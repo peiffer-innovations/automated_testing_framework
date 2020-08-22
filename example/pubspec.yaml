@@ -1,0 +1,36 @@
+name: example
+description: Example project for the Automated Testing Framework.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  automated_testing_framework:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+  flutter_native_splash: ^0.1.9
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets-src/icon.png"
+
+flutter_native_splash:
+  image: assets-src/splash.png
+  color: "212121"
+  android_disable_fullscreen: true
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/tests/
