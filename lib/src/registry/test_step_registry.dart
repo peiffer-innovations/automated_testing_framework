@@ -22,6 +22,7 @@ class TestStepRegistry {
     }
   }
 
+  /// Default instance that will be provided unless
   static final TestStepRegistry instance = TestStepRegistry(
     debugLabel: 'default',
   );
@@ -151,10 +152,15 @@ class TestStepRegistry {
     ),
   ];
 
+  /// Label that can be used to assist with debugging
   final String debugLabel;
+
   final Map<String, TestStepBuilder> _builtInSteps = {};
   final Map<String, TestStepBuilder> _customSteps = {};
 
+  /// Returns the complete list of available tests.  This will first get the
+  /// list of built in steps, then overlay on the custom steps assigned by the
+  /// application.
   List<AvailableTestStep> get availableSteps {
     var steps = <String, TestStepBuilder>{};
 
@@ -173,6 +179,12 @@ class TestStepRegistry {
     return result;
   }
 
+  /// Returns the registery bound to the widget tree.  If no registry is bound
+  /// to the widget tree, this will return the default instance.
+  ///
+  /// More often than not, developers will want to simply utilize the default
+  /// instance, unless specific parts of an application require highly
+  /// specialized test steps.
   static TestStepRegistry of(BuildContext context) {
     TestStepRegistry result;
 
@@ -188,13 +200,25 @@ class TestStepRegistry {
     return result ?? instance;
   }
 
+  /// Returns the test step that matches the given [id].  This will first look
+  /// in the registered custom steps and then if no custom step with the given
+  /// [id] exists, this will look in the built in steps.  If no step for the
+  /// given [id] can be found, this will return [null].
   AvailableTestStep getAvailableTestStep(String id) =>
       _customSteps[id]?.availableTestStep ??
       _builtInSteps[id]?.availableTestStep;
 
+  /// Returns the builder for the given [id].  This will first look in the
+  /// registered custom steps and then if no custom step with the given [id]
+  /// exists, this will look in the built in steps.  If no step for the given
+  /// [id] can be found, this will return [null].
   TestStepBuilder getBuilder(String id) =>
       _customSteps[id] ?? _builtInSteps[id];
 
+  /// Returns a [TestRunnerStep] for the given [id] and given set of [values].
+  /// This will first look in the registered custom steps and then fall back to
+  /// the built in steps.  If no step can be located for the given [id] then
+  /// this will return [null].
   TestRunnerStep getRunnerStep({
     @required String id,
     @required dynamic values,
@@ -209,11 +233,18 @@ class TestStepRegistry {
     return result;
   }
 
+  /// Registers a custom [step] with the registry.  If a custom step is already
+  /// registered with the same ultimate id then it will be replaced with this.
+  /// If a built in step is registered with the same ultimate id then this will
+  /// shadow the built in step such that this step will now be used in place of
+  /// the built in step.
   void registerCustomStep(TestStepBuilder step) {
     assert(step != null);
     _customSteps[step.availableTestStep.id] = step;
   }
 
+  /// Simple convenience method that calls [registerCustomStep] for every entity
+  /// in the given list.
   void registerCustomSteps(List<TestStepBuilder> steps) {
     if (steps != null) {
       for (var step in steps) {
@@ -222,6 +253,7 @@ class TestStepRegistry {
     }
   }
 
+  /// Returns a string name for the registry for debugging.
   @override
   String toString() => 'TestStepRegistry{$debugLabel}';
 }

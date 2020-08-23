@@ -33,7 +33,6 @@ export 'src/report/models/test_report_step.dart';
 export 'src/report/pages/test_report_page.dart';
 
 export 'src/runner/components/test_controller.dart';
-export 'src/runner/components/test_helper.dart';
 
 export 'src/runner/models/capture_context.dart';
 export 'src/runner/models/progress_value.dart';

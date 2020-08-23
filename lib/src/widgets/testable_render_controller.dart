@@ -107,7 +107,7 @@ class TestableRenderController {
 
     try {
       var runner = TestRunner.of(context);
-      result = runner.testableRenderController;
+      result = runner?.testableRenderController;
     } catch (e) {
       // no-op
     }

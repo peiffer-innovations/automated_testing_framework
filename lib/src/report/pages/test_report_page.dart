@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:static_translations/static_translations.dart';
 
+/// Page that can display a full test report.
 class TestReportPage extends StatelessWidget {
   TestReportPage({
     Key key,

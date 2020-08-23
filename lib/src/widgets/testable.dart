@@ -51,6 +51,7 @@ class TestableState extends State<Testable>
   GlobalKey _scrollKey;
   bool _showTestableOverlay = false;
   TestController _testController;
+  TestRunnerState _testRunner;
 
   dynamic Function() get onRequestError => _onRequestError;
   dynamic Function() get onRequestValue => _onRequestValue;
@@ -60,50 +61,54 @@ class TestableState extends State<Testable>
   void initState() {
     super.initState();
 
-    _renderController = TestableRenderController.of(context);
-    _testController = TestController.of(context);
+    _testRunner = TestRunner.of(context);
 
-    _onRequestError =
-        widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
-    if (_onRequestError != null) {
-      _types.add(TestableType.error_requestable);
-    }
+    if (_testRunner?.enabled == true) {
+      _renderController = TestableRenderController.of(context);
+      _testController = TestController.of(context);
+      _onRequestError =
+          widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
+      if (_onRequestError != null) {
+        _types.add(TestableType.error_requestable);
+      }
 
-    _onRequestValue =
-        widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
-    if (_onRequestValue != null) {
-      _types.add(TestableType.value_requestable);
-    }
+      _onRequestValue =
+          widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
+      if (_onRequestValue != null) {
+        _types.add(TestableType.value_requestable);
+      }
 
-    _onSetValue = widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
-    if (_onSetValue != null) {
-      _types.add(TestableType.value_settable);
-    }
+      _onSetValue =
+          widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
+      if (_onSetValue != null) {
+        _types.add(TestableType.value_settable);
+      }
 
-    if (_renderController.testWidgetsEnabled == true) {
-      _renderKey = GlobalKey();
+      if (_renderController.testWidgetsEnabled == true) {
+        _renderKey = GlobalKey();
 
-      _subscriptions.add(_renderController.stream.listen((_) {
-        if (mounted == true) {
-          setState(() {});
-        }
-      }));
-    }
-
-    if (_renderController.flashCount > 0) {
-      _animationController = AnimationController(
-        duration: _renderController.flashDuration,
-        vsync: this,
-      );
-      _animation = ColorTween(
-        begin: Colors.transparent,
-        end: _renderController.flashColor,
-      ).animate(_animationController)
-        ..addListener(() {
+        _subscriptions.add(_renderController.stream.listen((_) {
           if (mounted == true) {
             setState(() {});
           }
-        });
+        }));
+      }
+
+      if (_renderController.flashCount > 0) {
+        _animationController = AnimationController(
+          duration: _renderController.flashDuration,
+          vsync: this,
+        );
+        _animation = ColorTween(
+          begin: Colors.transparent,
+          end: _renderController.flashColor,
+        ).animate(_animationController)
+          ..addListener(() {
+            if (mounted == true) {
+              setState(() {});
+            }
+          });
+      }
     }
   }
 
@@ -387,7 +392,8 @@ class TestableState extends State<Testable>
   Widget build(BuildContext context) {
     Widget result;
 
-    if (_renderController.testWidgetsEnabled == true) {
+    if (_testRunner?.enabled == true &&
+        _renderController.testWidgetsEnabled == true) {
       var gestures =
           widget.gestures ?? TestableRenderController.of(context).gestures;
 

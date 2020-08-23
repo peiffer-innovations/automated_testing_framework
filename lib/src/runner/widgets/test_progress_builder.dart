@@ -30,9 +30,9 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
     super.initState();
 
     var testRunner = TestRunner.of(context);
-    _controller = testRunner.controller;
 
-    if (testRunner.enabled == true) {
+    if (testRunner?.enabled == true) {
+      _controller = testRunner.controller;
       _subscriptions.add(_controller.sleepStream.listen((event) {
         var sleeping = event?.progress != null;
         _error = event?.error == true;

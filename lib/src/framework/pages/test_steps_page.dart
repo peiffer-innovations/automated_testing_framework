@@ -215,34 +215,32 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       },
                     ),
                   ),
-                  if (tester.isReal() == true) ...[
-                    SizedBox(
-                      width: 16.0,
+                  SizedBox(
+                    width: 16.0,
+                  ),
+                  Tooltip(
+                    message: translator.translate(
+                      TestTranslations.atf_button_run,
                     ),
-                    Tooltip(
-                      message: translator.translate(
-                        TestTranslations.atf_button_run,
-                      ),
-                      child: IconButton(
-                        color: theme.iconTheme.color,
-                        icon: Icon(Icons.play_arrow),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                    child: IconButton(
+                      color: theme.iconTheme.color,
+                      icon: Icon(Icons.play_arrow),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
 
-                          try {
-                            await tester.execute(
-                              reset: false,
-                              steps: [step],
-                            );
-                          } catch (e) {
-                            tester.sleep = null;
-                            tester.step = null;
-                          }
-                        },
-                      ),
+                        try {
+                          await tester.execute(
+                            reset: false,
+                            steps: [step],
+                          );
+                        } catch (e) {
+                          tester.sleep = null;
+                          tester.step = null;
+                        }
+                      },
                     ),
-                  ],
+                  ),
                 ],
               ),
             ],
@@ -427,19 +425,18 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   style: TextStyle(color: theme.iconTheme.color),
                 ),
               ),
-              if (tester.isReal() == true)
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.play_circle_filled,
-                    color: theme.iconTheme.color,
-                  ),
-                  title: Text(
-                    translator.translate(
-                      TestTranslations.atf_button_run_all,
-                    ),
-                    style: TextStyle(color: theme.iconTheme.color),
-                  ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.play_circle_filled,
+                  color: theme.iconTheme.color,
                 ),
+                title: Text(
+                  translator.translate(
+                    TestTranslations.atf_button_run_all,
+                  ),
+                  style: TextStyle(color: theme.iconTheme.color),
+                ),
+              ),
             ],
             onTap: (int index) async {
               switch (index) {

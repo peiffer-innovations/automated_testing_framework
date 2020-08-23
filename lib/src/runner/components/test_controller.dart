@@ -8,13 +8,14 @@ import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
 
-const kTestDefaultTimeout = Duration(seconds: 20);
-
+/// This represents the meat of the overall automated test framework.  Through
+/// this controller, tests get loaded, saved, executed, and reported on.
 class TestController {
   TestController({
     this.delays = const TestStepDelays(),
     this.maxCommonSearchDepth = 3,
     @required GlobalKey<NavigatorState> navigatorKey,
+    @required this.onReset,
     @required TestStepRegistry registry,
     TestReader testReader = TestStore.testReader,
     TestReporter testReporter = TestStore.testReporter,
@@ -22,6 +23,7 @@ class TestController {
   })  : assert(maxCommonSearchDepth != null),
         assert(maxCommonSearchDepth >= 0),
         assert(navigatorKey != null),
+        assert(onReset != null),
         assert(registry != null),
         assert(testReader != null),
         assert(testReporter != null),
@@ -34,8 +36,17 @@ class TestController {
 
   static final Logger _logger = Logger('TestController');
 
+  /// The delays that tests should wait for.
   final TestStepDelays delays;
+
+  /// Defines how far down a widget tree a [Testable] widget should look for a
+  /// supported widget for the purposes of getting or setting values and errors.
   final int maxCommonSearchDepth;
+
+  /// Callback function that the application must register with the controller
+  /// so that when a reset is requested by a test, the application properly
+  /// resets to the initial state.
+  final AsyncCallback onReset;
 
   final GlobalKey<NavigatorState> _navigatorKey;
   final TestStepRegistry _registry;
@@ -51,22 +62,41 @@ class TestController {
   final TestReporter _testReporter;
   final TestWriter _testWriter;
 
+  /// The device pixel ratio to use when taking screencaptures.
   double devicePixelRatio = 4.0;
-  AsyncCallback onReset;
 
   Test _currentTest = Test();
 
+  /// Returns the current from the controller.  This will never be [null].
   Test get currentTest => _currentTest;
+
+  /// Returns the stream that will fire screep capture requests on.
   Stream<CaptureContext> get screencapStream => _screencapController.stream;
+
+  /// Returns the stream that will fire updates as a test is sleeping / waiting.
   Stream<ProgressValue> get sleepStream => _sleepController.stream;
+
+  /// Returns the stream that will fire updates when a test status changes.
   Stream<String> get statusStream => _statusController.stream;
+
+  /// Returns the stream that will fire updates when a test moves from step to
+  /// step.
   Stream<ProgressValue> get stepStream => _stepController.stream;
 
+  /// Sets the current test.  If the given test is [null] then a blank test will
+  /// be set instead.
   set currentTest(Test test) => _currentTest = test ?? Test();
+
+  /// Informs the controller that a sleep status update has happened.
   set sleep(ProgressValue value) => _sleepController?.add(value);
+
+  /// Informs the controller that a test status update has happened.
   set status(String value) => _statusController?.add(value);
+
+  /// Informs the controller that a test step update has happened.
   set step(ProgressValue value) => _stepController?.add(value);
 
+  /// Disposes the controller.
   void dispose() {
     _screencapController?.close();
     _sleepController?.close();
@@ -91,6 +121,21 @@ class TestController {
     return result;
   }
 
+  /// Executes a series of tests steps.  This accepts the [name] of the test
+  /// which may be [null] or empty.  The [reset] defines if the controller
+  /// should ask the application to perform a full reset before running or if it
+  /// should attempt to run for the current state.
+  ///
+  /// The list of [steps] may not be [null] or empty and define the steps that
+  /// the controller should execute.
+  ///
+  /// The [submitReport] value determines if the [testReporter] should be
+  /// executed after all steps have been completed or not.  Generally this value
+  /// will be [true] when running full tests and [false] when running debugging
+  /// level tests.
+  ///
+  /// The [version] defines the overall test version.  This may be [null] or
+  /// empty and should always be a value of 0 or higher when set.
   Future<void> execute({
     String name,
     bool reset = true,
@@ -181,6 +226,16 @@ class TestController {
     }
   }
 
+  /// Attempts to export the current test via the [testWriter] value.  This will
+  /// return [true] if and only if the current [testWriter] both returns [true]
+  /// and no exceptions were thrown along the way.
+  ///
+  /// If there is no name for the current test, this will prompt for a name to
+  /// submit with.  Should the user cancel that name, this will abort, not call
+  /// the [testWriter] and return a value of [false].
+  ///
+  /// The [clear] value instructs the controller to clear the current test on a
+  /// successful export or not.
   Future<bool> exportCurrentTest({
     bool clear = true,
     @required BuildContext context,
@@ -246,8 +301,6 @@ class TestController {
 
     return exported;
   }
-
-  bool isReal() => true;
 
   Future<List<Test>> loadTests(BuildContext context) => _testReader(context);
 

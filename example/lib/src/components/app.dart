@@ -33,18 +33,18 @@ class _AppState extends State<App> {
 
     _testController = TestController(
       navigatorKey: _navigatorKey,
+      onReset: () async {
+        while (_navigatorKey.currentState.canPop()) {
+          await _navigatorKey.currentState.pop();
+        }
+
+        _uniqueKey = UniqueKey();
+        setState(() {});
+      },
       registry: TestStepRegistry.instance,
       testReader: AssetTestStore.testReader,
       testWriter: ClipboardTestStore.testWriter,
     );
-    _testController.onReset = () async {
-      while (_navigatorKey.currentState.canPop()) {
-        await _navigatorKey.currentState.pop();
-      }
-
-      _uniqueKey = UniqueKey();
-      setState(() {});
-    };
 
     _themeController.stream.listen((_) {
       _darkTheme = _darkTheme != true;
@@ -70,6 +70,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return TestRunner(
       controller: _testController,
+      enabled: false,
       progressBuilder: TestProgressBuilder(
         theme: _darkTheme
             ? TestRunnerThemeData.dark(
@@ -77,7 +78,7 @@ class _AppState extends State<App> {
                 statusAlignment: TestStatusAlignment.bottomSafe,
               )
             : TestRunnerThemeData(
-                statusAlignment: TestStatusAlignment.none,
+                statusAlignment: TestStatusAlignment.bottom,
               ),
       ),
       testableRenderController: TestableRenderController(

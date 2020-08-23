@@ -13,8 +13,12 @@ class TestStepBuilder {
   })  : assert(availableTestStep != null),
         assert(testRunnerStepBuilder != null);
 
+  /// The test step that can be selected by the user.
   final AvailableTestStep availableTestStep;
+
+  /// The builder that can build the actual test execution step.
   final TestRunnerStepBuilder testRunnerStepBuilder;
 
+  /// Unique identifier (ideally; human readable) for the this step.
   String get id => availableTestStep.id;
 }
