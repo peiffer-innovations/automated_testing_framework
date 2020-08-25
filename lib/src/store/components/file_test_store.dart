@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 class FileTestStore {
   static List<String> testAssets;
 
-  static Future<List<Test>> testReader(BuildContext context) async {
-    List<Test> tests;
+  static Future<List<PendingTest>> testReader(BuildContext context) async {
+    List<PendingTest> tests;
 
     if (testAssets?.isNotEmpty == true) {
       for (var asset in testAssets) {
@@ -17,7 +17,7 @@ class FileTestStore {
           if (text?.isNotEmpty == true) {
             var parsed = json.decode(text);
 
-            tests = TestStore.createTests(parsed);
+            tests = TestStore.createMemoryTests(parsed);
           }
         } catch (e) {
           debugPrint(e);

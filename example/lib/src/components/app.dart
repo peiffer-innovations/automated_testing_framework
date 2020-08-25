@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:example/src/pages/home_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,6 +53,10 @@ class _AppState extends State<App> {
         setState(() {});
       }
     });
+
+    if (kProfileMode == true) {
+      _runTests();
+    }
   }
 
   @override
@@ -66,16 +71,20 @@ class _AppState extends State<App> {
     super.dispose();
   }
 
+  Future<void> _runTests() async {
+    var tests = await _testController.loadTests(context);
+    await _testController.runPendingTests(tests);
+  }
+
   @override
   Widget build(BuildContext context) {
     return TestRunner(
       controller: _testController,
-      enabled: false,
+      enabled: true,
       progressBuilder: TestProgressBuilder(
         theme: _darkTheme
             ? TestRunnerThemeData.dark(
-                showStepText: true,
-                statusAlignment: TestStatusAlignment.bottomSafe,
+                statusAlignment: TestStatusAlignment.bottom,
               )
             : TestRunnerThemeData(
                 statusAlignment: TestStatusAlignment.bottom,

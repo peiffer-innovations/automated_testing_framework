@@ -37,7 +37,10 @@ class Test extends JsonClass {
   ///   "steps": <List<TestStep>>
   /// }
   /// ```
-  static Test fromDynamic(dynamic map) {
+  static Test fromDynamic(
+    dynamic map, {
+    bool ignoreImages = false,
+  }) {
     Test result;
 
     if (map != null) {
@@ -46,7 +49,11 @@ class Test extends JsonClass {
             map['active'] == null ? true : JsonClass.parseBool(map['active']),
         name: map['name'],
         steps: JsonClass.fromDynamicList(
-            map['steps'], (map) => TestStep.fromDynamic(map)),
+            map['steps'],
+            (map) => TestStep.fromDynamic(
+                  map,
+                  ignoreImages: ignoreImages,
+                )),
         version: JsonClass.parseInt(map['version'], 1),
       );
     }

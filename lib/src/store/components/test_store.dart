@@ -10,32 +10,42 @@ class TestStore {
   /// object must be either a [List] of [Map] objects or an individual [Map]
   /// object that follow the structure defined in [Test.fromDynamic].
   ///
+  /// The optional [ignoreImages] parameter can be used to save memory when a
+  /// large number of tests are loaded.  By ignoring the images, the memory
+  /// required to host those images is removed.
+  ///
   /// This will never return [null].  If no tests exists in the [object] then
   /// this will return an empty array.
-  static List<Test> createTests(dynamic object) {
-    List<Test> tests;
+  static List<PendingTest> createMemoryTests(dynamic object,
+      {bool ignoreImages = true}) {
+    List<PendingTest> tests;
 
     if (object is List) {
-      tests = JsonClass.fromDynamicList(
+      var tempTests = JsonClass.fromDynamicList(
         object,
         (map) => Test.fromDynamic(map),
       );
-      tests.removeWhere(
+      tempTests.removeWhere(
         (test) =>
             test.name?.isNotEmpty != true && test.steps?.isNotEmpty != true,
       );
+
+      tests = [];
+      for (var t in tempTests) {
+        tests.add(PendingTest.memory(t));
+      }
     } else {
       var test = Test.fromDynamic(object);
 
       if (test.name?.isNotEmpty == true && test.steps?.isNotEmpty == true) {
-        tests = [test];
+        tests = [PendingTest.memory(test)];
       }
     }
 
     return tests ?? <Test>[];
   }
 
-  static Future<List<Test>> testReader(BuildContext context) async {
+  static Future<List<PendingTest>> testReader(BuildContext context) async {
     await _showNotSupported(context);
     return null;
   }

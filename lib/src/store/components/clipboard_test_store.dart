@@ -9,15 +9,15 @@ import 'package:static_translations/static_translations.dart';
 class ClipboardTestStore {
   static final Logger _logger = Logger('ClipboardTestStore');
 
-  static Future<List<Test>> testReader(BuildContext context) async {
-    List<Test> tests;
+  static Future<List<PendingTest>> testReader(BuildContext context) async {
+    List<PendingTest> tests;
 
     try {
       var data = await Clipboard.getData('text/plain');
       var text = data?.text;
       if (text?.isNotEmpty == true) {
         var parsed = json.decode(text);
-        tests = TestStore.createTests(parsed);
+        tests = TestStore.createMemoryTests(parsed);
       }
     } catch (e, stack) {
       _logger.severe('Error loading tests from clipboard', e, stack);

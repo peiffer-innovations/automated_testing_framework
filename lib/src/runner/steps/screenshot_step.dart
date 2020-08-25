@@ -2,6 +2,13 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:meta/meta.dart';
 
 class ScreenshotStep extends TestRunnerStep {
+  /// Creates an instance from a JSON-like map structure.  This expects the
+  /// following format:
+  ///
+  /// ```json
+  /// {
+  /// }
+  /// ```
   static ScreenshotStep fromDynamic(dynamic map) {
     ScreenshotStep result;
 
@@ -12,6 +19,7 @@ class ScreenshotStep extends TestRunnerStep {
     return result;
   }
 
+  /// Requests a screenshot from the framework and attaches it to the [report].
   @override
   Future<void> execute({
     @required TestReport report,
@@ -20,9 +28,13 @@ class ScreenshotStep extends TestRunnerStep {
     tester.status = '<screenshot>';
     var image = await tester.screencap();
 
-    report?.attachScreenshot(image);
+    if (image != null) {
+      report?.attachScreenshot(image);
+    }
   }
 
+  /// Converts this to a JSON compatible map.  For a description of the format,
+  /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {};
 }

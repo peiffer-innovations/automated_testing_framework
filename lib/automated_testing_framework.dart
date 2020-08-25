@@ -63,6 +63,11 @@ export 'src/store/components/clipboard_test_store.dart';
 export 'src/store/components/file_test_store.dart';
 export 'src/store/components/test_store.dart';
 
+export 'src/store/loaders/memory_test_loader.dart';
+
+export 'src/store/models/pending_test.dart';
+export 'src/store/models/test_loader.dart';
+
 export 'src/store/typedefs/test_reader.dart';
 export 'src/store/typedefs/test_reporter.dart';
 export 'src/store/typedefs/test_writer.dart';

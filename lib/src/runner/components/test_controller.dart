@@ -302,8 +302,19 @@ class TestController {
     return exported;
   }
 
-  Future<List<Test>> loadTests(BuildContext context) => _testReader(context);
+  /// Loads the list of tests from the assigned [TestReader].  This accepts the
+  /// [BuildContext] to allow the reader to provide visual feedback to the user
+  /// in case the load takes a while.
+  Future<List<PendingTest>> loadTests(BuildContext context) =>
+      _testReader(context);
 
+  /// Executes a screen capture for the application.  As a note, depending on
+  /// the device this may take several seconds.  The screenshot call is fully
+  /// async so this will wait until up to [TestStepDelays.screenshot] for the
+  /// response.
+  ///
+  /// This will never trigger a failure, but it will return [null] if the device
+  /// does not respond before the timeout.
   Future<Uint8List> screencap() async {
     var captureContext = CaptureContext(
       devicePixelRatio: devicePixelRatio,
@@ -313,53 +324,82 @@ class TestController {
     try {
       _screencapController.add(captureContext);
 
-      await Future.delayed(Duration(seconds: 3));
-
-      if (captureContext.image?.isNotEmpty != true) {
-        captureContext = null;
+      await Future.delayed(delays.screenshot);
+      var now = DateTime.now().millisecondsSinceEpoch;
+      while (captureContext.image?.isNotEmpty != true &&
+          now + delays.screenshot.inMilliseconds >
+              DateTime.now().millisecondsSinceEpoch) {
+        await Future.delayed(Duration(milliseconds: 100));
       }
     } catch (e, stack) {
       _logger.severe(e, stack);
     }
 
-    return captureContext == null
+    return captureContext?.image == null
         ? null
         : Uint8List.fromList(captureContext?.image);
   }
 
+  /// Requests the application to perform a reset.
   Future<void> reset() async {
     if (onReset != null) {
       await onReset();
     }
     // This covers the minimum animation time for Material animations to
     // complete.  This may or may not be enough time, which is why apps can add
-    // to the time using the `testSetUp` value.
+    // to the time using the [testSetUp] value.
     await Future.delayed(Duration(seconds: 1));
 
     status = '<set up>';
     await _sleep(delays.testSetUp);
   }
 
-  Future<void> runTests(List<Test> tests) async {
-    for (var test in tests) {
-      try {
-        await reset();
+  Future<void> runPendingTests(List<PendingTest> tests) async {
+    if (tests != null) {
+      for (var pendingTest in tests) {
+        try {
+          var test = await pendingTest.loader.load(ignoreImages: false);
+          await reset();
 
-        await execute(
-          name: test.name,
-          reset: false,
-          steps: test.steps,
-          submitReport: true,
-          version: test.version,
-        );
-      } catch (e, stack) {
-        _logger.severe(e, stack);
+          await execute(
+            name: test.name,
+            reset: false,
+            steps: test.steps,
+            submitReport: true,
+            version: test.version,
+          );
+        } catch (e, stack) {
+          _logger.severe(e, stack);
+        }
       }
     }
   }
 
+  /// Runs a series of tests.
+  Future<void> runTests(List<Test> tests) async {
+    if (tests != null) {
+      for (var test in tests) {
+        try {
+          await reset();
+
+          await execute(
+            name: test.name,
+            reset: false,
+            steps: test.steps,
+            submitReport: true,
+            version: test.version,
+          );
+        } catch (e, stack) {
+          _logger.severe(e, stack);
+        }
+      }
+    }
+  }
+
+  /// Submits the test report through the [TestReporter].
   Future<bool> submitReport(TestReport report) => _testReporter(report);
 
+  /// Sleeps for the given duration.
   Future<void> _sleep(Duration duration) async =>
       await SleepStep(timeout: duration).execute(tester: this);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
+/// Sets a value on the identified [Testable].
 class SetValueStep extends TestRunnerStep {
   SetValueStep({
     @required this.testableId,
@@ -18,11 +19,37 @@ class SetValueStep extends TestRunnerStep {
         assert(value?.isNotEmpty == true),
         type = type;
 
+  /// The id of the [Testable] widget to interact with.
   final String testableId;
+
+  /// The maximum amount of time this step will wait while searching for the
+  /// [Testable] on the widget tree.
   final Duration timeout;
+
+  /// The type of value to set.  This must be one of:
+  /// * `bool`
+  /// * `double`
+  /// * `int`
+  /// * `String`
   final String type;
+
+  /// The string representation of the value to set.
   final String value;
 
+  /// Creates an instance from a JSON-like map structure.  This expects the
+  /// following format:
+  ///
+  /// ```json
+  /// {
+  ///   "testableId": <String>,
+  ///   "timeout": <number>,
+  ///   "type": <String>,
+  ///   "value": <String>
+  /// }
+  /// ```
+  ///
+  /// See also:
+  /// * [JsonClass.parseDurationFromSeconds]
   static SetValueStep fromDynamic(dynamic map) {
     SetValueStep result;
 
@@ -38,6 +65,8 @@ class SetValueStep extends TestRunnerStep {
     return result;
   }
 
+  /// Attempts to locate the [Testable] identified by the [testableId] and will
+  /// then set the associated [value] to the found widget.
   @override
   Future<void> execute({
     @required TestReport report,
@@ -103,6 +132,8 @@ class SetValueStep extends TestRunnerStep {
     }
   }
 
+  /// Converts this to a JSON compatible map.  For a description of the format,
+  /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
         'testableId': testableId,

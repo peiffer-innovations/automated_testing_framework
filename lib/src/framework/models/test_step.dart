@@ -38,13 +38,32 @@ class TestStep extends JsonClass {
   /// operator, this will work.  A value of [null] will result in [null] being
   /// returned and an object that does not suppor the `[]` operator will result
   /// in an exception being thrown.
-  static TestStep fromDynamic(dynamic map) {
+  ///
+  /// The optional [ignoreImages] param instructs the steps to ignore any
+  /// [image] attribute.  This is useful if an application has a large number of
+  /// tests that need to be run.  By ignoring the images, a lot of memory can
+  /// be saved.
+  ///
+  /// This expects a JSON-like map object of the following format:
+  /// ```json
+  /// {
+  ///   "id": <String>,
+  ///   "image": <String; base64 encoded>,
+  ///   "values": <Map<String, dynamic>>
+  /// }
+  /// ```
+  static TestStep fromDynamic(
+    dynamic map, {
+    bool ignoreImages = false,
+  }) {
     TestStep result;
 
     if (map != null) {
       result = TestStep(
         id: map['id'],
-        image: map['image'] == null ? null : base64Decode(map['image']),
+        image: map['image'] == null || ignoreImages == true
+            ? null
+            : base64Decode(map['image']),
         values: map['values'] == null
             ? null
             : Map<String, dynamic>.from(map['values']),
@@ -69,6 +88,7 @@ class TestStep extends JsonClass {
       );
 
   /// Returns a JSON-compatible representation of the internal data structure.
+  /// For the returned format, see the [fromDynamic] function.
   @override
   Map<String, dynamic> toJson() => {
         if (id?.isNotEmpty == true) 'id': id,

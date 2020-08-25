@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart' as test;
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
+/// Step that will attempt to scroll another widget until it becomes visible.
 class ScrollUntilVisibleStep extends TestRunnerStep {
   ScrollUntilVisibleStep({
     @required this.increment,
@@ -14,11 +15,36 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         assert(increment != 0),
         assert(testableId?.isNotEmpty == true);
 
+  /// The increment in device-independent-pixels.  This may be a positive or
+  /// negative number.  Positive to scroll "forward" and negative to scroll
+  /// "backward".
   final double increment;
+
+  /// The id of the [Scrollable] widget to perform the scrolling actions on.
   final String scrollableId;
-  final Duration timeout;
+
+  /// The id of the [Testable] widget to interact with.
   final String testableId;
 
+  /// The maximum amount of time this step will wait while searching for the
+  /// [Testable] on the widget tree.
+  final Duration timeout;
+
+  /// Creates an instance from a JSON-like map structure.  This expects the
+  /// following format:
+  ///
+  /// ```json
+  /// {
+  ///   "increment": <number>,
+  ///   "scrollableId": <String>,
+  ///   "testableId": <String>,
+  ///   "timeout": <number>
+  /// }
+  /// ```
+  ///
+  /// See also:
+  /// * [JsonClass.parseDouble]
+  /// * [JsonClass.parseDurationFromSeconds]
   static ScrollUntilVisibleStep fromDynamic(dynamic map) {
     ScrollUntilVisibleStep result;
 
@@ -34,6 +60,19 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     return result;
   }
 
+  /// Executes the test step.  If the [scrollableId] is set then this will get
+  /// that [Scrollable] instance and interact with it.  Otherwise, this will
+  /// attempt to find the first [Scrollable] instance currently in the viewport
+  /// and interact with that.
+  ///
+  /// For the most part, pages with a single [Scrollable] will work fine with
+  /// omitting the [scrollableId].  However pages with multiple [Scrollables]
+  /// (like a Netflix style stacked carousel) will require the [scrollableId] to
+  /// be set in order to be able to find and interact with the inner
+  /// [Scrollable] instances.
+  ///
+  /// The [timeout] defines how much time is allowed to pass while attempting to
+  /// scroll and find the [Testable] identified by [testableId].
   @override
   Future<void> execute({
     @required TestReport report,
@@ -49,7 +88,11 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     test.Finder finder;
 
     if (scrollableId == null) {
-      finder = find.byType(Scrollable);
+      try {
+        finder = find.byType(Scrollable)?.first;
+      } catch (e) {
+        // no-op, will be handled later
+      }
     } else {
       finder = find.descendant(
         of: await waitFor(
@@ -80,40 +123,26 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
           'ScrollableId: $scrollableId -- Widget is not a Scrollable.');
     }
 
-    var controller = widget?.controller;
+    Offset offset;
+    switch (scrollable.axisDirection) {
+      case AxisDirection.down:
+        offset = Offset(0.0, -1.0 * increment);
+        break;
+      case AxisDirection.left:
+        offset = Offset(increment, 0.0);
+        break;
+      case AxisDirection.right:
+        offset = Offset(-1.0 * increment, 0.0);
+        break;
+      case AxisDirection.up:
+        offset = Offset(0.0, increment);
+        break;
+    }
+
     var scroller = (int count) async {
-      await controller.animateTo(
-        count * increment,
-        duration: tester.delays.scrollIncrement,
-        curve: Curves.ease,
-      );
+      await driver.drag(finder, offset);
     };
 
-    if (controller == null || controller is! ScrollController) {
-      Offset offset;
-      switch (scrollable.axisDirection) {
-        case AxisDirection.down:
-          offset = Offset(0.0, -1.0 * increment);
-          break;
-        case AxisDirection.left:
-          offset = Offset(increment, 0.0);
-          break;
-        case AxisDirection.right:
-          offset = Offset(-1.0 * increment, 0.0);
-          break;
-        case AxisDirection.up:
-          offset = Offset(0.0, increment);
-          break;
-      }
-
-      scroller = (int count) async {
-        await driver.drag(finder, offset);
-      };
-
-      // throw Exception(
-      //   'ScrollKey: $scrollableId -- No controller on child Scrollable; cannot scroll.',
-      // );
-    }
     var start = DateTime.now().millisecondsSinceEpoch;
     var end = start + timeout.inMilliseconds;
 
@@ -177,6 +206,8 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     }
   }
 
+  /// Converts this to a JSON compatible map.  For a description of the format,
+  /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
         'increment': increment,

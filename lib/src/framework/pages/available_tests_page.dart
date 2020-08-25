@@ -20,7 +20,7 @@ class AvailableTestsPage extends StatefulWidget {
 
 class _AvailableTestsPageState extends State<AvailableTestsPage> {
   final Map<String, bool> _active = {};
-  List<Test> _tests;
+  List<PendingTest> _tests;
   Translator _translator;
   TestController _testController;
 
@@ -35,11 +35,12 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     _loadTests();
   }
 
-  bool _isActive(Test test) => _active[test.name] ?? test.active ?? false;
+  bool _isActive(PendingTest test) => _active[test.name] ?? false;
 
-  void _loadTest(Test test) {
+  Future<void> _loadTest(PendingTest pendingTest) async {
+    var test = await pendingTest.loader.load();
     _testController.currentTest = test;
-    Navigator.of(context).pushReplacement(
+    await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (BuildContext context) => TestStepsPage(),
       ),
@@ -48,6 +49,9 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
 
   Future<void> _loadTests() async {
     _tests = (await _testController.loadTests(context)) ?? [];
+    _active.clear();
+
+    _tests?.forEach((test) => _active[test.name] = true);
     if (mounted == true) {
       setState(() {});
     }
@@ -61,30 +65,17 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     var tests = <Test>[];
 
     for (var test in _tests) {
-      if (_isActive(test) == true && test.steps?.isNotEmpty == true) {
-        var steps = <TestStep>[];
+      if (_isActive(test) && test.numSteps > 0) {
+        var t = await test.loader.load(ignoreImages: true);
 
-        for (var step in test.steps) {
-          steps.add(
-            TestStep(
-              id: step.id,
-              values: step.values,
-            ),
-          );
-        }
-
-        tests.add(Test(
-          name: test.name,
-          steps: steps,
-          version: test.version,
-        ));
+        tests.add(t);
       }
     }
 
     await TestController.of(context)?.runTests(tests);
   }
 
-  void _setActive(Test test) {
+  void _setActive(PendingTest test) {
     var active = _isActive(test);
 
     _active[test.name] = active != true;
@@ -94,14 +85,14 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     }
   }
 
-  Widget _buildTest(BuildContext context, Test test) => ListTile(
+  Widget _buildTest(BuildContext context, PendingTest test) => ListTile(
         onLongPress: () => _loadTest(test),
         onTap: () => _setActive(test),
         subtitle: Text(
           _translator.translate(
             TestTranslations.atf_version_steps,
             {
-              'steps': test.steps?.length,
+              'steps': test.numSteps,
               'version': test.version,
             },
           ),

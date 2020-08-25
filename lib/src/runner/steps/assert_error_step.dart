@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
+/// Test step that asserts that the error value equals (or does not equal) a
+/// specific value.
 class AssertErrorStep extends TestRunnerStep {
   AssertErrorStep({
     @required this.equals,
@@ -12,11 +14,36 @@ class AssertErrorStep extends TestRunnerStep {
   })  : assert(equals != null),
         assert(testableId?.isNotEmpty == true);
 
+  /// Set to [true] if the error from the widget must equal the [error] value.
+  /// Set to [false] if the error from the widget must not equal the [error]
+  /// value.
   final bool equals;
+
+  /// The error value to test against.
   final String error;
+
+  /// The id of the [Testable] widget to interact with.
   final String testableId;
+
+  /// The maximum amount of time this step will wait while searching for the
+  /// [Testable] on the widget tree.
   final Duration timeout;
 
+  /// Creates an instance from a JSON-like map structure.  This expects the
+  /// following format:
+  ///
+  /// ```json
+  /// {
+  ///   "error": <String>,
+  ///   "equals": <bool>,
+  ///   "testableId": <String>,
+  ///   "timeout": <number>
+  /// }
+  /// ```
+  ///
+  /// See also:
+  /// * [JsonClass.parseBool]
+  /// * [JsonClass.parseDurationFromSeconds]
   static AssertErrorStep fromDynamic(dynamic map) {
     AssertErrorStep result;
 
@@ -33,6 +60,8 @@ class AssertErrorStep extends TestRunnerStep {
     return result;
   }
 
+  /// Executes the step.  This will first look for the [Testable], get the error
+  /// from the [Testable], then compare it against the set [error] value.
   @override
   Future<void> execute({
     @required TestReport report,
@@ -82,6 +111,8 @@ class AssertErrorStep extends TestRunnerStep {
     }
   }
 
+  /// Converts this to a JSON compatible map.  For a description of the format,
+  /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
         'equals': equals,

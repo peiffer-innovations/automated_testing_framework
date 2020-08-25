@@ -8,6 +8,8 @@ import 'package:json_class/json_class.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
+/// Abstract step that all other test steps must extend.
+@immutable
 abstract class TestRunnerStep extends JsonClass {
   static final Logger _logger = Logger('TestRunnerStep');
 
@@ -16,21 +18,29 @@ abstract class TestRunnerStep extends JsonClass {
   static final OverrideWidgetTester _driver =
       OverrideWidgetTester(WidgetsBinding.instance);
 
+  /// Returns the function to call when logging is required
   static Function(Object) get console => _console;
+
+  /// Sets the function to call when logging is required.  The [printer] must
+  /// not be [null].
   static set console(Function(Object) printer) {
     assert(printer != null);
     _console = printer;
   }
 
+  /// Returns the test driver that can be used to interact with widgets.
   OverrideWidgetTester get driver => _driver;
 
+  /// Returns the finder that can be used to locate widgets.
   test.CommonFinders get find => test.find;
 
+  /// Function that is called when the step needs to execute.
   Future<void> execute({
     @required TestReport report,
     @required TestController tester,
   });
 
+  /// Logs a message and posts it as a status update to the [TestRunner].
   @protected
   void log(
     String message, {
@@ -40,6 +50,13 @@ abstract class TestRunnerStep extends JsonClass {
     tester.status = message;
   }
 
+  /// Sleeps for the defined [Duration].  This accept an optional [cancelStream]
+  /// which can be used to cancel the sleep.  The [error] flag informs the
+  /// sleeper about whether the duration is a standard duration or an error
+  /// based timeout.
+  ///
+  /// The optional [message] can be used to provide more details to the sleep
+  /// step.
   @protected
   Future<void> sleep(
     Duration duration, {
@@ -110,6 +127,7 @@ abstract class TestRunnerStep extends JsonClass {
     }
   }
 
+  /// Waits for a widget with a key that has [testableId] as the value.
   @protected
   Future<test.Finder> waitFor(
     dynamic testableId, {
