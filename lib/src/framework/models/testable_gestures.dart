@@ -21,7 +21,9 @@ class TestableGestures {
     this.widgetDoubleTap = TestableGestureAction.toggle_overlay,
     this.widgetForcePressEnd,
     this.widgetForcePressStart,
-    this.widgetLongPress = TestableGestureAction.open_test_actions_dialog,
+    this.widgetLongPress,
+    this.widgetLongPressMoveUpdate =
+        TestableGestureAction.open_test_actions_dialog,
     this.widgetTap,
   });
 
@@ -51,6 +53,10 @@ class TestableGestures {
   /// Action that will execute when a [Testable] widget with the overlay hidden
   /// is long pressed.
   final TestableGestureAction widgetLongPress;
+
+  /// Action that will execute when a [Testable] widget with the overlay hidden
+  /// receives a move update event after long pressing the widget.
+  final TestableGestureAction widgetLongPressMoveUpdate;
 
   /// Action that will execute when a [Testable] widget with the overlay hidden
   /// is tapped.
