@@ -69,6 +69,12 @@ class TestStepTranslations {
     value: 'Navigates back.  This will fail if there is no back button.',
   );
 
+  static const atf_help_long_press = TranslationEntry(
+    key: 'atf_help_long_press',
+    value:
+        'Long press the selected widget.  An error will occur if the widget is not found on the tree before the timeout is exceeded.',
+  );
+
   static const atf_help_open_menu = TranslationEntry(
     key: 'atf_help_open_menu',
     value: 'Opens the \"hamburger\" menu.',
@@ -129,6 +135,11 @@ class TestStepTranslations {
   static const atf_title_go_back = TranslationEntry(
     key: 'atf_title_go_back',
     value: 'Go Back',
+  );
+
+  static const atf_title_long_press = TranslationEntry(
+    key: 'atf_title_long_press',
+    value: 'Long Press',
   );
 
   static const atf_title_open_menu = TranslationEntry(

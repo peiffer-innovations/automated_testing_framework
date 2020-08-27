@@ -1,3 +1,10 @@
+## [0.1.3] - August 26th, 2020
+
+* Added LongPress tests support
+* Implemented `pump` function in `override_widget_tester.dart`
+* Changed `widgetLongPress` gesture action to `widgetLongPressMoveUpdate` gesture
+
+
 ## [0.1.2] - August 25th, 2020
 
 * More documentation updates

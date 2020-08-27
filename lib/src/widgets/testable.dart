@@ -38,7 +38,10 @@ class TestableState extends State<Testable>
   static final Logger _logger = Logger('_TestableState');
 
   final List<StreamSubscription> _subscriptions = [];
-  final Set<TestableType> _types = {TestableType.tappable};
+  final Set<TestableType> _types = {
+    TestableType.long_pressable,
+    TestableType.tappable
+  };
 
   Animation<Color> _animation;
   AnimationController _animationController;
@@ -447,6 +450,11 @@ class TestableState extends State<Testable>
               onLongPress: _getGestureAction(
                 widget: gestures.widgetLongPress,
               ),
+              onLongPressMoveUpdate: gestures.widgetLongPressMoveUpdate == null
+                  ? null
+                  : (_) => _fireTestableAction(
+                        gestures.widgetLongPressMoveUpdate,
+                      ),
               onTap: _getGestureAction(
                 widget: gestures.widgetTap,
               ),

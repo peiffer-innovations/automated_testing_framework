@@ -7,6 +7,7 @@ class TestableType {
   final String code;
 
   static const error_requestable = TestableType._('error_requestable');
+  static const long_pressable = TestableType._('long_pressable');
   static const scrollable = TestableType._('scrollable');
   static const scrolled = TestableType._('scrolled');
   static const tappable = TestableType._('tappable');
@@ -15,6 +16,7 @@ class TestableType {
 
   static const _all = [
     error_requestable,
+    long_pressable,
     scrollable,
     scrolled,
     tappable,

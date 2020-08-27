@@ -7,7 +7,7 @@ import 'package:static_translations/static_translations.dart';
 /// [TestStepRegistry] and create an instance of this class.  This binds the
 /// input form, any quick-add values, the help and title translation entities,
 /// and the requirements of the step that determines if the step will show or
-/// not gien the current constraints.
+/// not given the current constraints.
 @immutable
 class AvailableTestStep {
   const AvailableTestStep({
@@ -27,7 +27,7 @@ class AvailableTestStep {
 
   /// Binds the input form associated with the test step.  This must
   /// self-validate and ensure all required values exist before allowing
-  /// sumbission.
+  /// submission.
   final TestStepForm form;
 
   /// Translation key for the help text that describes the test step.

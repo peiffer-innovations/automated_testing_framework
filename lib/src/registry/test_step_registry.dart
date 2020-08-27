@@ -91,6 +91,19 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: LongPressForm(),
+        help: TestStepTranslations.atf_help_long_press,
+        id: 'long_press',
+        keys: const {'testableId', 'timeout'},
+        quickAddValues: const {},
+        title: TestStepTranslations.atf_title_long_press,
+        type: TestableType.long_pressable,
+        widgetless: false,
+      ),
+      testRunnerStepBuilder: LongPressStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: ScreenshotForm(),
         help: TestStepTranslations.atf_help_screenshot,
         id: 'screenshot',

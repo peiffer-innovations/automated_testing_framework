@@ -126,6 +126,13 @@ class ButtonsPage extends StatelessWidget {
               child: Container(
                 width: 200.0,
                 child: RaisedButton(
+                  onLongPress: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => CenterTextPage(
+                        text: _buttons[index],
+                      ),
+                    ),
+                  ),
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) => CenterTextPage(

@@ -48,8 +48,13 @@ class OverrideWidgetTester extends WidgetController
   Future<void> pump([
     Duration duration,
     EnginePhase phase = EnginePhase.sendSemanticsUpdate,
-  ]) =>
-      throw UnimplementedError();
+  ]) async {
+    if (duration != null)
+      // ignore: curly_braces_in_flow_control_structures
+      await Future<void>.delayed(duration);
+    binding.scheduleFrame();
+    await binding.endOfFrame;
+  }
 
   /// Whether there are any any transient callbacks scheduled.
   ///
