@@ -97,7 +97,7 @@ class TestStepRegistry {
         keys: const {'testableId', 'timeout'},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_long_press,
-        type: TestableType.long_pressable,
+        type: TestableType.tappable,
         widgetless: false,
       ),
       testRunnerStepBuilder: LongPressStep.fromDynamic,
