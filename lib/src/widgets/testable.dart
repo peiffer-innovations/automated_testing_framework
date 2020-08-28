@@ -38,10 +38,7 @@ class TestableState extends State<Testable>
   static final Logger _logger = Logger('_TestableState');
 
   final List<StreamSubscription> _subscriptions = [];
-  final Set<TestableType> _types = {
-    TestableType.long_pressable,
-    TestableType.tappable
-  };
+  final Set<TestableType> _types = {TestableType.tappable};
 
   Animation<Color> _animation;
   AnimationController _animationController;
