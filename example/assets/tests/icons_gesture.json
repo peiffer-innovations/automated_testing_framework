@@ -1,0 +1,46 @@
+{
+  "name": "Icons Gesture",
+  "steps": [
+    {
+      "id": "tap",
+      "image": null,
+      "values": {
+        "testableId": "test_page_Icons Gesture"
+      }
+    },
+    {
+      "id": "scroll_until_visible",
+      "image": null,
+      "values": {
+        "testableId": "icon_menu",
+        "increment": "40"
+      }
+    },
+    {
+      "id": "long_press",
+      "image": null,
+      "values": {
+        "testableId": "icon_menu"
+      }
+    },
+    {
+      "id": "assert_value",
+      "image": null,
+      "values": {
+        "testableId": "center_text",
+        "value": "menu",
+        "equals": "true"
+      }
+    },
+    {
+      "id": "go_back",
+      "image": null,
+      "values": {}
+    },
+    {
+      "id": "go_back",
+      "image": null,
+      "values": {}
+    }
+  ]
+}
