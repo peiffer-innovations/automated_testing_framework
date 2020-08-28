@@ -42,6 +42,7 @@ class TestableState extends State<Testable>
 
   Animation<Color> _animation;
   AnimationController _animationController;
+  bool _isDialogOpen;
   dynamic Function() _onRequestError;
   dynamic Function() _onRequestValue;
   ValueChanged<dynamic> _onSetValue;
@@ -109,6 +110,8 @@ class TestableState extends State<Testable>
             }
           });
       }
+
+      _isDialogOpen = false;
     }
   }
 
@@ -235,7 +238,8 @@ class TestableState extends State<Testable>
             ),
           ),
         );
-      } else {
+      } else if (_isDialogOpen == false) {
+        _isDialogOpen = true;
         var result = await showDialog<String>(
           context: context,
           useRootNavigator: false,
@@ -248,6 +252,7 @@ class TestableState extends State<Testable>
             value: _onRequestValue == null ? null : _onRequestValue(),
           ),
         );
+        _isDialogOpen = false;
 
         if (result?.isNotEmpty == true) {
           var translator = Translator.of(context);
@@ -449,9 +454,13 @@ class TestableState extends State<Testable>
               ),
               onLongPressMoveUpdate: gestures.widgetLongPressMoveUpdate == null
                   ? null
-                  : (_) => _fireTestableAction(
-                        gestures.widgetLongPressMoveUpdate,
-                      ),
+                  : (details) {
+                      if (details.localOffsetFromOrigin.distance != 0) {
+                        _fireTestableAction(
+                          gestures.widgetLongPressMoveUpdate,
+                        );
+                      }
+                    },
               onTap: _getGestureAction(
                 widget: gestures.widgetTap,
               ),
