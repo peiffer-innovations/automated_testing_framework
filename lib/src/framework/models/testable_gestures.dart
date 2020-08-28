@@ -21,9 +21,8 @@ class TestableGestures {
     this.widgetDoubleTap = TestableGestureAction.toggle_overlay,
     this.widgetForcePressEnd,
     this.widgetForcePressStart,
-    this.widgetLongPress,
-    this.widgetLongPressMoveUpdate =
-        TestableGestureAction.open_test_actions_dialog,
+    this.widgetLongPress = TestableGestureAction.open_test_actions_dialog,
+    this.widgetLongPressMoveUpdate,
     this.widgetTap,
   });
 
