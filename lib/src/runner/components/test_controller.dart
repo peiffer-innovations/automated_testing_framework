@@ -8,9 +8,51 @@ import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
 
-/// This represents the meat of the overall automated test framework.  Through
-/// this controller, tests get loaded, saved, executed, and reported on.
+/// Controller that allows for the creation, loading, saving, and running of
+/// automated tests.
 class TestController {
+  /// A controller for a [TestRunner] that can create, run, load, and save
+  /// automated tests.
+  ///
+  /// A callback function capable of resetting the applicaiton back to an
+  /// initial state (as defined by the application itself) must be passed via
+  /// [onReset].
+  ///
+  /// The [navigatorKey] is required to be the same key attached to a
+  /// [MaterialApp] or a [WidgetsApp].  This allows the navigation to the
+  /// [TestReportsPage].
+  ///
+  /// The [testReportBuilder] allows the overriding of the page to display the
+  /// report from a test run.  If omitted, the built in [TestReportPage] will be
+  /// used.  If set then the [TestReport] will be passed via the [ModalRoute]'s
+  /// arguments.
+  ///
+  /// The [delays] is used to determina the various wait times and timeouts for
+  /// the various test steps.
+  ///
+  /// The [maxCommonSearchDepth] informs the [Testable] how far it should walk
+  /// down the descendant tree to find a widget it knows how to wrap.  To
+  /// disable this auto-search for supported widgets, set this value to zero.
+  ///
+  /// The [registry] is used for finding the both available test steps for
+  /// building tests as well as running test steps.  In general, the default
+  /// [TestStepRegistry] is sufficient.
+  ///
+  /// This expects a [testReader] to be able to load tests into the platform for
+  /// editing and / or execution.  The default [testReader] is a no-op that will
+  /// never return any tests.
+  ///
+  /// A [testWriter] is used to be able to save / export tests that were created
+  /// within the application.  The default [testWriter] is a no-op that will
+  /// do nothing with the given test.
+  ///
+  /// Finally, a [testReporter] is used to submit test reports from tests
+  /// executed within the application.  The default [testReporter] is a no-op
+  /// that will do nothing with any given report.
+  ///
+  /// See also:
+  /// * [AssetTestStore]
+  /// * [ClipboardTestStore]
   TestController({
     this.delays = const TestStepDelays(),
     this.maxCommonSearchDepth = 3,
@@ -18,6 +60,7 @@ class TestController {
     @required this.onReset,
     @required TestStepRegistry registry,
     TestReader testReader = TestStore.testReader,
+    WidgetBuilder testReportBuilder,
     TestReporter testReporter = TestStore.testReporter,
     TestWriter testWriter = TestStore.testWriter,
   })  : assert(maxCommonSearchDepth != null),
@@ -29,8 +72,9 @@ class TestController {
         assert(testReporter != null),
         assert(testWriter != null),
         _navigatorKey = navigatorKey,
-        _registry = registry,
+        _registry = registry = TestStepRegistry.instance,
         _testReader = testReader,
+        _testReportBuilder = testReportBuilder,
         _testReporter = testReporter,
         _testWriter = testWriter;
 
@@ -59,6 +103,7 @@ class TestController {
   final StreamController<ProgressValue> _stepController =
       StreamController<ProgressValue>.broadcast();
   final TestReader _testReader;
+  final WidgetBuilder _testReportBuilder;
   final TestReporter _testReporter;
   final TestWriter _testWriter;
 
@@ -209,8 +254,11 @@ class TestController {
         futures.add(
           _navigatorKey.currentState.push(
             MaterialPageRoute(
-              builder: (BuildContext context) => TestReportPage(
-                report: testReport,
+              builder: _testReportBuilder ??
+                  (BuildContext context) => TestReportPage(),
+              settings: RouteSettings(
+                name: '/atf/test-report',
+                arguments: testReport,
               ),
             ),
           ),
@@ -354,6 +402,8 @@ class TestController {
     await _sleep(delays.testSetUp);
   }
 
+  /// Runs a series of [tests].  For full runs, this is more memory efficient as
+  /// it will only load the tests as needed.
   Future<void> runPendingTests(List<PendingTest> tests) async {
     if (tests != null) {
       for (var pendingTest in tests) {
@@ -375,7 +425,10 @@ class TestController {
     }
   }
 
-  /// Runs a series of tests.
+  /// Runs a series of [tests].  This is useful for smaller numbers of in-memory
+  /// tests but the [runPendingTests] should be prefered for full application
+  /// runs or for CI/CD pipelines as that only loads the bare minimum data up
+  /// front and then loads the full test data on an as needed basis.
   Future<void> runTests(List<Test> tests) async {
     if (tests != null) {
       for (var test in tests) {

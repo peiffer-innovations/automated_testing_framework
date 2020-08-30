@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 
+/// Renders the sleep progress on the test runner.
 class SleepProgress extends StatefulWidget {
   SleepProgress({
     this.error,
     Key key,
     @required this.max,
-    this.progress,
     @required this.stream,
     @required this.theme,
   })  : assert(max != null),
@@ -17,10 +17,18 @@ class SleepProgress extends StatefulWidget {
         assert(theme != null),
         super(key: key);
 
+  /// States whether this progress counter will result in an error or not.
   final bool error;
+
+  /// The max number of seconds this sleep may take.  The sleep progress will
+  /// animate to this max value unless
   final int max;
-  final double progress;
+
+  /// The stream to listen to for progress updates.  These updates will override
+  /// the built in update timer.
   final Stream<ProgressValue> stream;
+
+  /// The theme data for rendering the progress.
   final TestRunnerThemeData theme;
 
   @override

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
 import 'package:static_translations/static_translations.dart';
 
+/// Generic test store that provies no-op implementations of all the test
+/// storage functions.
 class TestStore {
   TestStore._();
 
@@ -45,13 +47,16 @@ class TestStore {
     return tests ?? <Test>[];
   }
 
+  /// Generic no-op function compatible with the [TestReader] definition.
   static Future<List<PendingTest>> testReader(BuildContext context) async {
     await _showNotSupported(context);
     return null;
   }
 
+  /// Generic no-op function compatible with the [TestReporter] definition.
   static Future<bool> testReporter(TestReport report) async => false;
 
+  /// Generic no-op function compatible with the [TestWriter] definition.
   static Future<bool> testWriter(
     BuildContext context,
     Test test,

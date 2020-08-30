@@ -60,7 +60,6 @@ export 'src/runner/widgets/test_runner.dart';
 
 export 'src/store/components/asset_test_store.dart';
 export 'src/store/components/clipboard_test_store.dart';
-export 'src/store/components/file_test_store.dart';
 export 'src/store/components/test_store.dart';
 
 export 'src/store/loaders/memory_test_loader.dart';

@@ -1,3 +1,9 @@
+## [0.2.0] - August 30th, 2020
+
+* More documentation updates
+* Removed the `FileTestStore` to preserve web compatibility in the core framework
+
+
 ## [0.1.2] - August 25th, 2020
 
 * More documentation updates

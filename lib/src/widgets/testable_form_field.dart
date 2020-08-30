@@ -1,6 +1,10 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 
+/// An extention to the standard [FormField] that is wrapped with a [Testable].
+///
+/// See also:
+/// * [FormField]
 class TestableFormField<T> extends StatelessWidget {
   TestableFormField({
     this.autovalidate = false,

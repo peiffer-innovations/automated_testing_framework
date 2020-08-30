@@ -8,7 +8,49 @@ import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
 
+/// Workhorse of the Automate Testing Framework.
 class Testable extends StatefulWidget {
+  /// Constructor for the [Testable] widget.  If there is no [TestRunner], or
+  /// the runner is not enabled then this is a simple passthrough for the
+  /// [child].
+  ///
+  /// This requires an [id] for the test framework to be able to find the widget
+  /// on the tree when running tests.  Ideally this [id] is human readable but
+  /// id can technically be any string that is valid w/in a [ValueKey].
+  ///
+  /// The [gestures] can be passed in as an override from the values set on the
+  /// [TestController].  That is useful if the default gestures are already
+  /// supported by this individual widget so providing a unique set of gestures
+  /// for the [Testable] is desired.
+  ///
+  /// The [scrollableId] is typically only required if there are multiple
+  /// [Scollables] on a page; such as a Netflix like vertical + horizontal
+  /// scroll.  When that happens, the framework will always find the top level
+  /// scroll and can only find the secondary scroll if the [scrollableId] is
+  /// passed in.  The [scrollableId] is the value passed into the [ValueKey] on
+  /// the key argument on the inner [Scrollable].
+  ///
+  /// This provides multiple mechanisms to try to interact with the [child]
+  /// widget.  The first is to try to search the widget tree for widgets this
+  /// knows how to interact with.  This will search up to
+  /// [TestController.maxCommonSearchDepth] for a widget it knows how to
+  /// interact with.  If none is found, or if the application would to provide
+  /// custom logic, then the following callback methods are available:
+  /// * [onRequestError] - Callback that will provide the current error message from the [child] widget.
+  /// * [onRequestValue] - Callback that will provide the current value from the [child] widget.
+  /// * [onSetValue] - Function that the framework can call to set the current value on the [child] widget.
+  ///
+  /// The list of Widgets this can auto-discover capabilities are as follows:
+  /// * [Checkbox]: onRequestValue
+  /// * [CupertinoSwitch]: onRequestValue; if a [TextEditingController] is set then also: onSetValue
+  /// * [CupertinoTextField]: onRequestValue
+  /// * [DropdownButton]: onRequestValue
+  /// * [FormField]: **Note**: must have a GlobalKey<FormFieldState> set; onRequestError, onRequestValue, onSetValue
+  /// * [Radio]: onRequestValue
+  /// * [Switch]: onRequestValue
+  /// * [Text]: onRequestValue
+  /// * [TextField]: onRequestValue; if a [TextEditingController] is set then also: onSetValue
+  /// * [TextFormField]: onRequestValue; if a [TextEditingController] is set then also: onSetValue
   Testable({
     @required this.child,
     this.gestures,
@@ -21,18 +63,38 @@ class Testable extends StatefulWidget {
         assert(id?.isNotEmpty == true),
         super(key: ValueKey(id));
 
+  /// The child widget the test framework should be testing.
   final Widget child;
+
+  /// The gesture overrides for this [Testable] widget.
   final TestableGestures gestures;
+
+  /// The page-unique identifier for the widget.  This is required for the
+  /// framework to be able to locate then widget when runnning in test mode.
   final String id;
+
+  /// Callback function that can provide the error message from the [child]
+  /// widget to the testing framework.
   final String Function() onRequestError;
+
+  /// Callback function that can provide the value from the [child] widget to
+  /// the testing framework.
   final dynamic Function() onRequestValue;
+
+  /// Callback funcation that can be used to set the value to the [child]
+  /// widget.
   final ValueChanged<dynamic> onSetValue;
+
+  /// The page-unique id of the [Scrollable] widget containing this [Testable]
+  /// widget.  This is required to be able to identify the propery [Scrollable]
+  /// when there are multiple [Scrollable] widgets on a single plage.
   final String scrollableId;
 
   @override
   TestableState createState() => TestableState();
 }
 
+/// State object for a [Testable] widget.
 class TestableState extends State<Testable>
     with SingleTickerProviderStateMixin {
   static final Logger _logger = Logger('_TestableState');
@@ -53,8 +115,16 @@ class TestableState extends State<Testable>
   TestController _testController;
   TestRunnerState _testRunner;
 
+  /// Returns the callback function capable of prividing the current error
+  /// message from the [child] widget.
   dynamic Function() get onRequestError => _onRequestError;
+
+  /// Returns the callback function capable of prividing the current value from
+  /// the [child] widget.
   dynamic Function() get onRequestValue => _onRequestValue;
+
+  /// Returns the callback funcation that can be used to set the value to the
+  /// [child]  widget.
   ValueChanged<dynamic> get onSetValue => _onSetValue;
 
   @override
@@ -145,6 +215,8 @@ class TestableState extends State<Testable>
     super.dispose();
   }
 
+  /// Flashes the [Testable] widget to give a visual indicator that the
+  /// framework is interactging with the widget.
   Future<void> flash() async {
     for (var i = 0; i < _renderController.flashCount; i++) {
       await _animationController.forward(from: 0.0);
@@ -346,6 +418,14 @@ class TestableState extends State<Testable>
         result = () => widget.groupValue;
       } else if (widget is Switch) {
         result = () => widget.value;
+      } else if (widget is FormField) {
+        var key = widget.key;
+        if (key is GlobalKey) {
+          var state = key.currentState;
+          if (state is FormFieldState) {
+            result = () => state.value;
+          }
+        }
       }
 
       try {
@@ -374,8 +454,15 @@ class TestableState extends State<Testable>
         if (text?.controller != null) {
           result = (dynamic value) => text.controller.text = value?.toString();
         }
+      } else if (widget is FormField) {
+        var key = widget.key;
+        if (key is GlobalKey) {
+          var state = key.currentState;
+          if (state is FormFieldState) {
+            result = (value) => state.didChange(value);
+          }
+        }
       }
-
       try {
         if (result == null && widget?.child != null) {
           result = _tryCommonSetValueMethods(widget.child, depth: depth + 1);
