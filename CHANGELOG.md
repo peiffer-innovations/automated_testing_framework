@@ -1,8 +1,19 @@
-## [0.1.3] - August 26th, 2020
+## [0.2.2] - September 1st, 2020
 
 * Added LongPress tests support
 * Implemented `pump` function in `override_widget_tester.dart`
 * Added `widgetLongPressMoveUpdate` testable gesture
+
+
+## [0.2.1] - September 1st, 2020
+
+* Fix to make the registry optional on `TestController`, as was originally intended
+
+
+## [0.2.0] - August 30th, 2020
+
+* More documentation updates
+* Removed the `FileTestStore` to preserve web compatibility in the core framework
 
 
 ## [0.1.2] - August 25th, 2020

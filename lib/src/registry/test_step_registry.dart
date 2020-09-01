@@ -22,7 +22,7 @@ class TestStepRegistry {
     }
   }
 
-  /// Default instance that will be provided unless
+  /// Default instance that will be provided unless otherwise specified.
   static final TestStepRegistry instance = TestStepRegistry(
     debugLabel: 'default',
   );

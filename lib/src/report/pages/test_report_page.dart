@@ -8,13 +8,11 @@ import 'package:static_translations/static_translations.dart';
 class TestReportPage extends StatelessWidget {
   TestReportPage({
     Key key,
-    @required this.report,
   }) : super(key: key);
-
-  final TestReport report;
 
   @override
   Widget build(BuildContext context) {
+    var report = ModalRoute.of(context).settings.arguments as TestReport;
     var translator = Translator.of(context);
     var unknown = translator.translate(TestTranslations.atf_unnamed_test);
     return Scaffold(

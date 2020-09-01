@@ -1,10 +1,9 @@
 import 'package:meta/meta.dart';
 
+/// Enum-like class that describes the various capabilities of a [Testable]
 @immutable
 class TestableType {
-  const TestableType._(this.code) : assert(code != null);
-
-  final String code;
+  const TestableType._(this._code) : assert(_code != null);
 
   static const error_requestable = TestableType._('error_requestable');
   static const scrollable = TestableType._('scrollable');
@@ -22,13 +21,17 @@ class TestableType {
     value_settable,
   ];
 
+  final String _code;
+
+  /// Gets the [TestableType] from the given string [code].  This will return
+  /// [null] if the [code] is not one that is supported.
   static TestableType lookup(String code) => _all.firstWhere(
-        (type) => type.code == code,
+        (type) => type._code == code,
       );
 
   @override
-  bool operator ==(other) => other is TestableType && other.code == code;
+  bool operator ==(other) => other is TestableType && other._code == _code;
 
   @override
-  int get hashCode => code.hashCode;
+  int get hashCode => _code.hashCode;
 }

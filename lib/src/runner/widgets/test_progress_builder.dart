@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 
+/// Builds and displays the test progress.
 class TestProgressBuilder extends StatefulWidget {
   const TestProgressBuilder({
     Key key,
@@ -21,7 +22,6 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
   TestController _controller;
   bool _error;
   int _max;
-  double _progress;
   Key _sleepKey = UniqueKey();
   bool _sleeping = false;
 
@@ -37,7 +37,6 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
         var sleeping = event?.progress != null;
         _error = event?.error == true;
         _max = event?.max;
-        _progress = event?.progress;
 
         if (sleeping != _sleeping) {
           _sleepKey = UniqueKey();
@@ -128,7 +127,6 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
                                     error: _error,
                                     key: _sleepKey,
                                     max: _max,
-                                    progress: _progress,
                                     stream: _controller.sleepStream,
                                     theme: widget.theme,
                                   ),

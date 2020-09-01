@@ -2,6 +2,11 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// An extention to the standard [TextFormField] that is wrapped with a
+/// [Testable].
+///
+/// See also:
+/// * [TextFormField]
 class TestableTextFormField extends StatefulWidget {
   TestableTextFormField({
     this.autocorrect = true,

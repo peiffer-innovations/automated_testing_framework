@@ -8,7 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
+/// Test runner that should be the base widget within an application.  This
+/// requires the test controller and the [child] which is the application
+/// itself.
 class TestRunner extends StatefulWidget {
+  /// Constructs the runner.  The [child] is the application to be tested.
+  ///
+  /// The [controller] is used to perform the actual test executions as well as
+  /// loading and saving tests.  The [controller] may be [null] if, and only if,
+  /// [enabled] is [false].
+  ///
+  /// Set [enabled] to [false] to disable the entire testing framework.  If
+  /// omitted the frameworl is enabled in debug and profile mode but disabled in
+  /// release mode.
+  ///
+  /// The [progressBuilder] is used to display test progress.  This will default
+  /// to the built in progress builder but can be overridden by applications to
+  /// display the test progress in their own unique way.
+  ///
+  /// The [testableRenderController] is used by the [Testable] widgets to
+  /// determine how to render their UI and process user interactions.
   TestRunner({
     @required this.child,
     @required this.controller,
@@ -25,12 +44,11 @@ class TestRunner extends StatefulWidget {
             testableRenderController ?? TestableRenderController(),
         super(key: key);
 
-  final bool _enabled;
-
   final Widget child;
   final TestController controller;
   final Widget progressBuilder;
 
+  final bool _enabled;
   final TestableRenderController _testableRenderController;
 
   static TestRunnerState of(BuildContext context) {

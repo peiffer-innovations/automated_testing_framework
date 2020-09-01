@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
 import 'package:json_theme/json_theme.dart';
 
-/// Test runner theme data
+/// Test runner theme data that can be used to alter the appearance of the built
+/// in test runner.
 @immutable
 class TestRunnerThemeData implements JsonClass {
   const TestRunnerThemeData({
@@ -29,6 +30,7 @@ class TestRunnerThemeData implements JsonClass {
         assert(statusSuccessColor != null),
         assert(statusTextColor != null);
 
+  /// Default theme for dark mode.
   factory TestRunnerThemeData.dark({
     Color runnerOverlayColor = Colors.white24,
     bool showRunnerStatus = kReleaseMode != true,
@@ -54,15 +56,39 @@ class TestRunnerThemeData implements JsonClass {
         statusTextColor: statusTextColor,
       );
 
+  /// The color of the overlay (or backdrop) the runner will display on top of
+  /// the application.
   final Color runnerOverlayColor;
+
+  /// Set to [true] to show the test runner status and [false] otherwise.
   final bool showRunnerStatus;
+
+  /// Set to [true] to show the test steps as they happen and [false] to hide
+  /// the test steps to fall back to a minimally sized progress bar.
   final bool showStepText;
+
+  /// The alignment for where the tests status bar will be displayed.
   final TestStatusAlignment statusAlignment;
+
+  /// The background color for the test status bar.
   final Color statusBackgroundColor;
+
+  /// The color to display when the current progress will result in an error if
+  /// completed.
   final Color statusErrorColor;
+
+  /// The opacity of the overall status bar.
   final double statusOpacity;
+
+  /// The color to display to indicate the how far along the the test is in its
+  /// execution.
   final Color statusProgressColor;
+
+  /// The color to display to indicate the test step is a success step if the
+  /// progress completes.
   final Color statusSuccessColor;
+
+  /// The color of the status text.
   final Color statusTextColor;
 
   @override
@@ -156,15 +182,32 @@ class TestRunnerThemeData implements JsonClass {
       };
 }
 
+/// Alignment for the test status bar.
 class TestStatusAlignment {
   const TestStatusAlignment._(this._code);
+
+  /// Aligns the test status bar at the very bottom of the screen.
   static const bottom = TestStatusAlignment._('bottom');
+
+  /// Aligns the test status bar at the bottom of the screen, but is padded so
+  /// that it renders above any system UI.
   static const bottomSafe = TestStatusAlignment._('bottomSafe');
+
+  /// Aligns the test status bar at the center of the screen.
   static const center = TestStatusAlignment._('center');
+
+  /// Hidees the test status bar.
   static const none = TestStatusAlignment._('none');
+
+  /// Aligns the test status bar at the top of the screen.
   static const top = TestStatusAlignment._('top');
+
+  /// Aligns the test status bar at the top of the screen, but is padded so that
+  /// it renders below any system UI.
   static const topSafe = TestStatusAlignment._('topSafe');
 
+  /// Converts the alignment from a string to an actual object.  This will throw
+  /// an exception if the string does not match any valid value.
   static TestStatusAlignment fromString(String data) {
     TestStatusAlignment result;
 
@@ -203,6 +246,8 @@ class TestStatusAlignment {
 
   final String _code;
 
+  /// Returns the string representation of this alignment that can be safely
+  /// passed to [fromString] to recreate the object.
   @override
   String toString() => _code;
 }

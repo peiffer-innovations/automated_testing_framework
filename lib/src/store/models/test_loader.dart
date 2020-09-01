@@ -1,6 +1,6 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 
-/// Interface for loading tests
+/// Interface for loading tests.
 abstract class TestLoader {
   /// Loads an individual test on-demand.
   ///

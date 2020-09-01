@@ -5,11 +5,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tinycolor/tinycolor.dart';
 
+/// Builder function that renders the [Testable] overlay when it is active.
 typedef WidgetOverlayBuilder = Function({
   BuildContext context,
   Testable testable,
 });
 
+/// Controller that is used to provide information for the [Testable].  This
+/// includes information such as what gestures to respond to as well as how to
+/// render the global and / or individual overlays.
 class TestableRenderController {
   TestableRenderController({
     Color flashColor = const Color(0x88FFEB3B),
@@ -102,6 +106,9 @@ class TestableRenderController {
     _controller?.add(null);
   }
 
+  /// Returns either the [TestableRenderController] from an ancestor
+  /// [TestRunner] instance, or this will return the default controller if no
+  /// [TestRunner] is available.
   static TestableRenderController of(BuildContext context) {
     TestableRenderController result;
 
@@ -116,7 +123,9 @@ class TestableRenderController {
     return result;
   }
 
-  static WidgetBuilder borderOverlay({
+  /// A global overlay that renders with a thin border around the entire
+  /// [Testable] widget using the given [color] and border [radius].
+  static WidgetBuilder borderGlobalOverlay({
     Color color,
     double radius = 4.0,
   }) =>
@@ -135,6 +144,8 @@ class TestableRenderController {
             ),
           );
 
+  /// A global overlay that renders with a solid [color] with a given [opacity]
+  /// over the  entire [Testable] widget.
   static WidgetBuilder fullGlobalOverlay({
     Color color,
     double opacity = 0.1,
@@ -152,6 +163,8 @@ class TestableRenderController {
             ),
           );
 
+  /// An individual overlay for a [Testable] widget that renders with a given
+  /// [color] and centered [icon] using a border [radius].
   static WidgetOverlayBuilder iconWidgetOverlay({
     Color color,
     IconData icon,
@@ -182,8 +195,12 @@ class TestableRenderController {
             ),
           );
 
+  /// An individual overlay for a [Testable] widget that renders with the given
+  /// [color] and border [radius].  This will render the current status text
+  /// from the active [TestRunner] in the center of the widget.
   static WidgetOverlayBuilder idWidgetOverlay({
     Color color,
+    Color textColor = Colors.white,
     double radius = 0.0,
   }) =>
       ({
@@ -208,13 +225,14 @@ class TestableRenderController {
                 testable.id,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: textColor,
                   fontFamily: 'monospace',
                 ),
               ),
             ),
           );
 
+  /// Disposes the controller.
   void dispose() {
     _controller?.close();
     _controller = null;
