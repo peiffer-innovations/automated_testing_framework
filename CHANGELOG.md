@@ -1,3 +1,8 @@
+## [0.2.1] - September 1st, 2020
+
+* Fix to make the registry optional on `TestController`, as was originally intended
+
+
 ## [0.2.0] - August 30th, 2020
 
 * More documentation updates
