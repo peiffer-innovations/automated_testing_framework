@@ -28,6 +28,7 @@ class _AppState extends State<App> {
       'assets/tests/buttons.json',
       'assets/tests/dropdowns.json',
       'assets/tests/failure.json',
+      'assets/tests/icons_gesture.json',
       'assets/tests/stacked_scrolling.json',
       'assets/tests/theme.json',
     ];

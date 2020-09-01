@@ -1,3 +1,10 @@
+## [0.2.2] - September 1st, 2020
+
+* Added LongPress tests support
+* Implemented `pump` function in `override_widget_tester.dart`
+* Added `widgetLongPressMoveUpdate` testable gesture
+
+
 ## [0.2.1] - September 1st, 2020
 
 * Fix to make the registry optional on `TestController`, as was originally intended

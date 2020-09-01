@@ -4,6 +4,7 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:example/src/pages/buttons_page.dart';
 import 'package:example/src/pages/dropdown_page.dart';
 import 'package:example/src/pages/edit_text_page.dart';
+import 'package:example/src/pages/icons_gesture_page.dart';
 import 'package:example/src/pages/stacked_scroll_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
     'Buttons': ButtonsPage(),
     'Dropdown': DropdownPage(),
     'Edit Text': EditTextPage(),
+    'Icons Gesture': IconsGesturePage(),
     'Stacked Scroll Page': StackedScrollPage(),
   };
 
