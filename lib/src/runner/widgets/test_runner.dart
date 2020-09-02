@@ -131,6 +131,7 @@ class TestRunnerState extends State<TestRunner> {
     return widget.enabled != true
         ? widget.child
         : MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Provider<TestController>.value(
               value: controller,
               child: Builder(

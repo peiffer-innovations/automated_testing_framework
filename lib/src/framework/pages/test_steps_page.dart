@@ -7,8 +7,11 @@ import 'package:static_translations/static_translations.dart';
 /// Page that shows all the test steps and their values for a current test.
 class TestStepsPage extends StatefulWidget {
   TestStepsPage({
+    this.fromDialog,
     Key key,
   }) : super(key: key);
+
+  final bool fromDialog;
 
   @override
   _TestStepsPageState createState() => _TestStepsPageState();
@@ -226,13 +229,16 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       color: theme.iconTheme.color,
                       icon: Icon(Icons.play_arrow),
                       onPressed: () async {
-                        Navigator.of(context).pop();
+                        if (widget.fromDialog != true) {
+                          Navigator.of(context).pop();
+                        }
                         Navigator.of(context).pop();
 
                         try {
                           await tester.execute(
                             reset: false,
                             steps: [step],
+                            submitReport: false,
                           );
                         } catch (e) {
                           tester.sleep = null;

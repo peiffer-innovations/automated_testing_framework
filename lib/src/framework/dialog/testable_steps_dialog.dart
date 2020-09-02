@@ -203,7 +203,9 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
           onPressed: () async {
             await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => TestStepsPage(),
+                builder: (BuildContext context) => TestStepsPage(
+                  fromDialog: true,
+                ),
               ),
             );
             if (mounted == true) {

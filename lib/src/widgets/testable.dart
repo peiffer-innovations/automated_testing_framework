@@ -16,7 +16,9 @@ class Testable extends StatefulWidget {
   ///
   /// This requires an [id] for the test framework to be able to find the widget
   /// on the tree when running tests.  Ideally this [id] is human readable but
-  /// id can technically be any string that is valid w/in a [ValueKey].
+  /// id can technically be any string that is valid w/in a [ValueKey].  If the
+  /// [id] is either [null] or empty then this will disable the test framework
+  /// for the child wildget and act as a simple passthrough.
   ///
   /// The [gestures] can be passed in as an override from the values set on the
   /// [TestController].  That is useful if the default gestures are already
@@ -60,7 +62,6 @@ class Testable extends StatefulWidget {
     this.onSetValue,
     this.scrollableId,
   })  : assert(child != null),
-        assert(id?.isNotEmpty == true),
         super(key: ValueKey(id));
 
   /// The child widget the test framework should be testing.
@@ -132,56 +133,58 @@ class TestableState extends State<Testable>
   void initState() {
     super.initState();
 
-    _testRunner = TestRunner.of(context);
+    if (widget.id?.isNotEmpty == true) {
+      _testRunner = TestRunner.of(context);
 
-    if (_testRunner?.enabled == true) {
-      _renderController = TestableRenderController.of(context);
-      _testController = TestController.of(context);
-      _onRequestError =
-          widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
-      if (_onRequestError != null) {
-        _types.add(TestableType.error_requestable);
-      }
+      if (_testRunner?.enabled == true) {
+        _renderController = TestableRenderController.of(context);
+        _testController = TestController.of(context);
+        _onRequestError =
+            widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
+        if (_onRequestError != null) {
+          _types.add(TestableType.error_requestable);
+        }
 
-      _onRequestValue =
-          widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
-      if (_onRequestValue != null) {
-        _types.add(TestableType.value_requestable);
-      }
+        _onRequestValue =
+            widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
+        if (_onRequestValue != null) {
+          _types.add(TestableType.value_requestable);
+        }
 
-      _onSetValue =
-          widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
-      if (_onSetValue != null) {
-        _types.add(TestableType.value_settable);
-      }
+        _onSetValue =
+            widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
+        if (_onSetValue != null) {
+          _types.add(TestableType.value_settable);
+        }
 
-      if (_renderController.testWidgetsEnabled == true) {
-        _renderKey = GlobalKey();
+        if (_renderController.testWidgetsEnabled == true) {
+          _renderKey = GlobalKey();
 
-        _subscriptions.add(_renderController.stream.listen((_) {
-          if (mounted == true) {
-            setState(() {});
-          }
-        }));
-      }
-
-      if (_renderController.flashCount > 0) {
-        _animationController = AnimationController(
-          duration: _renderController.flashDuration,
-          vsync: this,
-        );
-        _animation = ColorTween(
-          begin: Colors.transparent,
-          end: _renderController.flashColor,
-        ).animate(_animationController)
-          ..addListener(() {
+          _subscriptions.add(_renderController.stream.listen((_) {
             if (mounted == true) {
               setState(() {});
             }
-          });
-      }
+          }));
+        }
 
-      _isDialogOpen = false;
+        if (_renderController.flashCount > 0) {
+          _animationController = AnimationController(
+            duration: _renderController.flashDuration,
+            vsync: this,
+          );
+          _animation = ColorTween(
+            begin: Colors.transparent,
+            end: _renderController.flashColor,
+          ).animate(_animationController)
+            ..addListener(() {
+              if (mounted == true) {
+                setState(() {});
+              }
+            });
+        }
+
+        _isDialogOpen = false;
+      }
     }
   }
 
@@ -189,22 +192,24 @@ class TestableState extends State<Testable>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (mounted == true) {
-      _scrollableId = widget.scrollableId;
-      var canBeScrolled = false;
-      if (_scrollableId?.isNotEmpty != true) {
-        try {
-          var scrollable = Scrollable.of(context);
-          canBeScrolled = scrollable != null;
-          _scrollableId = scrollable?.widget?.key?.toString();
-        } catch (e, stack) {
-          _logger.severe(e, stack);
+    if (widget.id?.isNotEmpty == true) {
+      if (mounted == true) {
+        _scrollableId = widget.scrollableId;
+        var canBeScrolled = false;
+        if (_scrollableId?.isNotEmpty != true) {
+          try {
+            var scrollable = Scrollable.of(context);
+            canBeScrolled = scrollable != null;
+            _scrollableId = scrollable?.widget?.key?.toString();
+          } catch (e, stack) {
+            _logger.severe(e, stack);
+          }
         }
-      }
 
-      if (canBeScrolled == true || _scrollableId?.isNotEmpty == true) {
-        _types.add(TestableType.scrolled);
-        _scrollKey = GlobalKey();
+        if (canBeScrolled == true || _scrollableId?.isNotEmpty == true) {
+          _types.add(TestableType.scrolled);
+          _scrollKey = GlobalKey();
+        }
       }
     }
   }
@@ -258,8 +263,12 @@ class TestableState extends State<Testable>
           break;
 
         case TestableGestureAction.toggle_global_overlay:
+          _showTestableOverlay = false;
           _renderController.showGlobalOverlay =
               _renderController.showGlobalOverlay != true;
+          if (mounted == true) {
+            setState(() {});
+          }
           break;
 
         case TestableGestureAction.toggle_overlay:
@@ -484,7 +493,8 @@ class TestableState extends State<Testable>
   Widget build(BuildContext context) {
     Widget result;
 
-    if (_testRunner?.enabled == true &&
+    if (widget.id?.isNotEmpty == true &&
+        _testRunner?.enabled == true &&
         _renderController.testWidgetsEnabled == true) {
       var gestures =
           widget.gestures ?? TestableRenderController.of(context).gestures;

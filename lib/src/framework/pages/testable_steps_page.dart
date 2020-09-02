@@ -126,40 +126,41 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                 },
               ),
             ),
-          Tooltip(
-            message: translator.translate(TestTranslations.atf_quick_add),
-            child: IconButton(
-              icon: Icon(
-                Icons.add_circle,
-              ),
-              onPressed: () {
-                var values = <String, dynamic>{}
-                  ..addAll(_createValues(step))
-                  ..addAll(step.quickAddValues);
-                testController.currentTest.addTestStep(TestStep(
-                  id: step.id,
-                  image: step.widgetless == true ? null : widget.image,
-                  values: step.minify(values),
-                ));
+          if (step.quickAddValues != null)
+            Tooltip(
+              message: translator.translate(TestTranslations.atf_quick_add),
+              child: IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                ),
+                onPressed: () {
+                  var values = <String, dynamic>{}
+                    ..addAll(_createValues(step))
+                    ..addAll(step.quickAddValues);
+                  testController.currentTest.addTestStep(TestStep(
+                    id: step.id,
+                    image: step.widgetless == true ? null : widget.image,
+                    values: step.minify(values),
+                  ));
 
-                var snackBar = SnackBar(
-                  content: Text(
-                    translator.translate(
-                      TestTranslations.atf_added_step_action,
-                      {
-                        'step': translator.translate(step.title),
-                      },
+                  var snackBar = SnackBar(
+                    content: Text(
+                      translator.translate(
+                        TestTranslations.atf_added_step_action,
+                        {
+                          'step': translator.translate(step.title),
+                        },
+                      ),
                     ),
-                  ),
-                  duration: Duration(seconds: 1),
-                );
-                Scaffold.of(context).showSnackBar(snackBar);
-                if (mounted == true) {
-                  setState(() {});
-                }
-              },
+                    duration: Duration(seconds: 1),
+                  );
+                  Scaffold.of(context).showSnackBar(snackBar);
+                  if (mounted == true) {
+                    setState(() {});
+                  }
+                },
+              ),
             ),
-          ),
           IconButton(
             icon: Icon(
               Icons.help,

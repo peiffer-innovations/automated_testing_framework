@@ -84,7 +84,7 @@ abstract class TestStepForm {
       decoration: InputDecoration(
         labelText: translator.translate(label),
       ),
-      initialValue: values[id],
+      initialValue: values[id]?.toString(),
       onChanged: (value) => values[id] = value,
       validator: (value) => validators?.isNotEmpty == true
           ? Validator(validators: validators).validate(

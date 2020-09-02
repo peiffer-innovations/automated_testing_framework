@@ -25,10 +25,10 @@ Name | Description
 
 ## Tests
 
-![Activating Test Widget](documentation/images/activating_test_widget.gif)
+![Activating Test Widget](https://raw.githubusercontent.com/peiffer-innovations/automated_testing_framework/main/documentation/images/activating_test_widget.gif)
 
-![Dropdown Test](documentation/images/dropdown_test.gif)
+![Dropdown Test](https://raw.githubusercontent.com/peiffer-innovations/automated_testing_framework/main/documentation/images/dropdown_test.gif)
 
-![Failing Test](documentation/images/failing_test.gif)
+![Failing Test](https://raw.githubusercontent.com/peiffer-innovations/automated_testing_framework/main/documentation/images/failing_test.gif)
 
-![Stacked Scrolling](documentation/images/stacked_scrolling.gif)
+![Stacked Scrolling](https://raw.githubusercontent.com/peiffer-innovations/automated_testing_framework/main/documentation/images/stacked_scrolling.gif)

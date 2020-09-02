@@ -1,3 +1,12 @@
+## [0.2.3] - September 1st, 2020
+
+* Fix to disable Quick Add in the test steps page when a step doesn't support it
+* Fix to not submit a report at the end of an individual step run
+* Fix for when values passed to a `Testable` are types other than `String`
+* Fix for running individual steps from the `TestStepPage` that was opened via the dialog
+* Accept a null or empty id on `Testable` as a way to disable it
+
+
 ## [0.2.2] - September 1st, 2020
 
 * Added LongPress tests support
