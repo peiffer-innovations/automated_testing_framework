@@ -37,7 +37,7 @@ class _AppState extends State<App> {
       navigatorKey: _navigatorKey,
       onReset: () async {
         while (_navigatorKey.currentState.canPop()) {
-          await _navigatorKey.currentState.pop();
+          _navigatorKey.currentState.pop();
         }
 
         _uniqueKey = UniqueKey();
@@ -85,14 +85,17 @@ class _AppState extends State<App> {
       progressBuilder: TestProgressBuilder(
         theme: _darkTheme
             ? TestRunnerThemeData.dark(
-                statusAlignment: TestStatusAlignment.bottom,
+                showStepText: true,
+                showRunnerStatus: kDebugMode,
+                statusAlignment: TestStatusAlignment.bottomSafe,
               )
             : TestRunnerThemeData(
-                statusAlignment: TestStatusAlignment.bottom,
+                showRunnerStatus: kDebugMode,
               ),
       ),
       testableRenderController: TestableRenderController(
         flashCount: _darkTheme ? 3 : 0,
+        testWidgetsEnabled: kDebugMode,
       ),
       child: MultiProvider(
         providers: [

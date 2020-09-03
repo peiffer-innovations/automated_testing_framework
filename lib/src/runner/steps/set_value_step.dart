@@ -58,7 +58,7 @@ class SetValueStep extends TestRunnerStep {
         testableId: map['testableId'],
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
         type: map['type'],
-        value: map['value'],
+        value: map['value']?.toString(),
       );
     }
 

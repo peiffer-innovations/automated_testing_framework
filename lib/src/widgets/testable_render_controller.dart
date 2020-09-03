@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 /// Builder function that renders the [Testable] overlay when it is active.
@@ -16,6 +17,7 @@ typedef WidgetOverlayBuilder = Function({
 /// render the global and / or individual overlays.
 class TestableRenderController {
   TestableRenderController({
+    this.debugLabel = 'custom',
     Color flashColor = const Color(0x88FFEB3B),
     int flashCount = 3,
     Duration flashDuration = const Duration(milliseconds: 100),
@@ -23,7 +25,7 @@ class TestableRenderController {
     WidgetBuilder globalOverlayBuilder,
     Color overlayColor,
     bool showGlobalOverlay = false,
-    bool testWidgetsEnabled = kReleaseMode == false,
+    bool testWidgetsEnabled = kDebugMode == true,
     WidgetOverlayBuilder widgetOverlayBuilder,
   })  : assert(flashCount == 0 || flashColor != null),
         assert(flashCount != null),
@@ -41,7 +43,10 @@ class TestableRenderController {
         _widgetOverlayBuilder = widgetOverlayBuilder ?? iconWidgetOverlay();
 
   static final TestableRenderController _defaultInstance =
-      TestableRenderController();
+      TestableRenderController(debugLabel: 'default');
+  static final Logger _logger = Logger('TestableRenderController');
+
+  final String debugLabel;
 
   final Color _flashColor;
   final int _flashCount;
@@ -114,9 +119,9 @@ class TestableRenderController {
 
     try {
       var runner = TestRunner.of(context);
-      result = runner?.testableRenderController;
-    } catch (e) {
-      // no-op
+      result = runner.testableRenderController;
+    } catch (e, stack) {
+      _logger.severe('Error getting the controller from the context', e, stack);
     }
     result ??= _defaultInstance;
 
@@ -237,4 +242,7 @@ class TestableRenderController {
     _controller?.close();
     _controller = null;
   }
+
+  @override
+  String toString() => 'TestableRenderController<$debugLabel>';
 }

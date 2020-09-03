@@ -108,6 +108,16 @@ class TestTranslations {
     value: 'Export successful',
   );
 
+  static final atf_maximize_step_details = TranslationEntry(
+    key: 'atf_maximize_step_details',
+    value: 'Show full step details',
+  );
+
+  static final atf_minimize_step_details = TranslationEntry(
+    key: 'atf_minimize_step_details',
+    value: 'Show minimal step details',
+  );
+
   static final atf_no_tests_found = TranslationEntry(
     key: 'atf_no_tests_found',
     value: 'No tests found',
@@ -144,8 +154,18 @@ class TestTranslations {
   );
 
   static const atf_test_options = TranslationEntry(
-    key: 'qa_test_options',
+    key: 'atf_test_options',
     value: 'Test Options',
+  );
+
+  static const atf_test_steps = TranslationEntry(
+    key: 'atf_test_steps',
+    value: 'Test Steps',
+  );
+
+  static const atf_test_suite_results = TranslationEntry(
+    key: 'atf_test_suite_results',
+    value: 'Test Suite Results',
   );
 
   static final atf_tests = TranslationEntry(

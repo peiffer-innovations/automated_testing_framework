@@ -29,6 +29,9 @@ class TestableStepsDialog extends StatefulWidget {
 
 class _TestableStepsDialogState extends State<TestableStepsDialog> {
   final List<AvailableTestStep> _widgetSteps = [];
+  final List<AvailableTestStep> _widgetlessSteps = [];
+
+  TestableRenderController _testRenderController;
 
   @override
   void initState() {
@@ -37,10 +40,15 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
     var registry = TestStepRegistry.of(context);
     var availSteps = registry.availableSteps;
 
+    _testRenderController = TestableRenderController.of(context);
+
     availSteps.where((step) => step.widgetless == false).forEach((step) {
       if (step.supports(widget.types)) {
         _widgetSteps.add(step);
       }
+    });
+    availSteps.where((step) => step.widgetless == true).forEach((step) {
+      _widgetlessSteps.add(step);
     });
   }
 
@@ -79,9 +87,10 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
     }
 
     if (executeImmediate == true && testStep != null) {
-      await Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
       await TestController.of(context)?.execute(
+        skipScreenshots: true,
         steps: [testStep],
         submitReport: false,
         reset: false,
@@ -109,9 +118,10 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
     testController.currentTest.addTestStep(testStep);
 
     if (executeImmediate == true) {
-      await Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
       await TestController.of(context)?.execute(
+        skipScreenshots: true,
         steps: [testStep],
         submitReport: false,
         reset: false,
@@ -196,7 +206,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
         FlatButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            translator.translate(TestTranslations.atf_button_cancel),
+            translator.translate(TestTranslations.atf_button_close),
           ),
         ),
         FlatButton(
@@ -236,7 +246,42 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
                       context,
                       step,
                     ),
+                  Divider(),
                 ],
+                ...[
+                  for (var step in _widgetlessSteps)
+                    _buildTestAction(
+                      context,
+                      step,
+                    ),
+                ],
+                Divider(),
+                SwitchListTile.adaptive(
+                  onChanged: (value) {
+                    _testRenderController.showGlobalOverlay = value;
+                    if (mounted == true) {
+                      setState(() {});
+                    }
+                  },
+                  title: Text(
+                    translator.translate(
+                      TestTranslations.atf_show_global_overlays,
+                    ),
+                  ),
+                  value: _testRenderController.showGlobalOverlay == true,
+                ),
+                ListTile(
+                  onTap: () async {
+                    Navigator.of(context).pop();
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => AvailableTestsPage(),
+                      ),
+                    );
+                  },
+                  title: Text('Open Tests Page'),
+                  trailing: Icon(Icons.chevron_right),
+                )
               ],
             ),
           ),
@@ -244,7 +289,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
       ),
       contentPadding: EdgeInsets.symmetric(vertical: 16.0),
       title: Text(
-        translator.translate(TestTranslations.atf_selected_widget_steps),
+        translator.translate(TestTranslations.atf_test_steps),
       ),
     );
   }

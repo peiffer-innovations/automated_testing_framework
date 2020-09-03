@@ -40,11 +40,17 @@ class SleepStep extends TestRunnerStep {
   Future<void> execute({
     TestReport report,
     @required TestController tester,
-  }) =>
-      sleep(
-        timeout,
-        tester: tester,
-      );
+  }) async {
+    var name = "sleep('${timeout.inMilliseconds}')";
+    log(
+      name,
+      tester: tester,
+    );
+    await sleep(
+      timeout,
+      tester: tester,
+    );
+  }
 
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].

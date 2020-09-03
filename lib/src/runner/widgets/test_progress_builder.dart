@@ -194,7 +194,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.theme.statusAlignment != TestStatusAlignment.none
+    return widget.theme.showRunnerStatus == true
         ? _buildProgressWidgets(context)
         : SizedBox();
   }

@@ -94,13 +94,15 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         // no-op, will be handled later
       }
     } else {
-      finder = find.descendant(
-        of: await waitFor(
-          scrollableId,
-          tester: tester,
-        ),
-        matching: find.byType(Scrollable),
-      );
+      finder = find
+          .descendant(
+            of: await waitFor(
+              scrollableId,
+              tester: tester,
+            ),
+            matching: find.byType(Scrollable),
+          )
+          ?.first;
     }
 
     dynamic widget;
@@ -184,14 +186,14 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     tester.sleep = null;
 
     if (found == true) {
-      await waitFor(
+      var testableFinder = await waitFor(
         testableId,
         tester: tester,
       );
 
       var widgetFinder = find
           .descendant(
-            of: find.byKey(Key(testableId)),
+            of: testableFinder,
             matching: find.byType(Stack),
           )
           .evaluate();

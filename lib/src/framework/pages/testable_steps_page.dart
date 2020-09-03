@@ -4,6 +4,7 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:static_translations/static_translations.dart';
+import 'package:tinycolor/tinycolor.dart';
 
 /// Page that displays all the test steps for the current test.  This will allow
 /// the reordering, clearing, editing, and saving of the steps w/in a current
@@ -64,7 +65,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
     AvailableTestStep step,
   ) {
     var testController = TestController.of(context);
-    var theme = Theme.of(context);
+    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
 
     return ListTile(
@@ -99,6 +100,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
               message: translator
                   .translate(TestTranslations.atf_tooltip_add_and_run),
               child: IconButton(
+                color: theme.iconTheme.color,
                 icon: Icon(
                   Icons.play_circle_filled,
                 ),
@@ -118,6 +120,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                     // Wait for the back to complete before kicking off the step
                     await Future.delayed(Duration(milliseconds: 300));
                     await testController.execute(
+                      skipScreenshots: true,
                       reset: false,
                       steps: [testStep],
                       submitReport: false,
@@ -130,6 +133,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
             Tooltip(
               message: translator.translate(TestTranslations.atf_quick_add),
               child: IconButton(
+                color: theme.iconTheme.color,
                 icon: Icon(
                   Icons.add_circle,
                 ),
@@ -162,6 +166,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
               ),
             ),
           IconButton(
+            color: theme.iconTheme.color,
             icon: Icon(
               Icons.help,
             ),
@@ -197,214 +202,233 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
     var mq = MediaQuery.of(context);
     var testController = TestController.of(context);
     var testableRenderController = TestableRenderController.of(context);
-    var theme = Theme.of(context);
+    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
     var wide = mq.size.width >= 600.0;
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () async {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) => Theme(
-                  data: theme,
-                  child: AlertDialog(
-                    actions: <Widget>[
-                      FlatButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(
-                          translator.translate(
-                            TestTranslations.atf_button_ok,
-                          ),
-                        ),
-                      ),
-                    ],
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        FormField<bool>(
-                          builder: (FormFieldState<bool> state) =>
-                              SwitchListTile.adaptive(
-                            onChanged: (value) {
-                              testableRenderController.showGlobalOverlay =
-                                  value;
-                              state.setState(() {});
-                            },
-                            title: Text(
+    return Theme(
+      data: theme,
+      child: Builder(
+        builder: (BuildContext context) => Scaffold(
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) => Theme(
+                      data: theme,
+                      child: AlertDialog(
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text(
                               translator.translate(
-                                TestTranslations.atf_show_global_overlays,
+                                TestTranslations.atf_button_ok,
                               ),
                             ),
-                            value: testableRenderController.showGlobalOverlay,
                           ),
+                        ],
+                        content: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            FormField<bool>(
+                              builder: (FormFieldState<bool> state) =>
+                                  SwitchListTile.adaptive(
+                                onChanged: (value) {
+                                  testableRenderController.showGlobalOverlay =
+                                      value;
+                                  state.setState(() {});
+                                },
+                                title: Text(
+                                  translator.translate(
+                                    TestTranslations.atf_show_global_overlays,
+                                  ),
+                                ),
+                                value:
+                                    testableRenderController.showGlobalOverlay,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                        contentPadding: EdgeInsets.all(16.0),
+                        title: Text(
+                          translator
+                              .translate(TestTranslations.atf_test_options),
+                        ),
+                      ),
                     ),
-                    contentPadding: EdgeInsets.all(16.0),
-                    title: Text(
-                      translator.translate(TestTranslations.atf_test_options),
-                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.bug_report),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => AvailableTestsPage(),
                   ),
                 ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.bug_report),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => AvailableTestsPage(),
+              ),
+            ],
+            title: Text(
+              translator.translate(
+                TestTranslations.atf_available_test_steps,
               ),
             ),
           ),
-        ],
-        title: Text(
-          translator.translate(
-            TestTranslations.atf_available_test_steps,
-          ),
-        ),
-      ),
-      body: Material(
-        child: Builder(
-          builder: (BuildContext context) => SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: <Widget>[
-                      if (widget.image != null) ...[
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-                          child: Text(
-                            translator.translate(TestTranslations.atf_widget),
-                            style: theme.textTheme.headline6,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Flexible(
-                                child: Text(
-                                  widget.testableId,
-                                  maxLines: 1,
-                                  style: theme.textTheme.subtitle2,
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+          body: Material(
+            child: Builder(
+              builder: (BuildContext context) => SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: <Widget>[
+                          if (widget.testableId?.isNotEmpty == true) ...[
+                            Padding(
+                              padding:
+                                  EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                              child: Text(
+                                translator
+                                    .translate(TestTranslations.atf_widget),
+                                style: theme.textTheme.headline6,
+                                textAlign: TextAlign.center,
                               ),
-                              IconButton(
-                                  icon: Icon(Icons.content_copy),
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(
-                                        text: widget.testableId,
-                                      ),
-                                    );
-
-                                    var snackBar = SnackBar(
-                                      content: Text(
-                                        translator.translate(
-                                          TestTranslations
-                                              .atf_copied_to_clipboard,
-                                        ),
-                                      ),
-                                      duration: Duration(seconds: 1),
-                                    );
-                                    Scaffold.of(context).showSnackBar(snackBar);
-                                  }),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        Container(
-                          alignment: Alignment.center,
-                          color: theme.canvasColor,
-                          height: 200.0,
-                          child: Image.memory(
-                            widget.image,
-                            fit: BoxFit.scaleDown,
-                            scale: MediaQuery.of(context).devicePixelRatio,
-                          ),
-                        ),
-                        Divider(),
-                      ],
-                      if (widget.testableId?.isNotEmpty == true) ...[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            translator.translate(
-                              TestTranslations.atf_selected_widget_steps,
                             ),
-                            style: theme.textTheme.headline6,
-                            textAlign: TextAlign.center,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Text(
+                                      widget.testableId,
+                                      maxLines: 1,
+                                      style: theme.textTheme.subtitle2,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      icon: Icon(Icons.content_copy),
+                                      onPressed: () {
+                                        Clipboard.setData(
+                                          ClipboardData(
+                                            text: widget.testableId,
+                                          ),
+                                        );
+
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                            translator.translate(
+                                              TestTranslations
+                                                  .atf_copied_to_clipboard,
+                                            ),
+                                          ),
+                                          duration: Duration(seconds: 1),
+                                        );
+                                        Scaffold.of(context)
+                                            .showSnackBar(snackBar);
+                                      }),
+                                ],
+                              ),
+                            ),
+                          ],
+                          if (widget.image != null) ...[
+                            Divider(),
+                            Container(
+                              alignment: Alignment.center,
+                              color: theme.brightness == Brightness.dark
+                                  ? TinyColor(theme.scaffoldBackgroundColor)
+                                      .lighten(10)
+                                      .color
+                                  : TinyColor(theme.scaffoldBackgroundColor)
+                                      .darken(10)
+                                      .color,
+                              height: 200.0,
+                              child: Image.memory(
+                                widget.image,
+                                fit: BoxFit.scaleDown,
+                                scale: MediaQuery.of(context).devicePixelRatio,
+                              ),
+                            ),
+                            Divider(),
+                          ],
+                          if (widget.testableId?.isNotEmpty == true) ...[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                translator.translate(
+                                  TestTranslations.atf_selected_widget_steps,
+                                ),
+                                style: theme.textTheme.headline5,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            for (var step in _widgetSteps)
+                              _buildTestAction(
+                                context,
+                                step,
+                              ),
+                            Divider(),
+                          ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              translator.translate(
+                                TestTranslations.atf_widgetless_steps,
+                              ),
+                              style: theme.textTheme.headline5,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        for (var step in _widgetSteps)
-                          _buildTestAction(
-                            context,
-                            step,
-                          ),
-                        Divider(),
-                      ],
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          translator.translate(
-                            TestTranslations.atf_widgetless_steps,
-                          ),
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
-                        ),
+                          for (var step in _globalSteps)
+                            _buildTestAction(
+                              context,
+                              step,
+                            ),
+                        ],
                       ),
-                      for (var step in _globalSteps)
-                        _buildTestAction(
-                          context,
-                          step,
-                        ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).canvasColor,
-        child: Container(
-          alignment: wide == true ? Alignment.centerRight : Alignment.center,
-          height: 40.0,
-          child: FlatButton(
-            onPressed: (testController.currentTest.steps?.length ?? 0) == 0
-                ? null
-                : () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => TestStepsPage(),
-                      ),
-                    );
-                    if (mounted == true) {
-                      setState(() {});
-                    }
-                  },
-            child: Text(
-              translator.translate(
-                TestTranslations.atf_button_view_test_steps,
-                {
-                  'count': testController.currentTest.steps?.length ?? 0,
-                },
+          bottomNavigationBar: BottomAppBar(
+            color: theme.canvasColor,
+            child: Container(
+              alignment:
+                  wide == true ? Alignment.centerRight : Alignment.center,
+              height: 40.0,
+              child: FlatButton(
+                onPressed: (testController.currentTest.steps?.length ?? 0) == 0
+                    ? null
+                    : () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => TestStepsPage(),
+                          ),
+                        );
+                        if (mounted == true) {
+                          setState(() {});
+                        }
+                      },
+                child: Text(
+                  translator.translate(
+                    TestTranslations.atf_button_view_test_steps,
+                    {
+                      'count': testController.currentTest.steps?.length ?? 0,
+                    },
+                  ),
+                ),
               ),
             ),
           ),

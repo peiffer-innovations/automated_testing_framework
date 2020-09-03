@@ -9,7 +9,7 @@ import 'package:json_theme/json_theme.dart';
 class TestRunnerThemeData implements JsonClass {
   const TestRunnerThemeData({
     this.runnerOverlayColor = Colors.black26,
-    this.showRunnerStatus = kReleaseMode != true,
+    this.showRunnerStatus = kDebugMode == true,
     this.showStepText = false,
     this.statusAlignment = TestStatusAlignment.bottom,
     this.statusBackgroundColor = Colors.black45,
@@ -196,9 +196,6 @@ class TestStatusAlignment {
   /// Aligns the test status bar at the center of the screen.
   static const center = TestStatusAlignment._('center');
 
-  /// Hidees the test status bar.
-  static const none = TestStatusAlignment._('none');
-
   /// Aligns the test status bar at the top of the screen.
   static const top = TestStatusAlignment._('top');
 
@@ -211,9 +208,7 @@ class TestStatusAlignment {
   static TestStatusAlignment fromString(String data) {
     TestStatusAlignment result;
 
-    if (data == null) {
-      result = TestStatusAlignment.none;
-    } else {
+    if (data != null) {
       switch (data) {
         case 'bottom':
           result = TestStatusAlignment.bottom;
@@ -223,9 +218,6 @@ class TestStatusAlignment {
           break;
         case 'center':
           result = TestStatusAlignment.center;
-          break;
-        case 'none':
-          result = TestStatusAlignment.none;
           break;
         case 'top':
           result = TestStatusAlignment.top;

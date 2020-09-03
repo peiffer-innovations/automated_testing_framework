@@ -10,7 +10,7 @@ class TestStepDelays implements JsonClass {
   /// requirements.
   const TestStepDelays({
     this.defaultTimeout = const Duration(seconds: 10),
-    this.postFoundWidget = const Duration(),
+    this.postFoundWidget = Duration.zero,
     this.postStep = const Duration(seconds: 1),
     this.postSubmitReport = const Duration(seconds: 5),
     this.preStep = const Duration(seconds: 1),

@@ -30,8 +30,14 @@ export 'src/registry/test_step_registry.dart';
 export 'src/report/models/test_image.dart';
 export 'src/report/models/test_report.dart';
 export 'src/report/models/test_report_step.dart';
+export 'src/report/models/test_suite_report.dart';
+export 'src/report/models/test_suite_result.dart';
 
 export 'src/report/pages/test_report_page.dart';
+export 'src/report/pages/test_suite_report_page.dart';
+
+export 'src/report/widgets/test_report_step_widget.dart';
+export 'src/report/widgets/test_suite_result_widget.dart';
 
 export 'src/runner/components/test_controller.dart';
 

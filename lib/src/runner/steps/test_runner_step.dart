@@ -71,7 +71,7 @@ abstract class TestRunnerStep extends JsonClass {
 
       // However, let's put sanity limits.  At lest 10 events and no more than
       // 50.
-      var steps = max(5, min(50, calcSteps));
+      var steps = max(5, min(50, calcSteps)).toInt();
 
       tester.sleep = ProgressValue(max: steps, value: 0);
       var sleepMillis = duration.inMilliseconds ~/ steps;

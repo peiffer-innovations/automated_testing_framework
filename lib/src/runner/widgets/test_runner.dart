@@ -28,18 +28,23 @@ class TestRunner extends StatefulWidget {
   ///
   /// The [testableRenderController] is used by the [Testable] widgets to
   /// determine how to render their UI and process user interactions.
+  ///
+  /// If a [theme] is passed in then that will be used by the framework's built
+  /// in pages and widgets.
   TestRunner({
     @required this.child,
-    @required this.controller,
+    @required TestController controller,
     bool enabled,
     Key key,
     this.progressBuilder = const TestProgressBuilder(),
     TestableRenderController testableRenderController,
+    this.theme,
   })  : assert(child != null),
         assert(controller != null ||
             enabled == false ||
             (enabled == null && foundation.kReleaseMode == true)),
         _enabled = enabled ?? foundation.kReleaseMode != true,
+        controller = enabled == true ? controller : null,
         _testableRenderController =
             testableRenderController ?? TestableRenderController(),
         super(key: key);
@@ -47,6 +52,7 @@ class TestRunner extends StatefulWidget {
   final Widget child;
   final TestController controller;
   final Widget progressBuilder;
+  final ThemeData theme;
 
   final bool _enabled;
   final TestableRenderController _testableRenderController;
@@ -81,6 +87,7 @@ class TestRunnerState extends State<TestRunner> {
   bool get enabled => _enabled;
   TestableRenderController get testableRenderController =>
       widget.testableRenderController;
+  ThemeData get theme => widget.theme;
 
   @override
   void initState() {

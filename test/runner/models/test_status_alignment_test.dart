@@ -6,7 +6,6 @@ void main() {
     expect(TestStatusAlignment.bottom.toString(), 'bottom');
     expect(TestStatusAlignment.bottomSafe.toString(), 'bottomSafe');
     expect(TestStatusAlignment.center.toString(), 'center');
-    expect(TestStatusAlignment.none.toString(), 'none');
     expect(TestStatusAlignment.top.toString(), 'top');
     expect(TestStatusAlignment.topSafe.toString(), 'topSafe');
 
@@ -21,10 +20,6 @@ void main() {
     expect(
       TestStatusAlignment.fromString('center'),
       TestStatusAlignment.center,
-    );
-    expect(
-      TestStatusAlignment.fromString('none'),
-      TestStatusAlignment.none,
     );
     expect(
       TestStatusAlignment.fromString('top'),

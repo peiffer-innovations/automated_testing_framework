@@ -53,7 +53,7 @@ class AssertValueStep extends TestRunnerStep {
             map['equals'] == null ? true : JsonClass.parseBool(map['equals']),
         testableId: map['testableId'],
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
-        value: map['value'],
+        value: map['value']?.toString(),
       );
     }
 

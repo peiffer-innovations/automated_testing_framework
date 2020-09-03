@@ -96,11 +96,13 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
               'version': test.version,
             },
           ),
-          style: Theme.of(context).textTheme.subtitle2,
+          style: (TestRunner.of(context)?.theme ?? Theme.of(context))
+              .textTheme
+              .subtitle2,
         ),
         title: Text(test.name),
         trailing: IgnorePointer(
-          child: Switch(
+          child: Switch.adaptive(
             onChanged: (_) => _setActive(test),
             value: _isActive(test),
           ),
@@ -109,38 +111,44 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.play_circle_filled,
+    return Theme(
+      data: TestRunner.of(context)?.theme ?? Theme.of(context),
+      child: Builder(
+        builder: (BuildContext context) => Scaffold(
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.play_circle_filled,
+                ),
+                onPressed:
+                    _tests?.isNotEmpty == true ? () => _runTests() : null,
+              ),
+            ],
+            title: Text(
+              _translator.translate(TestTranslations.atf_tests),
             ),
-            onPressed: _tests?.isNotEmpty == true ? () => _runTests() : null,
           ),
-        ],
-        title: Text(
-          _translator.translate(TestTranslations.atf_tests),
+          body: _tests == null || _tests?.isEmpty == true
+              ? Center(
+                  child: _tests == null
+                      ? CircularProgressIndicator()
+                      : Text(
+                          _translator.translate(
+                            TestTranslations.atf_no_tests_found,
+                          ),
+                        ),
+                )
+              : ListView.builder(
+                  itemBuilder: (
+                    BuildContext context,
+                    int index,
+                  ) =>
+                      _buildTest(context, _tests[index]),
+                  itemCount: _tests.length,
+                ),
         ),
       ),
-      body: _tests == null || _tests?.isEmpty == true
-          ? Center(
-              child: _tests == null
-                  ? CircularProgressIndicator()
-                  : Text(
-                      _translator.translate(
-                        TestTranslations.atf_no_tests_found,
-                      ),
-                    ),
-            )
-          : ListView.builder(
-              itemBuilder: (
-                BuildContext context,
-                int index,
-              ) =>
-                  _buildTest(context, _tests[index]),
-              itemCount: _tests.length,
-            ),
     );
   }
 }

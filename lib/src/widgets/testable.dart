@@ -112,6 +112,9 @@ class TestableState extends State<Testable>
   TestableRenderController _renderController;
   GlobalKey _renderKey;
   String _scrollableId;
+
+  /// Global key that provides the ability for the scroll_until_visible step to
+  /// actually scroll to this widget.
   GlobalKey _scrollKey;
   bool _showTestableOverlay = false;
   TestController _testController;
@@ -226,9 +229,11 @@ class TestableState extends State<Testable>
   /// Flashes the [Testable] widget to give a visual indicator that the
   /// framework is interactging with the widget.
   Future<void> flash() async {
-    for (var i = 0; i < _renderController.flashCount; i++) {
-      await _animationController.forward(from: 0.0);
-      await _animationController.reverse(from: 1.0);
+    if (_renderController.testWidgetsEnabled == true) {
+      for (var i = 0; i < _renderController.flashCount; i++) {
+        await _animationController.forward(from: 0.0);
+        await _animationController.reverse(from: 1.0);
+      }
     }
   }
 
@@ -576,6 +581,17 @@ class TestableState extends State<Testable>
                 child: Container(color: _animation.value),
               ),
             ),
+        ],
+      );
+    } else if (widget.id?.isNotEmpty == true && _testRunner?.enabled == true) {
+      // The scroll_until_visible step is expecting a stack with a global key.
+      // So even though the test widgets are disabled, this wrapping still needs
+      // to happen or else that step will always fail.
+      result = Stack(
+        fit: StackFit.passthrough,
+        key: _scrollKey,
+        children: [
+          widget.child,
         ],
       );
     } else {

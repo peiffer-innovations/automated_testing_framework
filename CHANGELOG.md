@@ -1,3 +1,13 @@
+## [1.0.0] - September 2nd, 2020
+
+* Fix for typo in the EnsureExists registry
+* Updated `AssetTestStore` to support an index file or a list of individual files
+* Added added ability to pass a `Theme` to the `TestRunner` to give the test framework a unique theme vs the rest of the app
+* Reformatted the TestReport page to provide more useful information
+* Added a "minify test steps" option to the Test Steps page to make reordering easier
+* Added a `TestSuiteReportPage` to display a summary of all the test results in a test suite run.
+
+
 ## [0.2.3] - September 1st, 2020
 
 * Fix to disable Quick Add in the test steps page when a step doesn't support it

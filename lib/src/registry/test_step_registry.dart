@@ -56,18 +56,6 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
-        form: EnsureExistsForm(),
-        help: TestStepTranslations.atf_help_ensure_exists,
-        id: 'ensure_exists',
-        keys: const {'testableId'},
-        quickAddValues: const {},
-        title: TestStepTranslations.atf_title_ensure_exists,
-        widgetless: false,
-      ),
-      testRunnerStepBuilder: DismissKeyboardStep.fromDynamic,
-    ),
-    TestStepBuilder(
-      availableTestStep: AvailableTestStep(
         form: DismissKeyboardForm(),
         help: TestStepTranslations.atf_help_dismiss_keyboard,
         id: 'dismiss_keyboard',
@@ -77,6 +65,18 @@ class TestStepRegistry {
         widgetless: true,
       ),
       testRunnerStepBuilder: DismissKeyboardStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
+        form: EnsureExistsForm(),
+        help: TestStepTranslations.atf_help_ensure_exists,
+        id: 'ensure_exists',
+        keys: const {'testableId'},
+        quickAddValues: const {},
+        title: TestStepTranslations.atf_title_ensure_exists,
+        widgetless: false,
+      ),
+      testRunnerStepBuilder: EnsureExistsStep.fromDynamic,
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
@@ -132,6 +132,7 @@ class TestStepRegistry {
         help: TestStepTranslations.atf_help_set_value,
         id: 'set_value',
         keys: const {'testableId', 'timeout', 'type', 'value'},
+        quickAddValues: const {'type': 'String'},
         title: TestStepTranslations.atf_title_set_value,
         type: TestableType.value_settable,
         widgetless: false,
