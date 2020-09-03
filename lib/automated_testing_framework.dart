@@ -47,8 +47,6 @@ export 'src/runner/models/test.dart';
 export 'src/runner/models/test_runner_theme_data.dart';
 export 'src/runner/models/test_step_delays.dart';
 
-export 'src/runner/overrides/override_widget_tester.dart';
-
 export 'src/runner/steps/assert_error_step.dart';
 export 'src/runner/steps/assert_value_step.dart';
 export 'src/runner/steps/dismiss_keyboard_step.dart';

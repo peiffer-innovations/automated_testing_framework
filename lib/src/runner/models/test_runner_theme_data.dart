@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
-import 'package:json_theme/json_theme.dart';
 
 /// Test runner theme data that can be used to alter the appearance of the built
 /// in test runner.
@@ -147,19 +146,77 @@ class TestRunnerThemeData implements JsonClass {
 
     if (map != null) {
       result = TestRunnerThemeData(
-        runnerOverlayColor: ThemeDecoder.decodeColor(map['runnerOverlayColor']),
+        runnerOverlayColor: _decodeColor(map['runnerOverlayColor']),
         showRunnerStatus: JsonClass.parseBool(map['showRunnerStatus']),
         showStepText: JsonClass.parseBool(map['showStepText']),
         statusAlignment: TestStatusAlignment.fromString(map['statusAlignment']),
-        statusBackgroundColor:
-            ThemeDecoder.decodeColor(map['statusBackgroundColor']),
-        statusErrorColor: ThemeDecoder.decodeColor(map['statusErrorColor']),
+        statusBackgroundColor: _decodeColor(map['statusBackgroundColor']),
+        statusErrorColor: _decodeColor(map['statusErrorColor']),
         statusOpacity: JsonClass.parseDouble(map['statusOpacity']),
-        statusProgressColor:
-            ThemeDecoder.decodeColor(map['statusProgressColor']),
-        statusSuccessColor: ThemeDecoder.decodeColor(map['statusSuccessColor']),
-        statusTextColor: ThemeDecoder.decodeColor(map['statusTextColor']),
+        statusProgressColor: _decodeColor(map['statusProgressColor']),
+        statusSuccessColor: _decodeColor(map['statusSuccessColor']),
+        statusTextColor: _decodeColor(map['statusTextColor']),
       );
+    }
+
+    return result;
+  }
+
+  /// Decodes a given [value] into a color.  A [value] of [null] will result in
+  /// [null] being returned.
+  ///
+  /// This supports the following formats:
+  ///  * `rgb`
+  ///  * `rrggbb`
+  ///  * `aarrggbb`
+  ///  * `#rgb`
+  ///  * `#rrggbb`
+  ///  * `#aarrggbb`
+  static Color _decodeColor(dynamic value) {
+    Color result;
+
+    if (value is Color) {
+      result = value;
+    } else if (value != null) {
+      var i = 0;
+
+      if (value?.startsWith('#') == true) {
+        value = value.substring(1);
+      }
+
+      if (value?.length == 3) {
+        value = value.substring(0, 1) +
+            value.substring(0, 1) +
+            value.substring(1, 2) +
+            value.substring(1, 2) +
+            value.substring(2, 3) +
+            value.substring(2, 3);
+      }
+
+      if (value?.length == 6 || value?.length == 8) {
+        i = int.parse(value, radix: 16);
+
+        if (value?.length != 8) {
+          i = 0xff000000 + i;
+        }
+
+        result = Color(i);
+      }
+    }
+
+    return result;
+  }
+
+  /// Encodes the given [value] to the String representation.  This will always
+  /// use a hash encoded 8 digit string: "#aarrbbgg" format.
+  ///
+  /// This will return [null] if the value is [null].
+  static String _encodeColor(Color value) {
+    String result;
+
+    if (value != null) {
+      var hex = value.value.toRadixString(16).padLeft(8, '0');
+      result = '#$hex';
     }
 
     return result;
@@ -168,17 +225,16 @@ class TestRunnerThemeData implements JsonClass {
   /// Encodees the object to JSON.  For the format, see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
-        'runnerOverlayColor': ThemeEncoder.encodeColor(runnerOverlayColor),
+        'runnerOverlayColor': _encodeColor(runnerOverlayColor),
         'showRunnerStatus': showRunnerStatus,
         'showStepText': showStepText,
         'statusAlignment': statusAlignment.toString(),
-        'statusBackgroundColor':
-            ThemeEncoder.encodeColor(statusBackgroundColor),
-        'statusErrorColor': ThemeEncoder.encodeColor(statusErrorColor),
+        'statusBackgroundColor': _encodeColor(statusBackgroundColor),
+        'statusErrorColor': _encodeColor(statusErrorColor),
         'statusOpacity': statusOpacity,
-        'statusProgressColor': ThemeEncoder.encodeColor(statusProgressColor),
-        'statusSuccessColor': ThemeEncoder.encodeColor(statusSuccessColor),
-        'statusTextColor': ThemeEncoder.encodeColor(statusTextColor),
+        'statusProgressColor': _encodeColor(statusProgressColor),
+        'statusSuccessColor': _encodeColor(statusSuccessColor),
+        'statusTextColor': _encodeColor(statusTextColor),
       };
 }
 

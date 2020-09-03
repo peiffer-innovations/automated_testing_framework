@@ -30,9 +30,8 @@ class GoBackStep extends TestRunnerStep {
       'goBack',
       tester: tester,
     );
-    var backButton = find.byTooltip('Back');
 
-    await driver.tap(backButton);
+    await driver.pageBack();
   }
 
   /// Converts this to a JSON compatible map.  For a description of the format,

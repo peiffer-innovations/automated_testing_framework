@@ -9,12 +9,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_test/flutter_test.dart';
 
-/// Keep users from needing multiple imports to test semantics.
-export 'package:flutter/rendering.dart' show SemanticsHandle;
+import '../../flutter_test/flutter_test.dart';
 
 /// Class that programmatically interacts with widgets and the test environment.
 ///
@@ -22,11 +19,7 @@ export 'package:flutter/rendering.dart' show SemanticsHandle;
 /// `testWidget`) can be used as the `vsync` for `AnimationController` objects.
 class OverrideWidgetTester extends WidgetController
     implements HitTestDispatcher, TickerProvider {
-  OverrideWidgetTester(WidgetsBinding binding) : super(binding) {
-    if (binding is LiveTestWidgetsFlutterBinding)
-      // ignore: curly_braces_in_flow_control_structures
-      binding.deviceEventDispatcher = this;
-  }
+  OverrideWidgetTester(WidgetsBinding binding) : super(binding);
 
   /// The description string of the test currently being run.
   String get testDescription => _testDescription;
@@ -37,17 +30,9 @@ class OverrideWidgetTester extends WidgetController
   @override
   WidgetsBinding get binding => super.binding;
 
-  Future<void> pumpWidget(
-    Widget widget, [
-    Duration duration,
-    EnginePhase phase = EnginePhase.sendSemanticsUpdate,
-  ]) =>
-      throw UnimplementedError();
-
   @override
   Future<void> pump([
     Duration duration,
-    EnginePhase phase = EnginePhase.sendSemanticsUpdate,
   ]) async {
     if (duration != null)
       // ignore: curly_braces_in_flow_control_structures
@@ -145,94 +130,18 @@ class OverrideWidgetTester extends WidgetController
         binding.pipelineOwner.debugOutstandingSemanticsHandles;
   }
 
-  /// Simulates sending physical key down and up events through the system channel.
-  ///
-  /// This only simulates key events coming from a physical keyboard, not from a
-  /// soft keyboard.
-  ///
-  /// Specify `platform` as one of the platforms allowed in
-  /// [Platform.operatingSystem] to make the event appear to be from that type
-  /// of system. Defaults to "android". Must not be null. Some platforms (e.g.
-  /// Windows, iOS) are not yet supported.
-  ///
-  /// Keys that are down when the test completes are cleared after each test.
-  ///
-  /// This method sends both the key down and the key up events, to simulate a
-  /// key press. To simulate individual down and/or up events, see
-  /// [sendKeyDownEvent] and [sendKeyUpEvent].
-  ///
-  /// See also:
-  ///
-  ///  - [sendKeyDownEvent] to simulate only a key down event.
-  ///  - [sendKeyUpEvent] to simulate only a key up event.
-  Future<void> sendKeyEvent(LogicalKeyboardKey key,
-      {String platform = 'android'}) async {
-    assert(platform != null);
-    await simulateKeyDownEvent(key, platform: platform);
-    // Internally wrapped in async guard.
-    return simulateKeyUpEvent(key, platform: platform);
-  }
-
-  /// Simulates sending a physical key down event through the system channel.
-  ///
-  /// This only simulates key down events coming from a physical keyboard, not
-  /// from a soft keyboard.
-  ///
-  /// Specify `platform` as one of the platforms allowed in
-  /// [Platform.operatingSystem] to make the event appear to be from that type
-  /// of system. Defaults to "android". Must not be null. Some platforms (e.g.
-  /// Windows, iOS) are not yet supported.
-  ///
-  /// Keys that are down when the test completes are cleared after each test.
-  ///
-  /// See also:
-  ///
-  ///  - [sendKeyUpEvent] to simulate the corresponding key up event.
-  ///  - [sendKeyEvent] to simulate both the key up and key down in the same call.
-  Future<void> sendKeyDownEvent(LogicalKeyboardKey key,
-      {String platform = 'android'}) async {
-    assert(platform != null);
-    // Internally wrapped in async guard.
-    return simulateKeyDownEvent(key, platform: platform);
-  }
-
-  /// Simulates sending a physical key up event through the system channel.
-  ///
-  /// This only simulates key up events coming from a physical keyboard,
-  /// not from a soft keyboard.
-  ///
-  /// Specify `platform` as one of the platforms allowed in
-  /// [Platform.operatingSystem] to make the event appear to be from that type
-  /// of system. Defaults to "android". May not be null.
-  ///
-  /// See also:
-  ///
-  ///  - [sendKeyDownEvent] to simulate the corresponding key down event.
-  ///  - [sendKeyEvent] to simulate both the key up and key down in the same call.
-  Future<void> sendKeyUpEvent(LogicalKeyboardKey key,
-      {String platform = 'android'}) async {
-    assert(platform != null);
-    // Internally wrapped in async guard.
-    return simulateKeyUpEvent(key, platform: platform);
-  }
-
   /// Makes an effort to dismiss the current page with a Material [Scaffold] or
   /// a [CupertinoPageScaffold].
   ///
   /// Will throw an error if there is no back button in the page.
   Future<void> pageBack() async {
-    return TestAsyncUtils.guard<void>(() async {
-      // ignore: omit_local_variable_types
-      Finder backButton = find.byTooltip('Back');
-      if (backButton.evaluate().isEmpty) {
-        backButton = find.byType(CupertinoNavigationBarBackButton);
-      }
+    // ignore: omit_local_variable_types
+    Finder backButton = find.byTooltip('Back');
+    if (backButton.evaluate().isEmpty) {
+      backButton = find.byType(CupertinoNavigationBarBackButton);
+    }
 
-      expectSync(backButton, findsOneWidget,
-          reason: 'One back button expected on screen');
-
-      await tap(backButton);
-    });
+    await tap(backButton);
   }
 
   /// Attempts to find the [SemanticsNode] of first result from `finder`.

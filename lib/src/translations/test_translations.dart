@@ -3,72 +3,72 @@ import 'package:static_translations/static_translations.dart';
 class TestTranslations {
   TestTranslations._();
 
-  static final atf_added_step_action = TranslationEntry(
+  static const atf_added_step_action = TranslationEntry(
     key: 'atf_added_step_action',
     value: 'Added Step: {step}',
   );
 
-  static final atf_available_test_steps = TranslationEntry(
+  static const atf_available_test_steps = TranslationEntry(
     key: 'atf_available_test_steps',
     value: 'Available Test Steps',
   );
 
-  static final atf_button_cancel = TranslationEntry(
+  static const atf_button_cancel = TranslationEntry(
     key: 'atf_button_cancel',
     value: 'CANCEL',
   );
 
-  static final atf_button_discard = TranslationEntry(
+  static const atf_button_discard = TranslationEntry(
     key: 'atf_button_discard',
     value: 'DISCARD',
   );
 
-  static final atf_button_delete = TranslationEntry(
+  static const atf_button_delete = TranslationEntry(
     key: 'atf_button_delete',
     value: 'DELETE',
   );
 
-  static final atf_button_clear = TranslationEntry(
+  static const atf_button_clear = TranslationEntry(
     key: 'atf_button_clear',
     value: 'CLEAR',
   );
 
-  static final atf_button_close = TranslationEntry(
+  static const atf_button_close = TranslationEntry(
     key: 'atf_button_close',
     value: 'CLOSE',
   );
 
-  static final atf_button_edit = TranslationEntry(
+  static const atf_button_edit = TranslationEntry(
     key: 'atf_button_edit',
     value: 'EDIT',
   );
 
-  static final atf_button_export = TranslationEntry(
+  static const atf_button_export = TranslationEntry(
     key: 'atf_button_export',
     value: 'EXPORT',
   );
 
-  static final atf_button_ok = TranslationEntry(
+  static const atf_button_ok = TranslationEntry(
     key: 'atf_button_ok',
     value: 'OK',
   );
 
-  static final atf_button_rerun = TranslationEntry(
+  static const atf_button_rerun = TranslationEntry(
     key: 'atf_button_rerun',
     value: 'RUN TEST AGAIN',
   );
 
-  static final atf_button_run = TranslationEntry(
+  static const atf_button_run = TranslationEntry(
     key: 'atf_button_run',
     value: 'RUN',
   );
 
-  static final atf_button_run_all = TranslationEntry(
+  static const atf_button_run_all = TranslationEntry(
     key: 'atf_button_run_all',
     value: 'RUN ALL',
   );
 
-  static final atf_button_submit = TranslationEntry(
+  static const atf_button_submit = TranslationEntry(
     key: 'atf_button_submit',
     value: 'SUBMIT',
   );
@@ -88,7 +88,7 @@ class TestTranslations {
     value: 'Are you sure you want to clear all the test steps?',
   );
 
-  static final atf_copied_to_clipboard = TranslationEntry(
+  static const atf_copied_to_clipboard = TranslationEntry(
     key: 'atf_copied_to_clipboard',
     value: 'Copied to clipboard',
   );
@@ -108,47 +108,47 @@ class TestTranslations {
     value: 'Export successful',
   );
 
-  static final atf_maximize_step_details = TranslationEntry(
+  static const atf_maximize_step_details = TranslationEntry(
     key: 'atf_maximize_step_details',
     value: 'Show full step details',
   );
 
-  static final atf_minimize_step_details = TranslationEntry(
+  static const atf_minimize_step_details = TranslationEntry(
     key: 'atf_minimize_step_details',
     value: 'Show minimal step details',
   );
 
-  static final atf_no_tests_found = TranslationEntry(
+  static const atf_no_tests_found = TranslationEntry(
     key: 'atf_no_tests_found',
     value: 'No tests found',
   );
 
-  static final atf_operation_not_supported = TranslationEntry(
+  static const atf_operation_not_supported = TranslationEntry(
     key: 'atf_operation_not_supported',
     value: 'Operation not supported',
   );
 
-  static final atf_options = TranslationEntry(
+  static const atf_options = TranslationEntry(
     key: 'atf_options',
     value: 'Options',
   );
 
-  static final atf_quick_add = TranslationEntry(
+  static const atf_quick_add = TranslationEntry(
     key: 'atf_quick_add',
     value: 'Quick Add Step',
   );
 
-  static final atf_selected_widget_steps = TranslationEntry(
+  static const atf_selected_widget_steps = TranslationEntry(
     key: 'atf_selected_widget_steps',
     value: 'Selected Widget Steps',
   );
 
-  static final atf_show_global_overlays = TranslationEntry(
+  static const atf_show_global_overlays = TranslationEntry(
     key: 'atf_show_global_overlays',
     value: 'Show global overlays',
   );
 
-  static final atf_test_name = TranslationEntry(
+  static const atf_test_name = TranslationEntry(
     key: 'atf_test_name',
     value: 'Test Name',
   );
@@ -168,37 +168,37 @@ class TestTranslations {
     value: 'Test Suite Results',
   );
 
-  static final atf_tests = TranslationEntry(
+  static const atf_tests = TranslationEntry(
     key: 'atf_tests',
     value: 'Tests',
   );
 
-  static final atf_timeout_seconds = TranslationEntry(
+  static const atf_timeout_seconds = TranslationEntry(
     key: 'atf_timeout_seconds',
     value: 'Timeout (seconds)',
   );
 
-  static final atf_tooltip_add_and_run = TranslationEntry(
+  static const atf_tooltip_add_and_run = TranslationEntry(
     key: 'atf_tooltip_add_and_run',
     value: 'Add step and immediately execute',
   );
 
-  static final atf_unnamed_test = TranslationEntry(
+  static const atf_unnamed_test = TranslationEntry(
     key: 'atf_unnamed_test',
     value: '<Unnamed Test>',
   );
 
-  static final atf_version_steps = TranslationEntry(
+  static const atf_version_steps = TranslationEntry(
     key: 'atf_version_steps',
     value: 'Version: {version} / Steps: {steps}',
   );
 
-  static final atf_widget = TranslationEntry(
+  static const atf_widget = TranslationEntry(
     key: 'atf_widget',
     value: 'Widget',
   );
 
-  static final atf_widgetless_steps = TranslationEntry(
+  static const atf_widgetless_steps = TranslationEntry(
     key: 'atf_widgetless_steps',
     value: 'Other Steps',
   );

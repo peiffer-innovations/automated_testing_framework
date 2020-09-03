@@ -1,3 +1,8 @@
+## [1.0.1] - September 3rd, 2020
+
+* Copied `decodeColor` and `encodeColor` from the [json_theme](https://pub.dev/packages/json_theme) package due to incompatibilies with that package and Flutter 1.20 / 1.21.
+
+
 ## [1.0.0] - September 2nd, 2020
 
 * Fix for typo in the EnsureExists registry

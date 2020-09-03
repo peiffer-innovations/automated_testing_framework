@@ -1,5 +1,4 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 

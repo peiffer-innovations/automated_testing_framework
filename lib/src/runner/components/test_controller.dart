@@ -376,27 +376,32 @@ class TestController {
   /// This will never trigger a failure, but it will return [null] if the device
   /// does not respond before the timeout.
   Future<Uint8List> screencap() async {
-    var captureContext = CaptureContext(
-      devicePixelRatio: devicePixelRatio,
-      image: [],
-    );
-    status = '<screenshot>';
-    try {
-      _screencapController.add(captureContext);
+    Uint8List image;
+    if (!kIsWeb) {
+      var captureContext = CaptureContext(
+        devicePixelRatio: devicePixelRatio,
+        image: [],
+      );
+      status = '<screenshot>';
+      try {
+        _screencapController.add(captureContext);
 
-      var now = DateTime.now().millisecondsSinceEpoch;
-      while (captureContext.image?.isNotEmpty != true &&
-          now + delays.screenshot.inMilliseconds >
-              DateTime.now().millisecondsSinceEpoch) {
-        await Future.delayed(Duration(milliseconds: 100));
+        var now = DateTime.now().millisecondsSinceEpoch;
+        while (captureContext.image?.isNotEmpty != true &&
+            now + delays.screenshot.inMilliseconds >
+                DateTime.now().millisecondsSinceEpoch) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+      } catch (e, stack) {
+        _logger.severe(e, stack);
       }
-    } catch (e, stack) {
-      _logger.severe(e, stack);
+
+      image = captureContext?.image?.isNotEmpty != true
+          ? null
+          : Uint8List.fromList(captureContext?.image);
     }
 
-    return captureContext?.image == null
-        ? null
-        : Uint8List.fromList(captureContext?.image);
+    return image;
   }
 
   /// Requests the application to perform a reset.

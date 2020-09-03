@@ -3,10 +3,12 @@ import 'dart:math';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart' as test;
 import 'package:json_class/json_class.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+
+import '../../flutter_test/flutter_test.dart' as test;
+import '../overrides/override_widget_tester.dart';
 
 /// Abstract step that all other test steps must extend.
 @immutable
