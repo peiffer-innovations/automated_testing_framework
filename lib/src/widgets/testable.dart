@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
+import 'package:websafe_platform/websafe_platform.dart';
 
 /// Workhorse of the Automate Testing Framework.
 class Testable extends StatefulWidget {
@@ -297,16 +298,19 @@ class TestableState extends State<Testable>
       await Future.delayed(Duration(milliseconds: 500));
 
       List<int> image;
-
-      if (boundary?.debugNeedsPaint != true) {
-        var img = await boundary.toImage(
-          pixelRatio: MediaQuery.of(context).devicePixelRatio,
-        );
-        var byteData = await img.toByteData(
-          format: ui.ImageByteFormat.png,
-        );
-        image = byteData.buffer.asUint8List();
+      var wsp = WebsafePlatform();
+      if (wsp.isAndroid() || wsp.isIOS()) {
+        if (boundary?.debugNeedsPaint != true) {
+          var img = await boundary.toImage(
+            pixelRatio: MediaQuery.of(context).devicePixelRatio,
+          );
+          var byteData = await img.toByteData(
+            format: ui.ImageByteFormat.png,
+          );
+          image = byteData.buffer.asUint8List();
+        }
       }
+
       if (mounted == true) {
         setState(() {});
       }

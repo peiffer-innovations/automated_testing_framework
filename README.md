@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+* [Live Example](#live-example)
 * [Introduction](#introduction)
 * [Running the Example](#running-the-example)
 * [Quick Start](#quick-start)
@@ -11,6 +12,11 @@
 * [Reporting Test Results](#reporting-test-results)
 * [Framework in Action](#framework-in-action)
 
+
+## Live Example
+
+* [Web](https://peiffer-innovations.github.io/automated_testing_framework/web/index.html#/)
+  * _Note_: Please wait a few seconds after the example loads for the tests to start.  Once the tests are complete, you can interact with the app and build and run your own tests.
 
 ## Introduction
 

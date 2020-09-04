@@ -81,21 +81,21 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return TestRunner(
       controller: _testController,
-      enabled: true,
+      enabled: !kReleaseMode,
       progressBuilder: TestProgressBuilder(
         theme: _darkTheme
             ? TestRunnerThemeData.dark(
                 showStepText: true,
-                showRunnerStatus: kDebugMode,
+                showRunnerStatus: !kReleaseMode,
                 statusAlignment: TestStatusAlignment.bottomSafe,
               )
             : TestRunnerThemeData(
-                showRunnerStatus: kDebugMode,
+                showRunnerStatus: !kReleaseMode,
               ),
       ),
       testableRenderController: TestableRenderController(
         flashCount: _darkTheme ? 3 : 0,
-        testWidgetsEnabled: kDebugMode,
+        testWidgetsEnabled: !kReleaseMode,
       ),
       child: MultiProvider(
         providers: [
