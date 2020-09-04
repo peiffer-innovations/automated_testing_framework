@@ -1,6 +1,5 @@
 ## [1.0.1] - September 3rd, 2020
 
-* Copied `decodeColor` and `encodeColor` from the [json_theme](https://pub.dev/packages/json_theme) package due to incompatibilies with that package and Flutter 1.20 / 1.21.
 * Brought in the minimal amount of `flutter_test` to remove the dependency of the SDK version due to incompatibilities between Flutter 1.20 / 1.21.
 * Added Web and MacOS to the example app
   * _Note_: image capture is not supported in Flutter outside of iOS and Android currently
