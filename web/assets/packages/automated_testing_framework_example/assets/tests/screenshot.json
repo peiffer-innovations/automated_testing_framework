@@ -1,0 +1,8 @@
+{
+  "active": true,
+  "name": "Screenshot",
+  "steps": [{
+    "id": "screenshot"
+  }],
+  "version": 1
+}

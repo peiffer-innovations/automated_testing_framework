@@ -3,23 +3,25 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "index.html": "1bcca9eeb17cd7b530a98587955d6bd2",
-"/": "1bcca9eeb17cd7b530a98587955d6bd2",
-"main.dart.js": "77ca65a2ca27efc4155515f8c3e1ccbd",
+  "index.html": "64df8e67309794b5d6b45a17bf758c03",
+"/": "64df8e67309794b5d6b45a17bf758c03",
+"main.dart.js": "42338a8743ea2cf89c794fc4db0f618c",
 "favicon.png": "7d2009652f165b0bc9d9e23452621c35",
 "icons/Icon-192.png": "079d22db7d65e763c68d7199c2bd6b08",
 "icons/Icon-512.png": "f0de392acd8910e2196e38a327bbb747",
 "manifest.json": "15f73b7e8a8209c2206210b3ac8dea1b",
-"assets/AssetManifest.json": "932607ffcef1185f5ecff754159ff454",
-"assets/NOTICES": "55b938c21e4f8479fb82728f64bb63b5",
+"assets/AssetManifest.json": "32806b3151750a2dc695574e1b19f007",
+"assets/NOTICES": "54c9588b601de429d124d1b2ea10d8eb",
 "assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
-"assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25",
-"assets/assets/tests/dropdowns.json": "fdeb7cc744ab2c5a8048b58b1853d9b3",
-"assets/assets/tests/theme.json": "8ea5e33ac6086c4790cc5092cc8eb44e",
-"assets/assets/tests/icons_gesture.json": "949654db722b90876de832f880ba74d1",
-"assets/assets/tests/failure.json": "99a35a6140b7939989b94ccb544d991d",
-"assets/assets/tests/buttons.json": "e3cd6c7f59e2aea3a0b185dcbfae917b",
-"assets/assets/tests/stacked_scrolling.json": "62e29ae649b9be5ee2a947d74d46fdef"
+"assets/packages/automated_testing_framework_example/assets/tests/dropdowns.json": "fdeb7cc744ab2c5a8048b58b1853d9b3",
+"assets/packages/automated_testing_framework_example/assets/tests/exit_app.json": "33711af643ab798666c5f6ba4d0e97d2",
+"assets/packages/automated_testing_framework_example/assets/tests/theme.json": "8ea5e33ac6086c4790cc5092cc8eb44e",
+"assets/packages/automated_testing_framework_example/assets/tests/icons_gesture.json": "949654db722b90876de832f880ba74d1",
+"assets/packages/automated_testing_framework_example/assets/tests/screenshot.json": "230beef4c380464f24780daab07ce1eb",
+"assets/packages/automated_testing_framework_example/assets/tests/failure.json": "99a35a6140b7939989b94ccb544d991d",
+"assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "e3cd6c7f59e2aea3a0b185dcbfae917b",
+"assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "62e29ae649b9be5ee2a947d74d46fdef",
+"assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25"
 };
 
 // The application shell files that are downloaded before a service worker can

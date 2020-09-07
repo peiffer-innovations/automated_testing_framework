@@ -1,0 +1,8 @@
+{
+  "active": true,
+  "name": "Exit App",
+  "steps": [{
+    "id": "exit_app"
+  }],
+  "version": 1
+}
