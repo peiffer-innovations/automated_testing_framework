@@ -44,7 +44,8 @@ class TestRunner extends StatefulWidget {
             enabled == false ||
             (enabled == null && foundation.kReleaseMode == true)),
         _enabled = enabled ?? foundation.kReleaseMode != true,
-        controller = enabled == true ? controller : null,
+        controller =
+            (enabled ?? foundation.kReleaseMode != true) ? controller : null,
         _testableRenderController =
             testableRenderController ?? TestableRenderController(),
         super(key: key);
@@ -118,16 +119,18 @@ class TestRunnerState extends State<TestRunner> {
 
     Uint8List image;
 
-    RenderRepaintBoundary boundary =
-        _globalKey.currentContext.findRenderObject();
-    if (boundary?.debugNeedsPaint != true) {
-      var img = await boundary.toImage(
-        pixelRatio: devicePixelRatio,
-      );
-      var byteData = await img.toByteData(
-        format: ui.ImageByteFormat.png,
-      );
-      image = byteData.buffer.asUint8List();
+    if (!foundation.kIsWeb) {
+      RenderRepaintBoundary boundary =
+          _globalKey.currentContext.findRenderObject();
+      if (!foundation.kDebugMode || boundary?.debugNeedsPaint != true) {
+        var img = await boundary.toImage(
+          pixelRatio: devicePixelRatio,
+        );
+        var byteData = await img.toByteData(
+          format: ui.ImageByteFormat.png,
+        );
+        image = byteData.buffer.asUint8List();
+      }
     }
 
     return image;

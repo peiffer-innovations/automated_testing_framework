@@ -23,6 +23,8 @@ class TestableGestures {
     this.widgetForcePressStart,
     this.widgetLongPress = TestableGestureAction.open_test_actions_dialog,
     this.widgetLongPressMoveUpdate,
+    this.widgetSecondaryLongPress,
+    this.widgetSecondaryTap,
     this.widgetTap,
   });
 
@@ -56,6 +58,14 @@ class TestableGestures {
   /// Action that will execute when a [Testable] widget with the overlay hidden
   /// receives a move update event after long pressing the widget.
   final TestableGestureAction widgetLongPressMoveUpdate;
+
+  /// Action that will execute when a [Testable] widget with the overlay hidden
+  /// is long pressed with the secondary button.
+  final TestableGestureAction widgetSecondaryLongPress;
+
+  /// Action that will execute when a [Testable] widget with the overlay hidden
+  /// is tapped with the secondary button.
+  final TestableGestureAction widgetSecondaryTap;
 
   /// Action that will execute when a [Testable] widget with the overlay hidden
   /// is tapped.

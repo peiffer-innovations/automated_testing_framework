@@ -3,11 +3,11 @@ import 'dart:ui' as ui;
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
-import 'package:websafe_platform/websafe_platform.dart';
 
 /// Workhorse of the Automate Testing Framework.
 class Testable extends StatefulWidget {
@@ -288,6 +288,7 @@ class TestableState extends State<Testable>
   }
 
   Future<void> _openTestActions({@required bool page}) async {
+    var overlayShowing = _showTestableOverlay;
     RenderRepaintBoundary boundary =
         _renderKey.currentContext.findRenderObject();
     _showTestableOverlay = false;
@@ -295,12 +296,13 @@ class TestableState extends State<Testable>
       setState(() {});
     }
     try {
-      await Future.delayed(Duration(milliseconds: 500));
+      if (overlayShowing == true) {
+        await Future.delayed(Duration(milliseconds: 500));
+      }
 
       List<int> image;
-      var wsp = WebsafePlatform();
-      if (wsp.isAndroid() || wsp.isIOS()) {
-        if (boundary?.debugNeedsPaint != true) {
+      if (!kIsWeb) {
+        if (!kDebugMode || boundary?.debugNeedsPaint != true) {
           var img = await boundary.toImage(
             pixelRatio: MediaQuery.of(context).devicePixelRatio,
           );
@@ -567,6 +569,12 @@ class TestableState extends State<Testable>
                         );
                       }
                     },
+              onSecondaryLongPress: _getGestureAction(
+                widget: gestures.widgetSecondaryLongPress,
+              ),
+              onSecondaryTap: _getGestureAction(
+                widget: gestures.widgetSecondaryTap,
+              ),
               onTap: _getGestureAction(
                 widget: gestures.widgetTap,
               ),

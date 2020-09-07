@@ -1,3 +1,11 @@
+## [1.0.2] - September 7th, 2020
+
+* Added `exit_app` step
+* Added image capture support to Desktop.  Web is still unsupported.
+* Added support for secondary tap / secondary long-press.
+* Extracted the core example code to a new package to allow it to be reused across plugins.
+
+
 ## [1.0.1] - September 3rd, 2020
 
 * Brought in the minimal amount of `flutter_test` to remove the dependency of the SDK version due to incompatibilities between Flutter 1.20 / 1.21.

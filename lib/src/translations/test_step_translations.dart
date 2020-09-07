@@ -64,6 +64,12 @@ class TestStepTranslations {
     value: 'Ensures the requested widget exists with the set id.',
   );
 
+  static const atf_help_exit_app = TranslationEntry(
+    key: 'atf_help_exit_app',
+    value:
+        'Exits the application.  On mobile and desktop, this will result in the app quitting.  This will do nothing on the Web platform.',
+  );
+
   static const atf_help_go_back = TranslationEntry(
     key: 'atf_help_go_back',
     value: 'Navigates back.  This will fail if there is no back button.',
@@ -83,7 +89,7 @@ class TestStepTranslations {
   static const atf_help_screenshot = TranslationEntry(
     key: 'atf_help_screenshot',
     value:
-        'Takes a screenshot and saves it to the test runner.  As a note, screenshots take a up to 5 seconds so this step should be avoided in performance related tests.',
+        'Takes a screenshot and saves it to the test runner.  As a note, screenshots take a up to 5 seconds so this step should be avoided in performance related tests.  Screenshots are not supported on the Web platform.',
   );
 
   static const atf_help_scroll_until_visible = TranslationEntry(
@@ -130,6 +136,11 @@ class TestStepTranslations {
   static const atf_title_ensure_exists = TranslationEntry(
     key: 'atf_title_ensure_exists',
     value: 'Ensure Exists',
+  );
+
+  static const atf_title_exit_app = TranslationEntry(
+    key: 'atf_title_exit_app',
+    value: 'Exit App',
   );
 
   static const atf_title_go_back = TranslationEntry(

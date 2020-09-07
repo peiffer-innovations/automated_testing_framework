@@ -80,6 +80,18 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: ExitAppForm(),
+        help: TestStepTranslations.atf_help_exit_app,
+        id: 'exit_app',
+        keys: const {},
+        quickAddValues: const {},
+        title: TestStepTranslations.atf_title_exit_app,
+        widgetless: true,
+      ),
+      testRunnerStepBuilder: ExitAppStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: GoBackForm(),
         help: TestStepTranslations.atf_help_go_back,
         id: 'go_back',

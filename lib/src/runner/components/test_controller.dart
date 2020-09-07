@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
-import 'package:websafe_platform/websafe_platform.dart';
 
 /// Controller that allows for the creation, loading, saving, and running of
 /// automated tests.
@@ -379,8 +378,7 @@ class TestController {
   Future<Uint8List> screencap() async {
     Uint8List image;
 
-    var wsp = WebsafePlatform();
-    if (wsp.isAndroid() || wsp.isIOS()) {
+    if (!kIsWeb) {
       var captureContext = CaptureContext(
         devicePixelRatio: devicePixelRatio,
         image: [],
