@@ -12,6 +12,7 @@ class TestReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var report = ModalRoute.of(context).settings.arguments as TestReport;
+    var tester = TestController.of(context);
     var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
     var unknown = translator.translate(TestTranslations.atf_unnamed_test);
@@ -21,23 +22,22 @@ class TestReportPage extends StatelessWidget {
         builder: (BuildContext context) => Scaffold(
           appBar: AppBar(
             actions: [
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () async {
-                  var tester = TestController.of(context);
-
-                  await tester.execute(
-                    name: tester.currentTest.name,
-                    reset: true,
-                    skipScreenshots: true,
-                    steps: tester.currentTest.steps,
-                    submitReport: false,
-                    version: tester.currentTest.version,
-                  );
-                },
-                tooltip:
-                    translator.translate(TestTranslations.atf_button_rerun),
-              ),
+              if (tester.currentTest?.steps?.isNotEmpty == true)
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () async {
+                    await tester.execute(
+                      name: tester.currentTest.name,
+                      reset: true,
+                      skipScreenshots: true,
+                      steps: tester.currentTest.steps,
+                      submitReport: false,
+                      version: tester.currentTest.version,
+                    );
+                  },
+                  tooltip:
+                      translator.translate(TestTranslations.atf_button_rerun),
+                ),
             ],
             title: Text('${report.name ?? unknown} (${report.version ?? 0})'),
           ),

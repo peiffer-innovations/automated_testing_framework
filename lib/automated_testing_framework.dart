@@ -28,6 +28,7 @@ export 'src/framework/pages/testable_steps_page.dart';
 export 'src/registry/test_step_builder.dart';
 export 'src/registry/test_step_registry.dart';
 
+export 'src/report/models/test_device_info.dart';
 export 'src/report/models/test_image.dart';
 export 'src/report/models/test_report.dart';
 export 'src/report/models/test_report_step.dart';
@@ -70,6 +71,7 @@ export 'src/store/components/asset_test_store.dart';
 export 'src/store/components/clipboard_test_store.dart';
 export 'src/store/components/test_store.dart';
 
+export 'src/store/loaders/async_test_loader.dart';
 export 'src/store/loaders/memory_test_loader.dart';
 
 export 'src/store/models/pending_test.dart';

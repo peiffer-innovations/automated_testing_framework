@@ -8,7 +8,7 @@ class Test extends JsonClass {
     this.active = true,
     this.name,
     List<TestStep> steps,
-    this.version = 1,
+    this.version = 0,
   })  : assert(active != null),
         assert(version != null),
         steps = steps == null ? <TestStep>[] : List<TestStep>.from(steps);

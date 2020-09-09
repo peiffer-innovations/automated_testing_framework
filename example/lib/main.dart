@@ -20,16 +20,8 @@ void main() {
     }
   });
 
-  AssetTestStore.testAssets = [
-    'packages/automated_testing_framework_example/assets/tests/buttons.json',
-    'packages/automated_testing_framework_example/assets/tests/dropdowns.json',
-    'packages/automated_testing_framework_example/assets/tests/failure.json',
-    'packages/automated_testing_framework_example/assets/tests/icons_gesture.json',
-    'packages/automated_testing_framework_example/assets/tests/screenshot.json',
-    'packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json',
-    'packages/automated_testing_framework_example/assets/tests/theme.json',
-    'packages/automated_testing_framework_example/assets/tests/exit_app.json'
-  ];
+  AssetTestStore.testAssetIndex =
+      'packages/automated_testing_framework_example/assets/all_tests.json';
 
   var gestures = TestableGestures();
   var wsPlatform = WebsafePlatform();

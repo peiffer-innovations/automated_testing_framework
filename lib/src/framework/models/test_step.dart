@@ -76,6 +76,9 @@ class TestStep extends JsonClass {
   /// Copies the current test step with the values provided.  The values from
   /// the original object will only be overwritten by any values from non-null
   /// passed in objects.
+  ///
+  /// To clear the [image], set an [image] with a length of zero and that will
+  /// result in the copy excluding the image.
   TestStep copyWith({
     String id,
     Uint8List image,
@@ -83,7 +86,7 @@ class TestStep extends JsonClass {
   }) =>
       TestStep(
         id: id ?? this.id,
-        image: image ?? this.image,
+        image: image?.isEmpty == true ? null : image ?? this.image,
         values: values ?? this.values,
       );
 

@@ -219,6 +219,32 @@ class TestableState extends State<Testable>
   }
 
   @override
+  void didUpdateWidget(Widget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _types.remove(TestableType.error_requestable);
+    _types.remove(TestableType.value_requestable);
+    _types.remove(TestableType.value_settable);
+
+    _onRequestError =
+        widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
+    if (_onRequestError != null) {
+      _types.add(TestableType.error_requestable);
+    }
+
+    _onRequestValue =
+        widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
+    if (_onRequestValue != null) {
+      _types.add(TestableType.value_requestable);
+    }
+
+    _onSetValue = widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
+    if (_onSetValue != null) {
+      _types.add(TestableType.value_settable);
+    }
+  }
+
+  @override
   void dispose() {
     _animationController?.dispose();
     _animationController = null;

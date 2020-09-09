@@ -7,11 +7,14 @@ import 'package:uuid/uuid.dart';
 /// Represents a report from a test run.
 class TestReport {
   TestReport({
+    this.deviceInfo,
     String id,
     this.name,
     this.version,
   })  : id = id ?? Uuid().v4(),
         startTime = DateTime.now();
+
+  final TestDeviceInfo deviceInfo;
 
   /// The unique identifier for the report.  If not specifically set then this
   /// will be an auto-generated UUID.
