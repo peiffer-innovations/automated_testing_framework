@@ -20,9 +20,6 @@ void main() {
     }
   });
 
-  AssetTestStore.testAssetIndex =
-      'packages/automated_testing_framework_example/assets/all_tests.json';
-
   var gestures = TestableGestures();
   var wsPlatform = WebsafePlatform();
   if (wsPlatform.isFuchsia() ||
@@ -42,7 +39,10 @@ void main() {
       autorun: kProfileMode,
       enabled: true,
       gestures: gestures,
-      testReader: AssetTestStore.testReader,
+      testReader: AssetTestStore(
+        testAssetIndex:
+            'packages/automated_testing_framework_example/assets/all_tests.json',
+      ).testReader,
       testWidgetsEnabled: true,
       testWriter: ClipboardTestStore.testWriter,
     ),

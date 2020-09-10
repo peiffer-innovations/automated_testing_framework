@@ -197,22 +197,28 @@ class TestableState extends State<Testable>
     super.didChangeDependencies();
 
     if (widget.id?.isNotEmpty == true) {
-      if (mounted == true) {
-        _scrollableId = widget.scrollableId;
-        var canBeScrolled = false;
-        if (_scrollableId?.isNotEmpty != true) {
-          try {
-            var scrollable = Scrollable.of(context);
-            canBeScrolled = scrollable != null;
-            _scrollableId = scrollable?.widget?.key?.toString();
-          } catch (e, stack) {
-            _logger.severe(e, stack);
-          }
-        }
+      _testRunner = TestRunner.of(context);
 
-        if (canBeScrolled == true || _scrollableId?.isNotEmpty == true) {
-          _types.add(TestableType.scrolled);
-          _scrollKey = GlobalKey();
+      if (_testRunner?.enabled == true) {
+        TestDeviceInfo.initialize(context);
+
+        if (mounted == true) {
+          _scrollableId = widget.scrollableId;
+          var canBeScrolled = false;
+          if (_scrollableId?.isNotEmpty != true) {
+            try {
+              var scrollable = Scrollable.of(context);
+              canBeScrolled = scrollable != null;
+              _scrollableId = scrollable?.widget?.key?.toString();
+            } catch (e, stack) {
+              _logger.severe(e, stack);
+            }
+          }
+
+          if (canBeScrolled == true || _scrollableId?.isNotEmpty == true) {
+            _types.add(TestableType.scrolled);
+            _scrollKey = GlobalKey();
+          }
         }
       }
     }
@@ -222,25 +228,32 @@ class TestableState extends State<Testable>
   void didUpdateWidget(Widget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _types.remove(TestableType.error_requestable);
-    _types.remove(TestableType.value_requestable);
-    _types.remove(TestableType.value_settable);
+    if (widget.id?.isNotEmpty == true) {
+      _testRunner = TestRunner.of(context);
 
-    _onRequestError =
-        widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
-    if (_onRequestError != null) {
-      _types.add(TestableType.error_requestable);
-    }
+      if (_testRunner?.enabled == true) {
+        _types.remove(TestableType.error_requestable);
+        _types.remove(TestableType.value_requestable);
+        _types.remove(TestableType.value_settable);
 
-    _onRequestValue =
-        widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
-    if (_onRequestValue != null) {
-      _types.add(TestableType.value_requestable);
-    }
+        _onRequestError =
+            widget.onRequestError ?? _tryCommonGetErrorMethods(widget.child);
+        if (_onRequestError != null) {
+          _types.add(TestableType.error_requestable);
+        }
 
-    _onSetValue = widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
-    if (_onSetValue != null) {
-      _types.add(TestableType.value_settable);
+        _onRequestValue =
+            widget.onRequestValue ?? _tryCommonGetValueMethods(widget.child);
+        if (_onRequestValue != null) {
+          _types.add(TestableType.value_requestable);
+        }
+
+        _onSetValue =
+            widget.onSetValue ?? _tryCommonSetValueMethods(widget.child);
+        if (_onSetValue != null) {
+          _types.add(TestableType.value_settable);
+        }
+      }
     }
   }
 

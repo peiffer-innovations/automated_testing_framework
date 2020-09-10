@@ -1,8 +1,9 @@
-## [1.0.3] - September 8th, 2020
+## [1.0.3] - September 9th, 2020
 
 * Updated `TestStep` to be able to copy w/o the image.
 * Added `AsyncTestLoader` to provide more test loading options.
 * Updated with device info on the test reports.
+* Switched static `AssetTestStore` to an instance to better follow the object model.
 
 
 ## [1.0.2] - September 7th, 2020
