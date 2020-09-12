@@ -5,22 +5,26 @@ const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "index.html": "64df8e67309794b5d6b45a17bf758c03",
 "/": "64df8e67309794b5d6b45a17bf758c03",
-"main.dart.js": "42338a8743ea2cf89c794fc4db0f618c",
+"main.dart.js": "2ae750e1aabe6527e04461b59c56aa4f",
 "favicon.png": "7d2009652f165b0bc9d9e23452621c35",
 "icons/Icon-192.png": "079d22db7d65e763c68d7199c2bd6b08",
 "icons/Icon-512.png": "f0de392acd8910e2196e38a327bbb747",
 "manifest.json": "15f73b7e8a8209c2206210b3ac8dea1b",
-"assets/AssetManifest.json": "32806b3151750a2dc695574e1b19f007",
-"assets/NOTICES": "54c9588b601de429d124d1b2ea10d8eb",
-"assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
-"assets/packages/automated_testing_framework_example/assets/tests/dropdowns.json": "fdeb7cc744ab2c5a8048b58b1853d9b3",
+"assets/AssetManifest.json": "1f0e30ad3de1e1cdbe13fccc7a12b38e",
+"assets/NOTICES": "680722aa8d20d010e587f6e85961e0dc",
+"assets/assets-src/MaterialIcons-Regular.ttf": "a37b0c01c0baf1888ca812cc0508f6e2",
+"assets/FontManifest.json": "3a1c01ebd9adb7aecf384a895a3cbb43",
+"assets/packages/automated_testing_framework_example/assets/tests/dropdowns.json": "2a2c9feb2d16f86ca1b4c92821541071",
 "assets/packages/automated_testing_framework_example/assets/tests/exit_app.json": "33711af643ab798666c5f6ba4d0e97d2",
-"assets/packages/automated_testing_framework_example/assets/tests/theme.json": "8ea5e33ac6086c4790cc5092cc8eb44e",
-"assets/packages/automated_testing_framework_example/assets/tests/icons_gesture.json": "949654db722b90876de832f880ba74d1",
+"assets/packages/automated_testing_framework_example/assets/tests/theme.json": "8661a90272c87a61bfc4460edc00405d",
+"assets/packages/automated_testing_framework_example/assets/tests/icons_gesture.json": "668cdc5cf96ace08ab3ed54a92435471",
+"assets/packages/automated_testing_framework_example/assets/tests/issue_5.json": "a52a549b4a055c52adfb4dc70cebcb38",
+"assets/packages/automated_testing_framework_example/assets/tests/double_tap.json": "5f0d3caae4bcafd4efd28d584f12b2af",
 "assets/packages/automated_testing_framework_example/assets/tests/screenshot.json": "230beef4c380464f24780daab07ce1eb",
 "assets/packages/automated_testing_framework_example/assets/tests/failure.json": "99a35a6140b7939989b94ccb544d991d",
-"assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "e3cd6c7f59e2aea3a0b185dcbfae917b",
-"assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "62e29ae649b9be5ee2a947d74d46fdef",
+"assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "41ddb39a05d8608ff64f76bf04ed7a70",
+"assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "af0a8468449b071ba26ec064e2392520",
+"assets/packages/automated_testing_framework_example/assets/all_tests.json": "4525eb5d02aea7ee653182b065eb6e59",
 "assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25"
 };
 
@@ -38,8 +42,8 @@ const CORE = [
 self.addEventListener("install", (event) => {
   return event.waitUntil(
     caches.open(TEMP).then((cache) => {
-      return cache.addAll(
-        CORE.map((value) => new Request(value + '?revision=' + RESOURCES[value], {'cache': 'reload'})));
+      // Provide a 'reload' param to ensure the latest version is downloaded.
+      return cache.addAll(CORE.map((value) => new Request(value, {'cache': 'reload'})));
     })
   );
 });
