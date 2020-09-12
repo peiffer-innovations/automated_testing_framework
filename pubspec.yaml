@@ -21,7 +21,7 @@ dependencies:
   package_info: ">=0.4.3 <2.0.0"
   provider: ^4.3.2+2
   static_translations: ^1.0.3
-  tinycolor: ^1.0.3
+  tinycolor: ^1.0.2
   uuid: ^2.2.2
   websafe_platform: ^1.0.5
 
