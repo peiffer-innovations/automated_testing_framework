@@ -38,3 +38,7 @@ flutter_native_splash:
 
 flutter:
   uses-material-design: true
+  fonts:
+  - family: MaterialIcons
+    fonts:
+    - asset: assets-src/MaterialIcons-Regular.ttf

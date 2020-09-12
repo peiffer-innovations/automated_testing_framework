@@ -1,3 +1,7 @@
+## [1.0.4] - September 11th, 2020
+
+* Added example for `linux
+
 ## [1.0.3] - September 9th, 2020
 
 * Updated `TestStep` to be able to copy w/o the image.
