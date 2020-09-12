@@ -51,7 +51,7 @@ class LongPressStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "longPress('$testableId')";
+    var name = "long_press('$testableId')";
     log(
       name,
       tester: tester,

@@ -34,8 +34,8 @@ class AssertErrorStep extends TestRunnerStep {
   ///
   /// ```json
   /// {
-  ///   "error": <String>,
   ///   "equals": <bool>,
+  ///   "error": <String>,
   ///   "testableId": <String>,
   ///   "timeout": <number>
   /// }
@@ -67,7 +67,7 @@ class AssertErrorStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "assertError('$testableId', '$error')";
+    var name = "assert_error('$testableId', '$error')";
     log(
       name,
       tester: tester,

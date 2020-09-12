@@ -238,7 +238,8 @@ class TestController {
               tester: this,
             );
           }
-        } catch (e) {
+        } catch (e, stack) {
+          _logger.severe('Error running test step: ${step.id}', e, stack);
           error = '$e';
         } finally {
           testReport?.endStep(error);

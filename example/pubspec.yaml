@@ -11,14 +11,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  automated_testing_framework_example: ^1.0.2
+  automated_testing_framework_example: ^1.0.3
   websafe_platform: ^1.0.5
 
 dependency_overrides:
   automated_testing_framework:
     path: ../
-  # automated_testing_framework_example:
-  #   path: ../../automated_testing_framework_example
+  automated_testing_framework_example:
+    path: ../../automated_testing_framework_example
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +39,6 @@ flutter_native_splash:
 flutter:
   uses-material-design: true
   fonts:
-  - family: MaterialIcons
-    fonts:
-    - asset: assets-src/MaterialIcons-Regular.ttf
+    - family: MaterialIcons
+      fonts:
+        - asset: assets-src/MaterialIcons-Regular.ttf

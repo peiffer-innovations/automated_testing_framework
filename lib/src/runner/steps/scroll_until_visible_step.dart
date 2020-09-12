@@ -79,7 +79,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "scrollUntilVisible('$testableId', '$scrollableId')";
+    var name = "scroll_until_visible('$testableId', '$scrollableId')";
     var timeout = this.timeout ?? tester.delays.defaultTimeout;
     log(
       name,

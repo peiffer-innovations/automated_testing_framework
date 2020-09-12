@@ -29,7 +29,7 @@ class TestReportPage extends StatelessWidget {
                     await tester.execute(
                       name: tester.currentTest.name,
                       reset: true,
-                      skipScreenshots: true,
+                      skipScreenshots: false,
                       steps: tester.currentTest.steps,
                       submitReport: false,
                       version: tester.currentTest.version,
@@ -132,7 +132,7 @@ class TestReportPage extends StatelessWidget {
                       ),
                     );
                   }
-                } else {
+                } else if (index - 1 < report.steps.length) {
                   index--;
                   result = Padding(
                     padding: EdgeInsets.symmetric(
@@ -150,10 +150,26 @@ class TestReportPage extends StatelessWidget {
                       ),
                     ),
                   );
+                } else {
+                  index -= 1 + report.steps.length;
+
+                  result = Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                    child: Material(
+                      elevation: 2.0,
+                      child: Image.memory(
+                        report.images[index].image,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  );
                 }
                 return result;
               },
-              itemCount: report.steps.length + 1,
+              itemCount: report.steps.length + 1 + (report.images?.length ?? 0),
             ),
           ),
         ),

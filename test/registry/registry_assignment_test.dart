@@ -41,6 +41,19 @@ void main() {
     expect(availStep.widgetless, true);
   });
 
+  test('double_tap', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'double_tap',
+    );
+
+    expect(availStep.form.runtimeType, DoubleTapForm);
+    expect(availStep.help, TestStepTranslations.atf_help_double_tap);
+    expect(availStep.id, 'double_tap');
+    expect(availStep.title, TestStepTranslations.atf_title_double_tap);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, false);
+  });
+
   test('ensure_exists', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'ensure_exists',
@@ -52,6 +65,19 @@ void main() {
     expect(availStep.title, TestStepTranslations.atf_title_ensure_exists);
     expect(availStep.type, null);
     expect(availStep.widgetless, false);
+  });
+
+  test('exit_app', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'exit_app',
+    );
+
+    expect(availStep.form.runtimeType, ExitAppForm);
+    expect(availStep.help, TestStepTranslations.atf_help_exit_app);
+    expect(availStep.id, 'exit_app');
+    expect(availStep.title, TestStepTranslations.atf_title_exit_app);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, true);
   });
 
   test('go_back', () {

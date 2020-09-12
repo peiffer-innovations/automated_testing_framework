@@ -1,6 +1,13 @@
+## [1.0.5] - September 12th, 2020
+
+* Added logging to when a `TestStep` fails.
+* Added screenshots to the `TestReport` page.
+
+
 ## [1.0.4] - September 11th, 2020
 
-* Added example for `linux
+* Added example for `linux`
+
 
 ## [1.0.3] - September 9th, 2020
 

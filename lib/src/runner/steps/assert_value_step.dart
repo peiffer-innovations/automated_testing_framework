@@ -67,7 +67,7 @@ class AssertValueStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "assertValue('$testableId', '$value')";
+    var name = "assert_value('$testableId', '$value')";
     log(
       name,
       tester: tester,

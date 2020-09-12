@@ -40,7 +40,7 @@ class TestStepTranslations {
 
   static const atf_form_widget_id = TranslationEntry(
     key: 'atf_form_widget_id',
-    value: 'Widget ID',
+    value: 'Testable ID',
   );
 
   static const atf_help_assert_error = TranslationEntry(
@@ -57,6 +57,12 @@ class TestStepTranslations {
     key: 'atf_help_dismiss_keyboard',
     value:
         'Dismisses the soft keyboard.  If the keyboard is not currently visible, this does nothing.',
+  );
+
+  static const atf_help_double_tap = TranslationEntry(
+    key: 'atf_help_double_tap',
+    value:
+        'Double Taps the selected widget.  An error will occur if the widget is not found on the tree before the timeout is exceeded.',
   );
 
   static const atf_help_ensure_exists = TranslationEntry(
@@ -131,6 +137,11 @@ class TestStepTranslations {
   static const atf_title_dismiss_keyboard = TranslationEntry(
     key: 'atf_title_dismiss_keyboard',
     value: 'Dismiss Keyboard',
+  );
+
+  static const atf_title_double_tap = TranslationEntry(
+    key: 'atf_title_double_tap',
+    value: 'Double Tap',
   );
 
   static const atf_title_ensure_exists = TranslationEntry(

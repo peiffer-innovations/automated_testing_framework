@@ -34,7 +34,7 @@ class ExitAppStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = 'exitApp()';
+    var name = 'exit_app()';
     log(
       name,
       tester: tester,

@@ -1,4 +1,5 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 class GoBackStep extends TestRunnerStep {
@@ -27,11 +28,20 @@ class GoBackStep extends TestRunnerStep {
     @required TestController tester,
   }) async {
     log(
-      'goBack',
+      'go_back',
       tester: tester,
     );
 
-    await driver.pageBack();
+    var backButton = find.byTooltip('Back');
+    if (backButton.evaluate().isEmpty == true) {
+      backButton = find.byType(CupertinoNavigationBarBackButton);
+
+      if (backButton.evaluate().isEmpty == true) {
+        throw Exception('Unable to locate Back button.');
+      }
+    }
+
+    await driver.tap(backButton);
   }
 
   /// Converts this to a JSON compatible map.  For a description of the format,

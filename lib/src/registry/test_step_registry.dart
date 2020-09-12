@@ -56,6 +56,18 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: DoubleTapForm(),
+        help: TestStepTranslations.atf_help_double_tap,
+        id: 'double_tap',
+        keys: const {'testableId', 'timeout'},
+        quickAddValues: const {},
+        title: TestStepTranslations.atf_title_double_tap,
+        widgetless: false,
+      ),
+      testRunnerStepBuilder: DoubleTapStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: DismissKeyboardForm(),
         help: TestStepTranslations.atf_help_dismiss_keyboard,
         id: 'dismiss_keyboard',

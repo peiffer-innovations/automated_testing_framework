@@ -29,7 +29,7 @@ class DismissKeyboardStep extends TestRunnerStep {
     @required TestController tester,
   }) async {
     log(
-      'dismissKeyboard',
+      'dismiss_keyboard',
       tester: tester,
     );
     await SystemChannels.textInput.invokeMethod('TextInput.hide');

@@ -51,7 +51,7 @@ class EnsureExistsStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "ensureExists('$testableId')";
+    var name = "ensure_exists('$testableId')";
     log(
       name,
       tester: tester,

@@ -57,7 +57,7 @@ class SetValueStep extends TestRunnerStep {
       result = SetValueStep(
         testableId: map['testableId'],
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
-        type: map['type'],
+        type: map['type'] ?? 'String',
         value: map['value']?.toString(),
       );
     }
@@ -72,7 +72,7 @@ class SetValueStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "setValue('$testableId', '$value')";
+    var name = "set_value('$testableId', '$value')";
     log(
       name,
       tester: tester,

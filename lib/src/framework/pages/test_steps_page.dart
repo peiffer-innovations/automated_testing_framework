@@ -236,7 +236,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
                         try {
                           await tester.execute(
-                            skipScreenshots: true,
+                            skipScreenshots: false,
                             reset: false,
                             steps: [step],
                             submitReport: false,
@@ -460,7 +460,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
                         try {
                           await tester.execute(
-                            skipScreenshots: true,
+                            skipScreenshots: false,
                             reset: false,
                             steps: [step],
                             submitReport: false,
@@ -775,7 +775,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       var tester = TestController.of(context);
                       try {
                         await tester.execute(
-                          skipScreenshots: true,
+                          skipScreenshots: false,
                           steps: _testController.currentTest.steps,
                           submitReport: false,
                           reset: true,
