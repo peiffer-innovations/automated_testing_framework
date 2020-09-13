@@ -1,3 +1,8 @@
+## [1.0.5+1] - September 13th, 2020
+
+* Updated README with references to the newly available plugins
+
+
 ## [1.0.5] - September 12th, 2020
 
 * Added logging to when a `TestStep` fails.
