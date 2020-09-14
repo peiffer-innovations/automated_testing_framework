@@ -67,7 +67,11 @@ class AssertValueStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "assert_value('$testableId', '$value')";
+    String testableId = tester.resolveVariable(this.testableId);
+    String value = tester.resolveVariable(this.value);
+    assert(testableId?.isNotEmpty == true);
+
+    var name = "assert_value('$testableId', '$value', '$equals')";
     log(
       name,
       tester: tester,
@@ -110,6 +114,10 @@ class AssertValueStep extends TestRunnerStep {
       );
     }
   }
+
+  /// Overidden to ignore the delay
+  @override
+  Future<void> postStepSleep(Duration duration) async {}
 
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].

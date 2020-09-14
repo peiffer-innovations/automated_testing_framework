@@ -86,6 +86,8 @@ abstract class TestStepForm {
       ),
       initialValue: values[id]?.toString(),
       onChanged: (value) => values[id] = value,
+      smartDashesType: SmartDashesType.disabled,
+      smartQuotesType: SmartQuotesType.disabled,
       validator: (value) => validators?.isNotEmpty == true
           ? Validator(validators: validators).validate(
               context: context,

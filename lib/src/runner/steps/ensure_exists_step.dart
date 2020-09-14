@@ -51,6 +51,9 @@ class EnsureExistsStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
+    String testableId = tester.resolveVariable(this.testableId);
+    assert(testableId?.isNotEmpty == true);
+
     var name = "ensure_exists('$testableId')";
     log(
       name,
@@ -72,6 +75,14 @@ class EnsureExistsStep extends TestRunnerStep {
       throw Exception('testableId: [$testableId] -- could not locate widget.');
     }
   }
+
+  /// Overidden to ignore the delay
+  @override
+  Future<void> preStepSleep(Duration duration) async {}
+
+  /// Overidden to ignore the delay
+  @override
+  Future<void> postStepSleep(Duration duration) async {}
 
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].

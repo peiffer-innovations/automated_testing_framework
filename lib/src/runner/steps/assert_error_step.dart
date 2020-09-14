@@ -67,7 +67,11 @@ class AssertErrorStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "assert_error('$testableId', '$error')";
+    String error = tester.resolveVariable(this.error);
+    String testableId = tester.resolveVariable(this.testableId);
+    assert(testableId?.isNotEmpty == true);
+
+    var name = "assert_error('$testableId', '$error', '$equals')";
     log(
       name,
       tester: tester,
@@ -110,6 +114,10 @@ class AssertErrorStep extends TestRunnerStep {
       );
     }
   }
+
+  /// Overidden to ignore the delay
+  @override
+  Future<void> postStepSleep(Duration duration) async {}
 
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].

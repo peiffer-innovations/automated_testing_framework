@@ -5,7 +5,8 @@ import 'package:json_class/json_class.dart';
 import 'package:package_info/package_info.dart';
 import 'package:websafe_platform/websafe_platform.dart';
 
-/// Container class for the
+/// Container class for the device information for the device the test is being
+/// executed on.
 @immutable
 class TestDeviceInfo extends JsonClass {
   TestDeviceInfo.custom({
@@ -104,7 +105,7 @@ class TestDeviceInfo extends JsonClass {
             var plugin = DeviceInfoPlugin();
             var info = await plugin.iosInfo;
 
-            device = info.localizedModel;
+            device = info.name;
             model = info.model;
             physicalDevice = info.isPhysicalDevice;
             systemVersion = info.systemVersion;
@@ -142,7 +143,10 @@ class TestDeviceInfo extends JsonClass {
         try {
           var mq = MediaQuery.of(context);
 
-          dips = Size(mq.size.height, mq.size.width);
+          dips = Size(
+            mq.size.height,
+            mq.size.width,
+          );
           devicePixelRatio = mq.devicePixelRatio;
           pixels = Size(
             mq.size.height * devicePixelRatio,
@@ -156,6 +160,7 @@ class TestDeviceInfo extends JsonClass {
         brand: brand,
         buildNumber: buildNumber,
         device: device,
+        devicePixelRatio: devicePixelRatio,
         dips: dips,
         manufacturer: manufacturer,
         model: model,

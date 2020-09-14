@@ -3,6 +3,7 @@
 ## Table of Contents
 
 * [Introduction](#introduction)
+* [Working with Variables](#working-with-variables)
 * [Test Step Summary](#test-step-summary)
 * [Details](#details)
   * [assert_error](#assert_error)
@@ -16,6 +17,7 @@
   * [screenshot](#screenshot)
   * [scroll_until_visible](#scroll_until_visible)
   * [set_value](#set_value)
+  * [set_variable](#set_variable)
   * [sleep](#sleep)
   * [tap](#tap)
 
@@ -37,6 +39,16 @@ The values map is step dependent.  It is always required, though may be empty fo
 
 As a quick note, all data types can be string encoded or set as the native value.  So "200" and 200 are both acceptable on any number.  Likewise, for a boolean, any of the following values will evaluate to `true`: `true`, "true", 1, "1", "yes".  The string values are case-insensitive.
 
+
+---
+
+## Working with Variables
+
+The `TestController` has the ability to provide variable definitions.  You can use the `set_variable` step to set a variable or explicitly set the variable using the `setVariable` on the current `TestController`.  Variables can be referenced using the double-curley-braces format, example: `{{myVariableName}}`.
+
+The variables will be evaluated when the Test Step executes.
+
+
 ---
 
 ## Test Step Summary
@@ -54,6 +66,7 @@ Test Step IDs                                 | Description
 [screenshot](#screenshot)                     | Takes a screenshot of the current screen.
 [scroll_until_visible](#scroll_until_visible) | Scrolls the associated `Scrollable` until the `Testable` is visible on the screen.
 [set_value](#set_value)                       | Sets the value of the `Testable`.
+[set_variable](#set_variable)                 | Sets the value of to the defined key on the `TestController`.
 [sleep](#sleep)                               | Sleeps for a specified number of seconds.
 [tap](#tap)                                   | Executes a tap gesture on the associated `Testable`.
 
@@ -87,12 +100,12 @@ Test Step IDs                                 | Description
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`equals`     | boolean | No       | Defines whether the `Testable`'s error message must equal the `error` or must not equal the `error`.  Defaults to `true` if not defined.
-`error`      | String  | Yes      | The error message evaluate against.
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the error message.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`equals`     | boolean | No       | No                | Defines whether the `Testable`'s error message must equal the `error` or must not equal the `error`.  Defaults to `true` if not defined.
+`error`      | String  | Yes      | Yes               | The error message evaluate against.
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the error message.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 
 ---
 
@@ -122,12 +135,12 @@ Key          | Type    | Required | Description
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`equals`     | boolean | No       | Defines whether the `Testable`'s value must equal the `value` or must not equal the `value`.  Defaults to `true` if not defined.
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
-`value`      | String  | Yes      | The value to evaluate against.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`equals`     | boolean | No       | No                | Defines whether the `Testable`'s value must equal the `value` or must not equal the `value`.  Defaults to `true` if not defined.
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | Yes               | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+`value`      | String  | Yes      | No                | The value to evaluate against.
 
 
 ---
@@ -179,10 +192,10 @@ n/a
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 
 
 ---
@@ -208,10 +221,10 @@ Key          | Type    | Required | Description
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 
 
 ---
@@ -287,10 +300,10 @@ n/a
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 
 
 ---
@@ -343,12 +356,12 @@ n/a
 
 **Values**
 
-Key            | Type    | Required | Description
----------------|---------|----------|-------------
-`increment`    | number  | Yes      | The number of pixels to scroll by with each scroll iteration.  This should be >= 100 or else iOS's "scroll friction" will result in the scroll not really happening.  Set to a positive value to scroll forward and a negative value to scroll backwards.
-`scrollableId` | String  | No       | The identifier of a `Scrollable`'s `ValueKey`.  This is required when there are multiple scrolling elements (like a Netflix style list of scrollable rows).  When not set, the tester will attempt to scroll the first `Scrollable` it finds.  
-`testableId`   | String  | Yes      | The `id` of the `Testable` to scroll into the view.
-`timeout`      | integer | No       | Number of seconds the step will execute and attempt to find the `Testable` widget before failing with a timeout.
+Key            | Type    | Required | Supports Variable | Description
+---------------|---------|----------|-------------------|-------------
+`increment`    | number  | No       | Yes               | The number of pixels to scroll by with each scroll iteration.  This should be >= 100 or else iOS's "scroll friction" will result in the scroll not really happening.  Set to a positive value to scroll forward and a negative value to scroll backwards. Defaults to 200 when not set.
+`scrollableId` | String  | No       | Yes               | The identifier of a `Scrollable`'s `ValueKey`.  This is required when there are multiple scrolling elements (like a Netflix style list of scrollable rows).  When not set, the tester will attempt to scroll the first `Scrollable` it finds.  
+`testableId`   | String  | Yes      | Yes               | The `id` of the `Testable` to scroll into the view.
+`timeout`      | integer | No       | No                | Number of seconds the step will execute and attempt to find the `Testable` widget before failing with a timeout.
 
 
 ---
@@ -377,12 +390,43 @@ Key            | Type    | Required | Description
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
-`type`       | String  | No       | Defines the data type to set.  This can be `String`, `int`, `double`, or `bool`.  Defaults to `String` if not set.
-`value`      | String  | Yes      | The value to evaluate against.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+`type`       | String  | No       | Yes               | Defines the data type to set.  This can be `String`, `int`, `double`, or `bool`.  Defaults to `String` if not set.
+`value`      | String  | No       | Yes               | The value to evaluate against.
+
+
+---
+
+### set_variable
+
+**How it Works**
+
+1. Sets the `value` for the `key` on the `TestController`.
+
+**Example**
+
+```json
+{
+  "id": "set_variable",
+  "image": "<optional_base_64_image>",
+  "values": {
+    "key": "my-variable-key",
+    "type": "String",
+    "value": "My Set Value"
+  }
+}
+```
+
+**Values**
+
+Key     | Type    | Required | Supports Variable | Description
+--------|---------|----------|-------------------|-------------
+`key`   | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`type`  | String  | No       | Yes               | Defines the data type to set.  This can be `String`, `int`, `double`, or `bool`.  Defaults to `String` if not set.
+`value` | String  | No       | Yes               | The value to evaluate against.
 
 
 ---
@@ -407,9 +451,9 @@ Key          | Type    | Required | Description
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`timeout`    | integer | No       | Number of seconds the step will sleep / pause for.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`timeout`    | integer | No       | No                | Number of seconds the step will sleep / pause for.
 
 
 ---
@@ -436,8 +480,8 @@ Key          | Type    | Required | Description
 
 **Values**
 
-Key          | Type    | Required | Description
--------------|---------|----------|-------------
-`testableId` | String  | Yes      | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 

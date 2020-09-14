@@ -16,7 +16,6 @@ class SetValueStep extends TestRunnerStep {
             type == 'double' ||
             type == 'int' ||
             type == 'String'),
-        assert(value?.isNotEmpty == true),
         type = type;
 
   /// The id of the [Testable] widget to interact with.
@@ -72,7 +71,18 @@ class SetValueStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "set_value('$testableId', '$value')";
+    String testableId = tester.resolveVariable(this.testableId);
+    String type = tester.resolveVariable(this.type);
+    String value = tester.resolveVariable(this.value);
+
+    assert(testableId?.isNotEmpty == true);
+    assert(type != null);
+    assert(type == 'bool' ||
+        type == 'double' ||
+        type == 'int' ||
+        type == 'String');
+    var name = "set_value('$testableId', '$type', '$value')";
+
     log(
       name,
       tester: tester,

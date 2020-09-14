@@ -148,6 +148,19 @@ void main() {
     expect(availStep.widgetless, false);
   });
 
+  test('set_variable', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'set_variable',
+    );
+
+    expect(availStep.form.runtimeType, SetVariableForm);
+    expect(availStep.help, TestStepTranslations.atf_help_set_variable);
+    expect(availStep.id, 'set_variable');
+    expect(availStep.title, TestStepTranslations.atf_title_set_variable);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, true);
+  });
+
   test('sleep', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'sleep',

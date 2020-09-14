@@ -12,14 +12,12 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     this.scrollableId,
     @required this.testableId,
     this.timeout,
-  })  : assert(increment != null),
-        assert(increment != 0),
-        assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId?.isNotEmpty == true);
 
   /// The increment in device-independent-pixels.  This may be a positive or
   /// negative number.  Positive to scroll "forward" and negative to scroll
   /// "backward".
-  final double increment;
+  final String increment;
 
   /// The id of the [Scrollable] widget to perform the scrolling actions on.
   final String scrollableId;
@@ -51,7 +49,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
 
     if (map != null) {
       result = ScrollUntilVisibleStep(
-        increment: JsonClass.parseDouble(map['increment']),
+        increment: map['increment'],
         scrollableId: map['scrollableId'],
         testableId: map['testableId'],
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
@@ -79,7 +77,14 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    var name = "scroll_until_visible('$testableId', '$scrollableId')";
+    var increment =
+        JsonClass.parseDouble(tester.resolveVariable(this.increment)) ?? 200;
+    String scrollableId = tester.resolveVariable(this.scrollableId);
+    String testableId = tester.resolveVariable(this.testableId);
+    assert(testableId?.isNotEmpty == true);
+
+    var name =
+        "scroll_until_visible('$testableId', '$scrollableId', '$increment')";
     var timeout = this.timeout ?? tester.delays.defaultTimeout;
     log(
       name,

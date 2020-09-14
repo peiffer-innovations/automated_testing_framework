@@ -13,6 +13,11 @@ class TestStepTranslations {
     value: 'Error',
   );
 
+  static const atf_form_key = TranslationEntry(
+    key: 'atf_form_key',
+    value: 'Key',
+  );
+
   static const atf_form_scroll_increment = TranslationEntry(
     key: 'atf_form_scroll_increment',
     value: 'Scroll Increment',
@@ -105,7 +110,13 @@ class TestStepTranslations {
 
   static const atf_help_set_value = TranslationEntry(
     key: 'atf_help_set_value',
-    value: 'Sets a value from the widget',
+    value: 'Sets a value from the widget.',
+  );
+
+  static const atf_help_set_variable = TranslationEntry(
+    key: 'atf_help_set_variable',
+    value:
+        'Sets a variable on the Test Controller for use in other test steps.',
   );
 
   static const atf_help_sleep = TranslationEntry(
@@ -182,6 +193,11 @@ class TestStepTranslations {
   static const atf_title_set_value = TranslationEntry(
     key: 'atf_title_set_value',
     value: 'Set Value',
+  );
+
+  static const atf_title_set_variable = TranslationEntry(
+    key: 'atf_title_set_variable',
+    value: 'Set Variable',
   );
 
   static const atf_title_sleep = TranslationEntry(

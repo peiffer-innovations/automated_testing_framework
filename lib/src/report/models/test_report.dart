@@ -34,6 +34,9 @@ class TestReport {
   /// A list of all screencaptures requested by the test
   final List<TestImage> _images = [];
 
+  /// A list of the log entries that happened during the test.
+  final List<String> _logs = [];
+
   /// A list of all the steps executed by the test along with their individual
   /// results.
   final List<TestReportStep> _steps = [];
@@ -56,6 +59,9 @@ class TestReport {
   /// Returns the list of images that were screen captured via the test.
   List<TestImage> get images => List.unmodifiable(_images);
 
+  /// Returns the unmodifiable list of log entires from the report.
+  List<String> get logs => List.unmodifiable(_logs);
+
   /// Returns the runtime exception that aborted the test.  This will only be
   /// populated if the framework itself encountered a fatal issue (such as a
   /// malformed JSON body for a test step).  If this is populated, a developer
@@ -77,6 +83,9 @@ class TestReport {
 
     return success;
   }
+
+  /// Appends the log entry to the test report.
+  void appendLog(String log) => _logs.add(log);
 
   /// Attaches the given screenshot to the test report.
   void attachScreenshot(Uint8List screenshot) =>

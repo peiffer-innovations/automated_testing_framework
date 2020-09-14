@@ -165,6 +165,19 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: SetVariableForm(),
+        help: TestStepTranslations.atf_help_set_variable,
+        id: 'set_variable',
+        keys: const {'key', 'type', 'value'},
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_set_variable,
+        type: null,
+        widgetless: true,
+      ),
+      testRunnerStepBuilder: SetVariableStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: SleepForm(),
         help: TestStepTranslations.atf_help_sleep,
         id: 'sleep',

@@ -1,6 +1,15 @@
+## [1.1.0] - September 14th, 2020
+
+* Changed "minified" test steps render on the Current Test Steps page to allow for drag-and-drop too.
+* Added variable support to the test steps.
+* Added `set_variable` step.
+* Added ability to attach appplication logs to the `TestReport`.
+* Swapped attributes on the ios device info to get better data.
+
+
 ## [1.0.5+1] - September 13th, 2020
 
-* Updated README with references to the newly available plugins
+* Updated README with references to the newly available plugins.
 
 
 ## [1.0.5] - September 12th, 2020

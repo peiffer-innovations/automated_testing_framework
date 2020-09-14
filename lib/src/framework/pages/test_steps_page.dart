@@ -25,15 +25,123 @@ class _TestStepsPageState extends State<TestStepsPage> {
   final Logger _logger = Logger('TestStepsPageState');
 
   bool _exporting = false;
-  bool _minifySteps = false;
 
+  TestableRenderController _renderController;
   TestController _testController;
 
   @override
   void initState() {
     super.initState();
 
+    _renderController = TestableRenderController.of(context);
     _testController = TestController.of(context);
+  }
+
+  Future<void> _onEditStep({
+    @required TestStep step,
+  }) async {
+    var steps = List<TestStep>.from(
+      _testController.currentTest.steps,
+    );
+
+    var values = step?.values;
+    var idx = steps.indexOf(step);
+    var availableStep = TestStepRegistry.of(context).getAvailableTestStep(
+      step?.id,
+    );
+
+    if (availableStep != null) {
+      var newValues = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) => TestableFormPage(
+            form: availableStep.form,
+            values: values,
+          ),
+        ),
+      );
+
+      if (newValues != null) {
+        steps.removeAt(idx);
+        steps.insert(
+          idx,
+          step.copyWith(
+            values: newValues,
+          ),
+        );
+        _testController.currentTest = _testController.currentTest.copyWith(
+          steps: steps,
+        );
+
+        if (mounted == true) {
+          setState(() {});
+        }
+      }
+    }
+  }
+
+  Future<void> _onEditTestName({
+    @required TestController tester,
+    @required Translator translator,
+  }) async {
+    var label = translator.translate(TestTranslations.atf_test_name);
+    var testName = tester.currentTest.name ?? '';
+    var endTestName = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => Form(
+        autovalidate: true,
+        child: Builder(
+          builder: (BuildContext context) => AlertDialog(
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(null),
+                child: Text(
+                  translator.translate(
+                    TestTranslations.atf_button_cancel,
+                  ),
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  var valid = Form.of(context).validate();
+                  if (valid == true) {
+                    Navigator.of(context).pop(testName);
+                  }
+                },
+                child: Text(
+                  translator.translate(
+                    TestTranslations.atf_button_ok,
+                  ),
+                ),
+              ),
+            ],
+            content: TextFormField(
+              autocorrect: false,
+              autofocus: true,
+              autovalidate: true,
+              decoration: InputDecoration(
+                labelText: label,
+              ),
+              initialValue: testName,
+              onChanged: (value) => testName = value,
+              validator: (value) =>
+                  Validator(validators: [RequiredValidator()]).validate(
+                context: context,
+                label: label,
+                value: value,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    if (endTestName?.isNotEmpty == true) {
+      _testController.currentTest = _testController.currentTest.copyWith(
+        name: endTestName,
+      );
+      if (mounted == true) {
+        setState(() {});
+      }
+    }
   }
 
   Widget _buildFullStep(
@@ -73,7 +181,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
               Container(
                 width: double.infinity,
                 child: Text(
-                  step.id,
+                  '${index + 1}) ${step.id}',
                   style: theme.textTheme.headline6,
                 ),
               ),
@@ -174,48 +282,9 @@ class _TestStepsPageState extends State<TestStepsPage> {
                     child: IconButton(
                       color: theme.iconTheme.color,
                       icon: Icon(Icons.edit),
-                      onPressed: () async {
-                        var steps = List<TestStep>.from(
-                          _testController.currentTest.steps,
-                        );
-
-                        var values = step?.values;
-                        var idx = steps.indexOf(step);
-                        var availableStep =
-                            TestStepRegistry.of(context).getAvailableTestStep(
-                          step?.id,
-                        );
-
-                        if (availableStep != null) {
-                          var newValues = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  TestableFormPage(
-                                form: availableStep.form,
-                                values: values,
-                              ),
-                            ),
-                          );
-
-                          if (newValues != null) {
-                            steps.removeAt(idx);
-                            steps.insert(
-                              idx,
-                              step.copyWith(
-                                values: newValues,
-                              ),
-                            );
-                            _testController.currentTest =
-                                _testController.currentTest.copyWith(
-                              steps: steps,
-                            );
-
-                            if (mounted == true) {
-                              setState(() {});
-                            }
-                          }
-                        }
-                      },
+                      onPressed: () => _onEditStep(
+                        step: step,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -262,221 +331,84 @@ class _TestStepsPageState extends State<TestStepsPage> {
     @required int index,
     @required TestStep step,
   }) {
-    var tester = TestController.of(context);
-    var translator = Translator.of(context);
     var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    return Padding(
+    var translator = Translator.of(context);
+    return ListTile(
       key: ValueKey(step.key),
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(16.0),
-        elevation: 2.0,
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text(
-                      step.id,
-                      style: theme.textTheme.headline6,
-                    ),
-                  ),
-                  if ((step.values ?? {})['testableId']?.isNotEmpty ==
-                      true) ...[
-                    SizedBox(
-                      width: 16.0,
-                    ),
-                    Text(
-                      step.values['testableId'],
-                      style: TextStyle(fontFamily: 'monospace'),
-                    ),
-                  ]
-                ],
-              ),
-              // for (var entry in (step.values ?? {}).entries)
-              //   _buildValueEntry(context, entry),
-              Divider(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Tooltip(
-                    message: 'Move Up',
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.arrow_upward),
-                      onPressed: index == 0
-                          ? null
-                          : () {
-                              var steps = List<TestStep>.from(
-                                _testController.currentTest.steps,
-                              );
-
-                              steps.removeAt(index);
-                              steps.insert(index - 1, step);
-
-                              _testController.currentTest = _testController
-                                  .currentTest
-                                  .copyWith(steps: steps);
-                              if (mounted == true) {
-                                setState(() {});
-                              }
-                            },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: 'Move Down',
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.arrow_downward),
-                      onPressed:
-                          index == _testController.currentTest.steps.length - 1
-                              ? null
-                              : () {
-                                  var steps = List<TestStep>.from(
-                                    _testController.currentTest.steps,
-                                  );
-
-                                  steps.removeAt(index);
-                                  steps.insert(index + 1, step);
-
-                                  _testController.currentTest =
-                                      _testController.currentTest.copyWith(
-                                    steps: steps,
-                                  );
-                                  if (mounted == true) {
-                                    setState(() {});
-                                  }
-                                },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_button_delete,
-                    ),
-                    child: IconButton(
-                      color: theme.errorColor,
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        var steps = List<TestStep>.from(
-                          _testController.currentTest.steps,
-                        );
-
-                        steps.remove(step);
-                        _testController.currentTest =
-                            _testController.currentTest.copyWith(
-                          steps: steps,
-                        );
-                        if (mounted == true) {
-                          setState(() {});
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_button_edit,
-                    ),
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.edit),
-                      onPressed: () async {
-                        var steps = List<TestStep>.from(
-                          _testController.currentTest.steps,
-                        );
-
-                        var values = step?.values;
-                        var idx = steps.indexOf(step);
-                        var availableStep =
-                            TestStepRegistry.of(context).getAvailableTestStep(
-                          step?.id,
-                        );
-
-                        if (availableStep != null) {
-                          var newValues = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  TestableFormPage(
-                                form: availableStep.form,
-                                values: values,
-                              ),
-                            ),
-                          );
-
-                          if (newValues != null) {
-                            steps.removeAt(idx);
-                            steps.insert(
-                              idx,
-                              step.copyWith(
-                                values: newValues,
-                              ),
-                            );
-                            _testController.currentTest =
-                                _testController.currentTest.copyWith(
-                              steps: steps,
-                            );
-
-                            if (mounted == true) {
-                              setState(() {});
-                            }
-                          }
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_button_run,
-                    ),
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.play_arrow),
-                      onPressed: () async {
-                        if (widget.fromDialog != true) {
-                          Navigator.of(context).pop();
-                        }
-                        Navigator.of(context).pop();
-
-                        try {
-                          await tester.execute(
-                            skipScreenshots: false,
-                            reset: false,
-                            steps: [step],
-                            submitReport: false,
-                          );
-                        } catch (e) {
-                          tester.sleep = null;
-                          tester.step = null;
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 48.0,
+            child: Text('${index + 1}'),
           ),
-        ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  step.id,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontFamily: 'monospace'),
+                ),
+                if ((step.values ?? {})['testableId']?.isNotEmpty == true)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 4.0,
+                    ),
+                    child: Text(
+                      step.values['testableId'],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.caption,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      trailing: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: theme.errorColor,
+            ),
+            onPressed: () {
+              var steps = List<TestStep>.from(
+                _testController.currentTest.steps,
+              );
+
+              steps.remove(step);
+              _testController.currentTest =
+                  _testController.currentTest.copyWith(
+                steps: steps,
+              );
+              if (mounted == true) {
+                setState(() {});
+              }
+            },
+            tooltip: translator.translate(TestTranslations.atf_button_delete),
+          ),
+          SizedBox(
+            width: 16.0,
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: theme.iconTheme.color,
+            ),
+            onPressed: () => _onEditStep(step: step),
+            tooltip: translator.translate(TestTranslations.atf_button_edit),
+          ),
+        ],
       ),
     );
   }
@@ -519,81 +451,22 @@ class _TestStepsPageState extends State<TestStepsPage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.edit),
-                onPressed: () async {
-                  var label =
-                      translator.translate(TestTranslations.atf_test_name);
-                  var testName = tester.currentTest.name ?? '';
-                  var endTestName = await showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => Form(
-                      autovalidate: true,
-                      child: Builder(
-                        builder: (BuildContext context) => AlertDialog(
-                          actions: [
-                            FlatButton(
-                              onPressed: () => Navigator.of(context).pop(null),
-                              child: Text(
-                                translator.translate(
-                                  TestTranslations.atf_button_cancel,
-                                ),
-                              ),
-                            ),
-                            FlatButton(
-                              onPressed: () {
-                                var valid = Form.of(context).validate();
-                                if (valid == true) {
-                                  Navigator.of(context).pop(testName);
-                                }
-                              },
-                              child: Text(
-                                translator.translate(
-                                  TestTranslations.atf_button_ok,
-                                ),
-                              ),
-                            ),
-                          ],
-                          content: TextFormField(
-                            autocorrect: false,
-                            autofocus: true,
-                            autovalidate: true,
-                            decoration: InputDecoration(
-                              labelText: label,
-                            ),
-                            initialValue: testName,
-                            onChanged: (value) => testName = value,
-                            validator: (value) =>
-                                Validator(validators: [RequiredValidator()])
-                                    .validate(
-                              context: context,
-                              label: label,
-                              value: value,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                  if (endTestName?.isNotEmpty == true) {
-                    _testController.currentTest =
-                        _testController.currentTest.copyWith(
-                      name: endTestName,
-                    );
-                    if (mounted == true) {
-                      setState(() {});
-                    }
-                  }
-                },
+                onPressed: () => _onEditTestName(
+                  tester: tester,
+                  translator: translator,
+                ),
                 tooltip: translator.translate(TestTranslations.atf_button_edit),
               ),
               IconButton(
                 icon: Icon(
-                  _minifySteps == true
+                  _renderController.minifyTestSteps == true
                       ? Icons.fullscreen
                       : Icons.fullscreen_exit,
                 ),
-                onPressed: () => setState(() => _minifySteps = !_minifySteps),
+                onPressed: () => setState(() => _renderController
+                    .minifyTestSteps = !_renderController.minifyTestSteps),
                 tooltip: translator.translate(
-                  _minifySteps == true
+                  _renderController.minifyTestSteps == true
                       ? TestTranslations.atf_maximize_step_details
                       : TestTranslations.atf_minimize_step_details,
                 ),
@@ -613,25 +486,52 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 Positioned.fill(
                   child: IgnorePointer(
                     ignoring: _exporting == true,
-                    child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      children: <Widget>[
-                        for (var i = 0;
-                            i < testController.currentTest.steps.length;
-                            i++)
-                          _minifySteps == true
-                              ? _buildMinifiedStep(
-                                  context,
-                                  index: i,
-                                  step: testController.currentTest.steps[i],
-                                )
-                              : _buildFullStep(
+                    child: _renderController.minifyTestSteps == true
+                        ? ReorderableListView(
+                            onReorder: (int oldIndex, int newIndex) {
+                              var steps = List<TestStep>.from(
+                                _testController.currentTest.steps,
+                              );
+                              var step = steps[oldIndex];
+
+                              steps.removeAt(oldIndex);
+                              if (oldIndex > newIndex) {
+                                steps.insert(newIndex, step);
+                              } else {
+                                steps.insert(newIndex - 1, step);
+                              }
+
+                              _testController.currentTest = _testController
+                                  .currentTest
+                                  .copyWith(steps: steps);
+                              if (mounted == true) {
+                                setState(() {});
+                              }
+                            },
+                            children: <Widget>[
+                              for (var i = 0;
+                                  i < testController.currentTest.steps.length;
+                                  i++)
+                                _buildMinifiedStep(
                                   context,
                                   index: i,
                                   step: testController.currentTest.steps[i],
                                 ),
-                      ],
-                    ),
+                            ],
+                          )
+                        : ListView(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            children: <Widget>[
+                              for (var i = 0;
+                                  i < testController.currentTest.steps.length;
+                                  i++)
+                                _buildFullStep(
+                                  context,
+                                  index: i,
+                                  step: testController.currentTest.steps[i],
+                                ),
+                            ],
+                          ),
                   ),
                 ),
                 if (_exporting == true) ...[

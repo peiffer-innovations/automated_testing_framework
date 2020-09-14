@@ -15,20 +15,12 @@ import '../overrides/override_widget_tester.dart';
 abstract class TestRunnerStep extends JsonClass {
   static final Logger _logger = Logger('TestRunnerStep');
 
-  static Function(Object) _console =
-      (Object obj) => _logger.info(obj?.toString());
   static final OverrideWidgetTester _driver =
       OverrideWidgetTester(WidgetsBinding.instance);
 
   /// Returns the function to call when logging is required
-  static Function(Object) get console => _console;
-
-  /// Sets the function to call when logging is required.  The [printer] must
-  /// not be [null].
-  static set console(Function(Object) printer) {
-    assert(printer != null);
-    _console = printer;
-  }
+  static void _console(Object message, [Level level = Level.INFO]) =>
+      _logger.log(level, message);
 
   /// Returns the test driver that can be used to interact with widgets.
   OverrideWidgetTester get driver => _driver;
@@ -51,6 +43,18 @@ abstract class TestRunnerStep extends JsonClass {
     _console(message);
     tester.status = message;
   }
+
+  /// Gives the test step an opportunity to sleep after the step has been
+  /// executed.  Steps that do not interact with the application may choose to
+  /// override this and reduce or elimate the delay.
+  Future<void> postStepSleep(Duration duration) async =>
+      await Future.delayed(duration);
+
+  /// Gives the test step an opportunity to sleep before the step has been
+  /// executed.  Steps that do not interact with the application may choose to
+  /// override this and reduce or elimate the delay.
+  Future<void> preStepSleep(Duration duration) async =>
+      await Future.delayed(duration);
 
   /// Sleeps for the defined [Duration].  This accept an optional [cancelStream]
   /// which can be used to cancel the sleep.  The [error] flag informs the
@@ -97,13 +101,16 @@ abstract class TestRunnerStep extends JsonClass {
         }
 
         if (message?.isNotEmpty == true) {
-          _console(message);
+          _console(message, Level.FINEST);
         } else {
-          _console('Sleeping for ${duration.inMilliseconds} millis...');
+          _console(
+            'Sleeping for ${duration.inMilliseconds} millis...',
+            Level.FINEST,
+          );
         }
 
         for (var i = 0; i < steps; i++) {
-          _console(buildString(i));
+          _console(buildString(i), Level.FINEST);
           tester.sleep = ProgressValue(
             error: error,
             max: steps,
@@ -115,7 +122,7 @@ abstract class TestRunnerStep extends JsonClass {
             break;
           }
         }
-        _console(buildString(steps));
+        _console(buildString(steps), Level.FINEST);
       } finally {
         tester.sleep = ProgressValue(
           error: error,
@@ -180,7 +187,7 @@ abstract class TestRunnerStep extends JsonClass {
           StatefulElement element = finder;
           var state = element.state;
           if (state is TestableState) {
-            _console('flash: [$testableId]');
+            _console('flash: [$testableId]', Level.FINEST);
             await state.flash();
           }
         }

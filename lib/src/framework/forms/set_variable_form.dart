@@ -1,0 +1,70 @@
+import 'package:automated_testing_framework/automated_testing_framework.dart';
+import 'package:flutter/material.dart';
+import 'package:form_validation/form_validation.dart';
+import 'package:static_translations/static_translations.dart';
+
+class SetVariableForm extends TestStepForm {
+  const SetVariableForm();
+
+  @override
+  bool get supportsMinified => true;
+
+  @override
+  TranslationEntry get title => TestStepTranslations.atf_title_set_variable;
+
+  @override
+  Widget buildForm(
+    BuildContext context,
+    Map<String, dynamic> values, {
+    bool minify = false,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (minify != true)
+          buildHelpSection(
+            context,
+            TestStepTranslations.atf_help_set_variable,
+            minify: minify,
+          ),
+        buildValuesSection(
+          context,
+          [
+            buildEditText(
+              context: context,
+              id: 'key',
+              label: TestStepTranslations.atf_form_key,
+              validators: [
+                RequiredValidator(),
+              ],
+              values: values,
+            ),
+            SizedBox(height: 16.0),
+            buildEditText(
+              context: context,
+              id: 'value',
+              label: TestStepTranslations.atf_form_value,
+              validators: [RequiredValidator()],
+              values: values,
+            ),
+            SizedBox(height: 16.0),
+            buildDropdown(
+              context: context,
+              defaultValue: 'String',
+              id: 'type',
+              items: [
+                'bool',
+                'double',
+                'int',
+                'String',
+              ],
+              label: TestStepTranslations.atf_form_type,
+              values: values,
+            ),
+          ],
+          minify: minify,
+        ),
+      ],
+    );
+  }
+}

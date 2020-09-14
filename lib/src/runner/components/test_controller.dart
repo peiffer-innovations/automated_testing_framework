@@ -48,7 +48,8 @@ class TestController {
   ///
   /// Finally, a [testReporter] is used to submit test reports from tests
   /// executed within the application.  The default [testReporter] is a no-op
-  /// that will do nothing with any given report.
+  /// that will do nothing with any given report.  The [testReportLogLevel]
+  /// defines the level to capture in the [TestReport]s that are submitted.
   ///
   /// See also:
   /// * [AssetTestStore]
@@ -61,6 +62,7 @@ class TestController {
     TestStepRegistry registry,
     TestReader testReader = TestStore.testReader,
     WidgetBuilder testReportBuilder,
+    Level testReportLogLevel = Level.INFO,
     TestReporter testReporter = TestStore.testReporter,
     WidgetBuilder testSuiteReportBuilder,
     TestWriter testWriter = TestStore.testWriter,
@@ -75,6 +77,7 @@ class TestController {
         _registry = registry ?? TestStepRegistry.instance,
         _testReader = testReader,
         _testReportBuilder = testReportBuilder,
+        _testReportLogLevel = testReportLogLevel,
         _testReporter = testReporter,
         _testSuiteReportBuilder = testSuiteReportBuilder,
         _testWriter = testWriter;
@@ -105,9 +108,11 @@ class TestController {
       StreamController<ProgressValue>.broadcast();
   final TestReader _testReader;
   final WidgetBuilder _testReportBuilder;
+  final Level _testReportLogLevel;
   final TestReporter _testReporter;
   final WidgetBuilder _testSuiteReportBuilder;
   final TestWriter _testWriter;
+  final Map<String, dynamic> _variables = {};
 
   /// The device pixel ratio to use when taking screencaptures.
   double devicePixelRatio = 4.0;
@@ -207,11 +212,27 @@ class TestController {
     await Future.delayed(Duration(milliseconds: 100));
 
     TestReport testReport;
+    StreamSubscription logSubscription;
     if (reset == true || submitReport == true) {
       testReport = TestReport(
         name: name,
         version: version,
       );
+      if (_testReportLogLevel != null) {
+        logSubscription = Logger.root.onRecord.listen((record) {
+          if (_testReportLogLevel <= record.level) {
+            testReport.appendLog(
+              '${record.level.name}: ${record.time}: ${record.message}',
+            );
+            if (record.error != null) {
+              testReport.appendLog('${record.error}');
+            }
+            if (record.stackTrace != null) {
+              testReport.appendLog('${record.stackTrace}');
+            }
+          }
+        });
+      }
     }
     try {
       var idx = 0;
@@ -222,7 +243,7 @@ class TestController {
         );
 
         if (delays.preStep.inMilliseconds > 0) {
-          await Future.delayed(delays.preStep);
+          await driverStep.preStepSleep(delays.preStep);
         }
 
         testReport?.startStep(
@@ -245,8 +266,8 @@ class TestController {
           testReport?.endStep(error);
         }
 
-        if (delays.preStep.inMilliseconds > 0) {
-          await Future.delayed(delays.postStep);
+        if (delays.postStep.inMilliseconds > 0) {
+          await driverStep.postStepSleep(delays.preStep);
         }
 
         idx++;
@@ -257,6 +278,8 @@ class TestController {
       testReport?.exception('Exception in test', e, stack);
       _logger.severe('EXCEPTION IN TEST: ', e, stack);
     } finally {
+      await logSubscription?.cancel();
+
       await _sleep(delays.testTearDown);
       step = null;
       testReport?.complete();
@@ -369,41 +392,11 @@ class TestController {
   Future<List<PendingTest>> loadTests(BuildContext context) =>
       _testReader(context);
 
-  /// Executes a screen capture for the application.  As a note, depending on
-  /// the device this may take several seconds.  The screenshot call is fully
-  /// async so this will wait until up to [TestStepDelays.screenshot] for the
-  /// response.
-  ///
-  /// This will never trigger a failure, but it will return [null] if the device
-  /// does not respond before the timeout.
-  Future<Uint8List> screencap() async {
-    Uint8List image;
+  /// Removes the variable with the given [key] from the controller.
+  void removeVariable({@required String key}) {
+    assert(key != null);
 
-    if (!kIsWeb) {
-      var captureContext = CaptureContext(
-        devicePixelRatio: devicePixelRatio,
-        image: [],
-      );
-      status = '<screenshot>';
-      try {
-        _screencapController.add(captureContext);
-
-        var now = DateTime.now().millisecondsSinceEpoch;
-        while (captureContext.image?.isNotEmpty != true &&
-            now + delays.screenshot.inMilliseconds >
-                DateTime.now().millisecondsSinceEpoch) {
-          await Future.delayed(Duration(milliseconds: 100));
-        }
-      } catch (e, stack) {
-        _logger.severe(e, stack);
-      }
-
-      image = captureContext?.image?.isNotEmpty != true
-          ? null
-          : Uint8List.fromList(captureContext?.image);
-    }
-
-    return image;
+    _variables.remove(key);
   }
 
   /// Requests the application to perform a reset.
@@ -420,6 +413,23 @@ class TestController {
     await _sleep(delays.testSetUp);
   }
 
+  /// Resolves the given input with any potential variable on the controller.
+  /// Variable values use the mustache format and must begin with `{{` and end
+  /// with `}}`.  If the input is not marked as a variable or there is no
+  /// variable with the matching key registered then the input will be return
+  /// unaltered.
+  dynamic resolveVariable(dynamic input) {
+    dynamic result = input;
+    if (input is String && input.startsWith('{{') && input.endsWith('}}')) {
+      var key = input.substring(2, input.length - 2).trim();
+      if (_variables.containsKey(key)) {
+        result = _variables[key];
+      }
+    }
+
+    return result;
+  }
+
   /// Runs a series of [tests].  For full runs, this is more memory efficient as
   /// it will only load the tests as needed.
   ///
@@ -432,21 +442,23 @@ class TestController {
     if (tests != null) {
       var testSuiteReport = TestSuiteReport();
       for (var pendingTest in tests) {
-        try {
-          var test = await pendingTest.loader.load(ignoreImages: true);
-          await reset();
+        if (pendingTest.active == true) {
+          try {
+            var test = await pendingTest.loader.load(ignoreImages: true);
+            await reset();
 
-          await execute(
-            name: test.name,
-            reset: false,
-            skipScreenshots: skipScreenshots,
-            steps: test.steps,
-            submitReport: true,
-            testSuiteReport: testSuiteReport,
-            version: test.version,
-          );
-        } catch (e, stack) {
-          _logger.severe(e, stack);
+            await execute(
+              name: test.name,
+              reset: false,
+              skipScreenshots: skipScreenshots,
+              steps: test.steps,
+              submitReport: true,
+              testSuiteReport: testSuiteReport,
+              version: test.version,
+            );
+          } catch (e, stack) {
+            _logger.severe(e, stack);
+          }
         }
       }
 
@@ -503,6 +515,53 @@ class TestController {
         ),
       );
     }
+  }
+
+  /// Executes a screen capture for the application.  As a note, depending on
+  /// the device this may take several seconds.  The screenshot call is fully
+  /// async so this will wait until up to [TestStepDelays.screenshot] for the
+  /// response.
+  ///
+  /// This will never trigger a failure, but it will return [null] if the device
+  /// does not respond before the timeout.
+  Future<Uint8List> screencap() async {
+    Uint8List image;
+
+    if (!kIsWeb) {
+      var captureContext = CaptureContext(
+        devicePixelRatio: devicePixelRatio,
+        image: [],
+      );
+      status = '<screenshot>';
+      try {
+        _screencapController.add(captureContext);
+
+        var now = DateTime.now().millisecondsSinceEpoch;
+        while (captureContext.image?.isNotEmpty != true &&
+            now + delays.screenshot.inMilliseconds >
+                DateTime.now().millisecondsSinceEpoch) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+      } catch (e, stack) {
+        _logger.severe(e, stack);
+      }
+
+      image = captureContext?.image?.isNotEmpty != true
+          ? null
+          : Uint8List.fromList(captureContext?.image);
+    }
+
+    return image;
+  }
+
+  /// Sets the variable with the [key] to the [value].
+  void setVariable({
+    @required String key,
+    @required dynamic value,
+  }) {
+    assert(key != null);
+
+    _variables[key] = value;
   }
 
   /// Submits the test report through the [TestReporter].

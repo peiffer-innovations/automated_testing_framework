@@ -33,6 +33,10 @@ class ScreenshotStep extends TestRunnerStep {
     }
   }
 
+  /// Overidden to ignore the delay
+  @override
+  Future<void> postStepSleep(Duration duration) async {}
+
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].
   @override

@@ -7,11 +7,13 @@ import 'package:meta/meta.dart';
 class PendingTest {
   /// Constructs the pending test.
   PendingTest({
+    this.active = true,
     @required this.loader,
     @required this.name,
     @required this.numSteps,
     @required this.version,
-  })  : assert(loader != null),
+  })  : assert(active != null),
+        assert(loader != null),
         assert(name?.isNotEmpty == true),
         assert(numSteps != null),
         assert(numSteps >= 0),
@@ -21,11 +23,15 @@ class PendingTest {
   /// Constructs the pending test from an already loaded in-memory test.  This
   /// is really just a metadata wrapper for the passed in test.
   factory PendingTest.memory(Test test) => PendingTest(
+        active: test.active,
         loader: MemoryTestLoader(test: test),
         name: test.name,
         numSteps: test.steps.length,
         version: test.version,
       );
+
+  /// Flag that states whether the test is active by default or not.
+  final bool active;
 
   /// Loader that can load the full test details.
   final TestLoader loader;

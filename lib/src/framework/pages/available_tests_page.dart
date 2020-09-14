@@ -51,7 +51,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     _tests = (await _testController.loadTests(context)) ?? [];
     _active.clear();
 
-    _tests?.forEach((test) => _active[test.name] = true);
+    _tests?.forEach((test) => _active[test.name] = test.active);
     if (mounted == true) {
       setState(() {});
     }
