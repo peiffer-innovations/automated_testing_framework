@@ -2,6 +2,8 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
+/// Step that attempts to execute a Back action against the current navigation
+/// stack.
 class GoBackStep extends TestRunnerStep {
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:

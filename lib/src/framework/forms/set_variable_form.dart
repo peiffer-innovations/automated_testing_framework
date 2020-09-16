@@ -32,8 +32,8 @@ class SetVariableForm extends TestStepForm {
           [
             buildEditText(
               context: context,
-              id: 'key',
-              label: TestStepTranslations.atf_form_key,
+              id: 'variableName',
+              label: TestStepTranslations.atf_form_variable_name,
               validators: [
                 RequiredValidator(),
               ],

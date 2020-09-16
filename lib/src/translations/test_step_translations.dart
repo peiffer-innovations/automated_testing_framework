@@ -13,11 +13,6 @@ class TestStepTranslations {
     value: 'Error',
   );
 
-  static const atf_form_key = TranslationEntry(
-    key: 'atf_form_key',
-    value: 'Key',
-  );
-
   static const atf_form_scroll_increment = TranslationEntry(
     key: 'atf_form_scroll_increment',
     value: 'Scroll Increment',
@@ -41,6 +36,11 @@ class TestStepTranslations {
   static const atf_form_value = TranslationEntry(
     key: 'atf_form_value',
     value: 'Value',
+  );
+
+  static const atf_form_variable_name = TranslationEntry(
+    key: 'atf_form_variable_name',
+    value: 'Variable Name',
   );
 
   static const atf_form_widget_id = TranslationEntry(

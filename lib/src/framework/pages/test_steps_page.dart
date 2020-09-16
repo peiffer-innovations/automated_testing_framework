@@ -39,6 +39,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
   Future<void> _onEditStep({
     @required TestStep step,
+    @required ThemeData theme,
+    @required Translator translator,
   }) async {
     var steps = List<TestStep>.from(
       _testController.currentTest.steps,
@@ -76,6 +78,52 @@ class _TestStepsPageState extends State<TestStepsPage> {
           setState(() {});
         }
       }
+    } else {
+      await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) => Theme(
+          data: theme,
+          child: AlertDialog(
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  translator.translate(
+                    TestTranslations.atf_button_cancel,
+                  ),
+                ),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                textColor: theme.errorColor,
+                child: Text(
+                  translator.translate(
+                    TestTranslations.atf_button_clear,
+                  ),
+                ),
+              ),
+            ],
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  Icons.warning,
+                  color: theme.textTheme.bodyText2.color,
+                  size: 54.0,
+                ),
+                SizedBox(
+                  height: 16.0,
+                ),
+                Text(
+                  translator.translate(
+                    TestTranslations.atf_clear_confirmation,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
   }
 
@@ -284,6 +332,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       icon: Icon(Icons.edit),
                       onPressed: () => _onEditStep(
                         step: step,
+                        theme: theme,
+                        translator: translator,
                       ),
                     ),
                   ),
@@ -376,37 +426,45 @@ class _TestStepsPageState extends State<TestStepsPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: theme.errorColor,
-            ),
-            onPressed: () {
-              var steps = List<TestStep>.from(
-                _testController.currentTest.steps,
-              );
+          Tooltip(
+            message: translator.translate(TestTranslations.atf_button_delete),
+            child: IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: theme.errorColor,
+              ),
+              onPressed: () {
+                var steps = List<TestStep>.from(
+                  _testController.currentTest.steps,
+                );
 
-              steps.remove(step);
-              _testController.currentTest =
-                  _testController.currentTest.copyWith(
-                steps: steps,
-              );
-              if (mounted == true) {
-                setState(() {});
-              }
-            },
-            tooltip: translator.translate(TestTranslations.atf_button_delete),
+                steps.remove(step);
+                _testController.currentTest =
+                    _testController.currentTest.copyWith(
+                  steps: steps,
+                );
+                if (mounted == true) {
+                  setState(() {});
+                }
+              },
+            ),
           ),
           SizedBox(
             width: 16.0,
           ),
-          IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: theme.iconTheme.color,
+          Tooltip(
+            message: translator.translate(TestTranslations.atf_button_edit),
+            child: IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: theme.iconTheme.color,
+              ),
+              onPressed: () => _onEditStep(
+                step: step,
+                theme: theme,
+                translator: translator,
+              ),
             ),
-            onPressed: () => _onEditStep(step: step),
-            tooltip: translator.translate(TestTranslations.atf_button_edit),
           ),
         ],
       ),

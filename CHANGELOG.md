@@ -1,3 +1,9 @@
+## [1.1.1] - September 15th, 2020
+
+* Exposed the `TestStepRegistry` to via the `TestController`.
+* Changed from `key` to `variableName` on the `set_variable` step, but still accept `key` for compatibility.
+
+
 ## [1.1.0] - September 14th, 2020
 
 * Changed "minified" test steps render on the Current Test Steps page to allow for drag-and-drop too.

@@ -13,19 +13,19 @@ void main() {
     expect('foo', controller.resolveVariable('foo'));
     expect('{{foo}}', controller.resolveVariable('{{foo}}'));
 
-    controller.setVariable(key: 'foo', value: 'bar');
+    controller.setVariable(variableName: 'foo', value: 'bar');
     expect('bar', controller.resolveVariable('{{foo}}'));
 
-    controller.setVariable(key: 'foo', value: null);
+    controller.setVariable(variableName: 'foo', value: null);
     expect(null, controller.resolveVariable('{{foo}}'));
 
-    controller.setVariable(key: 'foo', value: false);
+    controller.setVariable(variableName: 'foo', value: false);
     expect(false, controller.resolveVariable('{{foo}}'));
 
-    controller.setVariable(key: 'foo', value: 42.0);
+    controller.setVariable(variableName: 'foo', value: 42.0);
     expect(42.0, controller.resolveVariable('{{foo}}'));
 
-    controller.removeVariable(key: 'foo');
+    controller.removeVariable(variableName: 'foo');
     expect('{{foo}}', controller.resolveVariable('{{foo}}'));
   });
 }

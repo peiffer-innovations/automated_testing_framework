@@ -43,10 +43,12 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
     var availSteps = registry.availableSteps;
 
     availSteps
-        .where((step) => step.widgetless == true)
+        .where((step) => step.form != null && step.widgetless == true)
         .forEach((step) => _globalSteps.add(step));
 
-    availSteps.where((step) => step.widgetless == false).forEach((step) {
+    availSteps
+        .where((step) => step.form != null && step.widgetless == false)
+        .forEach((step) {
       if (step.supports(widget.types)) {
         _widgetSteps.add(step);
       }

@@ -122,6 +122,9 @@ class TestController {
   /// Returns the current from the controller.  This will never be [null].
   Test get currentTest => _currentTest;
 
+  /// Returns the registry that is being used by the controller.
+  TestStepRegistry get registry => _registry;
+
   /// Returns the stream that will fire screep capture requests on.
   Stream<CaptureContext> get screencapStream => _screencapController.stream;
 
@@ -134,6 +137,10 @@ class TestController {
   /// Returns the stream that will fire updates when a test moves from step to
   /// step.
   Stream<ProgressValue> get stepStream => _stepController.stream;
+
+  /// Returns an unmodifiable map of all the currently set variables.
+  Map<String, dynamic> get variables =>
+      Map<String, dynamic>.unmodifiable(_variables);
 
   /// Sets the current test.  If the given test is [null] then a blank test will
   /// be set instead.
@@ -172,6 +179,9 @@ class TestController {
 
     return result;
   }
+
+  /// Clears all the variables.
+  void clearVariables() => _variables.clear();
 
   /// Executes a series of tests steps.  This accepts the [name] of the test
   /// which may be [null] or empty.  The [reset] defines if the controller
@@ -392,11 +402,11 @@ class TestController {
   Future<List<PendingTest>> loadTests(BuildContext context) =>
       _testReader(context);
 
-  /// Removes the variable with the given [key] from the controller.
-  void removeVariable({@required String key}) {
-    assert(key != null);
+  /// Removes the variable with the given [variableName] from the controller.
+  void removeVariable({@required String variableName}) {
+    assert(variableName != null);
 
-    _variables.remove(key);
+    _variables.remove(variableName);
   }
 
   /// Requests the application to perform a reset.
@@ -554,14 +564,14 @@ class TestController {
     return image;
   }
 
-  /// Sets the variable with the [key] to the [value].
+  /// Sets the variable with the [variableName] to the [value].
   void setVariable({
-    @required String key,
     @required dynamic value,
+    @required String variableName,
   }) {
-    assert(key != null);
+    assert(variableName != null);
 
-    _variables[key] = value;
+    _variables[variableName] = value;
   }
 
   /// Submits the test report through the [TestReporter].

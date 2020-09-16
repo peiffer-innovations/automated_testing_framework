@@ -413,9 +413,9 @@ Key          | Type    | Required | Supports Variable | Description
   "id": "set_variable",
   "image": "<optional_base_64_image>",
   "values": {
-    "key": "my-variable-key",
     "type": "String",
-    "value": "My Set Value"
+    "value": "My Set Value",
+    "variableName": "my-variable-key"
   }
 }
 ```

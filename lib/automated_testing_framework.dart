@@ -27,6 +27,8 @@ export 'src/framework/pages/test_steps_page.dart';
 export 'src/framework/pages/testable_form_page.dart';
 export 'src/framework/pages/testable_steps_page.dart';
 
+export 'src/framework/widgets/test_step_picker.dart';
+
 export 'src/registry/test_step_builder.dart';
 export 'src/registry/test_step_registry.dart';
 

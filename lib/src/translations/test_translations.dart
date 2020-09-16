@@ -118,6 +118,11 @@ class TestTranslations {
     value: 'Show minimal step details',
   );
 
+  static const atf_no_test_step = TranslationEntry(
+    key: 'atf_no_test_step',
+    value: '<No Test Step>',
+  );
+
   static const atf_no_tests_found = TranslationEntry(
     key: 'atf_no_tests_found',
     value: 'No tests found',

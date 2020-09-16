@@ -168,7 +168,7 @@ class TestStepRegistry {
         form: SetVariableForm(),
         help: TestStepTranslations.atf_help_set_variable,
         id: 'set_variable',
-        keys: const {'key', 'type', 'value'},
+        keys: const {'type', 'value', 'variableName'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_set_variable,
         type: null,

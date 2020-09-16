@@ -5,19 +5,16 @@ import 'package:meta/meta.dart';
 /// Sets a variable on the identified [TestController].
 class SetVariableStep extends TestRunnerStep {
   SetVariableStep({
-    @required this.key,
     String type = 'String',
     @required this.value,
-  })  : assert(key?.isNotEmpty == true),
-        assert(type != null),
+    @required this.variableName,
+  })  : assert(type != null),
         assert(type == 'bool' ||
             type == 'double' ||
             type == 'int' ||
             type == 'String'),
-        type = type;
-
-  /// The Key (or name) of the variable to set on the controller.
-  final String key;
+        type = type,
+        assert(variableName?.isNotEmpty == true);
 
   /// The type of value to set.  This must be one of:
   /// * `bool`
@@ -29,14 +26,17 @@ class SetVariableStep extends TestRunnerStep {
   /// The string representation of the value to set.
   final String value;
 
+  /// The variable name of the variable to set on the controller.
+  final String variableName;
+
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
   ///
   /// ```json
   /// {
-  ///   "key": <String>,
   ///   "type": <String>,
   ///   "value": <String>
+  ///   "variableName": <String>,
   /// }
   /// ```
   static SetVariableStep fromDynamic(dynamic map) {
@@ -44,9 +44,11 @@ class SetVariableStep extends TestRunnerStep {
 
     if (map != null) {
       result = SetVariableStep(
-        key: map['key'],
         type: map['type'] ?? 'String',
         value: map['value']?.toString(),
+
+        /// Accept either "variableName" or "key" for backward compatibility with 1.1.0
+        variableName: map['variableName'] ?? map['key'],
       );
     }
 
@@ -59,24 +61,24 @@ class SetVariableStep extends TestRunnerStep {
     @required TestReport report,
     @required TestController tester,
   }) async {
-    String key = tester.resolveVariable(this.key);
     String type = tester.resolveVariable(this.type);
     String value = tester.resolveVariable(this.value);
+    String variableName = tester.resolveVariable(this.variableName);
 
-    assert(key?.isNotEmpty == true);
     assert(type != null);
     assert(type == 'bool' ||
         type == 'double' ||
         type == 'int' ||
         type == 'String');
-    var name = "set_variable('$key', '$type', '$value')";
+    assert(variableName?.isNotEmpty == true);
+    var name = "set_variable('$variableName', '$type', '$value')";
 
     log(
       name,
       tester: tester,
     );
     tester.setVariable(
-      key: key,
+      variableName: variableName,
       value: value,
     );
   }
@@ -93,8 +95,8 @@ class SetVariableStep extends TestRunnerStep {
   /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
-        'key': key,
         'type': type,
         'value': value,
+        'variableName': variableName,
       };
 }
