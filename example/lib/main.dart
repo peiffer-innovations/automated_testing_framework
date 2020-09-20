@@ -39,7 +39,7 @@ void main() {
       autorun: kProfileMode,
       enabled: true,
       gestures: gestures,
-      // suiteName: 'Core',
+      suiteName: 'Core',
       testReader: AssetTestStore(
         testAssetIndex:
             'packages/automated_testing_framework_example/assets/all_tests.json',
