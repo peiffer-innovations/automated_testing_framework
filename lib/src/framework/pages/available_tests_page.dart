@@ -9,10 +9,12 @@ class AvailableTestsPage extends StatefulWidget {
   AvailableTestsPage({
     this.autoRun = false,
     Key key,
+    this.suiteName,
   })  : assert(autoRun != null),
         super(key: key);
 
   final bool autoRun;
+  final String suiteName;
 
   @override
   _AvailableTestsPageState createState() => _AvailableTestsPageState();
@@ -20,6 +22,8 @@ class AvailableTestsPage extends StatefulWidget {
 
 class _AvailableTestsPageState extends State<AvailableTestsPage> {
   final Map<String, bool> _active = {};
+  String _suiteName;
+  List<String> _testSuites = [];
   List<PendingTest> _tests;
   Translator _translator;
   TestController _testController;
@@ -31,6 +35,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     _translator = Translator.of(context);
 
     _testController = TestController.of(context);
+    _suiteName = widget.suiteName ?? _testController.selectedSuiteName;
 
     _loadTests();
   }
@@ -48,10 +53,20 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
   }
 
   Future<void> _loadTests() async {
-    _tests = (await _testController.loadTests(context)) ?? [];
+    _tests = (await _testController.loadTests(
+          context,
+        )) ??
+        [];
     _active.clear();
 
-    _tests?.forEach((test) => _active[test.name] = test.active);
+    var suites = <String>{};
+    _tests?.forEach((test) {
+      _active[test.name] = test.active;
+      if (test.suiteName != null) {
+        suites.add(test.suiteName);
+      }
+    });
+    _testSuites = suites.toList()..sort((a, b) => a.compareTo(b));
     if (mounted == true) {
       setState(() {});
     }
@@ -65,7 +80,9 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     var tests = <Test>[];
 
     for (var test in _tests) {
-      if (_isActive(test) && test.numSteps > 0) {
+      if (_isActive(test) &&
+          test.numSteps > 0 &&
+          (_suiteName == null || _suiteName == test.suiteName)) {
         var t = await test.loader.load(ignoreImages: true);
 
         tests.add(t);
@@ -85,14 +102,29 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     }
   }
 
-  Widget _buildTest(BuildContext context, PendingTest test) => ListTile(
+  void setSuiteName(String suiteName) {
+    _suiteName = suiteName;
+    if (mounted == true) {
+      setState(() {});
+    }
+  }
+
+  Widget _buildTest(
+    BuildContext context,
+    PendingTest test,
+  ) =>
+      ListTile(
+        key: ValueKey('${test.name}_${test.suiteName}'),
         onLongPress: () => _loadTest(test),
         onTap: () => _setActive(test),
         subtitle: Text(
           _translator.translate(
-            TestTranslations.atf_version_steps,
+            test.suiteName == null
+                ? TestTranslations.atf_version_steps
+                : TestTranslations.atf_suite_version_steps,
             {
               'steps': test.numSteps,
+              'suiteName': test.suiteName,
               'version': test.version,
             },
           ),
@@ -111,12 +143,72 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    var translator = Translator.of(context);
+    var suiteTests = _tests
+        ?.where((test) => _suiteName == null || _suiteName == test.suiteName)
+        ?.toList();
+
     return Theme(
-      data: TestRunner.of(context)?.theme ?? Theme.of(context),
+      data: theme,
       child: Builder(
         builder: (BuildContext context) => Scaffold(
           appBar: AppBar(
             actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      contentPadding: EdgeInsets.only(top: 16.0),
+                      title: Text(
+                        translator.translate(
+                          TestTranslations.atf_select_test_suite,
+                        ),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            onTap: () {
+                              setState(() => _suiteName = null);
+                              Navigator.of(context).pop();
+                            },
+                            title: Text(
+                              translator.translate(
+                                TestTranslations.atf_no_filter,
+                              ),
+                            ),
+                            trailing: _suiteName == null
+                                ? Icon(
+                                    Icons.check_circle,
+                                    color: theme.textTheme.bodyText2.color,
+                                  )
+                                : null,
+                          ),
+                          ...[
+                            for (var suite in _testSuites)
+                              ListTile(
+                                onTap: () {
+                                  setState(() => _suiteName = suite);
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text(suite),
+                                trailing: _suiteName == suite
+                                    ? Icon(
+                                        Icons.check_circle,
+                                        color: theme.textTheme.bodyText2.color,
+                                      )
+                                    : null,
+                              ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
               IconButton(
                 icon: Icon(
                   Icons.play_circle_filled,
@@ -129,7 +221,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
               _translator.translate(TestTranslations.atf_tests),
             ),
           ),
-          body: _tests == null || _tests?.isEmpty == true
+          body: suiteTests == null || suiteTests?.isEmpty == true
               ? Center(
                   child: _tests == null
                       ? CircularProgressIndicator()
@@ -144,8 +236,8 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
                     BuildContext context,
                     int index,
                   ) =>
-                      _buildTest(context, _tests[index]),
-                  itemCount: _tests.length,
+                      _buildTest(context, suiteTests[index]),
+                  itemCount: suiteTests.length,
                 ),
         ),
       ),

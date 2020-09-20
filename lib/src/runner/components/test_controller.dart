@@ -59,6 +59,7 @@ class TestController {
     this.maxCommonSearchDepth = 3,
     @required GlobalKey<NavigatorState> navigatorKey,
     @required this.onReset,
+    this.selectedSuiteName,
     TestStepRegistry registry,
     TestReader testReader = TestStore.testReader,
     WidgetBuilder testReportBuilder,
@@ -116,6 +117,9 @@ class TestController {
 
   /// The device pixel ratio to use when taking screencaptures.
   double devicePixelRatio = 4.0;
+
+  /// The currently selected test suite name.
+  String selectedSuiteName;
 
   Test _currentTest = Test();
 
@@ -341,6 +345,7 @@ class TestController {
       var translator = Translator.of(context);
 
       var name = '';
+      var suiteName = currentTest.suiteName ?? '';
       name = await showDialog<String>(
         context: context,
         builder: (BuildContext context) => Theme(
@@ -360,17 +365,44 @@ class TestController {
                 ),
               ),
             ],
-            content: TextFormField(
-              decoration: InputDecoration(
-                labelText: translator.translate(TestTranslations.atf_test_name),
-              ),
-              onChanged: (value) => name = value,
-              validator: (value) =>
-                  Validator(validators: [RequiredValidator()]).validate(
-                context: context,
-                label: translator.translate(TestTranslations.atf_test_name),
-                value: value,
-              ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextFormField(
+                  autocorrect: false,
+                  autofocus: true,
+                  autovalidate: true,
+                  decoration: InputDecoration(
+                    labelText: translator.translate(
+                      TestTranslations.atf_test_name,
+                    ),
+                  ),
+                  initialValue: name,
+                  onChanged: (value) => name = value,
+                  validator: (value) =>
+                      Validator(validators: [RequiredValidator()]).validate(
+                    context: context,
+                    label: translator.translate(
+                      TestTranslations.atf_test_name,
+                    ),
+                    value: value,
+                  ),
+                ),
+                SizedBox(
+                  height: 16.0,
+                ),
+                TextFormField(
+                  autocorrect: false,
+                  autofocus: false,
+                  decoration: InputDecoration(
+                    labelText: translator.translate(
+                      TestTranslations.atf_suite_name,
+                    ),
+                  ),
+                  initialValue: suiteName,
+                  onChanged: (value) => suiteName = value,
+                ),
+              ],
             ),
             title: Text(translator.translate(TestTranslations.atf_test_name)),
           ),
@@ -379,7 +411,11 @@ class TestController {
 
       if (name?.isNotEmpty == true) {
         save = true;
-        currentTest = currentTest.copyWith(name: name);
+        currentTest = currentTest.copyWith(
+          name: name,
+          suiteName: suiteName?.isNotEmpty == true ? suiteName : null,
+        );
+        selectedSuiteName = suiteName;
       } else {
         save = false;
       }
@@ -399,8 +435,14 @@ class TestController {
   /// Loads the list of tests from the assigned [TestReader].  This accepts the
   /// [BuildContext] to allow the reader to provide visual feedback to the user
   /// in case the load takes a while.
-  Future<List<PendingTest>> loadTests(BuildContext context) =>
-      _testReader(context);
+  Future<List<PendingTest>> loadTests(
+    BuildContext context, {
+    String suiteName,
+  }) =>
+      _testReader(
+        context,
+        suiteName: suiteName,
+      );
 
   /// Removes the variable with the given [variableName] from the controller.
   void removeVariable({@required String variableName}) {

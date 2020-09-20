@@ -10,6 +10,7 @@ class TestReport {
     TestDeviceInfo deviceInfo,
     String id,
     this.name,
+    this.suiteName,
     this.version,
   })  : deviceInfo = deviceInfo ?? TestDeviceInfo.instance,
         id = id ?? Uuid().v4(),
@@ -27,6 +28,9 @@ class TestReport {
 
   /// The date time the test started.
   final DateTime startTime;
+
+  /// The test suite for the report.
+  final String suiteName;
 
   /// The version of the test
   final int version;

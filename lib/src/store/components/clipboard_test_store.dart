@@ -24,7 +24,13 @@ class ClipboardTestStore {
   /// clipboard.  This ignores the [context] that is passed in.  This will
   /// never throw an error or return [null] and will instead return an empty
   /// array if it encounters issues loading the tests.
-  static Future<List<PendingTest>> testReader(BuildContext context) async {
+  ///
+  /// If the [suiteName] is not-null, this will exclude any tests that are not
+  /// same test suite.
+  static Future<List<PendingTest>> testReader(
+    BuildContext context, {
+    String suiteName,
+  }) async {
     var tests = <PendingTest>[];
 
     try {
@@ -34,6 +40,10 @@ class ClipboardTestStore {
         var parsed = json.decode(text);
         tests = TestStore.createMemoryTests(parsed);
       }
+
+      tests?.removeWhere(
+        (test) => suiteName?.isNotEmpty == true && suiteName != test.suiteName,
+      );
     } catch (e, stack) {
       _logger.severe('Error in ClipboardTestStore.testReader', e, stack);
     }

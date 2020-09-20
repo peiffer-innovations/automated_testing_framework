@@ -37,7 +37,13 @@ class AssetTestStore {
   /// [testAssets].  This ignores the [context] that is passed in.  This will
   /// never throw an error or return [null] and will instead return an empty
   /// array if it encounters issues loading the tests.
-  Future<List<PendingTest>> testReader(BuildContext context) async {
+  ///
+  /// If the [suiteName] is not-null, this will exclude any tests that are not
+  /// same test suite.
+  Future<List<PendingTest>> testReader(
+    BuildContext context, {
+    String suiteName,
+  }) async {
     var files = <String>[];
 
     if (testAssetIndex?.isNotEmpty == true) {
@@ -66,6 +72,10 @@ class AssetTestStore {
           _logger.severe('Error in AssetTestStore.testReader', e, stack);
         }
       }
+
+      tests?.removeWhere(
+        (test) => suiteName?.isNotEmpty == true && suiteName != test.suiteName,
+      );
     }
 
     return tests ?? <PendingTest>[];

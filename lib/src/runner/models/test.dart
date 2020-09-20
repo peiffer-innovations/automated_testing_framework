@@ -8,6 +8,7 @@ class Test extends JsonClass {
     this.active = true,
     this.name,
     List<TestStep> steps,
+    this.suiteName,
     this.version = 0,
   })  : assert(active != null),
         assert(version != null),
@@ -22,6 +23,9 @@ class Test extends JsonClass {
 
   /// The list of steps for the test
   final List<TestStep> steps;
+
+  /// The name of the test suite this test is a part of; may be [null] or empty.
+  final String suiteName;
 
   /// The test version.
   final int version;
@@ -54,6 +58,7 @@ class Test extends JsonClass {
                   map,
                   ignoreImages: ignoreImages,
                 )),
+        suiteName: map['suiteName'],
         version: JsonClass.parseInt(map['version'], 1),
       );
     }
@@ -72,12 +77,14 @@ class Test extends JsonClass {
     bool active,
     String name,
     List<TestStep> steps,
+    String suiteName,
     int version,
   }) =>
       Test(
         active: active ?? this.active,
         name: name ?? this.name,
         steps: steps ?? this.steps,
+        suiteName: suiteName ?? this.suiteName,
         version: version ?? this.version,
       );
 
@@ -88,6 +95,7 @@ class Test extends JsonClass {
         'active': active,
         'name': name ?? '<unnammed>',
         'steps': JsonClass.toJsonList(steps),
+        'suiteName': suiteName,
         'version': version,
       };
 }

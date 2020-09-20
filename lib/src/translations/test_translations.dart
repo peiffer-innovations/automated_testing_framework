@@ -118,6 +118,11 @@ class TestTranslations {
     value: 'Show minimal step details',
   );
 
+  static const atf_no_filter = TranslationEntry(
+    key: 'atf_no_filter',
+    value: '<No Filter>',
+  );
+
   static const atf_no_test_step = TranslationEntry(
     key: 'atf_no_test_step',
     value: '<No Test Step>',
@@ -143,6 +148,11 @@ class TestTranslations {
     value: 'Quick Add Step',
   );
 
+  static const atf_select_test_suite = TranslationEntry(
+    key: 'atf_select_test_suite',
+    value: 'Select Test Suite',
+  );
+
   static const atf_selected_widget_steps = TranslationEntry(
     key: 'atf_selected_widget_steps',
     value: 'Selected Widget Steps',
@@ -151,6 +161,16 @@ class TestTranslations {
   static const atf_show_global_overlays = TranslationEntry(
     key: 'atf_show_global_overlays',
     value: 'Show global overlays',
+  );
+
+  static const atf_suite_name = TranslationEntry(
+    key: 'atf_suite_name',
+    value: 'Suite Name',
+  );
+
+  static const atf_suite_version_steps = TranslationEntry(
+    key: 'atf_suite_version_steps',
+    value: 'Suite: {suiteName} / Version: {version} / Steps: {steps}',
   );
 
   static const atf_test_name = TranslationEntry(

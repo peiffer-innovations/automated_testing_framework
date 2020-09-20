@@ -1,3 +1,8 @@
+## [1.2.0] - September 19th, 2020
+
+* Added the concept of test suites to the framework
+
+
 ## [1.1.1] - September 15th, 2020
 
 * Exposed the `TestStepRegistry` to via the `TestController`.

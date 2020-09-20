@@ -6,10 +6,11 @@ import 'package:meta/meta.dart';
 class TestSuiteResult {
   TestSuiteResult({
     @required this.name,
-    @required this.version,
     @required this.numStepsPassed,
     @required this.numStepsTotal,
     @required this.steps,
+    this.suiteName,
+    @required this.version,
   })  : assert(name?.isNotEmpty == true),
         assert(version != null),
         assert(numStepsPassed != null),
@@ -28,6 +29,9 @@ class TestSuiteResult {
   /// The test step details from the report
   final List<TestReportStep> steps;
 
+  /// The test suite name
+  final String suiteName;
+
   /// The version of the test
   final int version;
 
@@ -41,6 +45,7 @@ class TestSuiteResult {
         numStepsPassed: report.passedSteps,
         numStepsTotal: report.steps.length,
         steps: report.steps,
+        suiteName: report.suiteName,
         version: report.version ?? 0,
       );
 }

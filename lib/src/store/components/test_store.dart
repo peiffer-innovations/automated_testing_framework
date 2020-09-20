@@ -48,7 +48,10 @@ class TestStore {
   }
 
   /// Generic no-op function compatible with the [TestReader] definition.
-  static Future<List<PendingTest>> testReader(BuildContext context) async {
+  static Future<List<PendingTest>> testReader(
+    BuildContext context, {
+    String suiteName,
+  }) async {
     await _showNotSupported(context);
     return null;
   }

@@ -133,6 +133,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
   }) async {
     var label = translator.translate(TestTranslations.atf_test_name);
     var testName = tester.currentTest.name ?? '';
+    var suiteName =
+        tester.currentTest.suiteName ?? tester.selectedSuiteName ?? '';
     var endTestName = await showDialog<String>(
       context: context,
       builder: (BuildContext context) => Form(
@@ -162,21 +164,40 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 ),
               ),
             ],
-            content: TextFormField(
-              autocorrect: false,
-              autofocus: true,
-              autovalidate: true,
-              decoration: InputDecoration(
-                labelText: label,
-              ),
-              initialValue: testName,
-              onChanged: (value) => testName = value,
-              validator: (value) =>
-                  Validator(validators: [RequiredValidator()]).validate(
-                context: context,
-                label: label,
-                value: value,
-              ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextFormField(
+                  autocorrect: false,
+                  autofocus: true,
+                  autovalidate: true,
+                  decoration: InputDecoration(
+                    labelText: label,
+                  ),
+                  initialValue: testName,
+                  onChanged: (value) => testName = value,
+                  validator: (value) =>
+                      Validator(validators: [RequiredValidator()]).validate(
+                    context: context,
+                    label: label,
+                    value: value,
+                  ),
+                ),
+                SizedBox(
+                  height: 16.0,
+                ),
+                TextFormField(
+                  autocorrect: false,
+                  autofocus: false,
+                  decoration: InputDecoration(
+                    labelText: translator.translate(
+                      TestTranslations.atf_suite_name,
+                    ),
+                  ),
+                  initialValue: suiteName,
+                  onChanged: (value) => suiteName = value,
+                ),
+              ],
             ),
           ),
         ),
@@ -185,6 +206,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
     if (endTestName?.isNotEmpty == true) {
       _testController.currentTest = _testController.currentTest.copyWith(
         name: endTestName,
+        suiteName: suiteName?.isEmpty == true ? null : suiteName,
       );
       if (mounted == true) {
         setState(() {});

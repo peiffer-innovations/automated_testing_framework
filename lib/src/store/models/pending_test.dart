@@ -11,6 +11,7 @@ class PendingTest {
     @required this.loader,
     @required this.name,
     @required this.numSteps,
+    @required this.suiteName,
     @required this.version,
   })  : assert(active != null),
         assert(loader != null),
@@ -27,6 +28,7 @@ class PendingTest {
         loader: MemoryTestLoader(test: test),
         name: test.name,
         numSteps: test.steps.length,
+        suiteName: test.suiteName,
         version: test.version,
       );
 
@@ -41,6 +43,9 @@ class PendingTest {
 
   /// Number of steps in the test that can be loaded.
   final int numSteps;
+
+  /// Name of the test suite the test is a part of.
+  final String suiteName;
 
   /// Version of the test to be loaded.
   final int version;
