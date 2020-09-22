@@ -92,8 +92,16 @@ class TestReport {
   void appendLog(String log) => _logs.add(log);
 
   /// Attaches the given screenshot to the test report.
-  void attachScreenshot(Uint8List screenshot) =>
-      _images.add(TestImage(image: screenshot));
+  void attachScreenshot(
+    Uint8List screenshot, {
+    @required bool goldenCompatible,
+    @required String id,
+  }) =>
+      _images.add(TestImage(
+        goldenCompatible: goldenCompatible,
+        id: id,
+        image: screenshot,
+      ));
 
   /// Completes the test and locks in the end time to now.
   void complete() => _endTime = DateTime.now();

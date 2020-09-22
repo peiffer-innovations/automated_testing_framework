@@ -1,3 +1,16 @@
+## [1.2.1] - September 21st, 2020
+
+* Updated the `screenshot` step to support an id and added the id to the `TestReport`.
+* Added "captureImage" capability to the `Testable` to allow capturing images of just that widget
+* Added "hide" and "obscure" capability to the `Testable` so it can self-obscure dynamic widgets for golden screenshots
+* Added capability for saving and loading golden images
+
+
+## [1.2.0+1] - September 19th, 2020
+
+* Updated the example to the latest
+
+
 ## [1.2.0] - September 19th, 2020
 
 * Added the concept of test suites to the framework

@@ -1,13 +1,66 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
 
 /// Page that can display a full test report.
-class TestReportPage extends StatelessWidget {
+class TestReportPage extends StatefulWidget {
   TestReportPage({
     Key key,
   }) : super(key: key);
+
+  @override
+  _TestReportPageState createState() => _TestReportPageState();
+}
+
+class _TestReportPageState extends State<TestReportPage> {
+  static final _logger = Logger('_TestReportPageState');
+  bool _saving = false;
+
+  Future<void> _saveGoldenImages(
+    BuildContext context, {
+    @required TestReport report,
+    @required TestController tester,
+  }) async {
+    assert(report != null);
+    assert(tester != null);
+    var translator = Translator.of(context);
+
+    _saving = true;
+    if (mounted == true) {
+      setState(() {});
+    }
+
+    var success = true;
+    try {
+      await tester.goldenImageWriter(report);
+    } catch (e, stack) {
+      success = false;
+      _logger.severe('Error uploading golden images', e, stack);
+    }
+
+    if (success == true) {
+      var snackBar = SnackBar(
+        content: Text(
+          translator.translate(TestTranslations.atf_export_successful),
+        ),
+      );
+      Scaffold.of(context).showSnackBar(snackBar);
+    } else {
+      var snackBar = SnackBar(
+        content: Text(
+          translator.translate(TestTranslations.atf_error_has_occurred),
+        ),
+      );
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
+
+    _saving = false;
+    if (mounted == true) {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +85,7 @@ class TestReportPage extends StatelessWidget {
                       skipScreenshots: false,
                       steps: tester.currentTest.steps,
                       submitReport: false,
+                      suiteName: tester.currentTest.suiteName,
                       version: tester.currentTest.version,
                     );
                   },
@@ -39,137 +93,212 @@ class TestReportPage extends StatelessWidget {
                       translator.translate(TestTranslations.atf_button_rerun),
                 ),
             ],
+            bottom: report.suiteName?.isNotEmpty == true
+                ? PreferredSize(
+                    preferredSize: null,
+                    child: Text(
+                      report.suiteName,
+                    ),
+                  )
+                : null,
             title: Text('${report.name ?? unknown} (${report.version ?? 0})'),
           ),
           body: SafeArea(
-            child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                Widget result;
-                if (index == 0) {
-                  if (report.runtimeException?.isNotEmpty == true) {
-                    result = Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Icon(
-                            Icons.warning,
-                            size: 64.0,
-                            color: Theme.of(context).textTheme.bodyText2.color,
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          Text(
-                            report.runtimeException,
-                            maxLines: 5,
-                          ),
-                          SizedBox(
-                            height: 16.0,
-                          ),
-                          Divider(),
-                        ],
-                      ),
-                    );
-                  } else {
-                    result = Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          SizedBox(height: 16.0),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Positioned.fill(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.red,
-                                  strokeWidth: 16.0,
-                                  value: report.passedSteps.toDouble() /
-                                      report.steps.length,
-                                  valueColor:
-                                      AlwaysStoppedAnimation(Colors.green),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                height: 160.0,
-                                width: 160.0,
-                                child: report.success == true
-                                    ? Icon(
-                                        Icons.check,
-                                        color: Colors.green,
-                                        size: 120.0,
-                                      )
-                                    : RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '${report.passedSteps}',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 32.0,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: ' / ${report.steps.length}',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText2
-                                                    .color,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+            child: Stack(
+              children: <Widget>[
+                IgnorePointer(
+                  ignoring: _saving == true,
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (BuildContext context, int index) {
+                            Widget result;
+                            if (index == 0) {
+                              if (report.runtimeException?.isNotEmpty == true) {
+                                result = Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.warning,
+                                        size: 64.0,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color,
                                       ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16.0),
-                        ],
-                      ),
-                    );
-                  }
-                } else if (index - 1 < report.steps.length) {
-                  index--;
-                  result = Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
-                    ),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(16.0),
-                      elevation: 2.0,
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: TestReportStepWidget(
-                          step: report.steps[index],
+                                      SizedBox(
+                                        height: 8.0,
+                                      ),
+                                      Text(
+                                        report.runtimeException,
+                                        maxLines: 5,
+                                      ),
+                                      SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      Divider(),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                result = Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SizedBox(height: 16.0),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: <Widget>[
+                                          Positioned.fill(
+                                            child: CircularProgressIndicator(
+                                              backgroundColor: Colors.red,
+                                              strokeWidth: 16.0,
+                                              value: report.passedSteps
+                                                      .toDouble() /
+                                                  report.steps.length,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      Colors.green),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 160.0,
+                                            width: 160.0,
+                                            child: report.success == true
+                                                ? Icon(
+                                                    Icons.check,
+                                                    color: Colors.green,
+                                                    size: 120.0,
+                                                  )
+                                                : RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              '${report.passedSteps}',
+                                                          style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 32.0,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              ' / ${report.steps.length}',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText2
+                                                                .color,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 16.0),
+                                    ],
+                                  ),
+                                );
+                              }
+                            } else if (index - 1 < report.steps.length) {
+                              index--;
+                              result = Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 16.0,
+                                ),
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  elevation: 2.0,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: TestReportStepWidget(
+                                      step: report.steps[index],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              index -= 1 + report.steps.length;
+
+                              result = Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 16.0,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                      report.images[index].id,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Material(
+                                      elevation: 2.0,
+                                      child: Image.memory(
+                                        report.images[index].image,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return result;
+                          },
+                          itemCount: report.steps.length +
+                              1 +
+                              (report.images?.length ?? 0),
                         ),
                       ),
+                      if (report.images?.isNotEmpty == true &&
+                          report.name?.isNotEmpty == true &&
+                          report.version != null &&
+                          tester.goldenImageWriter !=
+                              TestStore.goldenImageWriter)
+                        Builder(
+                          builder: (BuildContext context) => Center(
+                            child: FlatButton(
+                              onPressed: () => _saveGoldenImages(
+                                context,
+                                report: report,
+                                tester: tester,
+                              ),
+                              child: Text(
+                                translator.translate(
+                                  TestTranslations
+                                      .atf_button_export_golden_images,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                if (_saving == true) ...[
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.black26,
                     ),
-                  );
-                } else {
-                  index -= 1 + report.steps.length;
-
-                  result = Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
-                    ),
-                    child: Material(
-                      elevation: 2.0,
-                      child: Image.memory(
-                        report.images[index].image,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  );
-                }
-                return result;
-              },
-              itemCount: report.steps.length + 1 + (report.images?.length ?? 0),
+                  ),
+                  Positioned(
+                    bottom: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: LinearProgressIndicator(),
+                  ),
+                ],
+              ],
             ),
           ),
         ),

@@ -38,6 +38,10 @@ class TestController {
   /// building tests as well as running test steps.  In general, the default
   /// [TestStepRegistry] is sufficient.
   ///
+  /// The [testImageReader] will be used when golden images are requested from a
+  /// data store.  The default [testImageReader] is a no-op that will always
+  /// return [null] for all image requests.
+  ///
   /// This expects a [testReader] to be able to load tests into the platform for
   /// editing and / or execution.  The default [testReader] is a no-op that will
   /// never return any tests.
@@ -56,21 +60,25 @@ class TestController {
   /// * [ClipboardTestStore]
   TestController({
     this.delays = const TestStepDelays(),
+    this.goldenImageWriter = TestStore.goldenImageWriter,
     this.maxCommonSearchDepth = 3,
     @required GlobalKey<NavigatorState> navigatorKey,
     @required this.onReset,
     this.selectedSuiteName,
     TestStepRegistry registry,
+    this.testImageReader = TestStore.testImageReader,
     TestReader testReader = TestStore.testReader,
     WidgetBuilder testReportBuilder,
     Level testReportLogLevel = Level.INFO,
     TestReporter testReporter = TestStore.testReporter,
     WidgetBuilder testSuiteReportBuilder,
     TestWriter testWriter = TestStore.testWriter,
-  })  : assert(maxCommonSearchDepth != null),
+  })  : assert(goldenImageWriter != null),
+        assert(maxCommonSearchDepth != null),
         assert(maxCommonSearchDepth >= 0),
         assert(navigatorKey != null),
         assert(onReset != null),
+        assert(testImageReader != null),
         assert(testReader != null),
         assert(testReporter != null),
         assert(testWriter != null),
@@ -88,6 +96,8 @@ class TestController {
   /// The delays that tests should wait for.
   final TestStepDelays delays;
 
+  final GoldenImageWriter goldenImageWriter;
+
   /// Defines how far down a widget tree a [Testable] widget should look for a
   /// supported widget for the purposes of getting or setting values and errors.
   final int maxCommonSearchDepth;
@@ -96,6 +106,8 @@ class TestController {
   /// so that when a reset is requested by a test, the application properly
   /// resets to the initial state.
   final AsyncCallback onReset;
+
+  final TestImageReader testImageReader;
 
   final GlobalKey<NavigatorState> _navigatorKey;
   final TestStepRegistry _registry;
@@ -213,6 +225,7 @@ class TestController {
     bool skipScreenshots = false,
     @required List<TestStep> steps,
     bool submitReport = true,
+    String suiteName,
     TestSuiteReport testSuiteReport,
     int version,
   }) async {
@@ -230,6 +243,7 @@ class TestController {
     if (reset == true || submitReport == true) {
       testReport = TestReport(
         name: name,
+        suiteName: suiteName,
         version: version,
       );
       if (_testReportLogLevel != null) {
@@ -505,6 +519,7 @@ class TestController {
               skipScreenshots: skipScreenshots,
               steps: test.steps,
               submitReport: true,
+              suiteName: test.suiteName,
               testSuiteReport: testSuiteReport,
               version: test.version,
             );
@@ -549,6 +564,7 @@ class TestController {
             skipScreenshots: skipScreenshots,
             steps: test.steps,
             submitReport: true,
+            suiteName: test.suiteName,
             testSuiteReport: testSuiteReport,
             version: test.version,
           );

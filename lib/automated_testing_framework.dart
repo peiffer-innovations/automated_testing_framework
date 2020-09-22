@@ -32,6 +32,7 @@ export 'src/framework/widgets/test_step_picker.dart';
 export 'src/registry/test_step_builder.dart';
 export 'src/registry/test_step_registry.dart';
 
+export 'src/report/models/golden_test_images.dart';
 export 'src/report/models/test_device_info.dart';
 export 'src/report/models/test_image.dart';
 export 'src/report/models/test_report.dart';
@@ -83,6 +84,8 @@ export 'src/store/loaders/memory_test_loader.dart';
 export 'src/store/models/pending_test.dart';
 export 'src/store/models/test_loader.dart';
 
+export 'src/store/typedefs/golden_image_writer.dart';
+export 'src/store/typedefs/test_image_reader.dart';
 export 'src/store/typedefs/test_reader.dart';
 export 'src/store/typedefs/test_reporter.dart';
 export 'src/store/typedefs/test_writer.dart';

@@ -18,6 +18,7 @@ class TestDeviceInfo extends JsonClass {
     this.manufacturer,
     this.model,
     this.os,
+    this.orientation,
     this.physicalDevice = true,
     this.pixels,
     this.systemVersion,
@@ -34,10 +35,52 @@ class TestDeviceInfo extends JsonClass {
   final Size dips;
   final String manufacturer;
   final String model;
+  final String orientation;
   final String os;
   final bool physicalDevice;
   final Size pixels;
   final String systemVersion;
+
+  static TestDeviceInfo fromDynamic(dynamic map) {
+    TestDeviceInfo result;
+
+    if (map != null) {
+      var screen = map['screen'] ?? {};
+      var dips = screen['dips'] ?? {};
+      var pixels = screen['pixels'] ?? {};
+
+      result = TestDeviceInfo.custom(
+        brand: map['brand'],
+        buildNumber: map['buildNumber'],
+        device: map['device'],
+        devicePixelRatio: JsonClass.parseDouble(screen['devicePixelRatio']),
+        dips: Size(
+          JsonClass.parseDouble(
+            dips['width'],
+          ),
+          JsonClass.parseDouble(
+            dips['height'],
+          ),
+        ),
+        manufacturer: map['manufacturer'],
+        model: map['model'],
+        orientation: map['orientation'],
+        os: map['os'],
+        physicalDevice: JsonClass.parseBool(map['physicalDevice']),
+        pixels: Size(
+          JsonClass.parseDouble(
+            pixels['width'],
+          ),
+          JsonClass.parseDouble(
+            pixels['height'],
+          ),
+        ),
+        systemVersion: map['systemVersion'],
+      );
+    }
+
+    return result;
+  }
 
   String get deviceSignature => [
         buildNumber,
@@ -60,6 +103,7 @@ class TestDeviceInfo extends JsonClass {
       String manufacturer;
       String model;
       String os;
+      String orientation;
       bool physicalDevice;
       Size pixels;
       String systemVersion;
@@ -147,6 +191,7 @@ class TestDeviceInfo extends JsonClass {
             mq.size.height,
             mq.size.width,
           );
+          orientation = dips.width >= dips.height ? 'landscape' : 'portrait';
           devicePixelRatio = mq.devicePixelRatio;
           pixels = Size(
             mq.size.height * devicePixelRatio,
@@ -164,6 +209,7 @@ class TestDeviceInfo extends JsonClass {
         dips: dips,
         manufacturer: manufacturer,
         model: model,
+        orientation: orientation,
         os: os,
         physicalDevice: physicalDevice,
         pixels: pixels,
@@ -185,6 +231,7 @@ class TestDeviceInfo extends JsonClass {
         'device': device,
         'manufacturer': manufacturer,
         'model': model,
+        'orientation': orientation,
         'os': os,
         'physicalDevice': physicalDevice,
         'screen': devicePixelRatio == null

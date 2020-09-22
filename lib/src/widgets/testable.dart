@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
@@ -106,10 +107,13 @@ class TestableState extends State<Testable>
 
   Animation<Color> _animation;
   AnimationController _animationController;
+  Color _backgroundColor;
   bool _isDialogOpen;
+  Color _obscureColor = Colors.transparent;
   dynamic Function() _onRequestError;
   dynamic Function() _onRequestValue;
   ValueChanged<dynamic> _onSetValue;
+  double _opacity = 1.0;
   TestableRenderController _renderController;
   GlobalKey _renderKey;
   String _scrollableId;
@@ -266,6 +270,48 @@ class TestableState extends State<Testable>
     super.dispose();
   }
 
+  /// Captures the image from the current widget.  This will return [null] if
+  /// the image cannot be captured for any reason.
+  ///
+  /// This will always return [null] on the Web platform.
+  ///
+  /// This accepts an optional [backgroundColor].  When set, the
+  /// [backgroundColor] will be painted on the image first and then the widget
+  /// image will be painted.  This can be useful when widgets inherit a
+  /// background from their parent because that background would not be part of
+  /// the captured value.
+  Future<Uint8List> captureImage([
+    Color backgroundColor,
+  ]) async {
+    RenderRepaintBoundary boundary =
+        _renderKey.currentContext.findRenderObject();
+    Uint8List image;
+    if (!kIsWeb) {
+      if (!kDebugMode || boundary?.debugNeedsPaint != true) {
+        _backgroundColor = backgroundColor;
+        if (mounted == true) {
+          setState(() {});
+        }
+
+        await Future.delayed(Duration(milliseconds: 500));
+        boundary = _renderKey.currentContext.findRenderObject();
+        var img = await boundary.toImage(
+          pixelRatio: MediaQuery.of(context).devicePixelRatio,
+        );
+        var byteData = await img.toByteData(
+          format: ui.ImageByteFormat.png,
+        );
+        image = byteData.buffer.asUint8List();
+        _backgroundColor = null;
+        if (mounted == true) {
+          setState(() {});
+        }
+      }
+    }
+
+    return image;
+  }
+
   /// Flashes the [Testable] widget to give a visual indicator that the
   /// framework is interactging with the widget.
   Future<void> flash() async {
@@ -274,6 +320,26 @@ class TestableState extends State<Testable>
         await _animationController.forward(from: 0.0);
         await _animationController.reverse(from: 1.0);
       }
+    }
+  }
+
+  /// Obscures the testable widget using the given color.  This provides a way
+  /// to obscure / exclude dynamic widgets from golden screenshot calculations.
+  Future<void> obscure(Color color) async {
+    _obscureColor = color ?? Colors.transparent;
+    if (mounted == true) {
+      setState(() {});
+      await Future.delayed(Duration(milliseconds: 300));
+    }
+  }
+
+  /// Sets the opacity on the widget to hide it or show it for golden image
+  /// tests.
+  Future<void> opacity(double opacity) async {
+    _opacity = opacity ?? 0;
+    if (mounted == true) {
+      setState(() {});
+      await Future.delayed(Duration(milliseconds: 300));
     }
   }
 
@@ -328,8 +394,6 @@ class TestableState extends State<Testable>
 
   Future<void> _openTestActions({@required bool page}) async {
     var overlayShowing = _showTestableOverlay;
-    RenderRepaintBoundary boundary =
-        _renderKey.currentContext.findRenderObject();
     _showTestableOverlay = false;
     if (mounted == true) {
       setState(() {});
@@ -339,18 +403,7 @@ class TestableState extends State<Testable>
         await Future.delayed(Duration(milliseconds: 500));
       }
 
-      List<int> image;
-      if (!kIsWeb) {
-        if (!kDebugMode || boundary?.debugNeedsPaint != true) {
-          var img = await boundary.toImage(
-            pixelRatio: MediaQuery.of(context).devicePixelRatio,
-          );
-          var byteData = await img.toByteData(
-            format: ui.ImageByteFormat.png,
-          );
-          image = byteData.buffer.asUint8List();
-        }
-      }
+      var image = await captureImage();
 
       if (mounted == true) {
         setState(() {});
@@ -619,7 +672,31 @@ class TestableState extends State<Testable>
               ),
               child: RepaintBoundary(
                 key: _renderKey,
-                child: widget.child,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: _opacity ?? 1.0,
+                  child: Stack(
+                    children: <Widget>[
+                      if (_backgroundColor != null)
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            child: Container(
+                              color: _backgroundColor,
+                            ),
+                          ),
+                        ),
+                      widget.child,
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            color: _obscureColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -643,6 +720,14 @@ class TestableState extends State<Testable>
         key: _scrollKey,
         children: [
           widget.child,
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                color: _obscureColor,
+              ),
+            ),
+          ),
         ],
       );
     } else {

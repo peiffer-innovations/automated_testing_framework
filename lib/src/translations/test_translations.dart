@@ -48,6 +48,11 @@ class TestTranslations {
     value: 'EXPORT',
   );
 
+  static const atf_button_export_golden_images = TranslationEntry(
+    key: 'atf_button_export_golden_images',
+    value: 'EXPORT AS GOLDEN IMAGES',
+  );
+
   static const atf_button_ok = TranslationEntry(
     key: 'atf_button_ok',
     value: 'OK',
@@ -101,6 +106,11 @@ class TestTranslations {
   static const atf_discard_changes = TranslationEntry(
     key: 'atf_discard_changes',
     value: 'Discard changes?',
+  );
+
+  static const atf_error_has_occurred = TranslationEntry(
+    key: 'atf_error_has_occurred',
+    value: 'An error has occurred',
   );
 
   static const atf_export_successful = TranslationEntry(

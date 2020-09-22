@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
@@ -46,6 +48,19 @@ class TestStore {
 
     return tests ?? <Test>[];
   }
+
+  /// Generic no-op function compatible with the [GoldenImageWriter] definition.
+  static Future<void> goldenImageWriter(TestReport testReport) async => null;
+
+  /// Generic no-op function compatible with the [TestImageReader] definition.
+  static Future<Uint8List> testImageReader({
+    @required TestDeviceInfo deviceInfo,
+    String suiteName,
+    @required String testName,
+    @required String imageId,
+    int testVersion,
+  }) async =>
+      null;
 
   /// Generic no-op function compatible with the [TestReader] definition.
   static Future<List<PendingTest>> testReader(

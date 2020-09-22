@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
+import 'package:websafe_platform/websafe_platform.dart';
 
 /// Page that shows all the test steps and their values for a current test.
 class TestStepsPage extends StatefulWidget {
@@ -133,6 +134,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
   }) async {
     var label = translator.translate(TestTranslations.atf_test_name);
     var testName = tester.currentTest.name ?? '';
+    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var suiteName =
         tester.currentTest.suiteName ?? tester.selectedSuiteName ?? '';
     var endTestName = await showDialog<String>(
@@ -140,64 +142,67 @@ class _TestStepsPageState extends State<TestStepsPage> {
       builder: (BuildContext context) => Form(
         autovalidate: true,
         child: Builder(
-          builder: (BuildContext context) => AlertDialog(
-            actions: [
-              FlatButton(
-                onPressed: () => Navigator.of(context).pop(null),
-                child: Text(
-                  translator.translate(
-                    TestTranslations.atf_button_cancel,
-                  ),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  var valid = Form.of(context).validate();
-                  if (valid == true) {
-                    Navigator.of(context).pop(testName);
-                  }
-                },
-                child: Text(
-                  translator.translate(
-                    TestTranslations.atf_button_ok,
-                  ),
-                ),
-              ),
-            ],
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextFormField(
-                  autocorrect: false,
-                  autofocus: true,
-                  autovalidate: true,
-                  decoration: InputDecoration(
-                    labelText: label,
-                  ),
-                  initialValue: testName,
-                  onChanged: (value) => testName = value,
-                  validator: (value) =>
-                      Validator(validators: [RequiredValidator()]).validate(
-                    context: context,
-                    label: label,
-                    value: value,
-                  ),
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                TextFormField(
-                  autocorrect: false,
-                  autofocus: false,
-                  decoration: InputDecoration(
-                    labelText: translator.translate(
-                      TestTranslations.atf_suite_name,
+          builder: (BuildContext context) => Theme(
+            data: theme,
+            child: AlertDialog(
+              actions: [
+                FlatButton(
+                  onPressed: () => Navigator.of(context).pop(null),
+                  child: Text(
+                    translator.translate(
+                      TestTranslations.atf_button_cancel,
                     ),
                   ),
-                  initialValue: suiteName,
-                  onChanged: (value) => suiteName = value,
+                ),
+                FlatButton(
+                  onPressed: () {
+                    var valid = Form.of(context).validate();
+                    if (valid == true) {
+                      Navigator.of(context).pop(testName);
+                    }
+                  },
+                  child: Text(
+                    translator.translate(
+                      TestTranslations.atf_button_ok,
+                    ),
+                  ),
                 ),
               ],
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextFormField(
+                    autocorrect: false,
+                    autofocus: true,
+                    autovalidate: true,
+                    decoration: InputDecoration(
+                      labelText: label,
+                    ),
+                    initialValue: testName,
+                    onChanged: (value) => testName = value,
+                    validator: (value) =>
+                        Validator(validators: [RequiredValidator()]).validate(
+                      context: context,
+                      label: label,
+                      value: value,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  TextFormField(
+                    autocorrect: false,
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      labelText: translator.translate(
+                        TestTranslations.atf_suite_name,
+                      ),
+                    ),
+                    initialValue: suiteName,
+                    onChanged: (value) => suiteName = value,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -552,6 +557,13 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 ),
               ),
             ],
+            bottom: _testController.currentTest.suiteName?.isNotEmpty == true
+                ? PreferredSize(
+                    preferredSize: null,
+                    child: Text(_testController.currentTest.suiteName),
+                  )
+                : null,
+            centerTitle: WebsafePlatform().isIOS(),
             title: Text(
               _testController.currentTest.name ??
                   translator.translate(
@@ -753,12 +765,17 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       var controller = TestableRenderController.of(context);
                       controller.showGlobalOverlay = false;
                       var tester = TestController.of(context);
+                      Navigator.of(context).pop();
+                      await Future.delayed(Duration(milliseconds: 500));
                       try {
                         await tester.execute(
+                          name: _testController.currentTest.name,
+                          reset: true,
                           skipScreenshots: false,
                           steps: _testController.currentTest.steps,
                           submitReport: false,
-                          reset: true,
+                          suiteName: _testController.currentTest.suiteName,
+                          version: _testController.currentTest.version,
                         );
                       } catch (e, stack) {
                         _logger.severe(e, stack);

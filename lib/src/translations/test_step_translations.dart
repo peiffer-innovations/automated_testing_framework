@@ -13,6 +13,16 @@ class TestStepTranslations {
     value: 'Error',
   );
 
+  static const atf_form_golden_compatible = TranslationEntry(
+    key: 'atf_form_colden_compatible',
+    value: 'Golden Compatible',
+  );
+
+  static const atf_form_image_id = TranslationEntry(
+    key: 'atf_form_image_id',
+    value: 'Image ID',
+  );
+
   static const atf_form_scroll_increment = TranslationEntry(
     key: 'atf_form_scroll_increment',
     value: 'Scroll Increment',
