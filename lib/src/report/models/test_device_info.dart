@@ -15,6 +15,7 @@ class TestDeviceInfo extends JsonClass {
     this.device,
     this.devicePixelRatio,
     this.dips,
+    this.id,
     this.manufacturer,
     this.model,
     this.os,
@@ -33,6 +34,7 @@ class TestDeviceInfo extends JsonClass {
   final String device;
   final double devicePixelRatio;
   final Size dips;
+  final String id;
   final String manufacturer;
   final String model;
   final String orientation;
@@ -62,6 +64,7 @@ class TestDeviceInfo extends JsonClass {
             dips['height'],
           ),
         ),
+        id: map['id'],
         manufacturer: map['manufacturer'],
         model: map['model'],
         orientation: map['orientation'],
@@ -100,6 +103,7 @@ class TestDeviceInfo extends JsonClass {
       String device;
       double devicePixelRatio;
       Size dips;
+      var id = '<unknown>';
       String manufacturer;
       String model;
       String os;
@@ -133,6 +137,7 @@ class TestDeviceInfo extends JsonClass {
 
             brand = info.brand;
             device = info.device;
+            id = info.androidId;
             manufacturer = info.manufacturer;
             model = info.model;
             physicalDevice = info.isPhysicalDevice;
@@ -150,6 +155,7 @@ class TestDeviceInfo extends JsonClass {
             var info = await plugin.iosInfo;
 
             device = info.name;
+            id = info.identifierForVendor;
             model = info.model;
             physicalDevice = info.isPhysicalDevice;
             systemVersion = info.systemVersion;
@@ -207,6 +213,7 @@ class TestDeviceInfo extends JsonClass {
         device: device,
         devicePixelRatio: devicePixelRatio,
         dips: dips,
+        id: id,
         manufacturer: manufacturer,
         model: model,
         orientation: orientation,
@@ -229,6 +236,7 @@ class TestDeviceInfo extends JsonClass {
         'brand': brand,
         'buildNumber': buildNumber,
         'device': device,
+        'id': id,
         'manufacturer': manufacturer,
         'model': model,
         'orientation': orientation,

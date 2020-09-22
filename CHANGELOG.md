@@ -1,3 +1,8 @@
+## [1.2.2] - September 22nd, 2020
+
+* Adding `id` to `TestDeviceInfo`.
+
+
 ## [1.2.1+1] - September 21st, 2020
 
 * Updated the example to the latest
