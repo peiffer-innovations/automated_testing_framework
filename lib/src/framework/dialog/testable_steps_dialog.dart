@@ -90,7 +90,6 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
       Navigator.of(context).pop();
 
       await TestController.of(context)?.execute(
-        skipScreenshots: true,
         steps: [testStep],
         submitReport: false,
         reset: false,
@@ -121,7 +120,6 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
       Navigator.of(context).pop();
 
       await TestController.of(context)?.execute(
-        skipScreenshots: true,
         steps: [testStep],
         submitReport: false,
         reset: false,

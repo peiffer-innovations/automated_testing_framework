@@ -82,7 +82,6 @@ class _TestReportPageState extends State<TestReportPage> {
                     await tester.execute(
                       name: tester.currentTest.name,
                       reset: true,
-                      skipScreenshots: false,
                       steps: tester.currentTest.steps,
                       submitReport: false,
                       suiteName: tester.currentTest.suiteName,

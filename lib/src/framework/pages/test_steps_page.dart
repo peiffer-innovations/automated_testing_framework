@@ -382,7 +382,6 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
                         try {
                           await tester.execute(
-                            skipScreenshots: false,
                             reset: false,
                             steps: [step],
                             submitReport: false,
@@ -771,7 +770,6 @@ class _TestStepsPageState extends State<TestStepsPage> {
                         await tester.execute(
                           name: _testController.currentTest.name,
                           reset: true,
-                          skipScreenshots: false,
                           steps: _testController.currentTest.steps,
                           submitReport: false,
                           suiteName: _testController.currentTest.suiteName,

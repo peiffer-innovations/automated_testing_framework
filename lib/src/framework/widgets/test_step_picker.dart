@@ -110,6 +110,10 @@ class _TestStepPickerState extends State<TestStepPicker> {
         ),
       ),
     );
+
+    if (mounted == true) {
+      setState(() {});
+    }
   }
 
   @override

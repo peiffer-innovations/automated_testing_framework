@@ -1,3 +1,8 @@
+## [1.2.3] - September 22nd, 2020
+
+* Refactored `executeStep` out of the `execute` function in the `TestController` so plugins can execute sub-steps while ensuring those steps are part of the final report.
+
+
 ## [1.2.2] - September 22nd, 2020
 
 * Adding `id` to `TestDeviceInfo`.

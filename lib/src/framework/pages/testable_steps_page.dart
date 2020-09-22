@@ -122,7 +122,6 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                     // Wait for the back to complete before kicking off the step
                     await Future.delayed(Duration(milliseconds: 300));
                     await testController.execute(
-                      skipScreenshots: true,
                       reset: false,
                       steps: [testStep],
                       submitReport: false,

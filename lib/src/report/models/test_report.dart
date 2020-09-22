@@ -41,11 +41,14 @@ class TestReport {
   /// A list of the log entries that happened during the test.
   final List<String> _logs = [];
 
+  /// Holds a map of steps that have been started, but not finished, to their
+  /// metadata.
+  final Set<TestStep> _pendingSteps = {};
+
   /// A list of all the steps executed by the test along with their individual
   /// results.
-  final List<TestReportStep> _steps = [];
+  final Map<TestStep, TestReportStep> _steps = {};
 
-  TestReportStep _current;
   int _errorSteps = 0;
   int _passedSteps = 0;
   DateTime _endTime;
@@ -74,14 +77,14 @@ class TestReport {
   String get runtimeException => _runtimeException;
 
   /// Returns the list of test steps in an unmodifiable [List].
-  List<TestReportStep> get steps => List.unmodifiable(_steps);
+  List<TestReportStep> get steps => List.unmodifiable(_steps.values);
 
   /// Returns an overall status for the report.  This will return [true] if, and
   /// only if, there were no errors encountered within the test.  If any errors
   /// exist, be it step specific or test-wide, this will return [false].
   bool get success {
     var success = runtimeException == null;
-    for (var step in _steps) {
+    for (var step in steps) {
       success = success && step.error == null;
     }
 
@@ -106,38 +109,49 @@ class TestReport {
   /// Completes the test and locks in the end time to now.
   void complete() => _endTime = DateTime.now();
 
-  /// Ends the current step with the optional [error].  If the [error] is [null]
+  /// Ends the given [step] with the optional [error].  If the [error] is [null]
   /// then the step is considered successful.  If there is an [error] value then
   /// the step is considered a failure.
-  void endStep([String error]) {
-    if (_current != null) {
-      _current = _current.copyWith(
-        endTime: DateTime.now(),
-        error: error,
-      );
-      _steps.add(_current);
+  void endStep(
+    TestStep step, [
+    String error,
+  ]) {
+    if (_pendingSteps.contains(step)) {
+      _pendingSteps.remove(step);
+      var reportStep = _steps[step];
+      if (reportStep != null) {
+        reportStep = reportStep.copyWith(
+          endTime: DateTime.now(),
+          error: error,
+        );
+        _steps[step] = reportStep;
 
-      if (error == null) {
-        _passedSteps++;
-      } else {
-        _errorSteps++;
+        if (error == null) {
+          _passedSteps++;
+        } else {
+          _errorSteps++;
+        }
       }
-      _current = null;
     }
   }
 
   /// Informs the report that an excetion happened w/in the framework itself.
   /// This is likely a non-recoverable error and should be investigated.
-  void exception(String message, dynamic e, StackTrace stack) =>
-      _runtimeException = '$message: $e\n$stack';
+  ///
+  /// This will also end all pending steps and mark them as failed using the
+  /// given [message] as the error.
+  void exception(String message, dynamic e, StackTrace stack) {
+    _runtimeException = '$message: $e\n$stack';
+
+    _pendingSteps.forEach((step) => endStep(step));
+  }
 
   /// Starts a step within the report.
-  void startStep({
-    @required String id,
-    @required Map<String, dynamic> step,
-  }) =>
-      _current = TestReportStep(
-        id: id,
-        step: step,
-      );
+  void startStep(TestStep step) {
+    _pendingSteps.add(step);
+    _steps[step] = TestReportStep(
+      id: step.id,
+      step: step.values,
+    );
+  }
 }

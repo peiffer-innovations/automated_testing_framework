@@ -207,11 +207,6 @@ class TestController {
   /// The list of [steps] may not be [null] or empty and define the steps that
   /// the controller should execute.
   ///
-  /// The test runner will skip the screenshots if [skipScreenshots] is set to
-  /// [true].  This can be useful as screenshots take a considerable amount of
-  /// time and it may be preferrable to turn them off to run through a test
-  /// faster.
-  ///
   /// The [submitReport] value determines if the [testReporter] should be
   /// executed after all steps have been completed or not.  Generally this value
   /// will be [true] when running full tests and [false] when running debugging
@@ -222,7 +217,6 @@ class TestController {
   Future<void> execute({
     String name,
     bool reset = true,
-    bool skipScreenshots = false,
     @required List<TestStep> steps,
     bool submitReport = true,
     String suiteName,
@@ -238,10 +232,10 @@ class TestController {
     status = '<set up>';
     await Future.delayed(Duration(milliseconds: 100));
 
-    TestReport testReport;
+    TestReport report;
     StreamSubscription logSubscription;
     if (reset == true || submitReport == true) {
-      testReport = TestReport(
+      report = TestReport(
         name: name,
         suiteName: suiteName,
         version: version,
@@ -249,14 +243,14 @@ class TestController {
       if (_testReportLogLevel != null) {
         logSubscription = Logger.root.onRecord.listen((record) {
           if (_testReportLogLevel <= record.level) {
-            testReport.appendLog(
+            report.appendLog(
               '${record.level.name}: ${record.time}: ${record.message}',
             );
             if (record.error != null) {
-              testReport.appendLog('${record.error}');
+              report.appendLog('${record.error}');
             }
             if (record.stackTrace != null) {
-              testReport.appendLog('${record.stackTrace}');
+              report.appendLog('${record.stackTrace}');
             }
           }
         });
@@ -265,55 +259,26 @@ class TestController {
     try {
       var idx = 0;
       for (var step in steps) {
-        var driverStep = _registry.getRunnerStep(
-          id: step.id,
-          values: step.values,
+        await executeStep(
+          report: report,
+          step: step,
         );
-
-        if (delays.preStep.inMilliseconds > 0) {
-          await driverStep.preStepSleep(delays.preStep);
-        }
-
-        testReport?.startStep(
-          id: step.id,
-          step: driverStep.toJson(),
-        );
-        String error;
-
-        try {
-          if (skipScreenshots != true || step.id != 'screenshot') {
-            await driverStep.execute(
-              report: testReport,
-              tester: this,
-            );
-          }
-        } catch (e, stack) {
-          _logger.severe('Error running test step: ${step.id}', e, stack);
-          error = '$e';
-        } finally {
-          testReport?.endStep(error);
-        }
-
-        if (delays.postStep.inMilliseconds > 0) {
-          await driverStep.postStepSleep(delays.preStep);
-        }
 
         idx++;
         this.step = ProgressValue(max: steps.length, value: idx);
       }
     } catch (e, stack) {
-      testReport?.endStep('Runtime Error: $e');
-      testReport?.exception('Exception in test', e, stack);
+      report?.exception('Exception in test', e, stack);
       _logger.severe('EXCEPTION IN TEST: ', e, stack);
     } finally {
       await logSubscription?.cancel();
 
       await _sleep(delays.testTearDown);
       step = null;
-      testReport?.complete();
+      report?.complete();
 
-      if (testReport != null) {
-        testSuiteReport?.addTestReport(testReport);
+      if (report != null) {
+        testSuiteReport?.addTestReport(report);
         var futures = <Future>[];
         futures.add(
           _navigatorKey.currentState.push(
@@ -322,19 +287,53 @@ class TestController {
                   (BuildContext context) => TestReportPage(),
               settings: RouteSettings(
                 name: '/atf/test-report',
-                arguments: testReport,
+                arguments: report,
               ),
             ),
           ),
         );
         if (submitReport == true) {
-          futures.add(this.submitReport(testReport));
+          futures.add(this.submitReport(report));
           await _sleep(delays.postSubmitReport);
           await this.reset();
         }
 
         await Future.wait(futures);
       }
+    }
+  }
+
+  /// Executes a single [step] and attaches the execution information to the
+  /// [testReport].
+  Future<void> executeStep({
+    @required TestReport report,
+    @required TestStep step,
+  }) async {
+    var runnerStep = _registry.getRunnerStep(
+      id: step.id,
+      values: step.values,
+    );
+    if (delays.preStep.inMilliseconds > 0) {
+      await runnerStep.preStepSleep(delays.preStep);
+    }
+
+    report?.startStep(step);
+    String error;
+
+    try {
+      await runnerStep.execute(
+        report: report,
+        tester: this,
+      );
+    } catch (e, stack) {
+      _logger.severe('Error running test step: ${step.id}', e, stack);
+      error = '$e';
+    } finally {
+      report?.endStep(step, error);
+    }
+
+    if (delays.postStep.inMilliseconds > 0) {
+      await runnerStep.postStepSleep(delays.preStep);
     }
   }
 
@@ -499,12 +498,7 @@ class TestController {
   /// Runs a series of [tests].  For full runs, this is more memory efficient as
   /// it will only load the tests as needed.
   ///
-  /// By default, this will execute the screenshot step.  To disable screenshots
-  /// set [skipScreenshots] to [false].
-  Future<void> runPendingTests(
-    List<PendingTest> tests, {
-    bool skipScreenshots = false,
-  }) async {
+  Future<void> runPendingTests(List<PendingTest> tests) async {
     if (tests != null) {
       var testSuiteReport = TestSuiteReport();
       for (var pendingTest in tests) {
@@ -516,7 +510,6 @@ class TestController {
             await execute(
               name: test.name,
               reset: false,
-              skipScreenshots: skipScreenshots,
               steps: test.steps,
               submitReport: true,
               suiteName: test.suiteName,
@@ -545,13 +538,7 @@ class TestController {
   /// tests but the [runPendingTests] should be prefered for full application
   /// runs or for CI/CD pipelines as that only loads the bare minimum data up
   /// front and then loads the full test data on an as needed basis.
-  ///
-  /// By default, this will execute the screenshot step.  To disable screenshots
-  /// set [skipScreenshots] to [false].
-  Future<void> runTests(
-    List<Test> tests, {
-    bool skipScreenshots = false,
-  }) async {
+  Future<void> runTests(List<Test> tests) async {
     if (tests != null) {
       var testSuiteReport = TestSuiteReport();
       for (var test in tests) {
@@ -561,7 +548,6 @@ class TestController {
           await execute(
             name: test.name,
             reset: false,
-            skipScreenshots: skipScreenshots,
             steps: test.steps,
             submitReport: true,
             suiteName: test.suiteName,
