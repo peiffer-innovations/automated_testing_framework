@@ -1,3 +1,8 @@
+## [1.2.1+1] - September 21st, 2020
+
+* Updated the example to the latest
+
+
 ## [1.2.1] - September 21st, 2020
 
 * Updated the `screenshot` step to support an id and added the id to the `TestReport`.
