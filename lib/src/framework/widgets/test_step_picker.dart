@@ -48,10 +48,13 @@ class _TestStepPickerState extends State<TestStepPicker> {
       ),
     );
 
-    _step = TestStep(
-      id: aStep.id,
-      values: values,
-    );
+    if (values != null) {
+      _step = TestStep(
+        id: aStep.id,
+        values: values,
+      );
+    }
+
     if (mounted == true) {
       widget.onStepChanged(_step);
       Navigator.of(context).pop();

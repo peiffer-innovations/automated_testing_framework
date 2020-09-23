@@ -1,3 +1,7 @@
+## [1.2.1+1] - September 23th, 2020
+
+* Fixed `TestStepPicker` on discard changes.
+
 ## [1.2.4] - September 23rd, 2020
 
 * Fix for reversing height / width in `TestDeviceInfo`
