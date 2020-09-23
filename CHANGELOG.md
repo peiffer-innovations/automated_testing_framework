@@ -1,4 +1,4 @@
-## [1.2.1+1] - September 23th, 2020
+## [1.2.4+1] - September 23th, 2020
 
 * Fixed `TestStepPicker` on discard changes.
 
