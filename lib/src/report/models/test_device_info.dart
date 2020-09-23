@@ -194,14 +194,14 @@ class TestDeviceInfo extends JsonClass {
           var mq = MediaQuery.of(context);
 
           dips = Size(
-            mq.size.height,
             mq.size.width,
+            mq.size.height,
           );
           orientation = dips.width >= dips.height ? 'landscape' : 'portrait';
           devicePixelRatio = mq.devicePixelRatio;
           pixels = Size(
-            mq.size.height * devicePixelRatio,
             mq.size.width * devicePixelRatio,
+            mq.size.height * devicePixelRatio,
           );
         } catch (e) {
           // no-op, we don't know the screen, but let's not make a big fuss.

@@ -1,6 +1,14 @@
+## [1.2.4] - September 23rd, 2020
+
+* Fix for reversing height / width in `TestDeviceInfo`
+
+
 ## [1.2.3] - September 22nd, 2020
 
 * Refactored `executeStep` out of the `execute` function in the `TestController` so plugins can execute sub-steps while ensuring those steps are part of the final report.
+* Removed `skipScreenshots` because it was causing more problems than it solved.  If screenshots need to be conditionally skipped, the [flow control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control) plugin can do that via the `conditional` step.
+* Updated `TestReport` to guarantee steps are kept in order of start rather than end.
+* Fixed issue in `TestStepPicker` that prevented it from showing the selected step.
 
 
 ## [1.2.2] - September 22nd, 2020
