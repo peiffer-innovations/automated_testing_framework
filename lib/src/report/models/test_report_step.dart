@@ -14,8 +14,11 @@ class TestReportStep extends JsonClass {
     this.error,
     @required this.id,
     @required this.step,
+    @required this.subStep,
     DateTime startTime,
-  }) : startTime = startTime ?? DateTime.now();
+  })  : assert(id?.isNotEmpty == true),
+        assert(subStep != null),
+        startTime = startTime ?? DateTime.now();
 
   /// The date time that the step completed.
   final DateTime endTime;
@@ -33,12 +36,18 @@ class TestReportStep extends JsonClass {
   /// The values from the test step.
   final Map<String, dynamic> step;
 
+  /// Set to [true] if this represents a step executed by another step or
+  /// [false] if the step is a top-level test step directly executed by the
+  /// framework.
+  final bool subStep;
+
   /// Copies the report entry with the given values.
   TestReportStep copyWith({
     DateTime endTime,
     String error,
     Map<String, dynamic> step,
     DateTime startTime,
+    bool subStep,
   }) =>
       TestReportStep(
         endTime: endTime ?? this.endTime,
@@ -46,6 +55,7 @@ class TestReportStep extends JsonClass {
         id: id,
         startTime: startTime ?? this.startTime,
         step: step ?? this.step,
+        subStep: subStep ?? this.subStep,
       );
 
   /// Converts the report entry to a JSON compatible representation.
@@ -56,5 +66,6 @@ class TestReportStep extends JsonClass {
         'id': id,
         'startTime': startTime?.millisecondsSinceEpoch,
         'step': step,
+        'subStep': subStep,
       };
 }

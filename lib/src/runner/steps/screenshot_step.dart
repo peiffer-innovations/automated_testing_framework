@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 class ScreenshotStep extends TestRunnerStep {
   ScreenshotStep({
-    this.goldenCompatible,
+    this.goldenCompatible = true,
     this.imageId,
   });
 

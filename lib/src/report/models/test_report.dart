@@ -147,11 +147,15 @@ class TestReport {
   }
 
   /// Starts a step within the report.
-  void startStep(TestStep step) {
+  void startStep(
+    TestStep step, {
+    bool subStep = true,
+  }) {
     _pendingSteps.add(step);
     _steps[step] = TestReportStep(
       id: step.id,
       step: step.values,
+      subStep: subStep,
     );
   }
 }

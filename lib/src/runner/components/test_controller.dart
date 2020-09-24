@@ -64,6 +64,7 @@ class TestController {
     this.maxCommonSearchDepth = 3,
     @required GlobalKey<NavigatorState> navigatorKey,
     @required this.onReset,
+    this.screenshotOnFail = false,
     this.selectedSuiteName,
     TestStepRegistry registry,
     this.testImageReader = TestStore.testImageReader,
@@ -78,6 +79,7 @@ class TestController {
         assert(maxCommonSearchDepth >= 0),
         assert(navigatorKey != null),
         assert(onReset != null),
+        assert(screenshotOnFail != null),
         assert(testImageReader != null),
         assert(testReader != null),
         assert(testReporter != null),
@@ -96,6 +98,7 @@ class TestController {
   /// The delays that tests should wait for.
   final TestStepDelays delays;
 
+  /// Writer that saves golden images for a particular device.
   final GoldenImageWriter goldenImageWriter;
 
   /// Defines how far down a widget tree a [Testable] widget should look for a
@@ -107,6 +110,11 @@ class TestController {
   /// resets to the initial state.
   final AsyncCallback onReset;
 
+  /// Defines whether the framework should take a screenshot automatically
+  /// whenever a failure is detected or not.
+  final bool screenshotOnFail;
+
+  /// The image reader to read images for golden image comparisons.
   final TestImageReader testImageReader;
 
   final GlobalKey<NavigatorState> _navigatorKey;
@@ -262,6 +270,7 @@ class TestController {
         await executeStep(
           report: report,
           step: step,
+          subStep: false,
         );
 
         idx++;
@@ -308,6 +317,7 @@ class TestController {
   Future<void> executeStep({
     @required TestReport report,
     @required TestStep step,
+    bool subStep = true,
   }) async {
     var runnerStep = _registry.getRunnerStep(
       id: step.id,
@@ -317,7 +327,10 @@ class TestController {
       await runnerStep.preStepSleep(delays.preStep);
     }
 
-    report?.startStep(step);
+    report?.startStep(
+      step,
+      subStep: subStep,
+    );
     String error;
 
     try {
@@ -326,6 +339,25 @@ class TestController {
         tester: this,
       );
     } catch (e, stack) {
+      if (screenshotOnFail == true) {
+        try {
+          var imageNum = (report?.images?.length ?? 0) + 1;
+          await ScreenshotStep(
+            goldenCompatible: false,
+            imageId: 'failure_${step.id}_${imageNum}',
+          ).execute(
+            report: report,
+            tester: this,
+          );
+        } catch (e2, stack2) {
+          _logger.severe(
+            'Error taking failure screenshot: ${step.id}',
+            e2,
+            stack2,
+          );
+        }
+      }
+
       _logger.severe('Error running test step: ${step.id}', e, stack);
       error = '$e';
     } finally {
