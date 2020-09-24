@@ -1,3 +1,8 @@
+## [1.2.6+1] - September 24th, 2020
+
+* Minor fix to pass `ignoreImageData` properly from `TestReport` to the `TestImage` list.
+
+
 ## [1.2.6] - September 24th, 2020
 
 * Added in `_passing` variable so tests can "sense" when the previous steps are passing.
