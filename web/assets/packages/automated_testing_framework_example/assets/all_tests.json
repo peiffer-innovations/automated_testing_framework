@@ -8,6 +8,7 @@
   "packages/automated_testing_framework_example/assets/tests/screenshot.json",
   "packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json",
   "packages/automated_testing_framework_example/assets/tests/theme.json",
+  "packages/automated_testing_framework_example/assets/tests/variables.json",
 
   "packages/automated_testing_framework_example/assets/tests/exit_app.json"
 ]

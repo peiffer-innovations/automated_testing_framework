@@ -3,28 +3,29 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "index.html": "64df8e67309794b5d6b45a17bf758c03",
-"/": "64df8e67309794b5d6b45a17bf758c03",
-"main.dart.js": "2ae750e1aabe6527e04461b59c56aa4f",
+  "index.html": "08a3362ae900dabd2775d6cf4fbb8a51",
+"/": "08a3362ae900dabd2775d6cf4fbb8a51",
+"main.dart.js": "eab22e42febbdfd53c9b95c0949e9d9a",
 "favicon.png": "7d2009652f165b0bc9d9e23452621c35",
 "icons/Icon-192.png": "079d22db7d65e763c68d7199c2bd6b08",
 "icons/Icon-512.png": "f0de392acd8910e2196e38a327bbb747",
 "manifest.json": "15f73b7e8a8209c2206210b3ac8dea1b",
-"assets/AssetManifest.json": "1f0e30ad3de1e1cdbe13fccc7a12b38e",
-"assets/NOTICES": "680722aa8d20d010e587f6e85961e0dc",
+"assets/AssetManifest.json": "f7c83e0f8a2580d02100dcf66629a1b4",
+"assets/NOTICES": "8261bda4d959d93c3191d876c7e30ba2",
 "assets/assets-src/MaterialIcons-Regular.ttf": "a37b0c01c0baf1888ca812cc0508f6e2",
 "assets/FontManifest.json": "3a1c01ebd9adb7aecf384a895a3cbb43",
-"assets/packages/automated_testing_framework_example/assets/tests/dropdowns.json": "2a2c9feb2d16f86ca1b4c92821541071",
-"assets/packages/automated_testing_framework_example/assets/tests/exit_app.json": "33711af643ab798666c5f6ba4d0e97d2",
-"assets/packages/automated_testing_framework_example/assets/tests/theme.json": "8661a90272c87a61bfc4460edc00405d",
-"assets/packages/automated_testing_framework_example/assets/tests/icons_gesture.json": "668cdc5cf96ace08ab3ed54a92435471",
-"assets/packages/automated_testing_framework_example/assets/tests/issue_5.json": "a52a549b4a055c52adfb4dc70cebcb38",
-"assets/packages/automated_testing_framework_example/assets/tests/double_tap.json": "5f0d3caae4bcafd4efd28d584f12b2af",
-"assets/packages/automated_testing_framework_example/assets/tests/screenshot.json": "230beef4c380464f24780daab07ce1eb",
-"assets/packages/automated_testing_framework_example/assets/tests/failure.json": "99a35a6140b7939989b94ccb544d991d",
-"assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "41ddb39a05d8608ff64f76bf04ed7a70",
-"assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "af0a8468449b071ba26ec064e2392520",
-"assets/packages/automated_testing_framework_example/assets/all_tests.json": "4525eb5d02aea7ee653182b065eb6e59",
+"assets/packages/automated_testing_framework_example/assets/tests/dropdowns.json": "f1f2f78f6bbb729048728e05abca6d41",
+"assets/packages/automated_testing_framework_example/assets/tests/exit_app.json": "358f6cab447478d73eea4127678106ac",
+"assets/packages/automated_testing_framework_example/assets/tests/theme.json": "5b72a996ff15d64d58b7627f29df05bb",
+"assets/packages/automated_testing_framework_example/assets/tests/icons_gesture.json": "655cf20202457e9a9b8692f05334fbc8",
+"assets/packages/automated_testing_framework_example/assets/tests/issue_5.json": "21c374a01729bf635c57bc9effc9d37b",
+"assets/packages/automated_testing_framework_example/assets/tests/double_tap.json": "35a920944da4cf2e2154bf1c138c2e34",
+"assets/packages/automated_testing_framework_example/assets/tests/screenshot.json": "5a070f35d91e2c1cde99395809a1d876",
+"assets/packages/automated_testing_framework_example/assets/tests/variables.json": "7d554f244b740f375961fb0c9f80b393",
+"assets/packages/automated_testing_framework_example/assets/tests/failure.json": "8cefd140b688b564169ed2d304a52ce8",
+"assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "d35cccfbd9c0c4547e34441f6038ac5c",
+"assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "a98582489811cc6fc6a56cfcd5835699",
+"assets/packages/automated_testing_framework_example/assets/all_tests.json": "e8fce01cdab9ed060a47e61d87c26a74",
 "assets/fonts/MaterialIcons-Regular.otf": "a68d2a28c526b3b070aefca4bac93d25"
 };
 
@@ -37,13 +38,12 @@ const CORE = [
 "assets/NOTICES",
 "assets/AssetManifest.json",
 "assets/FontManifest.json"];
-
 // During install, the TEMP cache is populated with the application shell files.
 self.addEventListener("install", (event) => {
   return event.waitUntil(
     caches.open(TEMP).then((cache) => {
-      // Provide a 'reload' param to ensure the latest version is downloaded.
-      return cache.addAll(CORE.map((value) => new Request(value, {'cache': 'reload'})));
+      return cache.addAll(
+        CORE.map((value) => new Request(value + '?revision=' + RESOURCES[value], {'cache': 'reload'})));
     })
   );
 });
@@ -58,7 +58,6 @@ self.addEventListener("activate", function(event) {
       var tempCache = await caches.open(TEMP);
       var manifestCache = await caches.open(MANIFEST);
       var manifest = await manifestCache.match('manifest');
-
       // When there is no prior manifest, clear the entire cache.
       if (!manifest) {
         await caches.delete(CACHE_NAME);
@@ -72,7 +71,6 @@ self.addEventListener("activate", function(event) {
         await manifestCache.put('manifest', new Response(JSON.stringify(RESOURCES)));
         return;
       }
-
       var oldManifest = await manifest.json();
       var origin = self.location.origin;
       for (var request of await contentCache.keys()) {
@@ -113,21 +111,26 @@ self.addEventListener("fetch", (event) => {
   var origin = self.location.origin;
   var key = event.request.url.substring(origin.length + 1);
   // Redirect URLs to the index.html
-  if (event.request.url == origin || event.request.url.startsWith(origin + '/#')) {
+  if (key.indexOf('?v=') != -1) {
+    key = key.split('?v=')[0];
+  }
+  if (event.request.url == origin || event.request.url.startsWith(origin + '/#') || key == '') {
     key = '/';
   }
   // If the URL is not the RESOURCE list, skip the cache.
   if (!RESOURCES[key]) {
     return event.respondWith(fetch(event.request));
   }
+  // If the URL is the index.html, perform an online-first request.
+  if (key == '/') {
+    return onlineFirst(event);
+  }
   event.respondWith(caches.open(CACHE_NAME)
     .then((cache) =>  {
       return cache.match(event.request).then((response) => {
         // Either respond with the cached resource, or perform a fetch and
-        // lazily populate the cache. Ensure the resources are not cached
-        // by the browser for longer than the service worker expects.
-        var modifiedRequest = new Request(event.request, {'cache': 'reload'});
-        return response || fetch(modifiedRequest).then((response) => {
+        // lazily populate the cache.
+        return response || fetch(event.request).then((response) => {
           cache.put(event.request, response.clone());
           return response;
         });
@@ -142,7 +145,6 @@ self.addEventListener('message', (event) => {
   if (event.data === 'skipWaiting') {
     return self.skipWaiting();
   }
-
   if (event.message === 'downloadOffline') {
     downloadOffline();
   }
@@ -167,4 +169,26 @@ async function downloadOffline() {
     }
   }
   return contentCache.addAll(resources);
+}
+
+// Attempt to download the resource online before falling back to
+// the offline cache.
+function onlineFirst(event) {
+  return event.respondWith(
+    fetch(event.request).then((response) => {
+      return caches.open(CACHE_NAME).then((cache) => {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    }).catch((error) => {
+      return caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((response) => {
+          if (response != null) {
+            return response;
+          }
+          throw error;
+        });
+      });
+    })
+  );
 }

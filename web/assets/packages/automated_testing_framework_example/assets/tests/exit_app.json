@@ -1,6 +1,7 @@
 {
-  "active": true,
+  "active": false,
   "name": "Exit App",
+  "suiteName": "Exit",
   "steps": [{
     "id": "exit_app"
   }],
