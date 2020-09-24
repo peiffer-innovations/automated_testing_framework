@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
+import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 /// Represents a report from a test run.
-class TestReport {
+class TestReport extends JsonClass {
   TestReport({
     TestDeviceInfo deviceInfo,
     String id,
@@ -158,4 +159,21 @@ class TestReport {
       subStep: subStep,
     );
   }
+
+  @override
+  Map<String, dynamic> toJson([includeImageData = false]) => {
+        'deviceInfo': deviceInfo.toJson(),
+        'endTime': endTime?.millisecondsSinceEpoch,
+        'errorSteps': errorSteps,
+        'images': TestImage.toJsonList(images),
+        'logs': logs,
+        'name': name,
+        'passedSteps': passedSteps,
+        'runtimeException': runtimeException,
+        'startTime': startTime?.millisecondsSinceEpoch,
+        'steps': JsonClass.toJsonList(_steps.values.toList()),
+        'success': success,
+        'suiteName': suiteName,
+        'version': version,
+      };
 }

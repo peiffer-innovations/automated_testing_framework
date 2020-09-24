@@ -10,6 +10,8 @@
 * [Creating Tests](#creating-tests)
 * [Saving and Loading Tests](#saving-and-loading-tests)
 * [Reporting Test Results](#reporting-test-results)
+* [Working with Variables](#working-with-variables)
+  * [Reserved Variables](#reserved-variables)
 * [Framework in Action](#framework-in-action)
 * See Also
   * [Building & Running Tests](https://github.com/peiffer-innovations/automated_testing_framework/blob/main/documentation/BUILDING_RUNNING_TESTS.md)
@@ -19,10 +21,14 @@
   * [Firebase Storage](https://pub.dev/packages/automated_testing_framework_plugin_firebase_storage)
   * [Firebase Realtime Database](https://pub.dev/packages/automated_testing_framework_plugin_firebase)
 
+---
 ## Live Example
 
 * [Web](https://peiffer-innovations.github.io/automated_testing_framework/web/index.html#/)
   * _Note_: Please wait a few seconds after the example loads for the tests to start.  Once the tests are complete, you can interact with the app and build and run your own tests.
+
+
+---
 
 ## Introduction
 
@@ -39,6 +45,8 @@ Name | Description
 [TestController](https://pub.dev/documentation/automated_testing_framework/latest/automated_testing_framework/TestController-class.html) | Controller that is used to create, edit, load, save, and execute the tests.
 
 
+---
+
 ## Running the Example
 
 The framework comes with an example application that showcases the majority of the features the framework provides.  If you run the example in `debug` mode, you can interact with the `Testable` widgets, create tests, run tests, and see the results.
@@ -50,6 +58,8 @@ To see the tests in action, run the example via:
 flutter run --profile
 ```
 
+
+---
 
 ## Quick Start
 
@@ -148,6 +158,9 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
+
+---
+
 ## Annotating Testable Widgets
 
 Now that you've wired up the core portions of the framework, you will need to start annotating your application to identify widgets that the framework can interact with.  The main class for tihs annotation is the [Testable](https://pub.dev/documentation/automated_testing_framework/latest/widgets/Testable-class.html) widget.  Wrap widgets that need to be interacted with in an automated way with this `Testable` widget and the `Testable` widget will perform the bindings for you and also respond to commands from the framework when running tests.
@@ -179,6 +192,8 @@ Name | Description
 [TestableTextFormField](https://pub.dev/documentation/automated_testing_framework/latest/widgets/TestableTextFormField-class.html) | Wrapper for the TextFormField to provide the common testable callbacks
 
 
+---
+
 ## Creating Tests
 
 The `Testable` widgets add on to wrapped widgets gestures that allow you to interact with the test framework.  It's important to note that if the wrapped widget listens for the same gesture as the `Testable` then the wrapped widget will "win" and the `Testable` will not receive that gesture.  It is for that reason that the default implementation provides gestures for both a Long Press gesture and a Double Tap.  The `Testable` also introduces the concept of a "direct" interaction and an "interdirect" interaction.
@@ -197,6 +212,8 @@ Target    | Gesture    | Description
 `overlay` | Long Press | Toggle the global overlay over all `Testable` widgets.  This is useful to be able to quickly identify what widgets on a page have been annotated as `Testable` and which ones may have been missed. 
 
 
+---
+
 ## Saving and Loading Tests
 
 Tests can be saved and loaded by associating appropriate functions to the `TestController`.  The functions to be associated are the `TestReader` and `TestWriter` functions.
@@ -212,12 +229,33 @@ Class | Function | Description
 [ClipboardTestStore](https://pub.dev/documentation/automated_testing_framework/latest/automated_testing_framework/ClipboardTestStore-class.html) | `testWriter` | Function that writes the test data to the clipboard.  This can be used on a device, but it is really intended for use on emulators where the clipboard is shared with the host computer.
 
 
+---
+
 ## Reporting Test Results
 
 Similarly to the saving and loading of tests, the `TestController` provides a mechanism to send out reports from test runs.  There are no built in reporters that will provide the data outside of the application.  There are only screens that display test results at the end of a test or test suite.
 
 To receive the test report, implement the `testReporter` callback to send the report to your targetted area.
 
+
+---
+
+## Working with Variables
+
+The `TestController` supports variables within test steps and from external code.  Within steps that support variables, the variables utilize the mustache syntax.  For example: `{{variableName}}`.  Test steps that support variables will attempt to resolve the variable at runtime.  This provides the application the ability to set up common variables like usernames, passwords, etc. in a way that any test can generically refer to them.
+
+### Reserved Variables
+
+Reserved variables are begin with an underscore (`_`) and should be reserved for the framework itself plus any plugins that are applied to the framework.  Applications should avoid setting variables that begin with an underscore as they may be overwritten by plugins or the framework either now or at some future time.
+
+The following table defines the reserved variables provided by the framework that can be used in any test:
+
+Name       | Type      | Example | Description
+-----------|-----------|---------|-------------
+`_passing` | `boolean` | `true`  | Describes whether the test is currently passing or not.  This will be `true` up until the first failed step at which it will remain `false` for the remainder of the test.
+
+
+---
 
 ## Framework in Action
 

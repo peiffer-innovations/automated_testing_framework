@@ -1,3 +1,10 @@
+## [1.2.6] - September 24th, 2020
+
+* Added in `_passing` variable so tests can "sense" when the previous steps are passing.
+* Updated both `TestReport` and `TestImage` to utilize `JsonClass` to be self "json-able".
+* Added optional `stopOnFirstFail` to `TestController` to stop tests on the first failed step.
+
+
 ## [1.2.5] - September 23rd, 2020
 
 * Added a flag for `subStep` so plugins can identify steps w/in steps on the `TestReport`.

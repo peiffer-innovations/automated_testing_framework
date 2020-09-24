@@ -66,6 +66,7 @@ class TestController {
     @required this.onReset,
     this.screenshotOnFail = false,
     this.selectedSuiteName,
+    this.stopOnFirstFail = false,
     TestStepRegistry registry,
     this.testImageReader = TestStore.testImageReader,
     TestReader testReader = TestStore.testReader,
@@ -80,6 +81,7 @@ class TestController {
         assert(navigatorKey != null),
         assert(onReset != null),
         assert(screenshotOnFail != null),
+        assert(stopOnFirstFail != null),
         assert(testImageReader != null),
         assert(testReader != null),
         assert(testReporter != null),
@@ -113,6 +115,10 @@ class TestController {
   /// Defines whether the framework should take a screenshot automatically
   /// whenever a failure is detected or not.
   final bool screenshotOnFail;
+
+  /// Defines whether or not the framework should stop on the first failed step
+  /// or keep going and executing subsequent steps.
+  final bool stopOnFirstFail;
 
   /// The image reader to read images for golden image comparisons.
   final TestImageReader testImageReader;
@@ -231,6 +237,7 @@ class TestController {
     TestSuiteReport testSuiteReport,
     int version,
   }) async {
+    var passing = true;
     step = ProgressValue(max: steps.length, value: 0);
 
     if (reset == true) {
@@ -265,16 +272,25 @@ class TestController {
       }
     }
     try {
+      setVariable(
+        value: passing,
+        variableName: '_passing',
+      );
       var idx = 0;
       for (var step in steps) {
-        await executeStep(
-          report: report,
-          step: step,
-          subStep: false,
-        );
+        passing = await executeStep(
+              report: report,
+              step: step,
+              subStep: false,
+            ) &&
+            passing;
 
         idx++;
         this.step = ProgressValue(max: steps.length, value: idx);
+
+        if (stopOnFirstFail == true && passing != true) {
+          break;
+        }
       }
     } catch (e, stack) {
       report?.exception('Exception in test', e, stack);
@@ -314,11 +330,12 @@ class TestController {
 
   /// Executes a single [step] and attaches the execution information to the
   /// [testReport].
-  Future<void> executeStep({
+  Future<bool> executeStep({
     @required TestReport report,
     @required TestStep step,
     bool subStep = true,
   }) async {
+    var passed = true;
     var runnerStep = _registry.getRunnerStep(
       id: step.id,
       values: step.values,
@@ -360,6 +377,7 @@ class TestController {
 
       _logger.severe('Error running test step: ${step.id}', e, stack);
       error = '$e';
+      passed = false;
     } finally {
       report?.endStep(step, error);
     }
@@ -367,6 +385,8 @@ class TestController {
     if (delays.postStep.inMilliseconds > 0) {
       await runnerStep.postStepSleep(delays.preStep);
     }
+
+    return passed;
   }
 
   /// Attempts to export the current test via the [testWriter] value.  This will
