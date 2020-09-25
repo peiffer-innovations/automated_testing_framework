@@ -1,3 +1,8 @@
+## [1.2.6+2] - September 24th, 2020
+
+* Actually checked in the `fromDynamic` on the `TestReport`
+
+
 ## [1.2.6+1] - September 24th, 2020
 
 * Minor fix to pass `ignoreImageData` properly from `TestReport` to the `TestImage` list.

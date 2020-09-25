@@ -16,7 +16,6 @@ class TestImage extends JsonClass {
     @required this.image,
   })  : assert(goldenCompatible != null),
         assert(id?.isNotEmpty == true),
-        assert(image?.isNotEmpty == true),
         captureTime = captureTime ?? DateTime.now().millisecondsSinceEpoch,
         hash = hash ?? sha256.convert(image ?? [0]).toString();
 

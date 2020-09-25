@@ -13,9 +13,9 @@ class TestReportStep extends JsonClass {
     this.endTime,
     this.error,
     @required this.id,
+    DateTime startTime,
     @required this.step,
     @required this.subStep,
-    DateTime startTime,
   })  : assert(id?.isNotEmpty == true),
         assert(subStep != null),
         startTime = startTime ?? DateTime.now();
@@ -40,6 +40,24 @@ class TestReportStep extends JsonClass {
   /// [false] if the step is a top-level test step directly executed by the
   /// framework.
   final bool subStep;
+
+  static TestReportStep fromDynamic(dynamic map) {
+    TestReportStep result;
+
+    if (map != null) {
+      result = TestReportStep(
+        endTime: JsonClass.parseUtcMillis(map['endTime']),
+        error: map['error'],
+        id: map['id'],
+        startTime: JsonClass.parseUtcMillis(map['startTime']),
+        step:
+            map['step'] == null ? null : Map<String, dynamic>.from(map['step']),
+        subStep: JsonClass.parseBool(map['subStep']),
+      );
+    }
+
+    return result;
+  }
 
   /// Copies the report entry with the given values.
   TestReportStep copyWith({

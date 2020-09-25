@@ -14,8 +14,38 @@ class TestReport extends JsonClass {
     this.suiteName,
     this.version,
   })  : deviceInfo = deviceInfo ?? TestDeviceInfo.instance,
+        _errorSteps = 0,
         id = id ?? Uuid().v4(),
+        _images = [],
+        _logs = [],
+        _passedSteps = 0,
         startTime = DateTime.now();
+
+  TestReport._internal({
+    this.deviceInfo,
+    DateTime endTime,
+    int errorSteps,
+    this.id,
+    List<String> logs,
+    this.name,
+    int passedSteps,
+    String runtimeException,
+    this.startTime,
+    List<TestReportStep> steps,
+    this.suiteName,
+    this.version,
+    List<TestImage> images,
+  })  : _endTime = endTime,
+        _errorSteps = errorSteps,
+        _images = images,
+        _logs = logs,
+        _passedSteps = passedSteps,
+        _runtimeException = runtimeException {
+    steps?.forEach((step) => _steps[TestStep(
+          id: step.id,
+          values: step.step,
+        )] = step);
+  }
 
   /// Information about the app and device the test is executing on.
   final TestDeviceInfo deviceInfo;
@@ -37,10 +67,10 @@ class TestReport extends JsonClass {
   final int version;
 
   /// A list of all screencaptures requested by the test
-  final List<TestImage> _images = [];
+  final List<TestImage> _images;
 
   /// A list of the log entries that happened during the test.
-  final List<String> _logs = [];
+  final List<String> _logs;
 
   /// Holds a map of steps that have been started, but not finished, to their
   /// metadata.
@@ -50,8 +80,8 @@ class TestReport extends JsonClass {
   /// results.
   final Map<TestStep, TestReportStep> _steps = {};
 
-  int _errorSteps = 0;
-  int _passedSteps = 0;
+  int _errorSteps;
+  int _passedSteps;
   DateTime _endTime;
   String _runtimeException;
 
@@ -90,6 +120,36 @@ class TestReport extends JsonClass {
     }
 
     return success;
+  }
+
+  static TestReport fromDynamic(dynamic map) {
+    TestReport result;
+    if (map != null) {
+      result = TestReport._internal(
+        deviceInfo: TestDeviceInfo.fromDynamic(map['deviceInfo']),
+        endTime: DateTime.fromMillisecondsSinceEpoch(
+          JsonClass.parseInt(map['endTime']),
+        ),
+        errorSteps: JsonClass.parseInt(map['errorSteps']),
+        images: JsonClass.fromDynamicList(
+            map['images'], (map) => TestImage.fromDynamic(map)),
+        logs: List<String>.from(map['logs']),
+        name: map['name'],
+        passedSteps: JsonClass.parseInt(map['passedSteps']),
+        runtimeException: map['runtimeException'],
+        startTime: DateTime.fromMillisecondsSinceEpoch(
+          JsonClass.parseInt(map['startTime']),
+        ),
+        steps: JsonClass.fromDynamicList(
+          map['steps'],
+          (entry) => TestReportStep.fromDynamic(entry),
+        ),
+        suiteName: map['suiteName'],
+        version: JsonClass.parseInt(map['version']),
+      );
+    }
+
+    return result;
   }
 
   /// Appends the log entry to the test report.
