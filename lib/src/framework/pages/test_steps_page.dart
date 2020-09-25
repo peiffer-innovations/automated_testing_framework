@@ -429,7 +429,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   step.id,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontFamily: 'monospace'),
+                  style: TextStyle(fontFamily: 'monospaced'),
                 ),
                 if ((step.values ?? {})['testableId']?.isNotEmpty == true)
                   Padding(

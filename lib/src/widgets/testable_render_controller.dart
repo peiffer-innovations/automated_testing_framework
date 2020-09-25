@@ -242,7 +242,7 @@ class TestableRenderController {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: textColor,
-                  fontFamily: 'monospace',
+                  fontFamily: 'monospaced',
                 ),
               ),
             ),

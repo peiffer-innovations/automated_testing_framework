@@ -42,7 +42,7 @@ class TestReportStepWidget extends StatelessWidget {
                   TextSpan(
                     text: entry.value?.toString() ?? '<null>',
                     style: theme.textTheme.subtitle2.copyWith(
-                      fontFamily: 'monospace',
+                      fontFamily: 'monospaced',
                     ),
                   ),
                 ],

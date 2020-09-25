@@ -1,3 +1,8 @@
+## [1.2.6+3] - September 25th, 2020
+
+* Fix for monospace fonts to be `monospaced` as opposed to the incorrect `monospace`.
+
+
 ## [1.2.6+2] - September 24th, 2020
 
 * Actually checked in the `fromDynamic` on the `TestReport`
