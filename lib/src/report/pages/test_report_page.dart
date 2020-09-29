@@ -92,15 +92,9 @@ class _TestReportPageState extends State<TestReportPage> {
                       translator.translate(TestTranslations.atf_button_rerun),
                 ),
             ],
-            bottom: report.suiteName?.isNotEmpty == true
-                ? PreferredSize(
-                    preferredSize: null,
-                    child: Text(
-                      report.suiteName,
-                    ),
-                  )
-                : null,
-            title: Text('${report.name ?? unknown} (${report.version ?? 0})'),
+            title: Text(
+              translator.translate(TestTranslations.atf_test_results),
+            ),
           ),
           body: SafeArea(
             child: Stack(
@@ -204,6 +198,98 @@ class _TestReportPageState extends State<TestReportPage> {
                                         ],
                                       ),
                                       SizedBox(height: 16.0),
+                                      Material(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        elevation: 2.0,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Text(
+                                                      translator.translate(
+                                                        TestTranslations
+                                                            .atf_test_name,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16.0,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
+                                                      report.name ?? unknown,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'monospaced',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Divider(),
+                                              Row(
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Text(
+                                                      translator.translate(
+                                                        TestTranslations
+                                                            .atf_suite_name,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16.0,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
+                                                      report.suiteName,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'monospaced',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Divider(),
+                                              Row(
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Text(
+                                                      translator.translate(
+                                                        TestTranslations
+                                                            .atf_version,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16.0,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
+                                                      '${report.version}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'monospaced',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );

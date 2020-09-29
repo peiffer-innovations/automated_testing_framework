@@ -1,3 +1,8 @@
+## [1.2.8+1] - September 29th, 2020
+
+* UI only tweaks to the test editor and report pages
+
+
 ## [1.2.8] - September 29th, 2020
 
 * Minor fix for available tests page when tests in different suites have the same name.

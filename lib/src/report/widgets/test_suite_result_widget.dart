@@ -53,11 +53,26 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                           ),
                     SizedBox(width: 16.0),
                     Expanded(
-                      child: Text(
-                        '${widget.result.name} (${widget.result.version})',
-                        style: theme.textTheme.bodyText2.copyWith(
-                          fontSize: 18.0,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${widget.result.name} (${widget.result.version})',
+                            style: theme.textTheme.bodyText2.copyWith(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          if (widget.result.suiteName?.isNotEmpty == true) ...[
+                            Text(
+                              widget.result.suiteName,
+                              style: theme.textTheme.subtitle2.copyWith(
+                                color: theme.textTheme.subtitle2.color
+                                    .withOpacity(0.5),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                     SizedBox(width: 16.0),

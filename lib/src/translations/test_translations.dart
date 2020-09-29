@@ -203,6 +203,11 @@ class TestTranslations {
     value: 'Test Suite Results',
   );
 
+  static const atf_test_results = TranslationEntry(
+    key: 'atf_test_results',
+    value: 'Test Results',
+  );
+
   static const atf_tests = TranslationEntry(
     key: 'atf_tests',
     value: 'Tests',
@@ -221,6 +226,11 @@ class TestTranslations {
   static const atf_unnamed_test = TranslationEntry(
     key: 'atf_unnamed_test',
     value: '<Unnamed Test>',
+  );
+
+  static const atf_version = TranslationEntry(
+    key: 'atf_version',
+    value: 'Version',
   );
 
   static const atf_version_steps = TranslationEntry(

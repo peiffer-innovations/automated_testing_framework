@@ -556,18 +556,15 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 ),
               ),
             ],
-            bottom: _testController.currentTest.suiteName?.isNotEmpty == true
-                ? PreferredSize(
-                    preferredSize: null,
-                    child: Text(_testController.currentTest.suiteName),
-                  )
-                : null,
             centerTitle: WebsafePlatform().isIOS(),
             title: Text(
-              _testController.currentTest.name ??
-                  translator.translate(
-                    TestTranslations.atf_unnamed_test,
-                  ),
+              (_testController.currentTest.name ??
+                      translator.translate(
+                        TestTranslations.atf_unnamed_test,
+                      )) +
+                  (testController.currentTest.suiteName?.isNotEmpty == true
+                      ? ' (${testController.currentTest.suiteName})'
+                      : ''),
             ),
           ),
           body: SafeArea(
