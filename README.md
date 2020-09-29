@@ -20,6 +20,8 @@
   * [Cloud Firestore](https://pub.dev/packages/automated_testing_framework_plugin_firestore)
   * [Firebase Storage](https://pub.dev/packages/automated_testing_framework_plugin_firebase_storage)
   * [Firebase Realtime Database](https://pub.dev/packages/automated_testing_framework_plugin_firebase)
+  * [Flow Control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control)
+  * [Images](https://pub.dev/packages/automated_testing_framework_plugin_images)
 
 ---
 ## Live Example
