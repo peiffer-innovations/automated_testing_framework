@@ -72,6 +72,11 @@ class Test extends JsonClass {
   /// Clears all test steps from this test.
   void clearTestSteps() => steps.clear;
 
+  /// Returns the id of the test which is a concatenation of the suite
+  /// name and the test name.
+  String get id =>
+      (suiteName?.isNotEmpty == true ? '${suiteName}__' : '') + name;
+
   /// Copies this test with the given values.
   Test copyWith({
     bool active,

@@ -49,4 +49,9 @@ class PendingTest {
 
   /// Version of the test to be loaded.
   final int version;
+
+  /// Returns the id of the test which is a concatenation of the suite
+  /// name and the test name.
+  String get id =>
+      (suiteName?.isNotEmpty == true ? '${suiteName}__' : '') + name;
 }

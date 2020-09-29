@@ -40,7 +40,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     _loadTests();
   }
 
-  bool _isActive(PendingTest test) => _active[test.name] ?? false;
+  bool _isActive(PendingTest test) => _active[test.id] ?? false;
 
   Future<void> _loadTest(PendingTest pendingTest) async {
     var test = await pendingTest.loader.load();
@@ -61,7 +61,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
 
     var suites = <String>{};
     _tests?.forEach((test) {
-      _active[test.name] = test.active;
+      _active[test.id] = test.active;
       if (test.suiteName != null) {
         suites.add(test.suiteName);
       }
@@ -95,7 +95,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
   void _setActive(PendingTest test) {
     var active = _isActive(test);
 
-    _active[test.name] = active != true;
+    _active[test.id] = active != true;
 
     if (mounted == true) {
       setState(() {});

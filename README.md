@@ -4,6 +4,7 @@
 
 * [Live Example](#live-example)
 * [Introduction](#introduction)
+* [Framework Philosophy](#framework-philosophy)
 * [Running the Example](#running-the-example)
 * [Quick Start](#quick-start)
 * [Annotating Testable Widgets](#annotating-testable-widgets)
@@ -22,6 +23,7 @@
   * [Firebase Realtime Database](https://pub.dev/packages/automated_testing_framework_plugin_firebase)
   * [Flow Control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control)
   * [Images](https://pub.dev/packages/automated_testing_framework_plugin_images)
+  * [Logging](https://pub.dev/packages/automated_testing_framework_plugin_logging)
 
 ---
 ## Live Example
@@ -59,6 +61,18 @@ To see the tests in action, run the example via:
 ```
 flutter run --profile
 ```
+
+
+---
+
+## Framework Philosophy
+
+
+The testing framework is designed to be utilized by developers, QA members, or even Product folks to build and run automated tests.  The base framework is purposefully "Dart Native" to provide compatibility with steps that are easy to understand and used by the widest number of people.
+
+The framework provides plugin capabilities to allow for more advanced test steps or steps that require non-Dart-native dependencies.
+
+All steps provided by the framework or any first party plugins are guaranteed to be fully editable within a testable application itself.  While JSON experience may be beneficial, it is not required.
 
 
 ---

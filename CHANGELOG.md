@@ -1,3 +1,8 @@
+## [1.2.8] - September 29th, 2020
+
+* Minor fix for available tests page when tests in different suites have the same name.
+
+
 ## [1.2.7] - September 28th, 2020
 
 * Minor fixes for nulls where the forms from the framework are used outside of a testable application.
