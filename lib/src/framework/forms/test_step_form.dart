@@ -154,7 +154,8 @@ abstract class TestStepForm {
     const id = 'timeout';
     final label = TestTranslations.atf_timeout_seconds;
 
-    defaultTimeout ??= TestController.of(context).delays.defaultTimeout;
+    defaultTimeout ??=
+        (TestController.of(context)?.delays ?? TestStepDelays()).defaultTimeout;
 
     var translator = Translator.of(context);
     return TextFormField(

@@ -62,9 +62,10 @@ class _TestStepPickerState extends State<TestStepPicker> {
   }
 
   Future<void> _showAvailableSteps(BuildContext context) async {
-    var theme = _testRunner.theme ?? Theme.of(context);
+    var theme = _testRunner?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
-    var steps = _testRunner.controller.registry.availableSteps
+    var steps = (_testRunner?.controller?.registry ?? TestStepRegistry.instance)
+        .availableSteps
         .where((s) => s.form != null)
         .toList();
 
@@ -104,7 +105,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
                     context: context,
                     theme: theme,
                   ),
-                  title: Text(steps[index].id),
+                  title: Text(translator.translate(steps[index].title)),
                 ),
               ),
             ),
@@ -122,7 +123,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
   @override
   Widget build(BuildContext context) {
     var translator = Translator.of(context);
-    var theme = TestRunner.of(context).theme ?? Theme.of(context);
+    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

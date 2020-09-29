@@ -1,3 +1,8 @@
+## [1.2.7] - September 28th, 2020
+
+* Minor fixes for nulls where the forms from the framework are used outside of a testable application.
+
+
 ## [1.2.6+3] - September 25th, 2020
 
 * Fix for monospace fonts to be `monospaced` as opposed to the incorrect `monospace`.
