@@ -1,3 +1,8 @@
+## [1.2.8+2] - September 29th, 2020
+
+* Null fix for suite name on test reports
+
+
 ## [1.2.8+1] - September 29th, 2020
 
 * UI only tweaks to the test editor and report pages

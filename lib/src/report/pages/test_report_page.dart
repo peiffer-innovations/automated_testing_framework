@@ -232,33 +232,37 @@ class _TestReportPageState extends State<TestReportPage> {
                                                   ),
                                                 ],
                                               ),
-                                              Divider(),
-                                              Row(
-                                                children: <Widget>[
-                                                  Expanded(
-                                                    child: Text(
-                                                      translator.translate(
-                                                        TestTranslations
-                                                            .atf_suite_name,
+                                              if (report
+                                                      .suiteName?.isNotEmpty ==
+                                                  true) ...[
+                                                Divider(),
+                                                Row(
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: Text(
+                                                        translator.translate(
+                                                          TestTranslations
+                                                              .atf_suite_name,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 16.0,
-                                                  ),
-                                                  Flexible(
-                                                    child: Text(
-                                                      report.suiteName,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'monospaced',
+                                                    SizedBox(
+                                                      width: 16.0,
+                                                    ),
+                                                    Flexible(
+                                                      child: Text(
+                                                        report.suiteName,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'monospaced',
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
+                                                  ],
+                                                ),
+                                              ],
                                               Divider(),
                                               Row(
                                                 children: <Widget>[
