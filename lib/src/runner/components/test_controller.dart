@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
@@ -59,6 +60,7 @@ class TestController {
   /// * [AssetTestStore]
   /// * [ClipboardTestStore]
   TestController({
+    Map<String, PageRoute> customRoutes,
     this.delays = const TestStepDelays(),
     this.goldenImageWriter = TestStore.goldenImageWriter,
     this.maxCommonSearchDepth = 3,
@@ -75,6 +77,7 @@ class TestController {
     TestReporter testReporter = TestStore.testReporter,
     WidgetBuilder testSuiteReportBuilder,
     TestWriter testWriter = TestStore.testWriter,
+    Map<String, dynamic> variables,
   })  : assert(goldenImageWriter != null),
         assert(maxCommonSearchDepth != null),
         assert(maxCommonSearchDepth >= 0),
@@ -93,7 +96,10 @@ class TestController {
         _testReportLogLevel = testReportLogLevel,
         _testReporter = testReporter,
         _testSuiteReportBuilder = testSuiteReportBuilder,
-        _testWriter = testWriter;
+        _testWriter = testWriter {
+    _customRoutes.addAll(customRoutes ?? {});
+    _variables.addAll(variables ?? {});
+  }
 
   static final Logger _logger = Logger('TestController');
 
@@ -123,6 +129,7 @@ class TestController {
   /// The image reader to read images for golden image comparisons.
   final TestImageReader testImageReader;
 
+  final Map<String, PageRoute> _customRoutes = SplayTreeMap();
   final GlobalKey<NavigatorState> _navigatorKey;
   final TestStepRegistry _registry;
   final StreamController<CaptureContext> _screencapController =
@@ -151,6 +158,9 @@ class TestController {
 
   /// Returns the current from the controller.  This will never be [null].
   Test get currentTest => _currentTest;
+
+  /// Returns the custom routes, sorted by the display name.
+  Map<String, PageRoute> get customRoutes => Map.unmodifiable(_customRoutes);
 
   /// Returns the registry that is being used by the controller.
   TestStepRegistry get registry => _registry;
@@ -209,6 +219,9 @@ class TestController {
 
     return result;
   }
+
+  /// Clears all the custom routes.
+  void clearCustomRoutes() => _customRoutes.clear();
 
   /// Clears all the variables.
   void clearVariables() => _variables.clear();
@@ -497,6 +510,19 @@ class TestController {
     return exported;
   }
 
+  /// Returns the variable from the controller.  This will return [null] if the
+  /// variable is not currently set on the controller.
+  dynamic getVariable(String variableName) {
+    dynamic result;
+    if ('_now' == variableName) {
+      result = DateTime.now().toUtc();
+    } else {
+      result = _variables[variableName];
+    }
+
+    return result;
+  }
+
   /// Loads the list of tests from the assigned [TestReader].  This accepts the
   /// [BuildContext] to allow the reader to provide visual feedback to the user
   /// in case the load takes a while.
@@ -508,6 +534,16 @@ class TestController {
         context,
         suiteName: suiteName,
       );
+
+  /// Registers a custom [route] with the framework.  These routes will be
+  /// displayed on the [TestStepsDialog] and [TestStepsPage].  The [display] is
+  /// the string to display in a [ListTile]'s title to trigger navigation to the
+  /// [route].  If the route is [null], this will remove any route registered to
+  /// the [display].  If the [display] is already registered, it will be
+  /// replaced with the new [route]
+  void registerCustomRoute(String display, PageRoute route) => route == null
+      ? _customRoutes.remove(display)
+      : _customRoutes[display] = route;
 
   /// Removes the variable with the given [variableName] from the controller.
   void removeVariable({@required String variableName}) {
@@ -538,9 +574,11 @@ class TestController {
   dynamic resolveVariable(dynamic input) {
     dynamic result = input;
     if (input is String && input.startsWith('{{') && input.endsWith('}}')) {
-      var key = input.substring(2, input.length - 2).trim();
-      if (_variables.containsKey(key)) {
-        result = _variables[key];
+      var variableName = input.substring(2, input.length - 2).trim();
+
+      result = getVariable(variableName);
+      if (result == null && _variables.containsKey(variableName) != true) {
+        result = input;
       }
     }
 

@@ -1,3 +1,9 @@
+## [1.2.9] - September 30th, 2020
+
+* Added ability to register a custom route to the `TestStepRegistry` and have that route be presented as an option on `TestStepsDialog` and `TestStepsPage`.
+* Added variable for `_now` to return the current `DateTime`.
+
+
 ## [1.2.8+2] - September 29th, 2020
 
 * Null fix for suite name on test reports

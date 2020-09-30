@@ -97,8 +97,8 @@ class TestReport extends JsonClass {
   /// Returns the list of images that were screen captured via the test.
   List<TestImage> get images => List.unmodifiable(_images);
 
-  /// Returns the unmodifiable list of log entires from the report.
-  List<String> get logs => List.unmodifiable(_logs);
+  /// Returns the list of log entires from the report.
+  List<String> get logs => _logs;
 
   /// Returns the runtime exception that aborted the test.  This will only be
   /// populated if the framework itself encountered a fatal issue (such as a

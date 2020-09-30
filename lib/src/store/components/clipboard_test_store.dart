@@ -70,8 +70,13 @@ class ClipboardTestStore {
         ),
       ),
     );
-    var controller = Scaffold.of(context).showSnackBar(snackBar);
-    await controller.closed;
+
+    try {
+      var controller = Scaffold.of(context).showSnackBar(snackBar);
+      await controller.closed;
+    } catch (e) {
+      // no-op
+    }
 
     return true;
   }

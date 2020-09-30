@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
@@ -269,7 +273,9 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Tooltip(
-                    message: 'Move Up',
+                    message: translator.translate(
+                      TestTranslations.atf_tooltip_move_up,
+                    ),
                     child: IconButton(
                       color: theme.iconTheme.color,
                       icon: Icon(Icons.arrow_upward),
@@ -296,7 +302,9 @@ class _TestStepsPageState extends State<TestStepsPage> {
                     width: 16.0,
                   ),
                   Tooltip(
-                    message: 'Move Down',
+                    message: translator.translate(
+                      TestTranslations.atf_tooltip_move_down,
+                    ),
                     child: IconButton(
                       color: theme.iconTheme.color,
                       icon: Icon(Icons.arrow_downward),
@@ -540,6 +548,40 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   translator: translator,
                 ),
                 tooltip: translator.translate(TestTranslations.atf_button_edit),
+              ),
+              Builder(
+                builder: (BuildContext context) => IconButton(
+                  icon: Icon(Icons.content_copy),
+                  onPressed: () async {
+                    var encoder = JsonEncoder.withIndent('  ');
+                    var steps = testController.currentTest.steps;
+                    var simpleSteps = [];
+                    for (var step in steps) {
+                      simpleSteps.add(
+                        step
+                            .copyWith(
+                              image: Uint8List(0),
+                            )
+                            .toJson(),
+                      );
+                    }
+                    var encoded = encoder.convert(simpleSteps);
+
+                    var translator = Translator.of(context);
+
+                    await Clipboard.setData(ClipboardData(text: encoded));
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        translator.translate(
+                          TestTranslations.atf_copied_to_clipboard,
+                        ),
+                      ),
+                    ));
+                  },
+                  tooltip: translator.translate(
+                    TestTranslations.atf_tooltip_copy_steps,
+                  ),
+                ),
               ),
               IconButton(
                 icon: Icon(

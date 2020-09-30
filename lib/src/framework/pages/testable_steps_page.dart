@@ -257,8 +257,9 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                         ),
                         contentPadding: EdgeInsets.all(16.0),
                         title: Text(
-                          translator
-                              .translate(TestTranslations.atf_test_options),
+                          translator.translate(
+                            TestTranslations.atf_test_options,
+                          ),
                         ),
                       ),
                     ),
@@ -271,6 +272,9 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                   MaterialPageRoute(
                     builder: (BuildContext context) => AvailableTestsPage(),
                   ),
+                ),
+                tooltip: translator.translate(
+                  TestTranslations.atf_open_tests_page,
                 ),
               ),
             ],
@@ -395,6 +399,30 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                               context,
                               step,
                             ),
+                          if (testController.customRoutes?.isNotEmpty ==
+                              true) ...[
+                            Divider(),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                translator.translate(
+                                  TestTranslations.atf_custom_pages,
+                                ),
+                                style: theme.textTheme.headline5,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            for (var entry
+                                in testController.customRoutes.entries)
+                              ListTile(
+                                onTap: () async {
+                                  Navigator.of(context).pop();
+                                  await Navigator.of(context).push(entry.value);
+                                },
+                                title: Text(entry.key),
+                                trailing: Icon(Icons.chevron_right),
+                              ),
+                          ]
                         ],
                       ),
                     ),

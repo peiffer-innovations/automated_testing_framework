@@ -197,7 +197,8 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
   @override
   Widget build(BuildContext context) {
     var translator = Translator.of(context);
-    var numSteps = TestController.of(context).currentTest.steps.length;
+    var testController = TestController.of(context);
+    var numSteps = testController.currentTest.steps.length;
 
     return AlertDialog(
       actions: [
@@ -277,9 +278,22 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
                       ),
                     );
                   },
-                  title: Text('Open Tests Page'),
+                  title: Text(
+                    translator.translate(
+                      TestTranslations.atf_open_tests_page,
+                    ),
+                  ),
                   trailing: Icon(Icons.chevron_right),
-                )
+                ),
+                for (var entry in testController.customRoutes.entries)
+                  ListTile(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      await Navigator.of(context).push(entry.value);
+                    },
+                    title: Text(entry.key),
+                    trailing: Icon(Icons.chevron_right),
+                  ),
               ],
             ),
           ),

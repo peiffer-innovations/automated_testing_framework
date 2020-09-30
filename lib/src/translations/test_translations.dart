@@ -103,6 +103,11 @@ class TestTranslations {
     value: 'Please correct form errors before continuing.',
   );
 
+  static const atf_custom_pages = TranslationEntry(
+    key: 'atf_custom_pages',
+    value: 'Custom Pages',
+  );
+
   static const atf_discard_changes = TranslationEntry(
     key: 'atf_discard_changes',
     value: 'Discard changes?',
@@ -141,6 +146,11 @@ class TestTranslations {
   static const atf_no_tests_found = TranslationEntry(
     key: 'atf_no_tests_found',
     value: 'No tests found',
+  );
+
+  static const atf_open_tests_page = TranslationEntry(
+    key: 'atf_open_tests_page',
+    value: 'Open Tests Page',
   );
 
   static const atf_operation_not_supported = TranslationEntry(
@@ -221,6 +231,21 @@ class TestTranslations {
   static const atf_tooltip_add_and_run = TranslationEntry(
     key: 'atf_tooltip_add_and_run',
     value: 'Add step and immediately execute',
+  );
+
+  static const atf_tooltip_copy_steps = TranslationEntry(
+    key: 'atf_tooltip_copy_steps',
+    value: 'COPY STEPS',
+  );
+
+  static const atf_tooltip_move_down = TranslationEntry(
+    key: 'atf_tooltip_move_down',
+    value: 'MOVE DOWN',
+  );
+
+  static const atf_tooltip_move_up = TranslationEntry(
+    key: 'atf_tooltip_move_up',
+    value: 'MOVE UP',
   );
 
   static const atf_unnamed_test = TranslationEntry(
