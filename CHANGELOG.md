@@ -1,4 +1,4 @@
-## [1.2.9] - October 3rd, 2020
+## [1.2.10] - October 3rd, 2020
 
 * Added ability to register a custom route to the `TestStepRegistry` and have that route be presented as an option on `TestStepsDialog` and `TestStepsPage`.
 * Added variable for `_now` to return the current `DateTime`.
