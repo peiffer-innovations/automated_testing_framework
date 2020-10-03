@@ -241,12 +241,13 @@ class TestController {
   ///
   /// The [version] defines the overall test version.  This may be [null] or
   /// empty and should always be a value of 0 or higher when set.
-  Future<void> execute({
+  Future<TestReport> execute({
     String name,
     bool reset = true,
     @required List<TestStep> steps,
     bool submitReport = true,
     String suiteName,
+    TestReport report,
     TestSuiteReport testSuiteReport,
     int version,
   }) async {
@@ -260,30 +261,28 @@ class TestController {
     status = '<set up>';
     await Future.delayed(Duration(milliseconds: 100));
 
-    TestReport report;
     StreamSubscription logSubscription;
-    if (reset == true || submitReport == true) {
-      report = TestReport(
-        name: name,
-        suiteName: suiteName,
-        version: version,
-      );
-      if (_testReportLogLevel != null) {
-        logSubscription = Logger.root.onRecord.listen((record) {
-          if (_testReportLogLevel <= record.level) {
-            report.appendLog(
-              '${record.level.name}: ${record.time}: ${record.message}',
-            );
-            if (record.error != null) {
-              report.appendLog('${record.error}');
-            }
-            if (record.stackTrace != null) {
-              report.appendLog('${record.stackTrace}');
-            }
+    report ??= TestReport(
+      name: name,
+      suiteName: suiteName,
+      version: version,
+    );
+    if (_testReportLogLevel != null) {
+      logSubscription = Logger.root.onRecord.listen((record) {
+        if (_testReportLogLevel <= record.level) {
+          report.appendLog(
+            '${record.level.name}: ${record.time}: ${record.message}',
+          );
+          if (record.error != null) {
+            report.appendLog('${record.error}');
           }
-        });
-      }
+          if (record.stackTrace != null) {
+            report.appendLog('${record.stackTrace}');
+          }
+        }
+      });
     }
+
     try {
       setVariable(
         value: passing,
@@ -315,7 +314,7 @@ class TestController {
       step = null;
       report?.complete();
 
-      if (report != null) {
+      if (reset == true || submitReport == true) {
         testSuiteReport?.addTestReport(report);
         var futures = <Future>[];
         futures.add(
@@ -339,6 +338,8 @@ class TestController {
         await Future.wait(futures);
       }
     }
+
+    return report;
   }
 
   /// Executes a single [step] and attaches the execution information to the
@@ -449,7 +450,7 @@ class TestController {
                 TextFormField(
                   autocorrect: false,
                   autofocus: true,
-                  autovalidate: true,
+                  autovalidateMode: AutovalidateMode.always,
                   decoration: InputDecoration(
                     labelText: translator.translate(
                       TestTranslations.atf_test_name,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
@@ -66,6 +67,9 @@ class TestReport extends JsonClass {
   /// The version of the test
   final int version;
 
+  /// Completer that completes when the test report is completed.
+  final Completer<TestReport> _completeCompleter = Completer<TestReport>();
+
   /// A list of all screencaptures requested by the test
   final List<TestImage> _images;
 
@@ -81,9 +85,17 @@ class TestReport extends JsonClass {
   final Map<TestStep, TestReportStep> _steps = {};
 
   int _errorSteps;
+  StreamController<String> _exceptionStreamController =
+      StreamController<String>.broadcast();
+  StreamController<TestImage> _imageStreamController =
+      StreamController<TestImage>.broadcast();
   int _passedSteps;
   DateTime _endTime;
+  StreamController<String> _logStreamController =
+      StreamController<String>.broadcast();
   String _runtimeException;
+  StreamController<TestReportStep> _stepStreamController =
+      StreamController<TestReportStep>.broadcast();
 
   /// The date time the test was completed.
   DateTime get endTime => _endTime;
@@ -91,21 +103,44 @@ class TestReport extends JsonClass {
   /// The number of steps that encountered an error and failed.
   int get errorSteps => _errorSteps;
 
-  /// The number of steps that had no errors and successfully passed.
-  int get passedSteps => _passedSteps;
+  /// Returns the exception stream for the report.  This will return [null] if
+  /// the report has already been completed.  Listeners will be notified
+  /// whenever an exception happens within the testing framework itself.
+  Stream<String> get exceptionStream => _exceptionStreamController?.stream;
+
+  /// Returns the image stream for the report.  This will return [null] if the
+  /// report has already been completed.  Listeners will be notified whenever an
+  /// image is added to the report.
+  Stream<TestImage> get imageStream => _imageStreamController?.stream;
 
   /// Returns the list of images that were screen captured via the test.
-  List<TestImage> get images => List.unmodifiable(_images);
+  List<TestImage> get images => List.unmodifiable(_images ?? {});
+
+  /// Returns the logging stream for the report.  This will return [null] if the
+  /// report has already been completed.  Listeners will be notified whenever a
+  /// log entry is added to the report.
+  Stream<String> get logStream => _logStreamController?.stream;
 
   /// Returns the list of log entires from the report.
   List<String> get logs => _logs;
 
+  /// Returns the Future that will return when the test report has completed.
+  Future<TestReport> get onComplete => _completeCompleter.future;
+
+  /// The number of steps that had no errors and successfully passed.
+  int get passedSteps => _passedSteps;
+
   /// Returns the runtime exception that aborted the test.  This will only be
   /// populated if the framework itself encountered a fatal issue (such as a
   /// malformed JSON body for a test step).  If this is populated, a developer
-  /// should investicate because this is not a typical error that would be
+  /// should investigate because this is not a typical error that would be
   /// expected due to failed test runs.
   String get runtimeException => _runtimeException;
+
+  /// Returns the test step stream for the report.  This will return [null] if
+  /// the report has already been completed.  Listeners will be notified with
+  /// every completed test step.
+  Stream<TestReportStep> get stepStream => _stepStreamController?.stream;
 
   /// Returns the list of test steps in an unmodifiable [List].
   List<TestReportStep> get steps => List.unmodifiable(_steps.values);
@@ -153,22 +188,46 @@ class TestReport extends JsonClass {
   }
 
   /// Appends the log entry to the test report.
-  void appendLog(String log) => _logs.add(log);
+  void appendLog(String log) {
+    _logs.add(log);
+    _logStreamController?.add(log);
+  }
 
   /// Attaches the given screenshot to the test report.
   void attachScreenshot(
     Uint8List screenshot, {
     @required bool goldenCompatible,
     @required String id,
-  }) =>
-      _images.add(TestImage(
-        goldenCompatible: goldenCompatible,
-        id: id,
-        image: screenshot,
-      ));
+  }) {
+    var image = TestImage(
+      goldenCompatible: goldenCompatible,
+      id: id,
+      image: screenshot,
+    );
+    _images.add(image);
+    _imageStreamController?.add(image);
+  }
 
   /// Completes the test and locks in the end time to now.
-  void complete() => _endTime = DateTime.now();
+  void complete() {
+    if (_endTime == null) {
+      _endTime = DateTime.now();
+
+      _exceptionStreamController?.close();
+      _exceptionStreamController = null;
+
+      _imageStreamController?.close();
+      _imageStreamController = null;
+
+      _logStreamController?.close();
+      _logStreamController = null;
+
+      _stepStreamController?.close();
+      _stepStreamController = null;
+
+      _completeCompleter.complete(this);
+    }
+  }
 
   /// Ends the given [step] with the optional [error].  If the [error] is [null]
   /// then the step is considered successful.  If there is an [error] value then
@@ -192,6 +251,7 @@ class TestReport extends JsonClass {
         } else {
           _errorSteps++;
         }
+        _stepStreamController?.add(reportStep);
       }
     }
   }
@@ -205,6 +265,7 @@ class TestReport extends JsonClass {
     _runtimeException = '$message: $e\n$stack';
 
     _pendingSteps.forEach((step) => endStep(step));
+    _exceptionStreamController?.add(_runtimeException);
   }
 
   /// Starts a step within the report.

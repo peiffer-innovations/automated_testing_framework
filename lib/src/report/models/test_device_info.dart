@@ -223,7 +223,7 @@ class TestDeviceInfo extends JsonClass {
         systemVersion: systemVersion,
       );
 
-      if (result != null) {
+      if (result != null && context != null) {
         _instance = result;
       }
     }

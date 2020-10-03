@@ -51,7 +51,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
       _testController.currentTest.steps,
     );
 
-    var values = step?.values;
+    var values = step?.values ?? {};
     var idx = steps.indexOf(step);
     var availableStep = TestStepRegistry.of(context).getAvailableTestStep(
       step?.id,
@@ -144,7 +144,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
     var endTestName = await showDialog<String>(
       context: context,
       builder: (BuildContext context) => Form(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         child: Builder(
           builder: (BuildContext context) => Theme(
             data: theme,
@@ -178,7 +178,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   TextFormField(
                     autocorrect: false,
                     autofocus: true,
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.always,
                     decoration: InputDecoration(
                       labelText: label,
                     ),
@@ -690,23 +690,20 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       Icons.clear,
                       color: theme.errorColor,
                     ),
-                    title: Text(
-                      translator.translate(
-                        TestTranslations.atf_button_clear,
-                      ),
-                      style: TextStyle(color: theme.errorColor),
+                    label: translator.translate(
+                      TestTranslations.atf_button_clear,
                     ),
+                    // style: TextStyle(color: theme.errorColor),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.save,
                       color: theme.iconTheme.color,
                     ),
-                    title: Text(
-                      translator.translate(
-                        TestTranslations.atf_button_export,
-                      ),
-                      style: TextStyle(color: theme.iconTheme.color),
+                    label: translator.translate(
+                      TestTranslations.atf_button_export,
+
+                      // style: TextStyle(color: theme.iconTheme.color),
                     ),
                   ),
                   BottomNavigationBarItem(
@@ -714,12 +711,10 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       Icons.play_circle_filled,
                       color: theme.iconTheme.color,
                     ),
-                    title: Text(
-                      translator.translate(
-                        TestTranslations.atf_button_run_all,
-                      ),
-                      style: TextStyle(color: theme.iconTheme.color),
+                    label: translator.translate(
+                      TestTranslations.atf_button_run_all,
                     ),
+                    // style: TextStyle(color: theme.iconTheme.color),
                   ),
                 ],
                 onTap: (int index) async {

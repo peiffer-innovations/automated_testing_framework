@@ -141,7 +141,9 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
         child: TextFormField(
           autocorrect: widget.autocorrect,
           autofocus: widget.autofocus,
-          autovalidate: widget.autovalidate,
+          autovalidateMode: widget.autovalidate == true
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
           buildCounter: widget.buildCounter,
           controller: _controller,
           cursorColor: widget.cursorColor,

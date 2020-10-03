@@ -76,7 +76,9 @@ class _TestableDropdownButtonFormFieldState<T>
           widget.onChanged == null ? null : (value) => widget.onChanged(value),
       scrollableId: widget.scrollableId,
       child: DropdownButtonFormField<T>(
-        autovalidate: widget.autovalidate,
+        autovalidateMode: widget.autovalidate == true
+            ? AutovalidateMode.always
+            : AutovalidateMode.disabled,
         decoration: widget.decoration,
         disabledHint: widget.disabledHint,
         elevation: widget.elevation,

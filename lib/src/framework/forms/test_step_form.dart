@@ -37,7 +37,7 @@ abstract class TestStepForm {
 
     var translator = Translator.of(context);
     return DropdownButtonFormField<String>(
-      autovalidate: validators?.isNotEmpty == true,
+      autovalidateMode: AutovalidateMode.always,
       decoration: InputDecoration(
         labelText: translator.translate(label),
       ),
@@ -49,7 +49,7 @@ abstract class TestStepForm {
           ),
       ],
       onChanged: (value) => values[id] = value,
-      value: values[id],
+      value: values[id]?.toString(),
       validator: (value) => validators?.isNotEmpty == true
           ? Validator(validators: validators).validate(
               context: context,
@@ -80,7 +80,7 @@ abstract class TestStepForm {
 
     var translator = Translator.of(context);
     return TextFormField(
-      autovalidate: validators?.isNotEmpty == true,
+      autovalidateMode: AutovalidateMode.always,
       decoration: InputDecoration(
         labelText: translator.translate(label),
       ),
@@ -159,7 +159,7 @@ abstract class TestStepForm {
 
     var translator = Translator.of(context);
     return TextFormField(
-      autovalidate: true,
+      autovalidateMode: AutovalidateMode.always,
       decoration: InputDecoration(
         labelText: translator.translate(label),
       ),

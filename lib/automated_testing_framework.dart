@@ -1,3 +1,8 @@
+export 'src/driver/model/drivable_device.dart';
+export 'src/driver/model/external_test_driver.dart';
+
+export 'src/driver/widgets/test_driver_status.dart';
+
 export 'src/framework/dialog/testable_form_dialog.dart';
 export 'src/framework/dialog/testable_steps_dialog.dart';
 
