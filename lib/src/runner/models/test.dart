@@ -75,7 +75,7 @@ class Test extends JsonClass {
   /// Returns the id of the test which is a concatenation of the suite
   /// name and the test name.
   String get id =>
-      (suiteName?.isNotEmpty == true ? '${suiteName}__' : '') + name;
+      '${(suiteName?.isNotEmpty == true ? '${suiteName}__' : '')}$name';
 
   /// Copies this test with the given values.
   Test copyWith({

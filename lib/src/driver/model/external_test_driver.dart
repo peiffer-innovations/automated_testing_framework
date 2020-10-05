@@ -6,9 +6,9 @@ import 'package:meta/meta.dart';
 
 class ExternalTestDriver extends JsonClass {
   factory ExternalTestDriver({
-    String id,
-    String name,
-    String secret,
+    @required String id,
+    @required String name,
+    @required String secret,
   }) {
     var pingTime = DateTime.now();
 

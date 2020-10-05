@@ -1,5 +1,8 @@
 export 'src/driver/model/drivable_device.dart';
+export 'src/driver/model/driven_test_status.dart';
+export 'src/driver/model/driver_test_request.dart';
 export 'src/driver/model/external_test_driver.dart';
+export 'src/driver/model/test_device_status.dart';
 
 export 'src/driver/widgets/test_driver_status.dart';
 

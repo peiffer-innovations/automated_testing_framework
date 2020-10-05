@@ -156,6 +156,8 @@ class TestController {
 
   Test _currentTest = Test();
 
+  bool _runningTest = false;
+
   /// Returns the current from the controller.  This will never be [null].
   Test get currentTest => _currentTest;
 
@@ -164,6 +166,10 @@ class TestController {
 
   /// Returns the registry that is being used by the controller.
   TestStepRegistry get registry => _registry;
+
+  /// Returns whether or not the controller is actively running a test now or
+  /// not.
+  bool get runningTest => _runningTest;
 
   /// Returns the stream that will fire screep capture requests on.
   Stream<CaptureContext> get screencapStream => _screencapController.stream;
@@ -251,95 +257,100 @@ class TestController {
     TestSuiteReport testSuiteReport,
     int version,
   }) async {
-    var passing = true;
-    step = ProgressValue(max: steps.length, value: 0);
-
-    if (reset == true) {
-      await this.reset();
-    }
-
-    status = '<set up>';
-    await Future.delayed(Duration(milliseconds: 100));
-
-    StreamSubscription logSubscription;
-    report ??= TestReport(
-      name: name,
-      suiteName: suiteName,
-      version: version,
-    );
-    if (_testReportLogLevel != null) {
-      logSubscription = Logger.root.onRecord.listen((record) {
-        if (_testReportLogLevel <= record.level) {
-          report.appendLog(
-            '${record.level.name}: ${record.time}: ${record.message}',
-          );
-          if (record.error != null) {
-            report.appendLog('${record.error}');
-          }
-          if (record.stackTrace != null) {
-            report.appendLog('${record.stackTrace}');
-          }
-        }
-      });
-    }
-
+    _runningTest = true;
     try {
-      setVariable(
-        value: passing,
-        variableName: '_passing',
-      );
-      var idx = 0;
-      for (var step in steps) {
-        passing = await executeStep(
-              report: report,
-              step: step,
-              subStep: false,
-            ) &&
-            passing;
+      var passing = true;
+      step = ProgressValue(max: steps.length, value: 0);
 
-        idx++;
-        this.step = ProgressValue(max: steps.length, value: idx);
-
-        if (stopOnFirstFail == true && passing != true) {
-          break;
-        }
+      if (reset == true) {
+        await this.reset();
       }
-    } catch (e, stack) {
-      report?.exception('Exception in test', e, stack);
-      _logger.severe('EXCEPTION IN TEST: ', e, stack);
-    } finally {
-      await logSubscription?.cancel();
 
-      await _sleep(delays.testTearDown);
-      step = null;
-      report?.complete();
+      status = '<set up>';
+      await Future.delayed(Duration(milliseconds: 100));
 
-      if (reset == true || submitReport == true) {
-        testSuiteReport?.addTestReport(report);
-        var futures = <Future>[];
-        futures.add(
-          _navigatorKey.currentState.push(
-            MaterialPageRoute(
-              builder: _testReportBuilder ??
-                  (BuildContext context) => TestReportPage(),
-              settings: RouteSettings(
-                name: '/atf/test-report',
-                arguments: report,
+      StreamSubscription logSubscription;
+      report ??= TestReport(
+        name: name,
+        suiteName: suiteName,
+        version: version,
+      );
+      if (_testReportLogLevel != null) {
+        logSubscription = Logger.root.onRecord.listen((record) {
+          if (_testReportLogLevel <= record.level) {
+            report.appendLog(
+              '${record.level.name}: ${record.time}: ${record.message}',
+            );
+            if (record.error != null) {
+              report.appendLog('${record.error}');
+            }
+            if (record.stackTrace != null) {
+              report.appendLog('${record.stackTrace}');
+            }
+          }
+        });
+      }
+
+      try {
+        setVariable(
+          value: passing,
+          variableName: '_passing',
+        );
+        var idx = 0;
+        for (var step in steps) {
+          passing = await executeStep(
+                report: report,
+                step: step,
+                subStep: false,
+              ) &&
+              passing;
+
+          idx++;
+          this.step = ProgressValue(max: steps.length, value: idx);
+
+          if (stopOnFirstFail == true && passing != true) {
+            break;
+          }
+        }
+      } catch (e, stack) {
+        report?.exception('Exception in test', e, stack);
+        _logger.severe('EXCEPTION IN TEST: ', e, stack);
+      } finally {
+        await logSubscription?.cancel();
+
+        await _sleep(delays.testTearDown);
+        step = null;
+        report?.complete();
+
+        if (reset == true || submitReport == true) {
+          testSuiteReport?.addTestReport(report);
+          var futures = <Future>[];
+          futures.add(
+            _navigatorKey.currentState.push(
+              MaterialPageRoute(
+                builder: _testReportBuilder ??
+                    (BuildContext context) => TestReportPage(),
+                settings: RouteSettings(
+                  name: '/atf/test-report',
+                  arguments: report,
+                ),
               ),
             ),
-          ),
-        );
-        if (submitReport == true) {
-          futures.add(this.submitReport(report));
-          await _sleep(delays.postSubmitReport);
-          await this.reset();
+          );
+          if (submitReport == true) {
+            futures.add(this.submitReport(report));
+            await _sleep(delays.postSubmitReport);
+            await this.reset();
+          }
+
+          await Future.wait(futures);
         }
-
-        await Future.wait(futures);
       }
-    }
 
-    return report;
+      return report;
+    } finally {
+      _runningTest = false;
+    }
   }
 
   /// Executes a single [step] and attaches the execution information to the

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class TestDeviceInfo extends JsonClass {
     this.systemVersion,
   }) : assert(physicalDevice != null);
 
+  static Completer<TestDeviceInfo> _completer;
   static TestDeviceInfo _instance;
 
   static TestDeviceInfo get instance => _instance ?? initialize(null);
@@ -48,36 +51,40 @@ class TestDeviceInfo extends JsonClass {
 
     if (map != null) {
       var screen = map['screen'] ?? {};
-      var dips = screen['dips'] ?? {};
-      var pixels = screen['pixels'] ?? {};
+      var dips = screen['dips'];
+      var pixels = screen['pixels'];
 
       result = TestDeviceInfo.custom(
         brand: map['brand'],
         buildNumber: map['buildNumber'],
         device: map['device'],
         devicePixelRatio: JsonClass.parseDouble(screen['devicePixelRatio']),
-        dips: Size(
-          JsonClass.parseDouble(
-            dips['width'],
-          ),
-          JsonClass.parseDouble(
-            dips['height'],
-          ),
-        ),
+        dips: dips == null
+            ? null
+            : Size(
+                JsonClass.parseDouble(
+                  dips['width'],
+                ),
+                JsonClass.parseDouble(
+                  dips['height'],
+                ),
+              ),
         id: map['id'],
         manufacturer: map['manufacturer'],
         model: map['model'],
         orientation: map['orientation'],
         os: map['os'],
         physicalDevice: JsonClass.parseBool(map['physicalDevice']),
-        pixels: Size(
-          JsonClass.parseDouble(
-            pixels['width'],
-          ),
-          JsonClass.parseDouble(
-            pixels['height'],
-          ),
-        ),
+        pixels: pixels == null
+            ? null
+            : Size(
+                JsonClass.parseDouble(
+                  pixels['width'],
+                ),
+                JsonClass.parseDouble(
+                  pixels['height'],
+                ),
+              ),
         systemVersion: map['systemVersion'],
       );
     }
@@ -97,7 +104,14 @@ class TestDeviceInfo extends JsonClass {
   static Future<TestDeviceInfo> initialize(BuildContext context) async {
     var result = _instance;
 
-    if (result == null) {
+    while (_completer != null) {
+      await _completer.future;
+    }
+    result = _instance;
+
+    if (result == null || (context != null && result.dips == null)) {
+      _completer = Completer<TestDeviceInfo>();
+
       String brand;
       String buildNumber;
       String device;
@@ -223,9 +237,9 @@ class TestDeviceInfo extends JsonClass {
         systemVersion: systemVersion,
       );
 
-      if (result != null && context != null) {
-        _instance = result;
-      }
+      _instance = result;
+      _completer?.complete(result);
+      _completer = null;
     }
 
     return result;
