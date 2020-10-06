@@ -1,3 +1,8 @@
+## [1.2.11+1] - October 6th, 2020
+
+* Minor update to disable the global overlay while tests are running.
+
+
 ## [1.2.11] - October 5th, 2020
 
 * Data model updates to the external test runner framework.

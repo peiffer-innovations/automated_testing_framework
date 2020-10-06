@@ -700,7 +700,8 @@ class TestableState extends State<Testable>
               ),
             ),
           ),
-          if (_renderController.showGlobalOverlay == true)
+          if (_renderController.showGlobalOverlay == true &&
+              _testController.runningTest != true)
             _renderController.globalOverlayBuilder(context),
           overlay,
           if (_renderController.flashCount > 0)
