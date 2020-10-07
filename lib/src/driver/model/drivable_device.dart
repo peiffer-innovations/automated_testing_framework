@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-import 'package:crypto/crypto.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
@@ -26,7 +23,6 @@ class DrivableDevice extends JsonClass {
         pingTime: pingTime,
         secret: secret,
         status: status,
-        testDeviceInfo: testDeviceInfo,
       ),
       status: status,
       testDeviceInfo: testDeviceInfo,
@@ -75,17 +71,16 @@ class DrivableDevice extends JsonClass {
     @required DateTime pingTime,
     @required String secret,
     @required String status,
-    @required TestDeviceInfo testDeviceInfo,
   }) =>
-      Hmac(sha256, utf8.encode(secret))
-          .convert(utf8.encode(json.encode({
-            'driverId': driverId,
-            'id': id,
-            'pingTime': pingTime.millisecondsSinceEpoch,
-            'status': status,
-            'testDeviceInfo': testDeviceInfo.toJson(),
-          })))
-          .toString();
+      DriverSignatureHelper().createSignature(
+        secret,
+        [
+          driverId,
+          id,
+          pingTime.millisecondsSinceEpoch.toString(),
+          status,
+        ],
+      );
 
   String createSignature(String secret) => _createSignature(
         driverId: driverId,
@@ -93,7 +88,6 @@ class DrivableDevice extends JsonClass {
         pingTime: pingTime,
         secret: secret,
         status: status,
-        testDeviceInfo: testDeviceInfo,
       );
 
   bool validateSignature(String secret) {

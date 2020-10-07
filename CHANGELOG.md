@@ -1,3 +1,9 @@
+## [1.2.12] - October 7th, 2020
+
+* Swapped out `crypto` with `pointycastle`.
+* Fixed driver signatures for web apps.
+
+
 ## [1.2.11+1] - October 6th, 2020
 
 * Minor update to disable the global overlay while tests are running.

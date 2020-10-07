@@ -4,6 +4,8 @@ export 'src/driver/model/driver_test_request.dart';
 export 'src/driver/model/external_test_driver.dart';
 export 'src/driver/model/test_device_status.dart';
 
+export 'src/driver/utils/driver_signature_helper.dart';
+
 export 'src/driver/widgets/test_driver_status.dart';
 
 export 'src/framework/dialog/testable_form_dialog.dart';

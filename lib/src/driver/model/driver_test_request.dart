@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-import 'package:crypto/crypto.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
@@ -57,11 +54,12 @@ class DriverTestRequest extends JsonClass {
     @required String secret,
     @required DateTime timestamp,
   }) =>
-      Hmac(sha256, utf8.encode(secret))
-          .convert(utf8.encode(json.encode({
-            'timestamp': timestamp.millisecondsSinceEpoch,
-          })))
-          .toString();
+      DriverSignatureHelper().createSignature(
+        secret,
+        [
+          timestamp.millisecondsSinceEpoch.toString(),
+        ],
+      );
 
   String createSignature(String secret) => _createSignature(
         secret: secret,

@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:crypto/crypto.dart';
+import 'package:convert/convert.dart';
+import 'package:pointycastle/digests/sha256.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
@@ -17,7 +18,7 @@ class TestImage extends JsonClass {
   })  : assert(goldenCompatible != null),
         assert(id?.isNotEmpty == true),
         captureTime = captureTime ?? DateTime.now().millisecondsSinceEpoch,
-        hash = hash ?? sha256.convert(image ?? [0]).toString();
+        hash = hash ?? hex.encode(SHA256Digest().process(image ?? [0]));
 
   static TestImage fromDynamic(dynamic map) {
     TestImage result;
