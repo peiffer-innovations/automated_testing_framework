@@ -260,6 +260,9 @@ To receive the test report, implement the `testReporter` callback to send the re
 
 The `TestController` supports variables within test steps and from external code.  Within steps that support variables, the variables utilize the mustache syntax.  For example: `{{variableName}}`.  Test steps that support variables will attempt to resolve the variable at runtime.  This provides the application the ability to set up common variables like usernames, passwords, etc. in a way that any test can generically refer to them.
 
+Variables can be either the entire value or can be interpolated as a partial value.  For example, a variable named "one" with the value of "1" and the string of: "Number {{one}}" will result in a value of "Number 1".
+
+
 ### Reserved Variables
 
 Reserved variables are begin with an underscore (`_`) and should be reserved for the framework itself plus any plugins that are applied to the framework.  Applications should avoid setting variables that begin with an underscore as they may be overwritten by plugins or the framework either now or at some future time.

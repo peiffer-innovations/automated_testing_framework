@@ -1,3 +1,8 @@
+## [1.2.13] - October 7th, 2020
+
+* Upgraded the variable interpolation to search for variables in substrings rather than requiring them to be the whole string.
+
+
 ## [1.2.12] - October 7th, 2020
 
 * Swapped out `crypto` with `pointycastle`.

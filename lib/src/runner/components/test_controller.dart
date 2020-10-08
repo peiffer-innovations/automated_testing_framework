@@ -414,6 +414,24 @@ class TestController {
     return passed;
   }
 
+  /// Executes a single [test].  This will reset the application and submit the
+  /// report.  If the [report] is set it will be used, otherwise a net-new
+  /// [TestReport] will be created and returned.
+  Future<TestReport> executeTest({
+    @required Test test,
+    TestReport report,
+  }) async {
+    return await execute(
+      name: test.name,
+      report: report,
+      reset: true,
+      steps: test.steps,
+      submitReport: true,
+      suiteName: test.suiteName,
+      version: test.version,
+    );
+  }
+
   /// Attempts to export the current test via the [testWriter] value.  This will
   /// return [true] if and only if the current [testWriter] both returns [true]
   /// and no exceptions were thrown along the way.
@@ -585,12 +603,34 @@ class TestController {
   /// unaltered.
   dynamic resolveVariable(dynamic input) {
     dynamic result = input;
-    if (input is String && input.startsWith('{{') && input.endsWith('}}')) {
-      var variableName = input.substring(2, input.length - 2).trim();
+    if (input is String && input.contains('{{') && input.contains('}}')) {
+      var regex = RegExp(r'\{\{[^(})]*}}]*');
 
-      result = getVariable(variableName);
-      if (result == null && _variables.containsKey(variableName) != true) {
-        result = input;
+      var matches = regex.allMatches(input);
+      if (matches?.isNotEmpty == true) {
+        if (matches?.length == 1) {
+          var match = matches.first;
+          var variableName =
+              result.substring(match.start + 2, match.end - 2).trim();
+          var value = getVariable(variableName);
+          if (value != null || _variables.containsKey(variableName) == true) {
+            result = value;
+          }
+        } else {
+          matches = matches.toList().reversed;
+
+          for (var match in matches) {
+            var variableName =
+                result.substring(match.start + 2, match.end - 2).trim();
+
+            var value = getVariable(variableName);
+            if (value != null || _variables.containsKey(variableName) == true) {
+              result = value == null
+                  ? null
+                  : '${result.substring(0, match.start)}$value${result.substring(match.end, result.length)}';
+            }
+          }
+        }
       }
     }
 
