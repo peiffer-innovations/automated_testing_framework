@@ -608,7 +608,9 @@ class TestController {
 
       var matches = regex.allMatches(input);
       if (matches?.isNotEmpty == true) {
-        if (matches?.length == 1) {
+        if (matches?.length == 1 &&
+            input.startsWith('{{') &&
+            input.endsWith('}}')) {
           var match = matches.first;
           var variableName =
               result.substring(match.start + 2, match.end - 2).trim();

@@ -1,3 +1,9 @@
+## [1.2.14] - October 8th, 2020
+
+* Improved error message from `assert_value`
+* Fixed an issue with single variable return from the new variable interpolation code.
+
+
 ## [1.2.13] - October 7th, 2020
 
 * Upgraded the variable interpolation to search for variables in substrings rather than requiring them to be the whole string.

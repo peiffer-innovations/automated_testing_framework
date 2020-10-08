@@ -68,7 +68,7 @@ class AssertValueStep extends TestRunnerStep {
     @required TestController tester,
   }) async {
     String testableId = tester.resolveVariable(this.testableId);
-    String value = tester.resolveVariable(this.value);
+    var value = tester.resolveVariable(this.value)?.toString();
     assert(testableId?.isNotEmpty == true);
 
     var name = "assert_value('$testableId', '$value', '$equals')";
@@ -89,28 +89,27 @@ class AssertValueStep extends TestRunnerStep {
 
     var widgetFinder = finder.evaluate();
     var match = false;
+    dynamic actual;
     if (widgetFinder?.isNotEmpty == true) {
       StatefulElement element = widgetFinder.first;
 
       var state = element.state;
       if (state is TestableState) {
         try {
-          var actual = state.onRequestValue();
+          actual = state.onRequestValue();
           if (equals == (actual?.toString() == value)) {
             match = true;
-          } else {
-            throw Exception(
-              'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$value].',
-            );
           }
         } catch (e) {
-          // no-op; fail via "match != true"
+          throw Exception(
+            'testableId: [$testableId] -- could not locate Testable with a functional [onRequestValue] method.',
+          );
         }
       }
     }
     if (match != true) {
       throw Exception(
-        'testableId: [$testableId] -- could not locate Testable with a functional [onRequestValue] method.',
+        'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$value].',
       );
     }
   }
