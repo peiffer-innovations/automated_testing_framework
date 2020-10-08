@@ -4,14 +4,14 @@ const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "version.json": "4b6db237b3514a88107a422469adfb0f",
-"index.html": "79e04ddbfd3ea8c9303709fc7b653a8e",
-"/": "79e04ddbfd3ea8c9303709fc7b653a8e",
-"main.dart.js": "b4dcd593af2492fb5f1b540498b697e0",
+"index.html": "11118607927f81a18e7a4bfa3c813e2d",
+"/": "11118607927f81a18e7a4bfa3c813e2d",
+"main.dart.js": "b2f6bcbb4f477c51800d089d793a3332",
 "favicon.png": "7d2009652f165b0bc9d9e23452621c35",
 "icons/Icon-192.png": "079d22db7d65e763c68d7199c2bd6b08",
 "icons/Icon-512.png": "f0de392acd8910e2196e38a327bbb747",
 "manifest.json": "15f73b7e8a8209c2206210b3ac8dea1b",
-"assets/AssetManifest.json": "f7c83e0f8a2580d02100dcf66629a1b4",
+"assets/AssetManifest.json": "68c85d7714e3b6e58070b7d2aa8853e7",
 "assets/NOTICES": "1a2e5011e94000d2e56dec15feb3243f",
 "assets/assets-src/MaterialIcons-Regular.ttf": "a37b0c01c0baf1888ca812cc0508f6e2",
 "assets/FontManifest.json": "3a1c01ebd9adb7aecf384a895a3cbb43",
@@ -24,9 +24,10 @@ const RESOURCES = {
 "assets/packages/automated_testing_framework_example/assets/tests/screenshot.json": "5a070f35d91e2c1cde99395809a1d876",
 "assets/packages/automated_testing_framework_example/assets/tests/variables.json": "7d554f244b740f375961fb0c9f80b393",
 "assets/packages/automated_testing_framework_example/assets/tests/failure.json": "8cefd140b688b564169ed2d304a52ce8",
+"assets/packages/automated_testing_framework_example/assets/tests/interpolated_variables.json": "2491e0da34265345c86a6fe89a089894",
 "assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "d35cccfbd9c0c4547e34441f6038ac5c",
 "assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "a98582489811cc6fc6a56cfcd5835699",
-"assets/packages/automated_testing_framework_example/assets/all_tests.json": "e8fce01cdab9ed060a47e61d87c26a74",
+"assets/packages/automated_testing_framework_example/assets/all_tests.json": "2d2c55430cb923f834f1683ae76deaf4",
 "assets/fonts/MaterialIcons-Regular.otf": "132a5e63b5e510933ab4845577716106"
 };
 
