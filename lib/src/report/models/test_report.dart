@@ -15,21 +15,17 @@ class TestReport extends JsonClass {
     this.suiteName,
     this.version,
   })  : deviceInfo = deviceInfo ?? TestDeviceInfo.instance,
-        _errorSteps = 0,
         id = id ?? Uuid().v4(),
         _images = [],
         _logs = [],
-        _passedSteps = 0,
         startTime = DateTime.now();
 
   TestReport._internal({
     this.deviceInfo,
     DateTime endTime,
-    int errorSteps,
     this.id,
     List<String> logs,
     this.name,
-    int passedSteps,
     String runtimeException,
     this.startTime,
     List<TestReportStep> steps,
@@ -37,10 +33,8 @@ class TestReport extends JsonClass {
     this.version,
     List<TestImage> images,
   })  : _endTime = endTime,
-        _errorSteps = errorSteps,
         _images = images,
         _logs = logs,
-        _passedSteps = passedSteps,
         _runtimeException = runtimeException {
     steps?.forEach((step) => _steps[TestStep(
           id: step.id,
@@ -84,12 +78,10 @@ class TestReport extends JsonClass {
   /// results.
   final Map<TestStep, TestReportStep> _steps = {};
 
-  int _errorSteps;
   StreamController<String> _exceptionStreamController =
       StreamController<String>.broadcast();
   StreamController<TestImage> _imageStreamController =
       StreamController<TestImage>.broadcast();
-  int _passedSteps;
   DateTime _endTime;
   StreamController<String> _logStreamController =
       StreamController<String>.broadcast();
@@ -101,7 +93,8 @@ class TestReport extends JsonClass {
   DateTime get endTime => _endTime;
 
   /// The number of steps that encountered an error and failed.
-  int get errorSteps => _errorSteps;
+  int get errorSteps =>
+      _steps.values.where((step) => step.error == null).length;
 
   /// Returns the exception stream for the report.  This will return [null] if
   /// the report has already been completed.  Listeners will be notified
@@ -128,7 +121,8 @@ class TestReport extends JsonClass {
   Future<TestReport> get onComplete => _completeCompleter.future;
 
   /// The number of steps that had no errors and successfully passed.
-  int get passedSteps => _passedSteps;
+  int get passedSteps =>
+      _steps.values.where((step) => step.error == null).length;
 
   /// Returns the runtime exception that aborted the test.  This will only be
   /// populated if the framework itself encountered a fatal issue (such as a
@@ -165,12 +159,10 @@ class TestReport extends JsonClass {
         endTime: DateTime.fromMillisecondsSinceEpoch(
           JsonClass.parseInt(map['endTime']),
         ),
-        errorSteps: JsonClass.parseInt(map['errorSteps']),
         images: JsonClass.fromDynamicList(
             map['images'], (map) => TestImage.fromDynamic(map)),
         logs: List<String>.from(map['logs']),
         name: map['name'],
-        passedSteps: JsonClass.parseInt(map['passedSteps']),
         runtimeException: map['runtimeException'],
         startTime: DateTime.fromMillisecondsSinceEpoch(
           JsonClass.parseInt(map['startTime']),
@@ -246,11 +238,6 @@ class TestReport extends JsonClass {
         );
         _steps[step] = reportStep;
 
-        if (error == null) {
-          _passedSteps++;
-        } else {
-          _errorSteps++;
-        }
         _stepStreamController?.add(reportStep);
       }
     }
