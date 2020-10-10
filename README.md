@@ -24,6 +24,7 @@
   * [Flow Control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control)
   * [Images](https://pub.dev/packages/automated_testing_framework_plugin_images)
   * [Logging](https://pub.dev/packages/automated_testing_framework_plugin_logging)
+  * [Strings](https://pub.dev/packages/automated_testing_framework_plugin_strings)
 
 ---
 ## Live Example

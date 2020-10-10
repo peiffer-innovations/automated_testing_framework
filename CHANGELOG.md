@@ -1,3 +1,8 @@
+## [1.2.14+1] - October 10th, 2020
+
+* Added `timestamp` to `Test`.
+
+
 ## [1.2.14] - October 8th, 2020
 
 * Improved error message from `assert_value`

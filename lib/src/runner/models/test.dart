@@ -9,10 +9,12 @@ class Test extends JsonClass {
     this.name,
     List<TestStep> steps,
     this.suiteName,
+    DateTime timestamp,
     this.version = 0,
   })  : assert(active != null),
         assert(version != null),
-        steps = steps == null ? <TestStep>[] : List<TestStep>.from(steps);
+        steps = steps == null ? <TestStep>[] : List<TestStep>.from(steps),
+        timestamp = timestamp ?? DateTime.now();
 
   /// Sets whether or not this test is currently active.  The interal system
   /// will always create active tests but loaders may return inactive tests.
@@ -27,6 +29,9 @@ class Test extends JsonClass {
   /// The name of the test suite this test is a part of; may be [null] or empty.
   final String suiteName;
 
+  /// The timestamp for the test step.
+  final DateTime timestamp;
+
   /// The test version.
   final int version;
 
@@ -38,7 +43,10 @@ class Test extends JsonClass {
   /// {
   ///   "active": <bool>,
   ///   "name": <String>,
-  ///   "steps": <List<TestStep>>
+  ///   "steps": <List<TestStep>>,
+  ///   "suiteName": <String>,
+  ///   "timestamp": <number; millis since epoch>,
+  ///   "version": <number>
   /// }
   /// ```
   static Test fromDynamic(
@@ -59,6 +67,10 @@ class Test extends JsonClass {
                   ignoreImages: ignoreImages,
                 )),
         suiteName: map['suiteName'],
+        timestamp: JsonClass.parseUtcMillis(
+          map['timestamp'],
+          DateTime.now().millisecondsSinceEpoch,
+        ),
         version: JsonClass.parseInt(map['version'], 1),
       );
     }
@@ -83,11 +95,13 @@ class Test extends JsonClass {
     String name,
     List<TestStep> steps,
     String suiteName,
+    DateTime timestamp,
     int version,
   }) =>
       Test(
         active: active ?? this.active,
         name: name ?? this.name,
+        timestamp: timestamp?.millisecondsSinceEpoch ?? this.timestamp,
         steps: steps ?? this.steps,
         suiteName: suiteName ?? this.suiteName,
         version: version ?? this.version,
@@ -101,6 +115,7 @@ class Test extends JsonClass {
         'name': name ?? '<unnammed>',
         'steps': JsonClass.toJsonList(steps),
         'suiteName': suiteName,
+        'timestamp': (timestamp ?? DateTime.now()).millisecondsSinceEpoch,
         'version': version,
       };
 }
