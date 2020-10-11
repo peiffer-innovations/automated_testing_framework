@@ -83,6 +83,7 @@ class TestRunnerState extends State<TestRunner> {
 
   AnimationController _animationController;
   bool _enabled;
+  MediaQueryData _mediaQuery;
 
   TestController get controller => widget.controller;
   bool get enabled => _enabled;
@@ -99,7 +100,7 @@ class TestRunnerState extends State<TestRunner> {
     if (widget.enabled == true) {
       _subscriptions
           .add(controller.screencapStream.listen((captureContext) async {
-        var captured = await capture(captureContext.devicePixelRatio);
+        var captured = await capture();
         if (captured?.isNotEmpty == true) {
           captureContext.image.addAll(captured);
         }
@@ -114,7 +115,7 @@ class TestRunnerState extends State<TestRunner> {
     super.dispose();
   }
 
-  Future<Uint8List> capture([double devicePixelRatio = 1.0]) async {
+  Future<Uint8List> capture() async {
     await Future.delayed(Duration(milliseconds: 100));
 
     Uint8List image;
@@ -124,7 +125,7 @@ class TestRunnerState extends State<TestRunner> {
           _globalKey.currentContext.findRenderObject();
       if (!foundation.kDebugMode || boundary?.debugNeedsPaint != true) {
         var img = await boundary.toImage(
-          pixelRatio: devicePixelRatio,
+          pixelRatio: _mediaQuery?.devicePixelRatio ?? 1.0,
         );
         var byteData = await img.toByteData(
           format: ui.ImageByteFormat.png,
@@ -144,8 +145,9 @@ class TestRunnerState extends State<TestRunner> {
             debugShowCheckedModeBanner: false,
             home: Provider<TestController>.value(
               value: controller,
-              child: Builder(
-                builder: (BuildContext context) => Stack(
+              child: Builder(builder: (BuildContext context) {
+                _mediaQuery = MediaQuery.of(context);
+                return Stack(
                   children: <Widget>[
                     Positioned.fill(
                       child: RepaintBoundary(
@@ -159,8 +161,8 @@ class TestRunnerState extends State<TestRunner> {
                             widget.progressBuilder,
                       ),
                   ],
-                ),
-              ),
+                );
+              }),
             ),
           );
   }

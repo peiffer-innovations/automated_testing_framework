@@ -1,3 +1,8 @@
+## [1.2.15] - October 11th, 2020
+
+* Fixed an issue with the screen capture request that could result in the wrong image size.
+
+
 ## [1.2.14+3] - October 11th, 2020
 
 * Added `timestamp` to `GoldenTestImages`.

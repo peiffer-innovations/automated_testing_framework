@@ -148,9 +148,6 @@ class TestController {
   final TestWriter _testWriter;
   final Map<String, dynamic> _variables = {};
 
-  /// The device pixel ratio to use when taking screencaptures.
-  double devicePixelRatio = 4.0;
-
   /// The currently selected test suite name.
   String selectedSuiteName;
 
@@ -218,7 +215,6 @@ class TestController {
     try {
       var runner = TestRunner.of(context);
       result = runner?.controller;
-      result?.devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     } catch (e) {
       // no-op
     }
@@ -727,7 +723,6 @@ class TestController {
 
     if (!kIsWeb) {
       var captureContext = CaptureContext(
-        devicePixelRatio: devicePixelRatio,
         image: [],
       );
       status = '<screenshot>';
