@@ -10,13 +10,15 @@ class GoldenTestImages extends JsonClass {
     @required this.suiteName,
     @required this.testName,
     @required this.testVersion,
-  });
+    DateTime timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
 
   final TestDeviceInfo deviceInfo;
   final Map<String, String> goldenHashes;
   final String suiteName;
   final String testName;
   final int testVersion;
+  final DateTime timestamp;
 
   static GoldenTestImages fromDynamic(dynamic map) {
     GoldenTestImages result;
@@ -30,6 +32,7 @@ class GoldenTestImages extends JsonClass {
         suiteName: map['suiteName'],
         testName: map['testName'],
         testVersion: JsonClass.parseInt(map['testVersion']),
+        timestamp: JsonClass.parseUtcMillis(map['timestamp']),
       );
     }
 
@@ -51,6 +54,7 @@ class GoldenTestImages extends JsonClass {
       suiteName: report.suiteName,
       testName: report.name,
       testVersion: report.version,
+      timestamp: DateTime.now(),
     );
   }
 
@@ -61,5 +65,6 @@ class GoldenTestImages extends JsonClass {
         'suiteName': suiteName,
         'testName': testName,
         'testVersion': testVersion,
+        'timestamp': timestamp?.millisecondsSinceEpoch,
       };
 }

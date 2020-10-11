@@ -1,3 +1,8 @@
+## [1.2.14+3] - October 11th, 2020
+
+* Added `timestamp` to `GoldenTestImages`.
+
+
 ## [1.2.14+2] - October 10th, 2020
 
 * Fixed a bug with the `TestSuiteReport` and `TestReport` when plugins are using the substep feature.
