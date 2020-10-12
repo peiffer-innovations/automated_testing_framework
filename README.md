@@ -270,10 +270,11 @@ Reserved variables are begin with an underscore (`_`) and should be reserved for
 
 The following table defines the reserved variables provided by the framework that can be used in any test:
 
-Name       | Type       | Example | Description
------------|------------|---------|-------------
-`_now`     | `DateTime` | n/a     | Returns `DateTime.now().toUtc()`.
-`_passing` | `boolean`  | `true`  | Describes whether the test is currently passing or not.  This will be `true` up until the first failed step at which it will remain `false` for the remainder of the test.
+Name        | Type       | Example   | Description
+------------|------------|-----------|-------------
+`_now`      | `DateTime` | n/a       | Returns `DateTime.now().toUtc()`.
+`_passing`  | `boolean`  | `true`    | Describes whether the test is currently passing or not.  This will be `true` up until the first failed step at which it will remain `false` for the remainder of the test.
+`_platform` | `String`   | `android` | The current platform running the test.  Will be one of: `android`, `fuchsia`, `ios`, `linux`, `macos`, `windows`, `web`, `unknown`.
 
 
 ---

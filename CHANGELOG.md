@@ -1,3 +1,9 @@
+## [1.2.15+2] - October 12th, 2020
+
+* Added `_platform` reserved variable.
+* Added `driverName` to `DrivableDevice`.
+
+
 ## [1.2.15+1] - October 11th, 2020
 
 * Added the build number to the test suite report page.

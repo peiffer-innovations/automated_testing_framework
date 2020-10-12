@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
+import 'package:websafe_platform/websafe_platform.dart';
 
 /// Controller that allows for the creation, loading, saving, and running of
 /// automated tests.
@@ -540,10 +541,30 @@ class TestController {
   /// variable is not currently set on the controller.
   dynamic getVariable(String variableName) {
     dynamic result;
-    if ('_now' == variableName) {
-      result = DateTime.now().toUtc();
-    } else {
-      result = _variables[variableName];
+
+    switch (variableName) {
+      case '_now':
+        result = DateTime.now().toUtc();
+        break;
+      case '_platform':
+        if (WebsafePlatform().isAndroid()) {
+          result = 'android';
+        } else if (WebsafePlatform().isFuchsia()) {
+          result = 'fuchsia';
+        } else if (WebsafePlatform().isIOS()) {
+          result = 'ios';
+        } else if (WebsafePlatform().isMacOS()) {
+          result = 'macos';
+        } else if (WebsafePlatform().isWeb()) {
+          result = 'web';
+        } else if (WebsafePlatform().isWindows()) {
+          result = 'windows';
+        } else {
+          result = 'unknown';
+        }
+        break;
+      default:
+        result = _variables[variableName];
     }
 
     return result;

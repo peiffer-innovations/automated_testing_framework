@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 class DrivableDevice extends JsonClass {
   factory DrivableDevice({
     @required String driverId,
+    @required String driverName,
     @required String id,
     @required String secret,
     @required String status,
@@ -15,10 +16,12 @@ class DrivableDevice extends JsonClass {
     var pingTime = DateTime.now();
     return DrivableDevice._internal(
       driverId: driverId,
+      driverName: driverName,
       id: id,
       pingTime: pingTime,
       signature: _createSignature(
         driverId: driverId,
+        driverName: driverName,
         id: id,
         pingTime: pingTime,
         secret: secret,
@@ -31,6 +34,7 @@ class DrivableDevice extends JsonClass {
 
   DrivableDevice._internal({
     @required this.driverId,
+    @required this.driverName,
     String id,
     @required this.pingTime,
     @required this.signature,
@@ -42,6 +46,7 @@ class DrivableDevice extends JsonClass {
         assert(testDeviceInfo != null);
 
   final String driverId;
+  final String driverName;
   final String id;
   final DateTime pingTime;
   final String signature;
@@ -54,6 +59,7 @@ class DrivableDevice extends JsonClass {
     if (map != null) {
       result = DrivableDevice._internal(
         driverId: map['driverId'],
+        driverName: map['driverName'],
         id: map['id'],
         pingTime: JsonClass.parseUtcMillis(map['pingTime']),
         signature: map['signature'],
@@ -67,6 +73,7 @@ class DrivableDevice extends JsonClass {
 
   static String _createSignature({
     @required String driverId,
+    @required String driverName,
     @required String id,
     @required DateTime pingTime,
     @required String secret,
@@ -84,6 +91,7 @@ class DrivableDevice extends JsonClass {
 
   String createSignature(String secret) => _createSignature(
         driverId: driverId,
+        driverName: driverName,
         id: id,
         pingTime: pingTime,
         secret: secret,
@@ -99,6 +107,7 @@ class DrivableDevice extends JsonClass {
   @override
   Map<String, dynamic> toJson() => {
         'driverId': driverId,
+        'driverName': driverName,
         'id': id,
         'pingTime': pingTime.millisecondsSinceEpoch,
         'signature': signature,
