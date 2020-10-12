@@ -1,4 +1,4 @@
-## [1.2.15+2] - October 12th, 2020
+## [1.2.16] - October 12th, 2020
 
 * Added `_platform` reserved variable.
 * Added `driverName` to `DrivableDevice`.
