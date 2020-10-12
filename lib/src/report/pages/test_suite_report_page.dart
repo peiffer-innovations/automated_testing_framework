@@ -20,7 +20,7 @@ class TestSuiteReportPage extends StatelessWidget {
       child: Builder(
         builder: (BuildContext context) => Scaffold(
           appBar: AppBar(
-            title: Text(title),
+            title: Text('$title (${report.deviceInfo?.buildNumber})'),
           ),
           body: SafeArea(
             child: ListView.builder(

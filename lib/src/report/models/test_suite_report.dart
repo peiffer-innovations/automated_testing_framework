@@ -19,6 +19,16 @@ class TestSuiteReport {
     return passed;
   }
 
+  /// Returns the test device info from the test suite.  This assumes that the
+  /// device hasn't changed during the entire run so it will return the first
+  /// non-null instance from any of the results.
+  TestDeviceInfo get deviceInfo {
+    var infos = _results.where((result) => result.deviceInfo != null);
+    var info = infos?.isNotEmpty == true ? infos.first.deviceInfo : null;
+
+    return info;
+  }
+
   /// Returns [true] if, and only if, all tests passed.
   bool get success => numTestsPassed == _results.length;
 

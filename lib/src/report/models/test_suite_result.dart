@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 /// test suite.
 class TestSuiteResult {
   TestSuiteResult({
+    @required this.deviceInfo,
     @required this.name,
     @required this.numStepsPassed,
     @required this.numStepsTotal,
@@ -16,6 +17,9 @@ class TestSuiteResult {
         assert(numStepsPassed != null),
         assert(numStepsTotal != null),
         assert(numStepsTotal >= numStepsPassed);
+
+  /// The test device info from the report
+  final TestDeviceInfo deviceInfo;
 
   /// The name of the test
   final String name;
@@ -41,6 +45,7 @@ class TestSuiteResult {
   /// Creates the summarized [TestSuiteResult] from a larger / more detailed
   /// [TestReport].
   static TestSuiteResult fromTestReport(TestReport report) => TestSuiteResult(
+        deviceInfo: report.deviceInfo,
         name: report.name ?? '<unknown>',
         numStepsPassed: report.passedSteps,
         numStepsTotal: report.steps.length,
