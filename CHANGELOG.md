@@ -1,3 +1,8 @@
+## [1.2.16+2] - October 15th, 2020
+
+* Added equals, hash, and id property to `GoldenTestImages`.
+
+
 ## [1.2.16+1] - October 15th, 2020
 
 * Added equals and hash code to `DrivableDevice` and `ExternalTestDriver`.

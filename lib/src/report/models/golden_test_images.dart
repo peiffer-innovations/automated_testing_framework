@@ -7,14 +7,22 @@ class GoldenTestImages extends JsonClass {
   GoldenTestImages({
     @required this.deviceInfo,
     @required this.goldenHashes,
+    String id,
     @required this.suiteName,
     @required this.testName,
     @required this.testVersion,
     DateTime timestamp,
-  }) : timestamp = timestamp ?? DateTime.now();
+  })  : id = id ??
+            createId(
+              deviceInfo: deviceInfo,
+              suiteName: suiteName,
+              testName: testName,
+            ),
+        timestamp = timestamp ?? DateTime.now();
 
   final TestDeviceInfo deviceInfo;
   final Map<String, String> goldenHashes;
+  final String id;
   final String suiteName;
   final String testName;
   final int testVersion;
@@ -50,6 +58,7 @@ class GoldenTestImages extends JsonClass {
         goldenHashes: map['goldenHashes'] == null
             ? null
             : Map<String, String>.from(map['goldenHashes']),
+        id: map['id'],
         suiteName: map['suiteName'],
         testName: map['testName'],
         testVersion: JsonClass.parseInt(map['testVersion']),
@@ -80,9 +89,17 @@ class GoldenTestImages extends JsonClass {
   }
 
   @override
+  bool operator ==(dynamic other) =>
+      other is GoldenTestImages && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
   Map<String, dynamic> toJson() => {
         'deviceInfo': deviceInfo.toJson(),
         'goldenHashes': goldenHashes,
+        'id': id,
         'suiteName': suiteName,
         'testName': testName,
         'testVersion': testVersion,
