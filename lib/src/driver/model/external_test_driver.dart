@@ -2,6 +2,7 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:json_class/json_class.dart';
 import 'package:meta/meta.dart';
 
+@immutable
 class ExternalTestDriver extends JsonClass {
   factory ExternalTestDriver({
     @required String id,
@@ -67,6 +68,12 @@ class ExternalTestDriver extends JsonClass {
           pingTime.millisecondsSinceEpoch.toString(),
         ],
       );
+
+  @override
+  bool operator ==(dynamic other) => other is DrivableDevice && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
 
   String createSignature(String secret) => _createSignature(
         id: id,

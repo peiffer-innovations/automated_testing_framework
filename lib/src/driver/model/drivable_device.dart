@@ -21,7 +21,6 @@ class DrivableDevice extends JsonClass {
       pingTime: pingTime,
       signature: _createSignature(
         driverId: driverId,
-        driverName: driverName,
         id: id,
         pingTime: pingTime,
         secret: secret,
@@ -73,7 +72,6 @@ class DrivableDevice extends JsonClass {
 
   static String _createSignature({
     @required String driverId,
-    @required String driverName,
     @required String id,
     @required DateTime pingTime,
     @required String secret,
@@ -89,9 +87,14 @@ class DrivableDevice extends JsonClass {
         ],
       );
 
+  @override
+  bool operator ==(dynamic other) => other is DrivableDevice && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
+
   String createSignature(String secret) => _createSignature(
         driverId: driverId,
-        driverName: driverName,
         id: id,
         pingTime: pingTime,
         secret: secret,

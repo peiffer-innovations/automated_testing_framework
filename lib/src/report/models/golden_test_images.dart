@@ -20,6 +20,27 @@ class GoldenTestImages extends JsonClass {
   final int testVersion;
   final DateTime timestamp;
 
+  static String createId({
+    @required TestDeviceInfo deviceInfo,
+    @required String suiteName,
+    @required String testName,
+  }) {
+    var suitePrefix = suiteName?.isNotEmpty == true ? '${suiteName}_' : '';
+    return '${suitePrefix}${testName}_${deviceInfo.os}_${deviceInfo.systemVersion}_${deviceInfo.model}_${deviceInfo.device}_${deviceInfo.orientation}_${deviceInfo.pixels?.height}_${deviceInfo.pixels?.width}';
+  }
+
+  static String createIdFromReport(TestReport report) {
+    var suiteName = report.suiteName;
+    var testName = report.name;
+    var deviceInfo = report.deviceInfo;
+
+    return createId(
+      deviceInfo: deviceInfo,
+      suiteName: suiteName,
+      testName: testName,
+    );
+  }
+
   static GoldenTestImages fromDynamic(dynamic map) {
     GoldenTestImages result;
 

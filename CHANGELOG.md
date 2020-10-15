@@ -1,3 +1,9 @@
+## [1.2.16+1] - October 15th, 2020
+
+* Added equals and hash code to `DrivableDevice` and `ExternalTestDriver`.
+* Added id generator util functions to `GoldenTestImages`.
+
+
 ## [1.2.16] - October 12th, 2020
 
 * Added `_platform` reserved variable.
