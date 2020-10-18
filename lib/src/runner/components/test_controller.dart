@@ -154,6 +154,7 @@ class TestController {
 
   Test _currentTest = Test();
 
+  bool _runningSuite = false;
   bool _runningTest = false;
 
   /// Returns the current from the controller.  This will never be [null].
@@ -167,7 +168,7 @@ class TestController {
 
   /// Returns whether or not the controller is actively running a test now or
   /// not.
-  bool get runningTest => _runningTest;
+  bool get runningTest => _runningTest == true || _runningSuite == true;
 
   /// Returns the stream that will fire screep capture requests on.
   Stream<CaptureContext> get screencapStream => _screencapController.stream;
@@ -660,12 +661,57 @@ class TestController {
   /// it will only load the tests as needed.
   ///
   Future<void> runPendingTests(List<PendingTest> tests) async {
-    if (tests != null) {
-      var testSuiteReport = TestSuiteReport();
-      for (var pendingTest in tests) {
-        if (pendingTest.active == true) {
+    _runningSuite = true;
+    try {
+      if (tests != null) {
+        var testSuiteReport = TestSuiteReport();
+        for (var pendingTest in tests) {
+          if (pendingTest.active == true) {
+            try {
+              var test = await pendingTest.loader.load(ignoreImages: true);
+              await reset();
+
+              await execute(
+                name: test.name,
+                reset: false,
+                steps: test.steps,
+                submitReport: true,
+                suiteName: test.suiteName,
+                testSuiteReport: testSuiteReport,
+                version: test.version,
+              );
+            } catch (e, stack) {
+              _logger.severe(e, stack);
+            }
+          }
+        }
+
+        await _navigatorKey.currentState.push(
+          MaterialPageRoute(
+            builder: _testSuiteReportBuilder ??
+                (BuildContext context) => TestSuiteReportPage(),
+            settings: RouteSettings(
+              arguments: testSuiteReport,
+            ),
+          ),
+        );
+      }
+    } finally {
+      _runningSuite = false;
+    }
+  }
+
+  /// Runs a series of [tests].  This is useful for smaller numbers of in-memory
+  /// tests but the [runPendingTests] should be prefered for full application
+  /// runs or for CI/CD pipelines as that only loads the bare minimum data up
+  /// front and then loads the full test data on an as needed basis.
+  Future<void> runTests(List<Test> tests) async {
+    _runningSuite = true;
+    try {
+      if (tests != null) {
+        var testSuiteReport = TestSuiteReport();
+        for (var test in tests) {
           try {
-            var test = await pendingTest.loader.load(ignoreImages: true);
             await reset();
 
             await execute(
@@ -681,54 +727,19 @@ class TestController {
             _logger.severe(e, stack);
           }
         }
-      }
 
-      await _navigatorKey.currentState.push(
-        MaterialPageRoute(
-          builder: _testSuiteReportBuilder ??
-              (BuildContext context) => TestSuiteReportPage(),
-          settings: RouteSettings(
-            arguments: testSuiteReport,
+        await _navigatorKey.currentState.push(
+          MaterialPageRoute(
+            builder: _testSuiteReportBuilder ??
+                (BuildContext context) => TestSuiteReportPage(),
+            settings: RouteSettings(
+              arguments: testSuiteReport,
+            ),
           ),
-        ),
-      );
-    }
-  }
-
-  /// Runs a series of [tests].  This is useful for smaller numbers of in-memory
-  /// tests but the [runPendingTests] should be prefered for full application
-  /// runs or for CI/CD pipelines as that only loads the bare minimum data up
-  /// front and then loads the full test data on an as needed basis.
-  Future<void> runTests(List<Test> tests) async {
-    if (tests != null) {
-      var testSuiteReport = TestSuiteReport();
-      for (var test in tests) {
-        try {
-          await reset();
-
-          await execute(
-            name: test.name,
-            reset: false,
-            steps: test.steps,
-            submitReport: true,
-            suiteName: test.suiteName,
-            testSuiteReport: testSuiteReport,
-            version: test.version,
-          );
-        } catch (e, stack) {
-          _logger.severe(e, stack);
-        }
+        );
       }
-
-      await _navigatorKey.currentState.push(
-        MaterialPageRoute(
-          builder: _testSuiteReportBuilder ??
-              (BuildContext context) => TestSuiteReportPage(),
-          settings: RouteSettings(
-            arguments: testSuiteReport,
-          ),
-        ),
-      );
+    } finally {
+      _runningSuite = false;
     }
   }
 

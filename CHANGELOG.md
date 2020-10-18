@@ -1,3 +1,8 @@
+## [1.2.17] - October 18th, 2020
+
+* Added flag so the `TestController.runningTest` will return true when either a single or multiple tests are running.
+
+
 ## [1.2.16+2] - October 15th, 2020
 
 * Added equals, hash, and id property to `GoldenTestImages`.
