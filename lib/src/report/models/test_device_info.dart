@@ -22,10 +22,10 @@ class TestDeviceInfo extends JsonClass {
     this.model,
     this.os,
     this.orientation,
-    this.physicalDevice = true,
+    bool physicalDevice = true,
     this.pixels,
     this.systemVersion,
-  }) : assert(physicalDevice != null);
+  }) : physicalDevice = physicalDevice ?? true;
 
   static Completer<TestDeviceInfo> _completer;
   static TestDeviceInfo _instance;

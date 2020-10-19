@@ -1,3 +1,9 @@
+## [1.2.17+1] - October 19th, 2020
+
+* Minor fix for `TestDeviceInfo` to work with Windows builds.
+* Added Windows example.
+
+
 ## [1.2.17] - October 18th, 2020
 
 * Added flag so the `TestController.runningTest` will return true when either a single or multiple tests are running.
