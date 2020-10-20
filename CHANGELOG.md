@@ -1,3 +1,8 @@
+## [1.2.17+2] - October 20th, 2020
+
+* Minor fix for `Test.copyWith` when passing in a timestamp.
+
+
 ## [1.2.17+1] - October 19th, 2020
 
 * Minor fix for `TestDeviceInfo` to work with Windows builds.

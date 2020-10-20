@@ -101,7 +101,7 @@ class Test extends JsonClass {
       Test(
         active: active ?? this.active,
         name: name ?? this.name,
-        timestamp: timestamp?.millisecondsSinceEpoch ?? this.timestamp,
+        timestamp: timestamp ?? this.timestamp,
         steps: steps ?? this.steps,
         suiteName: suiteName ?? this.suiteName,
         version: version ?? this.version,
