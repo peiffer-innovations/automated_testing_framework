@@ -8,13 +8,17 @@ import 'package:flutter/material.dart';
 /// * [DropdownButtonFormField]
 class TestableDropdownButtonFormField<T> extends StatefulWidget {
   TestableDropdownButtonFormField({
+    this.autofocus = false,
     // ignore: deprecated_member_use_from_same_package
     @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
     this.autovalidateMode,
     this.decoration = const InputDecoration(),
     this.disabledHint,
+    this.dropdownColor,
     this.elevation = 8,
     this.enabled = true,
+    this.focusColor,
+    this.focusNode,
     this.hint,
     this.icon,
     this.iconSize = 24.0,
@@ -35,12 +39,16 @@ class TestableDropdownButtonFormField<T> extends StatefulWidget {
     this.value,
   });
 
+  final bool autofocus;
   final bool autovalidate;
   final AutovalidateMode autovalidateMode;
   final dynamic decoration;
   final Widget disabledHint;
+  final Color dropdownColor;
   final int elevation;
   final bool enabled;
+  final Color focusColor;
+  final FocusNode focusNode;
   final Widget hint;
   final Widget icon;
   final String id;
@@ -79,6 +87,7 @@ class _TestableDropdownButtonFormFieldState<T>
           widget.onChanged == null ? null : (value) => widget.onChanged(value),
       scrollableId: widget.scrollableId,
       child: DropdownButtonFormField<T>(
+        autofocus: widget.autofocus,
         autovalidateMode: widget.autovalidate == null
             ? widget.autovalidateMode
             : widget.autovalidate == true
@@ -86,7 +95,10 @@ class _TestableDropdownButtonFormFieldState<T>
                 : AutovalidateMode.disabled,
         decoration: widget.decoration,
         disabledHint: widget.disabledHint,
+        dropdownColor: widget.dropdownColor,
         elevation: widget.elevation,
+        focusColor: widget.focusColor,
+        focusNode: widget.focusNode,
         hint: widget.hint,
         icon: widget.icon,
         items: widget.items,

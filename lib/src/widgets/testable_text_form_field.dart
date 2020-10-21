@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 class TestableTextFormField extends StatefulWidget {
   TestableTextFormField({
     this.autocorrect = true,
+    this.autofillHints,
     this.autofocus = false,
     // ignore: deprecated_member_use_from_same_package
     @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
@@ -17,6 +18,7 @@ class TestableTextFormField extends StatefulWidget {
     this.buildCounter,
     this.controller,
     this.cursorColor,
+    this.cursorHeight,
     this.cursorRadius,
     this.cursorWidth = 2.0,
     this.decoration = const InputDecoration(),
@@ -35,6 +37,7 @@ class TestableTextFormField extends StatefulWidget {
     this.maxLines,
     this.minLines,
     this.obscureText = false,
+    this.obscuringCharacter,
     this.onChanged,
     this.onEditingComplete,
     this.onFieldSubmitted,
@@ -59,12 +62,14 @@ class TestableTextFormField extends StatefulWidget {
   });
 
   final bool autocorrect;
+  final Iterable<String> autofillHints;
   final bool autofocus;
   final bool autovalidate;
   final AutovalidateMode autovalidateMode;
   final InputCounterWidgetBuilder buildCounter;
   final TextEditingController controller;
   final Color cursorColor;
+  final double cursorHeight;
   final Radius cursorRadius;
   final double cursorWidth;
   final dynamic decoration;
@@ -83,6 +88,7 @@ class TestableTextFormField extends StatefulWidget {
   final int maxLines;
   final int minLines;
   final bool obscureText;
+  final String obscuringCharacter;
   final ValueChanged<String> onChanged;
   final VoidCallback onEditingComplete;
   final ValueChanged<String> onFieldSubmitted;
@@ -143,6 +149,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
             : null,
         child: TextFormField(
           autocorrect: widget.autocorrect,
+          autofillHints: widget.autofillHints,
           autofocus: widget.autofocus,
           autovalidateMode: widget.autovalidate == null
               ? widget.autovalidateMode
@@ -152,6 +159,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           buildCounter: widget.buildCounter,
           controller: _controller,
           cursorColor: widget.cursorColor,
+          cursorHeight: widget.cursorHeight,
           cursorRadius: widget.cursorRadius,
           cursorWidth: widget.cursorWidth,
           decoration: widget.decoration,
@@ -160,6 +168,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           enabled: widget.enabled,
           expands: widget.expands,
           focusNode: widget.focusNode,
+          initialValue: widget.initialValue,
           inputFormatters: widget.inputFormatters,
           keyboardAppearance: widget.keyboardAppearance,
           keyboardType: widget.keyboardType,
@@ -168,6 +177,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           maxLines: widget.maxLines,
           minLines: widget.minLines,
           obscureText: widget.obscureText,
+          obscuringCharacter: widget.obscuringCharacter,
           onChanged: widget.onChanged,
           onEditingComplete: widget.onEditingComplete,
           onFieldSubmitted: widget.onFieldSubmitted,
