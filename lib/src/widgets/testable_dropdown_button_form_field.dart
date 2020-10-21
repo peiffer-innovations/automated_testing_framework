@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 /// * [DropdownButtonFormField]
 class TestableDropdownButtonFormField<T> extends StatefulWidget {
   TestableDropdownButtonFormField({
-    this.autovalidate = false,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
+    this.autovalidateMode,
     this.decoration = const InputDecoration(),
     this.disabledHint,
     this.elevation = 8,
@@ -34,6 +36,7 @@ class TestableDropdownButtonFormField<T> extends StatefulWidget {
   });
 
   final bool autovalidate;
+  final AutovalidateMode autovalidateMode;
   final dynamic decoration;
   final Widget disabledHint;
   final int elevation;
@@ -76,9 +79,11 @@ class _TestableDropdownButtonFormFieldState<T>
           widget.onChanged == null ? null : (value) => widget.onChanged(value),
       scrollableId: widget.scrollableId,
       child: DropdownButtonFormField<T>(
-        autovalidateMode: widget.autovalidate == true
-            ? AutovalidateMode.always
-            : AutovalidateMode.disabled,
+        autovalidateMode: widget.autovalidate == null
+            ? widget.autovalidateMode
+            : widget.autovalidate == true
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
         decoration: widget.decoration,
         disabledHint: widget.disabledHint,
         elevation: widget.elevation,

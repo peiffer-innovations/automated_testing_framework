@@ -1,3 +1,8 @@
+## [1.2.17+4] - October 21th, 2020
+
+* Switch from `autovalidate` to `autovalidateMode` to match the direction Flutter is headed.
+
+
 ## [1.2.17+3] - October 20th, 2020
 
 * Fix for test controller stating it is running until the `TestSuiteReportPage` is dismissed

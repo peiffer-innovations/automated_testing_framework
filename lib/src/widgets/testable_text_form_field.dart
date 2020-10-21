@@ -11,7 +11,9 @@ class TestableTextFormField extends StatefulWidget {
   TestableTextFormField({
     this.autocorrect = true,
     this.autofocus = false,
-    this.autovalidate = false,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
+    this.autovalidateMode,
     this.buildCounter,
     this.controller,
     this.cursorColor,
@@ -59,6 +61,7 @@ class TestableTextFormField extends StatefulWidget {
   final bool autocorrect;
   final bool autofocus;
   final bool autovalidate;
+  final AutovalidateMode autovalidateMode;
   final InputCounterWidgetBuilder buildCounter;
   final TextEditingController controller;
   final Color cursorColor;
@@ -141,9 +144,11 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
         child: TextFormField(
           autocorrect: widget.autocorrect,
           autofocus: widget.autofocus,
-          autovalidateMode: widget.autovalidate == true
-              ? AutovalidateMode.always
-              : AutovalidateMode.disabled,
+          autovalidateMode: widget.autovalidate == null
+              ? widget.autovalidateMode
+              : widget.autovalidate == true
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
           buildCounter: widget.buildCounter,
           controller: _controller,
           cursorColor: widget.cursorColor,

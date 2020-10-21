@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 /// * [FormField]
 class TestableFormField<T> extends StatelessWidget {
   TestableFormField({
-    this.autovalidate = false,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
+    this.autovalidateMode,
     @required this.builder,
     this.enabled = true,
     @required this.id,
@@ -18,6 +20,7 @@ class TestableFormField<T> extends StatelessWidget {
   }) : assert(id?.isNotEmpty == true);
 
   final bool autovalidate;
+  final AutovalidateMode autovalidateMode;
   final FormFieldBuilder<T> builder;
   final bool enabled;
   final String id;
@@ -28,7 +31,11 @@ class TestableFormField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FormField(
-        autovalidate: autovalidate,
+        autovalidateMode: autovalidate == null
+            ? autovalidateMode
+            : autovalidate == true
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
         builder: (FormFieldState<T> state) => Testable(
           id: id,
           onRequestValue: () => state.value,
