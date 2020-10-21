@@ -662,9 +662,9 @@ class TestController {
   ///
   Future<void> runPendingTests(List<PendingTest> tests) async {
     _runningSuite = true;
-    try {
-      if (tests != null) {
-        var testSuiteReport = TestSuiteReport();
+    if (tests != null) {
+      var testSuiteReport = TestSuiteReport();
+      try {
         for (var pendingTest in tests) {
           if (pendingTest.active == true) {
             try {
@@ -685,19 +685,18 @@ class TestController {
             }
           }
         }
-
-        await _navigatorKey.currentState.push(
-          MaterialPageRoute(
-            builder: _testSuiteReportBuilder ??
-                (BuildContext context) => TestSuiteReportPage(),
-            settings: RouteSettings(
-              arguments: testSuiteReport,
-            ),
-          ),
-        );
+      } finally {
+        _runningSuite = false;
       }
-    } finally {
-      _runningSuite = false;
+      await _navigatorKey.currentState.push(
+        MaterialPageRoute(
+          builder: _testSuiteReportBuilder ??
+              (BuildContext context) => TestSuiteReportPage(),
+          settings: RouteSettings(
+            arguments: testSuiteReport,
+          ),
+        ),
+      );
     }
   }
 
@@ -707,9 +706,9 @@ class TestController {
   /// front and then loads the full test data on an as needed basis.
   Future<void> runTests(List<Test> tests) async {
     _runningSuite = true;
-    try {
-      if (tests != null) {
-        var testSuiteReport = TestSuiteReport();
+    if (tests != null) {
+      var testSuiteReport = TestSuiteReport();
+      try {
         for (var test in tests) {
           try {
             await reset();
@@ -727,19 +726,18 @@ class TestController {
             _logger.severe(e, stack);
           }
         }
-
-        await _navigatorKey.currentState.push(
-          MaterialPageRoute(
-            builder: _testSuiteReportBuilder ??
-                (BuildContext context) => TestSuiteReportPage(),
-            settings: RouteSettings(
-              arguments: testSuiteReport,
-            ),
-          ),
-        );
+      } finally {
+        _runningSuite = false;
       }
-    } finally {
-      _runningSuite = false;
+      await _navigatorKey.currentState.push(
+        MaterialPageRoute(
+          builder: _testSuiteReportBuilder ??
+              (BuildContext context) => TestSuiteReportPage(),
+          settings: RouteSettings(
+            arguments: testSuiteReport,
+          ),
+        ),
+      );
     }
   }
 

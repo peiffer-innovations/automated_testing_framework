@@ -1,3 +1,8 @@
+## [1.2.17+3] - October 20th, 2020
+
+* Fix for test controller stating it is running until the `TestSuiteReportPage` is dismissed
+
+
 ## [1.2.17+2] - October 20th, 2020
 
 * Minor fix for `Test.copyWith` when passing in a timestamp.
