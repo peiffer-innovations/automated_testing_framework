@@ -1,3 +1,8 @@
+## [1.2.17+5] - October 21th, 2020
+
+* Update to return the `TestSuiteReport` from `runTests` and `runPendingTests`.
+
+
 ## [1.2.17+4] - October 21th, 2020
 
 * Switch from `autovalidate` to `autovalidateMode` to match the direction Flutter is headed.

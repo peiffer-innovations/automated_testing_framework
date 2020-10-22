@@ -660,10 +660,10 @@ class TestController {
   /// Runs a series of [tests].  For full runs, this is more memory efficient as
   /// it will only load the tests as needed.
   ///
-  Future<void> runPendingTests(List<PendingTest> tests) async {
+  Future<TestSuiteReport> runPendingTests(List<PendingTest> tests) async {
+    var testSuiteReport = TestSuiteReport();
     _runningSuite = true;
     if (tests != null) {
-      var testSuiteReport = TestSuiteReport();
       try {
         for (var pendingTest in tests) {
           if (pendingTest.active == true) {
@@ -698,16 +698,17 @@ class TestController {
         ),
       );
     }
+    return testSuiteReport;
   }
 
   /// Runs a series of [tests].  This is useful for smaller numbers of in-memory
   /// tests but the [runPendingTests] should be prefered for full application
   /// runs or for CI/CD pipelines as that only loads the bare minimum data up
   /// front and then loads the full test data on an as needed basis.
-  Future<void> runTests(List<Test> tests) async {
+  Future<TestSuiteReport> runTests(List<Test> tests) async {
+    var testSuiteReport = TestSuiteReport();
     _runningSuite = true;
     if (tests != null) {
-      var testSuiteReport = TestSuiteReport();
       try {
         for (var test in tests) {
           try {
@@ -739,6 +740,8 @@ class TestController {
         ),
       );
     }
+
+    return testSuiteReport;
   }
 
   /// Executes a screen capture for the application.  As a note, depending on
