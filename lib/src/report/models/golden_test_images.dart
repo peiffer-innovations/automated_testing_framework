@@ -34,7 +34,7 @@ class GoldenTestImages extends JsonClass {
     @required String testName,
   }) {
     var suitePrefix = suiteName?.isNotEmpty == true ? '${suiteName}_' : '';
-    return '${suitePrefix}${testName}_${deviceInfo.os}_${deviceInfo.systemVersion}_${deviceInfo.model}_${deviceInfo.device}_${deviceInfo.orientation}_${deviceInfo.pixels?.height}_${deviceInfo.pixels?.width}';
+    return '${suitePrefix}${testName}_${deviceInfo.appIdentifier}_${deviceInfo.os}_${deviceInfo.systemVersion}_${deviceInfo.model}_${deviceInfo.device}_${deviceInfo.orientation}_${deviceInfo.pixels?.height}_${deviceInfo.pixels?.width}';
   }
 
   static String createIdFromReport(TestReport report) {

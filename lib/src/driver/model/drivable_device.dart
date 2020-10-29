@@ -13,17 +13,18 @@ class DrivableDevice extends JsonClass {
     @required String status,
     @required TestDeviceInfo testDeviceInfo,
   }) {
-    appIdentifier ?? '<unknown>';
+    var appId =
+        TestAppSettings.settings.appIdentifier ?? appIdentifier ?? '<unknown>';
     id ??= testDeviceInfo.id;
     var pingTime = DateTime.now();
     return DrivableDevice._internal(
-      appIdentifier: appIdentifier,
+      appIdentifier: appId,
       driverId: driverId,
       driverName: driverName,
       id: id,
       pingTime: pingTime,
       signature: _createSignature(
-        appIdentifier: appIdentifier,
+        appIdentifier: appId,
         driverId: driverId,
         id: id,
         pingTime: pingTime,
@@ -44,8 +45,10 @@ class DrivableDevice extends JsonClass {
     @required this.signature,
     @required this.status,
     @required this.testDeviceInfo,
-  })  : appIdentifier =
-            appIdentifier ?? testDeviceInfo.appIdentifier ?? '<unknown>',
+  })  : appIdentifier = TestAppSettings.settings.appIdentifier ??
+            appIdentifier ??
+            testDeviceInfo.appIdentifier ??
+            '<unknown>',
         id = id ?? testDeviceInfo.id,
         assert(pingTime != null),
         assert(signature?.isNotEmpty == true),

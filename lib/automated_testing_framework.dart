@@ -28,6 +28,7 @@ export 'src/framework/forms/tap_form.dart';
 export 'src/framework/forms/test_step_form.dart';
 
 export 'src/framework/models/available_test_step.dart';
+export 'src/framework/models/test_app_settings.dart';
 export 'src/framework/models/test_step.dart';
 export 'src/framework/models/testable_gesture_action.dart';
 export 'src/framework/models/testable_gestures.dart';

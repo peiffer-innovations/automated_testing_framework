@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:websafe_platform/websafe_platform.dart';
 
 void main() {
+  TestAppSettings.initialize(appIdentifier: 'ATF Core');
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     // ignore: avoid_print

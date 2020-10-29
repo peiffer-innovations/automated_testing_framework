@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -228,7 +229,7 @@ class TestDeviceInfo extends JsonClass {
         }
       }
       result = TestDeviceInfo.custom(
-        appIdentifier: appIdentifier,
+        appIdentifier: TestAppSettings.settings.appIdentifier ?? appIdentifier,
         brand: brand,
         buildNumber: buildNumber,
         device: device,
@@ -254,6 +255,7 @@ class TestDeviceInfo extends JsonClass {
 
   @override
   Map<String, dynamic> toJson() => {
+        'appIdentifier': appIdentifier,
         'brand': brand,
         'buildNumber': buildNumber,
         'device': device,
