@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 @immutable
 class DrivableDevice extends JsonClass {
   factory DrivableDevice({
+    @required String appIdentifier,
     @required String driverId,
     @required String driverName,
     @required String id,
@@ -15,11 +16,13 @@ class DrivableDevice extends JsonClass {
     id ??= testDeviceInfo.id;
     var pingTime = DateTime.now();
     return DrivableDevice._internal(
+      appIdentifier: appIdentifier,
       driverId: driverId,
       driverName: driverName,
       id: id,
       pingTime: pingTime,
       signature: _createSignature(
+        appIdentifier: appIdentifier,
         driverId: driverId,
         id: id,
         pingTime: pingTime,
@@ -32,6 +35,7 @@ class DrivableDevice extends JsonClass {
   }
 
   DrivableDevice._internal({
+    String appIdentifier,
     @required this.driverId,
     @required this.driverName,
     String id,
@@ -39,11 +43,14 @@ class DrivableDevice extends JsonClass {
     @required this.signature,
     @required this.status,
     @required this.testDeviceInfo,
-  })  : id = id ?? testDeviceInfo.id,
+  })  : appIdentifier =
+            appIdentifier ?? testDeviceInfo.appIdentifier ?? '<unknown>',
+        id = id ?? testDeviceInfo.id,
         assert(pingTime != null),
         assert(signature?.isNotEmpty == true),
         assert(testDeviceInfo != null);
 
+  final String appIdentifier;
   final String driverId;
   final String driverName;
   final String id;
@@ -57,6 +64,7 @@ class DrivableDevice extends JsonClass {
 
     if (map != null) {
       result = DrivableDevice._internal(
+        appIdentifier: map['appIdentifier'],
         driverId: map['driverId'],
         driverName: map['driverName'],
         id: map['id'],
@@ -71,6 +79,7 @@ class DrivableDevice extends JsonClass {
   }
 
   static String _createSignature({
+    @required String appIdentifier,
     @required String driverId,
     @required String id,
     @required DateTime pingTime,
@@ -80,6 +89,7 @@ class DrivableDevice extends JsonClass {
       DriverSignatureHelper().createSignature(
         secret,
         [
+          appIdentifier,
           driverId,
           id,
           pingTime.millisecondsSinceEpoch.toString(),
@@ -94,6 +104,7 @@ class DrivableDevice extends JsonClass {
   int get hashCode => id.hashCode;
 
   String createSignature(String secret) => _createSignature(
+        appIdentifier: appIdentifier,
         driverId: driverId,
         id: id,
         pingTime: pingTime,
@@ -109,6 +120,7 @@ class DrivableDevice extends JsonClass {
 
   @override
   Map<String, dynamic> toJson() => {
+        'appIdentifier': appIdentifier,
         'driverId': driverId,
         'driverName': driverName,
         'id': id,

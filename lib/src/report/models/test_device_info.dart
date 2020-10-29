@@ -12,19 +12,20 @@ import 'package:websafe_platform/websafe_platform.dart';
 @immutable
 class TestDeviceInfo extends JsonClass {
   TestDeviceInfo.custom({
-    this.brand,
-    this.buildNumber,
-    this.device,
-    this.devicePixelRatio,
-    this.dips,
-    this.id,
-    this.manufacturer,
-    this.model,
-    this.os,
-    this.orientation,
+    @required this.appIdentifier,
+    @required this.brand,
+    @required this.buildNumber,
+    @required this.device,
+    @required this.devicePixelRatio,
+    @required this.dips,
+    @required this.id,
+    @required this.manufacturer,
+    @required this.model,
+    @required this.os,
+    @required this.orientation,
     bool physicalDevice = true,
-    this.pixels,
-    this.systemVersion,
+    @required this.pixels,
+    @required this.systemVersion,
   }) : physicalDevice = physicalDevice ?? true;
 
   static Completer<TestDeviceInfo> _completer;
@@ -32,6 +33,7 @@ class TestDeviceInfo extends JsonClass {
 
   static TestDeviceInfo get instance => _instance ?? initialize(null);
 
+  final String appIdentifier;
   final String brand;
   final String buildNumber;
   final String device;
@@ -55,6 +57,7 @@ class TestDeviceInfo extends JsonClass {
       var pixels = screen['pixels'];
 
       result = TestDeviceInfo.custom(
+        appIdentifier: map['appIdentifier'],
         brand: map['brand'],
         buildNumber: map['buildNumber'],
         device: map['device'],
@@ -93,6 +96,7 @@ class TestDeviceInfo extends JsonClass {
   }
 
   String get deviceSignature => [
+        appIdentifier,
         buildNumber,
         os,
         manufacturer,
@@ -112,6 +116,7 @@ class TestDeviceInfo extends JsonClass {
     if (result == null || (context != null && result.dips == null)) {
       _completer = Completer<TestDeviceInfo>();
 
+      var appIdentifier = '<unknown>';
       String brand;
       String buildNumber;
       String device;
@@ -138,6 +143,7 @@ class TestDeviceInfo extends JsonClass {
       } else {
         try {
           var pInfo = await PackageInfo.fromPlatform();
+          appIdentifier = pInfo.appName;
           buildNumber = pInfo.buildNumber;
         } catch (e) {
           // No-op; don't fail because we can't get the build number.
@@ -222,6 +228,7 @@ class TestDeviceInfo extends JsonClass {
         }
       }
       result = TestDeviceInfo.custom(
+        appIdentifier: appIdentifier,
         brand: brand,
         buildNumber: buildNumber,
         device: device,

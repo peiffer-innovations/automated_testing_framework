@@ -1,3 +1,8 @@
+## [1.2.18] - October 28th, 2020
+
+* Added `appIdentifier` to `DrivableDevice` and `TestDeviceInfo`.
+
+
 ## [1.2.17+5] - October 21th, 2020
 
 * Update to return the `TestSuiteReport` from `runTests` and `runPendingTests`.
