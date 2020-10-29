@@ -1,3 +1,8 @@
+## [1.2.18+1] - October 28th, 2020
+
+* Added `appIdentifier` to `ExternalTestDriver`.
+
+
 ## [1.2.18] - October 28th, 2020
 
 * Added `appIdentifier` to `DrivableDevice` and `TestDeviceInfo`.

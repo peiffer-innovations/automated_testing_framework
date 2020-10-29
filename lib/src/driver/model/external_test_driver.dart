@@ -5,17 +5,21 @@ import 'package:meta/meta.dart';
 @immutable
 class ExternalTestDriver extends JsonClass {
   factory ExternalTestDriver({
+    String appIdentifier,
     @required String id,
     @required String name,
     @required String secret,
   }) {
+    appIdentifier = appIdentifier ?? '<unknown>';
     var pingTime = DateTime.now();
 
     return ExternalTestDriver._internal(
+      appIdentifier: appIdentifier,
       id: id,
       name: name,
       pingTime: pingTime,
       signature: _createSignature(
+        appIdentifier: appIdentifier,
         id: id,
         name: name,
         pingTime: pingTime,
@@ -25,15 +29,18 @@ class ExternalTestDriver extends JsonClass {
   }
 
   ExternalTestDriver._internal({
+    String appIdentifier,
     @required this.id,
     @required this.name,
     @required this.pingTime,
     @required this.signature,
-  })  : assert(id?.isNotEmpty == true),
+  })  : appIdentifier = appIdentifier ?? '<unknown>',
+        assert(id?.isNotEmpty == true),
         assert(name?.isNotEmpty == true),
         assert(pingTime != null),
         assert(signature?.isNotEmpty == true);
 
+  final String appIdentifier;
   final String id;
   final String name;
   final DateTime pingTime;
@@ -44,6 +51,7 @@ class ExternalTestDriver extends JsonClass {
 
     if (map != null) {
       result = ExternalTestDriver._internal(
+        appIdentifier: map['appIdentifier'],
         id: map['id'],
         name: map['name'],
         pingTime: JsonClass.parseUtcMillis(map['pingTime']),
@@ -55,6 +63,7 @@ class ExternalTestDriver extends JsonClass {
   }
 
   static String _createSignature({
+    @required String appIdentifier,
     @required String id,
     @required String name,
     @required DateTime pingTime,
@@ -63,6 +72,7 @@ class ExternalTestDriver extends JsonClass {
       DriverSignatureHelper().createSignature(
         secret,
         [
+          appIdentifier,
           id,
           name,
           pingTime.millisecondsSinceEpoch.toString(),
@@ -70,12 +80,16 @@ class ExternalTestDriver extends JsonClass {
       );
 
   @override
-  bool operator ==(dynamic other) => other is DrivableDevice && other.id == id;
+  bool operator ==(dynamic other) =>
+      other is DrivableDevice &&
+      other.appIdentifier == appIdentifier &&
+      other.id == id;
 
   @override
   int get hashCode => id.hashCode;
 
   String createSignature(String secret) => _createSignature(
+        appIdentifier: appIdentifier,
         id: id,
         name: name,
         pingTime: pingTime,
@@ -90,6 +104,7 @@ class ExternalTestDriver extends JsonClass {
 
   @override
   Map<String, dynamic> toJson() => {
+        'appIdentifier': appIdentifier,
         'id': id,
         'name': name,
         'pingTime': pingTime.millisecondsSinceEpoch,

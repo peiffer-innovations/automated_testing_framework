@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 @immutable
 class DrivableDevice extends JsonClass {
   factory DrivableDevice({
-    @required String appIdentifier,
+    String appIdentifier,
     @required String driverId,
     @required String driverName,
     @required String id,
@@ -13,6 +13,7 @@ class DrivableDevice extends JsonClass {
     @required String status,
     @required TestDeviceInfo testDeviceInfo,
   }) {
+    appIdentifier ?? '<unknown>';
     id ??= testDeviceInfo.id;
     var pingTime = DateTime.now();
     return DrivableDevice._internal(
