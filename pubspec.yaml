@@ -1,12 +1,13 @@
 name: automated_testing_framework
 description: A testing framework that allows in app tests to be built and executed in an automated way.
-version: 1.2.18+1
+version: 1.2.18+2
 homepage: https://github.com/peiffer-innovations/automated_testing_framework
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  automated_testing_framework_models: ^1.0.0+1
   child_builder: ^1.0.0+2
   convert: ^2.1.1
   device_info: ">=0.4.2+7 <2.0.0"
@@ -19,7 +20,6 @@ dependencies:
   logging: ^0.11.4
   meta: ^1.1.8
   package_info: ">=0.4.3 <2.0.0"
-  pointycastle: ^2.0.0
   provider: ^4.3.2+2
   static_translations: ^1.0.3
   tinycolor: ^1.0.2

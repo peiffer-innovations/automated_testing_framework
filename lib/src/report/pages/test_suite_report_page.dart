@@ -1,13 +1,17 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:static_translations/static_translations.dart';
 
 /// Page that can display a summarized result from a test suite run.
 class TestSuiteReportPage extends StatelessWidget {
   TestSuiteReportPage({
     Key key,
-  }) : super(key: key);
+  })  : timestamp = DateTime.now(),
+        super(key: key);
+
+  final DateTime timestamp;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +85,17 @@ class TestSuiteReportPage extends StatelessWidget {
                                     ),
                             ),
                           ],
+                        ),
+                        SizedBox(height: 16.0),
+                        Material(
+                          borderRadius: BorderRadius.circular(16.0),
+                          elevation: 2.0,
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              DateFormat("M/d '@' h:mmaa").format(timestamp),
+                            ),
+                          ),
                         ),
                         SizedBox(height: 16.0),
                       ],
