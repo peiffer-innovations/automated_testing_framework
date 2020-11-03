@@ -204,7 +204,7 @@ class TestableState extends State<Testable>
       _testRunner = TestRunner.of(context);
 
       if (_testRunner?.enabled == true) {
-        TestDeviceInfo.initialize(context);
+        TestDeviceInfoHelper.initialize(context);
 
         if (mounted == true) {
           _scrollableId = widget.scrollableId;
@@ -454,6 +454,7 @@ class TestableState extends State<Testable>
                 ),
               ),
             );
+            // ignore: deprecated_member_use
             Scaffold.of(context).showSnackBar(snackBar);
           } catch (e) {
             await showDialog(

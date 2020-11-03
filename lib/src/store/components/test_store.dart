@@ -93,6 +93,7 @@ class TestStore {
         ),
       ),
     );
+    // ignore: deprecated_member_use
     var controller = Scaffold.of(context).showSnackBar(snackBar);
     await controller.closed;
   }

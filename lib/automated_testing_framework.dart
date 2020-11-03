@@ -33,7 +33,7 @@ export 'src/framework/widgets/test_step_picker.dart';
 export 'src/registry/test_step_builder.dart';
 export 'src/registry/test_step_registry.dart';
 
-export 'src/report/models/test_device_info.dart';
+export 'src/report/models/test_device_info_helper.dart';
 
 export 'src/report/pages/test_report_page.dart';
 export 'src/report/pages/test_suite_report_page.dart';

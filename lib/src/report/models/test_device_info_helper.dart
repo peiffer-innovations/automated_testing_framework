@@ -10,39 +10,11 @@ import 'package:websafe_platform/websafe_platform.dart';
 /// Container class for the device information for the device the test is being
 /// executed on.
 @immutable
-class TestDeviceInfo extends BaseTestDeviceInfo {
-  TestDeviceInfo._internal(BaseTestDeviceInfo info)
-      : super.custom(
-          appIdentifier: info.appIdentifier,
-          brand: info.brand,
-          buildNumber: info.buildNumber,
-          device: info.device,
-          devicePixelRatio: info.devicePixelRatio,
-          dips: info.dips,
-          id: info.id,
-          manufacturer: info.manufacturer,
-          model: info.model,
-          orientation: info.orientation,
-          os: info.os,
-          physicalDevice: info.physicalDevice,
-          pixels: info.pixels,
-          systemVersion: info.systemVersion,
-        );
-
+class TestDeviceInfoHelper {
   static Completer<TestDeviceInfo> _completer;
   static TestDeviceInfo _instance;
 
   static TestDeviceInfo get instance => _instance ?? initialize(null);
-
-  static TestDeviceInfo fromDynamic(dynamic map) {
-    TestDeviceInfo result;
-
-    if (map != null) {
-      result = TestDeviceInfo._internal(BaseTestDeviceInfo.fromDynamic(map));
-    }
-
-    return result;
-  }
 
   static Future<TestDeviceInfo> initialize(BuildContext context) async {
     var result = _instance;
@@ -166,24 +138,21 @@ class TestDeviceInfo extends BaseTestDeviceInfo {
           // no-op, we don't know the screen, but let's not make a big fuss.
         }
       }
-      result = TestDeviceInfo._internal(
-        BaseTestDeviceInfo.custom(
-          appIdentifier:
-              TestAppSettings.settings.appIdentifier ?? appIdentifier,
-          brand: brand,
-          buildNumber: buildNumber,
-          device: device,
-          devicePixelRatio: devicePixelRatio,
-          dips: dips,
-          id: id,
-          manufacturer: manufacturer,
-          model: model,
-          orientation: orientation,
-          os: os,
-          physicalDevice: physicalDevice,
-          pixels: pixels,
-          systemVersion: systemVersion,
-        ),
+      result = TestDeviceInfo.custom(
+        appIdentifier: TestAppSettings.settings.appIdentifier ?? appIdentifier,
+        brand: brand,
+        buildNumber: buildNumber,
+        device: device,
+        devicePixelRatio: devicePixelRatio,
+        dips: dips,
+        id: id,
+        manufacturer: manufacturer,
+        model: model,
+        orientation: orientation,
+        os: os,
+        physicalDevice: physicalDevice,
+        pixels: pixels,
+        systemVersion: systemVersion,
       );
 
       _instance = result;

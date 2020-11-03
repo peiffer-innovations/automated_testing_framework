@@ -1,6 +1,12 @@
+## [1.2.18+3] - November 3rd, 2020
+
+* Updated to latest models
+
+
 ## [1.2.18+2] - November 3rd, 2020
 
 * Added timestamp to `TestSuiteReportPage`.
+* Moved common models out to a separate package.
 
 
 ## [1.2.18+1] - October 28th, 2020

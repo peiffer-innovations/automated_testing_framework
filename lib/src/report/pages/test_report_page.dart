@@ -46,6 +46,7 @@ class _TestReportPageState extends State<TestReportPage> {
           translator.translate(TestTranslations.atf_export_successful),
         ),
       );
+      // ignore: deprecated_member_use
       Scaffold.of(context).showSnackBar(snackBar);
     } else {
       var snackBar = SnackBar(
@@ -53,6 +54,7 @@ class _TestReportPageState extends State<TestReportPage> {
           translator.translate(TestTranslations.atf_error_has_occurred),
         ),
       );
+      // ignore: deprecated_member_use
       Scaffold.of(context).showSnackBar(snackBar);
     }
 
