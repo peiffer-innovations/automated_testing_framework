@@ -21,7 +21,7 @@ dependency_overrides:
   #   path: ../../automated_testing_framework_example
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.8.0
+  flutter_launcher_icons: ^0.8.1
   flutter_native_splash: ^0.1.9
   flutter_test:
     sdk: flutter

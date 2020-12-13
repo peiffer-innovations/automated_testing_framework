@@ -1,3 +1,8 @@
+## [1.3.0] - December 13th, 2020
+
+* Updated dependencies
+
+
 ## [1.2.18+3] - November 3rd, 2020
 
 * Updated to latest models
