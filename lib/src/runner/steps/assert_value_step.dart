@@ -7,12 +7,18 @@ import 'package:meta/meta.dart';
 /// value.
 class AssertValueStep extends TestRunnerStep {
   AssertValueStep({
+    @required this.caseSensitive,
     @required this.equals,
     @required this.testableId,
     this.timeout,
     @required this.value,
-  })  : assert(equals != null),
+  })  : assert(caseSensitive != null),
+        assert(equals != null),
         assert(testableId?.isNotEmpty == true);
+
+  /// Set to [true] if the comparison should be case sensitive.  Set to [false]
+  /// to allow the comparison to be case insensitive.
+  final bool caseSensitive;
 
   /// Set to [true] if the value from the [Testable] must equal the set [value].
   /// Set to [false] if the value from the [Testable] must not equal the
@@ -34,6 +40,7 @@ class AssertValueStep extends TestRunnerStep {
   ///
   /// ```json
   /// {
+  ///   "caseSensitive": <bool>,
   ///   "equals": <bool>,
   ///   "testableId": <String>,
   ///   "timeout": <number>,
@@ -49,6 +56,9 @@ class AssertValueStep extends TestRunnerStep {
 
     if (map != null) {
       result = AssertValueStep(
+        caseSensitive: map['caseSensitive'] == null
+            ? true
+            : JsonClass.parseBool(map['caseSensitive']),
         equals:
             map['equals'] == null ? true : JsonClass.parseBool(map['equals']),
         testableId: map['testableId'],
@@ -71,7 +81,8 @@ class AssertValueStep extends TestRunnerStep {
     var value = tester.resolveVariable(this.value)?.toString();
     assert(testableId?.isNotEmpty == true);
 
-    var name = "assert_value('$testableId', '$value', '$equals')";
+    var name =
+        "assert_value('$testableId', '$value', '$equals', '$caseSensitive')";
     log(
       name,
       tester: tester,
@@ -97,7 +108,11 @@ class AssertValueStep extends TestRunnerStep {
       if (state is TestableState) {
         try {
           actual = state.onRequestValue();
-          if (equals == (actual?.toString() == value)) {
+          if (equals ==
+              (caseSensitive == true
+                  ? (actual?.toString() == value)
+                  : (actual?.toString()?.toLowerCase() ==
+                      value?.toString()?.toLowerCase()))) {
             match = true;
           }
         } catch (e) {
@@ -109,7 +124,7 @@ class AssertValueStep extends TestRunnerStep {
     }
     if (match != true) {
       throw Exception(
-        'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$value].',
+        'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$value] (caseSensitive = [$caseSensitive]).',
       );
     }
   }

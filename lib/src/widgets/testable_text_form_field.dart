@@ -37,7 +37,7 @@ class TestableTextFormField extends StatefulWidget {
     this.maxLines,
     this.minLines,
     this.obscureText = false,
-    this.obscuringCharacter,
+    this.obscuringCharacter = '*',
     this.onChanged,
     this.onEditingComplete,
     this.onFieldSubmitted,
@@ -173,6 +173,8 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           keyboardAppearance: widget.keyboardAppearance,
           keyboardType: widget.keyboardType,
           maxLength: widget.maxLength,
+
+          // ignore: deprecated_member_use
           maxLengthEnforced: widget.maxLengthEnforced,
           maxLines: widget.maxLines,
           minLines: widget.minLines,

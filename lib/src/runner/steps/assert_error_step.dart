@@ -7,12 +7,18 @@ import 'package:meta/meta.dart';
 /// specific value.
 class AssertErrorStep extends TestRunnerStep {
   AssertErrorStep({
+    @required this.caseSensitive,
     @required this.equals,
     @required this.error,
     @required this.testableId,
     this.timeout,
-  })  : assert(equals != null),
+  })  : assert(caseSensitive != null),
+        assert(equals != null),
         assert(testableId?.isNotEmpty == true);
+
+  /// Set to [true] if the comparison should be case sensitive.  Set to [false]
+  /// to allow the comparison to be case insensitive.
+  final bool caseSensitive;
 
   /// Set to [true] if the error from the widget must equal the [error] value.
   /// Set to [false] if the error from the widget must not equal the [error]
@@ -34,6 +40,7 @@ class AssertErrorStep extends TestRunnerStep {
   ///
   /// ```json
   /// {
+  ///   "caseSensitive": <bool>,
   ///   "equals": <bool>,
   ///   "error": <String>,
   ///   "testableId": <String>,
@@ -49,6 +56,9 @@ class AssertErrorStep extends TestRunnerStep {
 
     if (map != null) {
       result = AssertErrorStep(
+        caseSensitive: map['caseSensitive'] == null
+            ? true
+            : JsonClass.parseBool(map['caseSensitive']),
         error: map['error'],
         equals:
             map['equals'] == null ? true : JsonClass.parseBool(map['equals']),
@@ -71,7 +81,8 @@ class AssertErrorStep extends TestRunnerStep {
     String testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "assert_error('$testableId', '$error', '$equals')";
+    var name =
+        "assert_error('$testableId', '$error', '$equals', '$caseSensitive')";
     log(
       name,
       tester: tester,
@@ -96,11 +107,16 @@ class AssertErrorStep extends TestRunnerStep {
       if (state is TestableState) {
         try {
           var actual = state.onRequestError();
-          if (equals == (actual?.toString() == error)) {
+
+          if (equals ==
+              (caseSensitive == true
+                  ? (actual?.toString() == error)
+                  : (actual?.toString()?.toLowerCase() ==
+                      error?.toString()?.toLowerCase()))) {
             match = true;
           } else {
             throw Exception(
-              'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$error].',
+              'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$error] (caseSensitive = [$caseSensitive]).',
             );
           }
         } catch (e) {

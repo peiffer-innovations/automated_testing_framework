@@ -90,6 +90,7 @@ Test Step IDs                                 | Description
   "id": "assert_error",
   "image": "<optional_base_64_image>",
   "values": {
+    "caseSensitive": true,
     "equals": true,
     "error": "Value is required",
     "testableId": "my-text-id",
@@ -100,12 +101,13 @@ Test Step IDs                                 | Description
 
 **Values**
 
-Key          | Type    | Required | Supports Variable | Description
--------------|---------|----------|-------------------|-------------
-`equals`     | boolean | No       | No                | Defines whether the `Testable`'s error message must equal the `error` or must not equal the `error`.  Defaults to `true` if not defined.
-`error`      | String  | Yes      | Yes               | The error message evaluate against.
-`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the error message.
-`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+Key             | Type    | Required | Supports Variable | Description
+----------------|---------|----------|-------------------|-------------
+`caseSensitive` | boolean | No       | No                | Defines whether the `equals` comparison requires case to match or will consider two values equal if only the case differs.  Defaults to `true` if not defined.
+`equals`        | boolean | No       | No                | Defines whether the `Testable`'s error message must equal the `error` or must not equal the `error`.  Defaults to `true` if not defined.
+`error`         | String  | Yes      | Yes               | The error message evaluate against.
+`testableId`    | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the error message.
+`timeout`       | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 
 ---
 
@@ -125,6 +127,7 @@ Key          | Type    | Required | Supports Variable | Description
   "id": "assert_value",
   "image": "<optional_base_64_image>",
   "values": {
+    "caseSensitive": true,
     "equals": true,
     "testableId": "my-text-id",
     "timeout": 10,
@@ -135,12 +138,13 @@ Key          | Type    | Required | Supports Variable | Description
 
 **Values**
 
-Key          | Type    | Required | Supports Variable | Description
--------------|---------|----------|-------------------|-------------
-`equals`     | boolean | No       | No                | Defines whether the `Testable`'s value must equal the `value` or must not equal the `value`.  Defaults to `true` if not defined.
-`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
-`timeout`    | integer | No       | Yes               | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
-`value`      | String  | Yes      | No                | The value to evaluate against.
+Key             | Type    | Required | Supports Variable | Description
+----------------|---------|----------|-------------------|-------------
+`caseSensitive` | boolean | No       | No                | Defines whether the `equals` comparison requires case to match or will consider two values equal if only the case differs.  Defaults to `true` if not defined.
+`equals`        | boolean | No       | No                | Defines whether the `Testable`'s value must equal the `value` or must not equal the `value`.  Defaults to `true` if not defined.
+`testableId`    | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`       | integer | No       | Yes               | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+`value`         | String  | Yes      | No                | The value to evaluate against.
 
 
 ---
