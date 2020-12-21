@@ -58,6 +58,18 @@ class AssertValueForm extends TestStepForm {
               label: TestStepTranslations.atf_form_equals,
               values: values,
             ),
+            SizedBox(height: 16.0),
+            buildDropdown(
+              context: context,
+              defaultValue: 'true',
+              id: 'caseSensitive',
+              items: [
+                'true',
+                'false',
+              ],
+              label: TestStepTranslations.atf_form_case_sensitive,
+              values: values,
+            ),
             if (minify != true) ...[
               SizedBox(height: 16.0),
               buildTimeoutSection(

@@ -3,6 +3,11 @@ import 'package:static_translations/static_translations.dart';
 class TestStepTranslations {
   TestStepTranslations._();
 
+  static const atf_form_case_sensitive = TranslationEntry(
+    key: 'atf_form_case_sensitive',
+    value: 'Case Must Match',
+  );
+
   static const atf_form_equals = TranslationEntry(
     key: 'atf_form_equals',
     value: 'Actual Must Equal Expected',
