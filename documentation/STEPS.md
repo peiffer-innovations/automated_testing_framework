@@ -144,7 +144,7 @@ Key             | Type    | Required | Supports Variable | Description
 `equals`        | boolean | No       | No                | Defines whether the `Testable`'s value must equal the `value` or must not equal the `value`.  Defaults to `true` if not defined.
 `testableId`    | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
 `timeout`       | integer | No       | Yes               | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
-`value`         | String  | Yes      | No                | The value to evaluate against.
+`value`         | String  | Yes      | Yes               | The value to evaluate against.
 
 
 ---
