@@ -139,6 +139,7 @@ class AssertErrorStep extends TestRunnerStep {
   /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
+        'caseSensitive': caseSensitive,
         'equals': equals,
         'error': error,
         'testableId': testableId,

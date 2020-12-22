@@ -1,3 +1,8 @@
+## [1.3.1+1] - December 21st, 2020
+
+* Fix to put "caseSensitive" in the toJson on `assert_error_step` and `assert_value_step`.
+
+
 ## [1.3.1] - December 21st, 2020
 
 * Added "caseSensitive" as an option to `assert_error_step` and `assert_value_step`.

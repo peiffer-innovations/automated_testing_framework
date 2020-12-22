@@ -137,6 +137,7 @@ class AssertValueStep extends TestRunnerStep {
   /// see [fromDynamic].
   @override
   Map<String, dynamic> toJson() => {
+        'caseSensitive': caseSensitive,
         'equals': equals,
         'testableId': testableId,
         'timeout': timeout?.inSeconds,
