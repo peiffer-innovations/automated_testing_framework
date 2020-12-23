@@ -1,3 +1,8 @@
+## [1.3.2] - December 22nd, 2020
+
+* Fix for `set_value` to support non-string variables.
+
+
 ## [1.3.1+2] - December 22nd, 2020
 
 * Documentation update only.

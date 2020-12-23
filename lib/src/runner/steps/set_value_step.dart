@@ -73,7 +73,7 @@ class SetValueStep extends TestRunnerStep {
   }) async {
     String testableId = tester.resolveVariable(this.testableId);
     String type = tester.resolveVariable(this.type);
-    String value = tester.resolveVariable(this.value);
+    var value = tester.resolveVariable(this.value)?.toString();
 
     assert(testableId?.isNotEmpty == true);
     assert(type != null);
