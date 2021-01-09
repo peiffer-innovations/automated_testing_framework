@@ -1,3 +1,8 @@
+## [1.3.2+1] - January 9th, 2021
+
+* Dependency updates
+
+
 ## [1.3.2] - December 22nd, 2020
 
 * Fix for `set_value` to support non-string variables.
