@@ -179,7 +179,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                   data: theme,
                   child: AlertDialog(
                     actions: [
-                      FlatButton(
+                      TextButton(
                         onPressed: () => Navigator.of(context).pop(),
                         child: Text(
                           translator
@@ -223,7 +223,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                       data: theme,
                       child: AlertDialog(
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text(
                               translator.translate(
@@ -439,7 +439,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
               alignment:
                   wide == true ? Alignment.centerRight : Alignment.center,
               height: 40.0,
-              child: FlatButton(
+              child: TextButton(
                 onPressed: (testController.currentTest.steps?.length ?? 0) == 0
                     ? null
                     : () async {

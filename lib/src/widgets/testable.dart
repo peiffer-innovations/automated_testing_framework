@@ -461,7 +461,7 @@ class TestableState extends State<Testable>
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 actions: [
-                  FlatButton(
+                  TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
                       translator.translate(TestTranslations.atf_button_ok),

@@ -42,7 +42,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
 
     return AlertDialog(
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(null),
           child: Text(
             translator.translate(
@@ -50,7 +50,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
             ),
           ),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             var valid = _formKey.currentState.validate();
             if (valid == true) {
@@ -62,7 +62,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
                   data: theme,
                   child: AlertDialog(
                     actions: [
-                      FlatButton(
+                      TextButton(
                         onPressed: () => Navigator.of(context).pop(true),
                         child: Text(
                           translator.translate(

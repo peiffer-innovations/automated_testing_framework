@@ -202,13 +202,13 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
 
     return AlertDialog(
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
             translator.translate(TestTranslations.atf_button_close),
           ),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () async {
             await Navigator.of(context).push(
               MaterialPageRoute(

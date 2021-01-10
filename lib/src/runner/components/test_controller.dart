@@ -458,13 +458,13 @@ class TestController {
           data: theme,
           child: AlertDialog(
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(null),
                 child: Text(
                   translator.translate(TestTranslations.atf_button_cancel),
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(name),
                 child: Text(
                   translator.translate(TestTranslations.atf_button_submit),

@@ -90,7 +90,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
           data: theme,
           child: AlertDialog(
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: Text(
                   translator.translate(
@@ -98,9 +98,13 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   ),
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                textColor: theme.errorColor,
+                style: ButtonStyle(
+                  textStyle: MaterialStateProperty.all(
+                    TextStyle(color: theme.errorColor),
+                  ),
+                ),
                 child: Text(
                   translator.translate(
                     TestTranslations.atf_button_clear,
@@ -150,7 +154,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
             data: theme,
             child: AlertDialog(
               actions: [
-                FlatButton(
+                TextButton(
                   onPressed: () => Navigator.of(context).pop(null),
                   child: Text(
                     translator.translate(
@@ -158,7 +162,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                     ),
                   ),
                 ),
-                FlatButton(
+                TextButton(
                   onPressed: () {
                     var valid = Form.of(context).validate();
                     if (valid == true) {
@@ -727,7 +731,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                           data: theme,
                           child: AlertDialog(
                             actions: <Widget>[
-                              FlatButton(
+                              TextButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(false),
                                 child: Text(
@@ -736,10 +740,14 @@ class _TestStepsPageState extends State<TestStepsPage> {
                                   ),
                                 ),
                               ),
-                              FlatButton(
+                              TextButton(
                                 onPressed: () =>
                                     Navigator.of(context).pop(true),
-                                textColor: theme.errorColor,
+                                style: ButtonStyle(
+                                  textStyle: MaterialStateProperty.all(
+                                    TextStyle(color: theme.errorColor),
+                                  ),
+                                ),
                                 child: Text(
                                   translator.translate(
                                     TestTranslations.atf_button_clear,

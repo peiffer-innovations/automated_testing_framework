@@ -75,18 +75,22 @@ class _TestStepPickerState extends State<TestStepPicker> {
         data: theme,
         child: AlertDialog(
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () {
                 widget.onStepChanged(null);
                 setState(() => _step = null);
                 Navigator.of(context).pop();
               },
-              textColor: theme.errorColor,
+              style: ButtonStyle(
+                textStyle: MaterialStateProperty.all(
+                  TextStyle(color: theme.errorColor),
+                ),
+              ),
               child: Text(
                 translator.translate(TestTranslations.atf_button_clear),
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 translator.translate(TestTranslations.atf_button_cancel),

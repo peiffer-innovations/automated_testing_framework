@@ -358,7 +358,7 @@ class _TestReportPageState extends State<TestReportPage> {
                               TestStore.goldenImageWriter)
                         Builder(
                           builder: (BuildContext context) => Center(
-                            child: FlatButton(
+                            child: TextButton(
                               onPressed: () => _saveGoldenImages(
                                 context,
                                 report: report,

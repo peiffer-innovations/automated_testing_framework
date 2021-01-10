@@ -36,16 +36,24 @@ class _TestableFormPageState extends State<TestableFormPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            textColor: theme.textTheme.bodyText2.color,
+            style: ButtonStyle(
+              textStyle: MaterialStateProperty.all(
+                TextStyle(color: theme.textTheme.bodyText2.color),
+              ),
+            ),
             child: Text(
               translator.translate(TestTranslations.atf_button_cancel),
             ),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            textColor: Colors.red,
+            style: ButtonStyle(
+              textStyle: MaterialStateProperty.all(
+                TextStyle(color: theme.errorColor),
+              ),
+            ),
             child: Text(
               translator.translate(
                 TestTranslations.atf_button_discard,
@@ -120,7 +128,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
                         children: <Widget>[
                           Expanded(
                             flex: wide == true ? 0 : 1,
-                            child: FlatButton(
+                            child: TextButton(
                               onPressed: () async {
                                 var result = await _showDiscardDialog(context);
 
@@ -140,7 +148,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
                           ),
                           Expanded(
                             flex: wide == true ? 0 : 1,
-                            child: FlatButton(
+                            child: TextButton(
                               onPressed: () {
                                 var valid = Form.of(context).validate();
                                 if (valid == true) {
@@ -152,7 +160,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
                                       data: theme,
                                       child: AlertDialog(
                                         actions: [
-                                          FlatButton(
+                                          TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
                                             child: Text(
