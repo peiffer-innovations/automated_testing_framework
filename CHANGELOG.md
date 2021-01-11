@@ -1,3 +1,8 @@
+## [1.3.3+1] - January 11th, 2021
+
+* Dependency updates
+
+
 ## [1.3.3] - January 10th, 2021
 
 * Swapped old Flat / Raised buttons for new Text / Elevated ones.
