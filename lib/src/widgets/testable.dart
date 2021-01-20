@@ -317,8 +317,8 @@ class TestableState extends State<Testable>
   Future<void> flash() async {
     if (_renderController.testWidgetsEnabled == true) {
       for (var i = 0; i < _renderController.flashCount; i++) {
-        await _animationController.forward(from: 0.0);
-        await _animationController.reverse(from: 1.0);
+        await _animationController?.forward(from: 0.0)?.orCancel;
+        await _animationController?.reverse(from: 1.0)?.orCancel;
       }
     }
   }

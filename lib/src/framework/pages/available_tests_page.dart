@@ -66,10 +66,31 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
         suites.add(test.suiteName);
       }
     });
-    _testSuites = suites.toList()..sort((a, b) => a.compareTo(b));
+    _testSuites = suites.toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     if (mounted == true) {
       setState(() {});
     }
+
+    _tests?.sort((a, b) {
+      var result = 0;
+
+      result = (a.suiteName ?? '')
+          .toLowerCase()
+          .compareTo((b.suiteName ?? '').toLowerCase());
+
+      if (result == 0) {
+        result = (a.name ?? '')
+            .toLowerCase()
+            .compareTo((b.name ?? '').toLowerCase());
+      }
+
+      if (result == 0) {
+        result = b.version - a.version;
+      }
+
+      return result;
+    });
 
     if (widget.autoRun == true) {
       await _runTests();
@@ -160,51 +181,48 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
                 onPressed: () async {
                   await showDialog(
                     context: context,
-                    builder: (BuildContext context) => AlertDialog(
+                    builder: (BuildContext context) => SimpleDialog(
                       contentPadding: EdgeInsets.only(top: 16.0),
                       title: Text(
                         translator.translate(
                           TestTranslations.atf_select_test_suite,
                         ),
                       ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            onTap: () {
-                              setState(() => _suiteName = null);
-                              Navigator.of(context).pop();
-                            },
-                            title: Text(
-                              translator.translate(
-                                TestTranslations.atf_no_filter,
-                              ),
+                      children: [
+                        ListTile(
+                          onTap: () {
+                            setState(() => _suiteName = null);
+                            Navigator.of(context).pop();
+                          },
+                          title: Text(
+                            translator.translate(
+                              TestTranslations.atf_no_filter,
                             ),
-                            trailing: _suiteName == null
-                                ? Icon(
-                                    Icons.check_circle,
-                                    color: theme.textTheme.bodyText2.color,
-                                  )
-                                : null,
                           ),
-                          ...[
-                            for (var suite in _testSuites)
-                              ListTile(
-                                onTap: () {
-                                  setState(() => _suiteName = suite);
-                                  Navigator.of(context).pop();
-                                },
-                                title: Text(suite),
-                                trailing: _suiteName == suite
-                                    ? Icon(
-                                        Icons.check_circle,
-                                        color: theme.textTheme.bodyText2.color,
-                                      )
-                                    : null,
-                              ),
-                          ],
+                          trailing: _suiteName == null
+                              ? Icon(
+                                  Icons.check_circle,
+                                  color: theme.textTheme.bodyText2.color,
+                                )
+                              : null,
+                        ),
+                        ...[
+                          for (var suite in _testSuites)
+                            ListTile(
+                              onTap: () {
+                                setState(() => _suiteName = suite);
+                                Navigator.of(context).pop();
+                              },
+                              title: Text(suite),
+                              trailing: _suiteName == suite
+                                  ? Icon(
+                                      Icons.check_circle,
+                                      color: theme.textTheme.bodyText2.color,
+                                    )
+                                  : null,
+                            ),
                         ],
-                      ),
+                      ],
                     ),
                   );
                 },

@@ -1,3 +1,10 @@
+## [1.3.4] - January 19th, 2021
+
+* Fixed deadlock issue with `flash` on the `Testable` object when the widget is disposed in the middle of a flash call.
+* Fixed sort for available tests page.
+* Fixed filter for available tests pages when there are more filters than fit vertically.
+
+
 ## [1.3.3+2] - January 17th, 2021
 
 * Dependency updates
