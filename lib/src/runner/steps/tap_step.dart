@@ -45,6 +45,7 @@ class TapStep extends TestRunnerStep {
   /// then will attempt to tap the widget on center point of the widget.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -59,15 +60,23 @@ class TapStep extends TestRunnerStep {
 
     var finder = await waitFor(
       testableId,
+      cancelToken: cancelToken,
       tester: tester,
       timeout: timeout,
     );
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     await sleep(
       tester.delays.postFoundWidget,
+      cancelStream: cancelToken?.stream,
       tester: tester,
     );
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     await driver.tap(finder);
   }
 

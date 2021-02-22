@@ -38,6 +38,7 @@ class SleepStep extends TestRunnerStep {
   /// Simply sleeps for the time specified by [timeout].
   @override
   Future<void> execute({
+    CancelToken cancelToken,
     TestReport report,
     @required TestController tester,
   }) async {
@@ -46,8 +47,12 @@ class SleepStep extends TestRunnerStep {
       name,
       tester: tester,
     );
+    if (cancelToken?.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     await sleep(
       timeout,
+      cancelStream: cancelToken?.stream,
       tester: tester,
     );
   }

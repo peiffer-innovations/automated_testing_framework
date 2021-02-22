@@ -26,6 +26,7 @@ class GoBackStep extends TestRunnerStep {
   /// tapping it.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -41,6 +42,10 @@ class GoBackStep extends TestRunnerStep {
       if (backButton.evaluate().isEmpty == true) {
         throw Exception('Unable to locate Back button.');
       }
+    }
+
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
     }
 
     await driver.tap(backButton);

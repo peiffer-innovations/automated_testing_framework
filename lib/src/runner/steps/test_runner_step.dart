@@ -22,6 +22,12 @@ abstract class TestRunnerStep extends JsonClass {
   static void _console(Object message, [Level level = Level.INFO]) =>
       _logger.log(level, message);
 
+  /// Returns the default timeout for the step.  Steps that should respond
+  /// quickly should use a relatively low value and steps that may take a long
+  /// time should return an appropriately longer time.  Defaults [null] which
+  ///
+  Duration get defaultStepTimeout => Duration(minutes: 1);
+
   /// Returns the test driver that can be used to interact with widgets.
   OverrideWidgetTester get driver => _driver;
 
@@ -30,6 +36,7 @@ abstract class TestRunnerStep extends JsonClass {
 
   /// Function that is called when the step needs to execute.
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   });
@@ -66,7 +73,7 @@ abstract class TestRunnerStep extends JsonClass {
   @protected
   Future<void> sleep(
     Duration duration, {
-    Stream<void> cancelStream,
+    @required Stream<void> cancelStream,
     bool error = false,
     String message,
     @required TestController tester,
@@ -140,6 +147,7 @@ abstract class TestRunnerStep extends JsonClass {
   @protected
   Future<test.Finder> waitFor(
     dynamic testableId, {
+    @required CancelToken cancelToken,
     @required TestController tester,
     Duration timeout,
   }) async {
@@ -159,6 +167,10 @@ abstract class TestRunnerStep extends JsonClass {
             finder.evaluate().first;
             found = true;
           } catch (e) {
+            if (cancelToken.cancelled == true) {
+              throw Exception('[CANCELLED]: step was cancelled by the test');
+            }
+
             await Future.delayed(Duration(milliseconds: 100));
           }
         }
@@ -178,8 +190,15 @@ abstract class TestRunnerStep extends JsonClass {
       );
 
       var result = await waiter();
+      if (cancelToken.cancelled == true) {
+        throw Exception('[CANCELLED]: step was cancelled by the test');
+      }
+
       controller.add(null);
       await sleeper;
+      if (cancelToken.cancelled == true) {
+        throw Exception('[CANCELLED]: step was cancelled by the test');
+      }
 
       try {
         var finder = result.evaluate()?.first;

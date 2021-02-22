@@ -1,5 +1,13 @@
 export 'package:automated_testing_framework_models/automated_testing_framework_models.dart';
 
+export 'src/driver/components/test_driver.dart';
+export 'src/driver/components/test_driver_state.dart';
+
+export 'src/driver/handlers/log_handler.dart';
+export 'src/driver/handlers/reservation_handler.dart';
+export 'src/driver/handlers/run_test_handler.dart';
+export 'src/driver/handlers/screenshot_handler.dart';
+
 export 'src/driver/widgets/test_driver_status.dart';
 
 export 'src/framework/dialog/testable_form_dialog.dart';

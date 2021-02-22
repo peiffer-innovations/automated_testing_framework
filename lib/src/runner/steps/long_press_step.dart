@@ -48,6 +48,7 @@ class LongPressStep extends TestRunnerStep {
   /// then will attempt to long press the widget on center point of the widget.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -62,12 +63,14 @@ class LongPressStep extends TestRunnerStep {
 
     var finder = await waitFor(
       testableId,
+      cancelToken: cancelToken,
       tester: tester,
       timeout: timeout,
     );
 
     await sleep(
       tester.delays.postFoundWidget,
+      cancelStream: cancelToken.stream,
       tester: tester,
     );
 

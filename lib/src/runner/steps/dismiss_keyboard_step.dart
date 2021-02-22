@@ -25,6 +25,7 @@ class DismissKeyboardStep extends TestRunnerStep {
   /// currently showing.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {

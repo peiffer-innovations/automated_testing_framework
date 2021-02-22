@@ -43,6 +43,7 @@ class ScreenshotStep extends TestRunnerStep {
   /// Requests a screenshot from the framework and attaches it to the [report].
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {

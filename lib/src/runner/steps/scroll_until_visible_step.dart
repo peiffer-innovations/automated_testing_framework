@@ -74,6 +74,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
   /// scroll and find the [Testable] identified by [testableId].
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -104,6 +105,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
           .descendant(
             of: await waitFor(
               scrollableId,
+              cancelToken: cancelToken,
               tester: tester,
             ),
             matching: find.byType(Scrollable),
@@ -111,11 +113,17 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
           ?.first;
     }
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     dynamic widget;
     try {
       widget = finder.evaluate().first.widget;
     } catch (e) {
       // no-op
+    }
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
     }
 
     if (widget == null) {
@@ -158,6 +166,10 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     var count = 0;
     var found = widgetFinder.evaluate()?.isNotEmpty == true;
     while (found != true && DateTime.now().millisecondsSinceEpoch < end) {
+      if (cancelToken.cancelled == true) {
+        throw Exception('[CANCELLED]: step was cancelled by the test');
+      }
+
       var diff = end - DateTime.now().millisecondsSinceEpoch;
       tester.sleep = ProgressValue(
         error: true,
@@ -176,6 +188,9 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
             .toInt(),
       );
       await Future.delayed(tester.delays.scrollIncrement);
+      if (cancelToken.cancelled == true) {
+        throw Exception('[CANCELLED]: step was cancelled by the test');
+      }
 
       var widgetFinder = find.byKey(Key(testableId)).evaluate();
 
@@ -194,6 +209,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     if (found == true) {
       var testableFinder = await waitFor(
         testableId,
+        cancelToken: cancelToken,
         tester: tester,
       );
 
@@ -205,6 +221,9 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
           .evaluate();
 
       GlobalKey globalKey = widgetFinder.first.widget.key;
+      if (cancelToken.cancelled == true) {
+        throw Exception('[CANCELLED]: step was cancelled by the test');
+      }
 
       await Scrollable.ensureVisible(globalKey.currentContext);
     } else {

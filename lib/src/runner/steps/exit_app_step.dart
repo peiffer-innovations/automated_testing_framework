@@ -31,6 +31,7 @@ class ExitAppStep extends TestRunnerStep {
   /// Executes the step and exits the application.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {

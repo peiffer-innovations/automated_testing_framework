@@ -1,3 +1,10 @@
+## [2.0.0] - Februray 21st, 2021
+
+* Added ability to cancel running tests.
+* Upgraded to latest models that support more realtime test driving.
+* Added test driver implementation that supports driving real timetime tests based off of communication sources.
+
+
 ## [1.3.4] - January 19th, 2021
 
 * Fixed deadlock issue with `flash` on the `Testable` object when the widget is disposed in the middle of a flash call.

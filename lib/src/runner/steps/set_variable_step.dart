@@ -58,6 +58,7 @@ class SetVariableStep extends TestRunnerStep {
   /// Sets the variable on the [TestController].
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {

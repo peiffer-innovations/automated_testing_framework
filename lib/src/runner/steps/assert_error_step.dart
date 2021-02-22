@@ -74,6 +74,7 @@ class AssertErrorStep extends TestRunnerStep {
   /// from the [Testable], then compare it against the set [error] value.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -89,15 +90,20 @@ class AssertErrorStep extends TestRunnerStep {
     );
     var finder = await waitFor(
       testableId,
+      cancelToken: cancelToken,
       tester: tester,
       timeout: timeout,
     );
 
     await sleep(
       tester.delays.postFoundWidget,
+      cancelStream: cancelToken.stream,
       tester: tester,
     );
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     var widgetFinder = finder.evaluate();
     var match = false;
     if (widgetFinder?.isNotEmpty == true) {

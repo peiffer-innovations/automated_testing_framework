@@ -68,6 +68,7 @@ class SetValueStep extends TestRunnerStep {
   /// then set the associated [value] to the found widget.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -89,12 +90,14 @@ class SetValueStep extends TestRunnerStep {
     );
     var finder = await waitFor(
       testableId,
+      cancelToken: cancelToken,
       tester: tester,
       timeout: timeout,
     );
 
     await sleep(
       tester.delays.postFoundWidget,
+      cancelStream: cancelToken.stream,
       tester: tester,
     );
 
@@ -120,7 +123,14 @@ class SetValueStep extends TestRunnerStep {
         throw Exception('Unknown type encountered: $type');
     }
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     var widgetFinder = finder.evaluate();
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
+
     var match = false;
     if (widgetFinder?.isNotEmpty == true) {
       try {

@@ -143,9 +143,11 @@ class TestDeviceInfoHelper {
         brand: brand,
         buildNumber: buildNumber,
         device: device,
+        deviceGroup: TestAppSettings.settings.deviceGroup,
         devicePixelRatio: devicePixelRatio,
         dips: dips,
-        id: id,
+        // Always use the settings device id if it is set
+        id: TestAppSettings.settings.deviceId ?? id,
         manufacturer: manufacturer,
         model: model,
         orientation: orientation,

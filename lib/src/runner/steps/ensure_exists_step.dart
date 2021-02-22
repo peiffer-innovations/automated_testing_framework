@@ -48,6 +48,7 @@ class EnsureExistsStep extends TestRunnerStep {
   /// the [timeout] is exceeded.
   @override
   Future<void> execute({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestController tester,
   }) async {
@@ -61,15 +62,20 @@ class EnsureExistsStep extends TestRunnerStep {
     );
     var finder = await waitFor(
       testableId,
+      cancelToken: cancelToken,
       tester: tester,
       timeout: timeout,
     );
 
     await sleep(
       tester.delays.postFoundWidget,
+      cancelStream: cancelToken.stream,
       tester: tester,
     );
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     var widgetFinder = finder.evaluate();
     if (widgetFinder?.isNotEmpty != true) {
       throw Exception('testableId: [$testableId] -- could not locate widget.');

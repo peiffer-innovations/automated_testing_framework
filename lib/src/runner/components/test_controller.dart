@@ -102,6 +102,8 @@ class TestController {
     _variables.addAll(variables ?? {});
   }
 
+  static const Duration _kSuiteStartTimeout = Duration(minutes: 2);
+
   static final Logger _logger = Logger('TestController');
 
   /// The delays that tests should wait for.
@@ -130,6 +132,8 @@ class TestController {
   /// The image reader to read images for golden image comparisons.
   final TestImageReader testImageReader;
 
+  final StreamController<void> _cancelController =
+      StreamController<void>.broadcast();
   final Map<String, PageRoute> _customRoutes = SplayTreeMap();
   final GlobalKey<NavigatorState> _navigatorKey;
   final TestStepRegistry _registry;
@@ -141,6 +145,7 @@ class TestController {
       StreamController<String>.broadcast();
   final StreamController<ProgressValue> _stepController =
       StreamController<ProgressValue>.broadcast();
+  final TestControllerState _testControllerState = TestControllerState();
   final TestReader _testReader;
   final WidgetBuilder _testReportBuilder;
   final Level _testReportLogLevel;
@@ -154,9 +159,6 @@ class TestController {
 
   Test _currentTest = Test();
 
-  bool _runningSuite = false;
-  bool _runningTest = false;
-
   /// Returns the current from the controller.  This will never be [null].
   Test get currentTest => _currentTest;
 
@@ -168,13 +170,18 @@ class TestController {
 
   /// Returns whether or not the controller is actively running a test now or
   /// not.
-  bool get runningTest => _runningTest == true || _runningSuite == true;
+  bool get runningTest =>
+      _testControllerState.runningTest == true ||
+      _testControllerState.runningSuite == true;
 
   /// Returns the stream that will fire screep capture requests on.
   Stream<CaptureContext> get screencapStream => _screencapController.stream;
 
   /// Returns the stream that will fire updates as a test is sleeping / waiting.
   Stream<ProgressValue> get sleepStream => _sleepController.stream;
+
+  /// Returns the current state for the test controller.
+  TestControllerState get state => _testControllerState;
 
   /// Returns the stream that will fire updates when a test status changes.
   Stream<String> get statusStream => _statusController.stream;
@@ -200,14 +207,6 @@ class TestController {
   /// Informs the controller that a test step update has happened.
   set step(ProgressValue value) => _stepController?.add(value);
 
-  /// Disposes the controller.
-  void dispose() {
-    _screencapController?.close();
-    _sleepController?.close();
-    _statusController?.close();
-    _stepController?.close();
-  }
-
   /// Returns the [TestController] provided by the widget tree.  This will never
   /// throw an exception but may return [null] if no controller is available on
   /// the widget tree.
@@ -224,11 +223,42 @@ class TestController {
     return result;
   }
 
+  /// Canceles any currently running test.  The current step will be the last to
+  /// execute, but this may still take a while as the current second could be a
+  /// long running step.
+  ///
+  /// If no test is currently running, this does nothing.
+  Future<void> cancelRunningTests([
+    Duration timeout = const Duration(minutes: 5),
+  ]) async {
+    _cancelController.add(null);
+
+    var startTime = DateTime.now();
+    while (_testControllerState.runningTest == true) {
+      await Future.delayed(Duration(seconds: 1));
+      if (DateTime.now().millisecondsSinceEpoch -
+              startTime.millisecondsSinceEpoch >=
+          timeout.inMilliseconds) {
+        throw Exception(
+            '[TIMEOUT]: A timeout has occurred while waiting for the tests to complete.');
+      }
+    }
+  }
+
   /// Clears all the custom routes.
   void clearCustomRoutes() => _customRoutes.clear();
 
   /// Clears all the variables.
   void clearVariables() => _variables.clear();
+
+  /// Disposes the controller.  Once disposed, a controller can not be reused.
+  void dispose() {
+    _cancelController?.close();
+    _screencapController?.close();
+    _sleepController?.close();
+    _statusController?.close();
+    _stepController?.close();
+  }
 
   /// Executes a series of tests steps.  This accepts the [name] of the test
   /// which may be [null] or empty.  The [reset] defines if the controller
@@ -247,17 +277,35 @@ class TestController {
   /// empty and should always be a value of 0 or higher when set.
   Future<TestReport> execute({
     String name,
+    TestReport report,
     bool reset = true,
+    Duration stepTimeout,
     @required List<TestStep> steps,
     bool submitReport = true,
     String suiteName,
-    TestReport report,
     TestSuiteReport testSuiteReport,
+    Duration testTimeout,
     int version,
   }) async {
-    _runningTest = true;
+    if (_testControllerState.runningTest == true) {
+      await cancelRunningTests();
+    }
+
+    var settings = TestAppSettings.settings;
+
+    stepTimeout ??= settings.stepTimeout;
+    testTimeout ??= settings.testTimeout;
+
+    var cancelToken = CancelToken(timeout: testTimeout);
+    var cancelSubscription = _cancelController.stream.listen(
+      (_) => cancelToken.cancel(),
+    );
+    _testControllerState.currentTest = name;
+    _testControllerState.progress = 0.0;
+    _testControllerState.runningTest = true;
+
     try {
-      var passing = true;
+      _testControllerState.passing = true;
       step = ProgressValue(max: steps.length, value: 0);
 
       if (reset == true) {
@@ -291,22 +339,38 @@ class TestController {
 
       try {
         setVariable(
-          value: passing,
+          value: _testControllerState.passing,
           variableName: '_passing',
         );
         var idx = 0;
         for (var step in steps) {
-          passing = await executeStep(
-                report: report,
-                step: step,
-                subStep: false,
-              ) &&
-              passing;
+          if (cancelToken.cancelled == true) {
+            break;
+          }
+
+          Timer timeoutTimer;
+          if (stepTimeout != null) {
+            timeoutTimer = Timer(stepTimeout, () => cancelToken?.cancel());
+          }
+
+          try {
+            _testControllerState.passing = await executeStep(
+                  cancelToken: cancelToken,
+                  report: report,
+                  step: step,
+                  subStep: false,
+                ) &&
+                _testControllerState.passing;
+          } finally {
+            timeoutTimer?.cancel();
+          }
 
           idx++;
-          this.step = ProgressValue(max: steps.length, value: idx);
+          var progress = ProgressValue(max: steps.length, value: idx);
+          this.step = progress;
+          _testControllerState.progress = progress.progress;
 
-          if (stopOnFirstFail == true && passing != true) {
+          if (stopOnFirstFail == true && _testControllerState.passing != true) {
             break;
           }
         }
@@ -320,7 +384,8 @@ class TestController {
         step = null;
         report?.complete();
 
-        if (reset == true || submitReport == true) {
+        if (cancelToken.cancelled == false &&
+            (reset == true || submitReport == true)) {
           testSuiteReport?.addTestReport(report);
           var futures = <Future>[];
           futures.add(
@@ -347,13 +412,18 @@ class TestController {
 
       return report;
     } finally {
-      _runningTest = false;
+      await cancelSubscription.cancel();
+      await cancelToken.complete();
+      _testControllerState.runningTest = false;
     }
   }
 
   /// Executes a single [step] and attaches the execution information to the
-  /// [testReport].
+  /// [testReport].  The [cancelToken] allows the step to be cancelled.
+  /// Whenever a step has a loop or a long running task, it should listen to the
+  /// stream from the token or read the flag from the token.
   Future<bool> executeStep({
+    @required CancelToken cancelToken,
     @required TestReport report,
     @required TestStep step,
     bool subStep = true,
@@ -363,6 +433,11 @@ class TestController {
       id: step.id,
       values: step.values,
     );
+
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was canceled by the test');
+    }
+
     if (delays.preStep.inMilliseconds > 0) {
       await runnerStep.preStepSleep(delays.preStep);
     }
@@ -372,13 +447,20 @@ class TestController {
       subStep: subStep,
     );
     String error;
-
     try {
+      if (cancelToken.cancelled == true) {
+        throw Exception('[CANCELLED]: step was cancelled by the test');
+      }
+      _testControllerState.currentStep = step.id;
       await runnerStep.execute(
+        cancelToken: cancelToken,
         report: report,
         tester: this,
       );
     } catch (e, stack) {
+      if (cancelToken.cancelled == true) {
+        rethrow;
+      }
       if (screenshotOnFail == true) {
         try {
           var imageNum = (report?.images?.length ?? 0) + 1;
@@ -386,6 +468,7 @@ class TestController {
             goldenCompatible: false,
             imageId: 'failure_${step.id}_${imageNum}',
           ).execute(
+            cancelToken: cancelToken,
             report: report,
             tester: this,
           );
@@ -402,9 +485,13 @@ class TestController {
       error = '$e';
       passed = false;
     } finally {
+      _testControllerState.currentStep = null;
       report?.endStep(step, error);
     }
 
+    if (cancelToken.cancelled == true) {
+      throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
     if (delays.postStep.inMilliseconds > 0) {
       await runnerStep.postStepSleep(delays.preStep);
     }
@@ -660,9 +747,24 @@ class TestController {
   /// Runs a series of [tests].  For full runs, this is more memory efficient as
   /// it will only load the tests as needed.
   ///
-  Future<TestSuiteReport> runPendingTests(List<PendingTest> tests) async {
+  Future<TestSuiteReport> runPendingTests(
+    List<PendingTest> tests, [
+    Duration waitTimeout = _kSuiteStartTimeout,
+  ]) async {
+    var startTime = DateTime.now();
+    while (_testControllerState.runningSuite == true) {
+      if (DateTime.now().millisecondsSinceEpoch -
+              startTime.millisecondsSinceEpoch >=
+          waitTimeout.inMilliseconds) {
+        throw Exception(
+          '[TIMEOUT]: Could not start tests, suite is still running.',
+        );
+      }
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+
     var testSuiteReport = TestSuiteReport();
-    _runningSuite = true;
+    _testControllerState.runningSuite = true;
     if (tests != null) {
       try {
         for (var pendingTest in tests) {
@@ -686,7 +788,7 @@ class TestController {
           }
         }
       } finally {
-        _runningSuite = false;
+        _testControllerState.runningSuite = false;
       }
       await _navigatorKey.currentState.push(
         MaterialPageRoute(
@@ -705,9 +807,25 @@ class TestController {
   /// tests but the [runPendingTests] should be prefered for full application
   /// runs or for CI/CD pipelines as that only loads the bare minimum data up
   /// front and then loads the full test data on an as needed basis.
-  Future<TestSuiteReport> runTests(List<Test> tests) async {
+  Future<TestSuiteReport> runTests(
+    List<Test> tests, {
+    Duration stepTimeout,
+    Duration waitTimeout = _kSuiteStartTimeout,
+  }) async {
+    var startTime = DateTime.now();
+    while (_testControllerState.runningSuite == true) {
+      if (DateTime.now().millisecondsSinceEpoch -
+              startTime.millisecondsSinceEpoch >=
+          waitTimeout.inMilliseconds) {
+        throw Exception(
+          '[TIMEOUT]: Could not start tests, suite is still running.',
+        );
+      }
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+
     var testSuiteReport = TestSuiteReport();
-    _runningSuite = true;
+    _testControllerState.runningSuite = true;
     if (tests != null) {
       try {
         for (var test in tests) {
@@ -717,6 +835,7 @@ class TestController {
             await execute(
               name: test.name,
               reset: false,
+              stepTimeout: stepTimeout,
               steps: test.steps,
               submitReport: true,
               suiteName: test.suiteName,
@@ -728,7 +847,7 @@ class TestController {
           }
         }
       } finally {
-        _runningSuite = false;
+        _testControllerState.runningSuite = false;
       }
       await _navigatorKey.currentState.push(
         MaterialPageRoute(
