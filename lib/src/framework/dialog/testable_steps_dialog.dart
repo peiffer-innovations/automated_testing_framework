@@ -9,18 +9,18 @@ class TestableStepsDialog extends StatefulWidget {
   TestableStepsDialog({
     this.error,
     this.image,
-    Key key,
+    Key? key,
     this.scrollableId,
     this.testableId,
     this.types,
     this.value,
   }) : super(key: key);
 
-  final String error;
-  final Uint8List image;
-  final String scrollableId;
-  final String testableId;
-  final List<TestableType> types;
+  final String? error;
+  final Uint8List? image;
+  final String? scrollableId;
+  final String? testableId;
+  final List<TestableType>? types;
   final dynamic value;
 
   @override
@@ -31,7 +31,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
   final List<AvailableTestStep> _widgetSteps = [];
   final List<AvailableTestStep> _widgetlessSteps = [];
 
-  TestableRenderController _testRenderController;
+  late TestableRenderController _testRenderController;
 
   @override
   void initState() {
@@ -60,8 +60,8 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
       });
 
   Future<bool> _fireForm({
-    @required BuildContext context,
-    @required AvailableTestStep step,
+    required BuildContext context,
+    required AvailableTestStep step,
     bool executeImmediate = false,
   }) async {
     var added = false;
@@ -75,14 +75,14 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
       ),
     );
 
-    TestStep testStep;
+    TestStep? testStep;
     if (values != null) {
       testStep = TestStep(
         id: step.id,
         image: step.widgetless == true ? null : widget.image,
         values: step.minify(values),
       );
-      testController.currentTest.addTestStep(testStep);
+      testController!.currentTest.addTestStep(testStep);
       added = true;
     }
 
@@ -93,6 +93,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
         steps: [testStep],
         submitReport: false,
         reset: false,
+        version: 0,
       );
     }
 
@@ -100,14 +101,14 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
   }
 
   Future<void> _fireQuickAdd({
-    @required BuildContext context,
-    @required AvailableTestStep step,
+    required BuildContext context,
+    required AvailableTestStep step,
     bool executeImmediate = false,
   }) async {
-    var testController = TestController.of(context);
+    var testController = TestController.of(context)!;
     var values = <String, dynamic>{}
       ..addAll(_createValues(step))
-      ..addAll(step.quickAddValues);
+      ..addAll(step.quickAddValues!);
 
     var testStep = TestStep(
       id: step.id,
@@ -123,6 +124,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
         steps: [testStep],
         submitReport: false,
         reset: false,
+        version: 0,
       );
     }
   }
@@ -197,7 +199,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
   @override
   Widget build(BuildContext context) {
     var translator = Translator.of(context);
-    var testController = TestController.of(context);
+    var testController = TestController.of(context)!;
     var numSteps = testController.currentTest.steps.length;
 
     return AlertDialog(

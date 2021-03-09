@@ -1,20 +1,17 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 /// Test step that asserts that the error value equals (or does not equal) a
 /// specific value.
 class AssertErrorStep extends TestRunnerStep {
   AssertErrorStep({
-    @required this.caseSensitive,
-    @required this.equals,
-    @required this.error,
-    @required this.testableId,
+    required this.caseSensitive,
+    required this.equals,
+    required this.error,
+    required this.testableId,
     this.timeout,
-  })  : assert(caseSensitive != null),
-        assert(equals != null),
-        assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId?.isNotEmpty == true);
 
   /// Set to [true] if the comparison should be case sensitive.  Set to [false]
   /// to allow the comparison to be case insensitive.
@@ -26,14 +23,14 @@ class AssertErrorStep extends TestRunnerStep {
   final bool equals;
 
   /// The error value to test against.
-  final String error;
+  final String? error;
 
   /// The id of the [Testable] widget to interact with.
-  final String testableId;
+  final String? testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
-  final Duration timeout;
+  final Duration? timeout;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -51,8 +48,8 @@ class AssertErrorStep extends TestRunnerStep {
   /// See also:
   /// * [JsonClass.parseBool]
   /// * [JsonClass.parseDurationFromSeconds]
-  static AssertErrorStep fromDynamic(dynamic map) {
-    AssertErrorStep result;
+  static AssertErrorStep? fromDynamic(dynamic map) {
+    AssertErrorStep? result;
 
     if (map != null) {
       result = AssertErrorStep(
@@ -74,12 +71,12 @@ class AssertErrorStep extends TestRunnerStep {
   /// from the [Testable], then compare it against the set [error] value.
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
-    String error = tester.resolveVariable(this.error);
-    String testableId = tester.resolveVariable(this.testableId);
+    String? error = tester.resolveVariable(this.error);
+    String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
     var name =
@@ -106,19 +103,19 @@ class AssertErrorStep extends TestRunnerStep {
     }
     var widgetFinder = finder.evaluate();
     var match = false;
-    if (widgetFinder?.isNotEmpty == true) {
-      StatefulElement element = widgetFinder.first;
+    if (widgetFinder.isNotEmpty == true) {
+      var element = widgetFinder.first as StatefulElement;
 
       var state = element.state;
       if (state is TestableState) {
         try {
-          var actual = state.onRequestError();
+          var actual = state.onRequestError!();
 
           if (equals ==
               (caseSensitive == true
                   ? (actual?.toString() == error)
-                  : (actual?.toString()?.toLowerCase() ==
-                      error?.toString()?.toLowerCase()))) {
+                  : (actual?.toString().toLowerCase() ==
+                      error?.toString().toLowerCase()))) {
             match = true;
           } else {
             throw Exception(

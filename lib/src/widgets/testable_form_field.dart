@@ -10,24 +10,24 @@ class TestableFormField<T> extends StatelessWidget {
     // ignore: deprecated_member_use_from_same_package
     @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
     this.autovalidateMode,
-    @required this.builder,
+    required this.builder,
     this.enabled = true,
-    @required this.id,
+    required this.id,
     this.initialValue,
     this.onSaved,
     this.scrollableId,
     this.validator,
-  }) : assert(id?.isNotEmpty == true);
+  });
 
-  final bool autovalidate;
-  final AutovalidateMode autovalidateMode;
+  final bool? autovalidate;
+  final AutovalidateMode? autovalidateMode;
   final FormFieldBuilder<T> builder;
   final bool enabled;
   final String id;
-  final T initialValue;
-  final FormFieldSetter<T> onSaved;
-  final FormFieldValidator<T> validator;
-  final String scrollableId;
+  final T? initialValue;
+  final FormFieldSetter<T>? onSaved;
+  final FormFieldValidator<T>? validator;
+  final String? scrollableId;
 
   @override
   Widget build(BuildContext context) => FormField(

@@ -7,8 +7,8 @@ class RunTestHandler {
   RunTestHandler._internal();
   static final RunTestHandler _singleton = RunTestHandler._internal();
 
-  TestDriver _driver;
-  Timer _timer;
+  late TestDriver _driver;
+  Timer? _timer;
 
   set driver(TestDriver driver) => _driver = driver;
 
@@ -22,7 +22,7 @@ class RunTestHandler {
     );
     if (command is AbortTestCommand) {
       var controller = _driver.testController;
-      await controller.cancelRunningTests();
+      await controller!.cancelRunningTests();
 
       result = CommandAck(
         commandId: command.id,
@@ -45,7 +45,7 @@ class RunTestHandler {
     );
     var controller = _driver.testController;
 
-    var running = controller.runningTest;
+    var running = controller!.runningTest;
     if (running == true) {
       _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
         running = controller.runningTest;
@@ -57,25 +57,29 @@ class RunTestHandler {
     }
 
     if (command is RunTestCommand) {
-      if ((command.test.steps?.length ?? 0) >= 0) {
-        var report = TestReport();
-        var logSub = report.logStream.listen((data) {
-          _driver.communicator.sendCommand(CommandAck(
-            commandId: command.id,
-            message: data,
-            response: TestStatusResponse(
-              complete: false,
-              progress: report.steps.length / command.test.steps.length,
+      if (command.test.steps.isNotEmpty == true) {
+        var report = TestReport(version: command.test.version);
+        var logSub = report.logStream!.listen((data) {
+          _driver.communicator!.sendCommand(
+            CommandAck(
+              commandId: command.id,
+              message: data,
+              response: TestStatusResponse(
+                complete: false,
+                progress: report.steps.length / command.test.steps.length,
+                report: report,
+                status: '[STARTUP]',
+              ),
             ),
-          ));
+          );
         });
-        StreamSubscription imageSub;
+        StreamSubscription? imageSub;
 
         if (command.sendScreenshots == true) {
-          imageSub = report.imageStream.listen((data) {
-            _driver.communicator.sendCommand(CommandAck(
+          imageSub = report.imageStream!.listen((data) {
+            _driver.communicator!.sendCommand(CommandAck(
               commandId: command.id,
-              response: ScreenshotResponse(image: data.image),
+              response: ScreenshotResponse(image: data.image!),
             ));
           });
         }
@@ -92,6 +96,7 @@ class RunTestHandler {
               complete: true,
               progress: 1.0,
               report: report,
+              status: '[COMPLETE]',
             ),
             success: true,
           );

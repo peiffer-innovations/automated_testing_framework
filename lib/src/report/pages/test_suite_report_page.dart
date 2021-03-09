@@ -7,7 +7,7 @@ import 'package:static_translations/static_translations.dart';
 /// Page that can display a summarized result from a test suite run.
 class TestSuiteReportPage extends StatelessWidget {
   TestSuiteReportPage({
-    Key key,
+    Key? key,
   })  : timestamp = DateTime.now(),
         super(key: key);
 
@@ -15,7 +15,7 @@ class TestSuiteReportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var report = ModalRoute.of(context).settings.arguments as TestSuiteReport;
+    var report = ModalRoute.of(context)!.settings.arguments as TestSuiteReport?;
     var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
     var title = translator.translate(TestTranslations.atf_test_suite_results);
@@ -24,7 +24,7 @@ class TestSuiteReportPage extends StatelessWidget {
       child: Builder(
         builder: (BuildContext context) => Scaffold(
           appBar: AppBar(
-            title: Text('$title (${report.deviceInfo?.buildNumber})'),
+            title: Text('$title (${report!.deviceInfo?.buildNumber})'),
           ),
           body: SafeArea(
             child: ListView.builder(
@@ -76,7 +76,7 @@ class TestSuiteReportPage extends StatelessWidget {
                                               fontSize: 20,
                                               color: Theme.of(context)
                                                   .textTheme
-                                                  .bodyText2
+                                                  .bodyText2!
                                                   .color,
                                             ),
                                           ),
@@ -104,7 +104,7 @@ class TestSuiteReportPage extends StatelessWidget {
                 } else {
                   index--;
                   result = TestSuiteResultWidget(
-                    result: report.results[index],
+                    result: report.results[index]!,
                   );
                 }
                 return result;

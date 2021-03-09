@@ -6,12 +6,10 @@ import 'package:static_translations/static_translations.dart';
 /// a test step.
 class TestableFormDialog extends StatefulWidget {
   TestableFormDialog({
-    @required this.form,
-    @required this.values,
-    Key key,
-  })  : assert(form != null),
-        assert(values != null),
-        super(key: key);
+    required this.form,
+    required this.values,
+    Key? key,
+  }) : super(key: key);
 
   /// The form for the dialog.  The form will render with [minify] set to
   /// [true].
@@ -26,7 +24,7 @@ class TestableFormDialog extends StatefulWidget {
 
 class _TestableFormDialogState extends State<TestableFormDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Map<String, dynamic> _values;
+  Map<String, dynamic>? _values;
 
   @override
   void initState() {
@@ -52,7 +50,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
         ),
         TextButton(
           onPressed: () {
-            var valid = _formKey.currentState.validate();
+            var valid = _formKey.currentState!.validate();
             if (valid == true) {
               Navigator.of(context).pop(_values);
             } else {
@@ -76,7 +74,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
                       children: <Widget>[
                         Icon(
                           Icons.warning,
-                          color: theme.textTheme.bodyText2.color,
+                          color: theme.textTheme.bodyText2!.color,
                           size: 54,
                         ),
                         SizedBox(

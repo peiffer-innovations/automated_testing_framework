@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 class TestSuiteResultWidget extends StatefulWidget {
   TestSuiteResultWidget({
-    Key key,
-    @required this.result,
-  })  : assert(result != null),
-        super(key: key);
+    Key? key,
+    required this.result,
+  }) : super(key: key);
 
   final TestSuiteResult result;
 
@@ -30,7 +29,7 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
         borderRadius: BorderRadius.circular(16.0),
         elevation: 2.0,
         child: InkWell(
-          onTap: widget.result.steps?.isNotEmpty == true
+          onTap: widget.result.steps.isNotEmpty == true
               ? () => setState(() => _expanded = !_expanded)
               : null,
           child: Padding(
@@ -59,15 +58,15 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                         children: [
                           Text(
                             '${widget.result.name} (${widget.result.version})',
-                            style: theme.textTheme.bodyText2.copyWith(
+                            style: theme.textTheme.bodyText2!.copyWith(
                               fontSize: 18.0,
                             ),
                           ),
                           if (widget.result.suiteName?.isNotEmpty == true) ...[
                             Text(
-                              widget.result.suiteName,
-                              style: theme.textTheme.subtitle2.copyWith(
-                                color: theme.textTheme.subtitle2.color
+                              widget.result.suiteName!,
+                              style: theme.textTheme.subtitle2!.copyWith(
+                                color: theme.textTheme.subtitle2!.color!
                                     .withOpacity(0.5),
                               ),
                             ),
@@ -85,7 +84,7 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                           ),
                           TextSpan(
                             text: ' | ',
-                            style: theme.textTheme.bodyText2
+                            style: theme.textTheme.bodyText2!
                                 .copyWith(fontFamily: 'monospaced'),
                           ),
                           TextSpan(

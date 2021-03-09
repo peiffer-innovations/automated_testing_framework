@@ -1,17 +1,15 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 /// Sets a value on the identified [Testable].
 class SetValueStep extends TestRunnerStep {
   SetValueStep({
-    @required this.testableId,
+    required this.testableId,
     this.timeout,
     String type = 'String',
-    @required this.value,
-  })  : assert(testableId?.isNotEmpty == true),
-        assert(type != null),
+    required this.value,
+  })   : assert(testableId?.isNotEmpty == true),
         assert(type == 'bool' ||
             type == 'double' ||
             type == 'int' ||
@@ -19,11 +17,11 @@ class SetValueStep extends TestRunnerStep {
         type = type;
 
   /// The id of the [Testable] widget to interact with.
-  final String testableId;
+  final String? testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
-  final Duration timeout;
+  final Duration? timeout;
 
   /// The type of value to set.  This must be one of:
   /// * `bool`
@@ -33,7 +31,7 @@ class SetValueStep extends TestRunnerStep {
   final String type;
 
   /// The string representation of the value to set.
-  final String value;
+  final String? value;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -49,8 +47,8 @@ class SetValueStep extends TestRunnerStep {
   ///
   /// See also:
   /// * [JsonClass.parseDurationFromSeconds]
-  static SetValueStep fromDynamic(dynamic map) {
-    SetValueStep result;
+  static SetValueStep? fromDynamic(dynamic map) {
+    SetValueStep? result;
 
     if (map != null) {
       result = SetValueStep(
@@ -68,16 +66,15 @@ class SetValueStep extends TestRunnerStep {
   /// then set the associated [value] to the found widget.
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
-    String testableId = tester.resolveVariable(this.testableId);
+    String? testableId = tester.resolveVariable(this.testableId);
     String type = tester.resolveVariable(this.type);
     var value = tester.resolveVariable(this.value)?.toString();
 
     assert(testableId?.isNotEmpty == true);
-    assert(type != null);
     assert(type == 'bool' ||
         type == 'double' ||
         type == 'int' ||
@@ -132,13 +129,13 @@ class SetValueStep extends TestRunnerStep {
     }
 
     var match = false;
-    if (widgetFinder?.isNotEmpty == true) {
+    if (widgetFinder.isNotEmpty == true) {
       try {
-        StatefulElement element = widgetFinder.first;
+        var element = widgetFinder.first as StatefulElement;
 
         var state = element.state;
         if (state is TestableState) {
-          state.onSetValue(typedValue);
+          state.onSetValue!(typedValue);
           match = true;
         }
       } catch (e) {

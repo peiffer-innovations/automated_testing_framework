@@ -4,12 +4,13 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:tinycolor/tinycolor.dart';
+
+import '../tinycolor/tinycolor.dart';
 
 /// Builder function that renders the [Testable] overlay when it is active.
 typedef WidgetOverlayBuilder = Function({
-  BuildContext context,
-  Testable testable,
+  required BuildContext context,
+  required Testable testable,
 });
 
 /// Controller that is used to provide information for the [Testable].  This
@@ -21,24 +22,20 @@ class TestableRenderController {
     Color flashColor = const Color(0x88FFEB3B),
     int flashCount = 3,
     Duration flashDuration = const Duration(milliseconds: 100),
-    TestableGestures gestures,
-    WidgetBuilder globalOverlayBuilder,
+    TestableGestures? gestures,
+    WidgetBuilder? globalOverlayBuilder,
     bool minifyTestSteps = false,
-    Color overlayColor,
+    Color? overlayColor,
     bool showGlobalOverlay = false,
     bool testWidgetsEnabled = kDebugMode == true,
-    WidgetOverlayBuilder widgetOverlayBuilder,
-  })  : assert(flashCount == 0 || flashColor != null),
-        assert(flashCount != null),
-        assert(flashCount >= 0),
-        assert(showGlobalOverlay != null),
-        assert(testWidgetsEnabled != null),
+    WidgetOverlayBuilder? widgetOverlayBuilder,
+  })  : assert(flashCount >= 0),
         _flashColor = flashColor,
         _flashCount = flashCount,
         _flashDuration = flashDuration,
         _gestures = gestures ?? TestableGestures(),
         _globalOverlayBuilder = globalOverlayBuilder ?? fullGlobalOverlay(),
-        _minifyTestSteps = minifyTestSteps ?? false,
+        _minifyTestSteps = minifyTestSteps,
         _overlayColor = overlayColor ?? Colors.red.shade300,
         _showGlobalOverlay = showGlobalOverlay,
         _testWidgetsEnabled = testWidgetsEnabled,
@@ -54,11 +51,11 @@ class TestableRenderController {
   final int _flashCount;
   final Duration _flashDuration;
 
-  StreamController<void> _controller = StreamController<void>.broadcast();
+  StreamController<void>? _controller = StreamController<void>.broadcast();
   TestableGestures _gestures;
   WidgetBuilder _globalOverlayBuilder;
   bool _minifyTestSteps;
-  Color _overlayColor;
+  Color? _overlayColor;
   bool _showGlobalOverlay;
   bool _testWidgetsEnabled;
   WidgetOverlayBuilder _widgetOverlayBuilder;
@@ -69,55 +66,43 @@ class TestableRenderController {
   TestableGestures get gestures => _gestures;
   WidgetBuilder get globalOverlayBuilder => _globalOverlayBuilder;
   bool get minifyTestSteps => _minifyTestSteps;
-  Color get overlayColor => _overlayColor;
+  Color? get overlayColor => _overlayColor;
   bool get showGlobalOverlay => _showGlobalOverlay;
-  Stream<void> get stream => _controller?.stream;
+  Stream<void>? get stream => _controller?.stream;
   bool get testWidgetsEnabled => _testWidgetsEnabled;
   WidgetOverlayBuilder get widgetOverlayBuilder => _widgetOverlayBuilder;
 
   set gestures(TestableGestures gestures) {
-    assert(gestures != null);
-
     _gestures = gestures;
     _controller?.add(null);
   }
 
   set globalOverlayBuilder(WidgetBuilder globalOverlayBuilder) {
-    assert(globalOverlayBuilder != null);
-
     _globalOverlayBuilder = globalOverlayBuilder;
     _controller?.add(null);
   }
 
   set minifyTestSteps(bool minifyTestSteps) {
-    assert(minifyTestSteps != null);
-
     _minifyTestSteps = minifyTestSteps;
     _controller?.add(null);
   }
 
-  set overlayColor(Color overlayColor) {
+  set overlayColor(Color? overlayColor) {
     _overlayColor = overlayColor;
     _controller?.add(null);
   }
 
   set showGlobalOverlay(bool showGlobalOverlay) {
-    assert(showGlobalOverlay != null);
-
     _showGlobalOverlay = showGlobalOverlay;
     _controller?.add(null);
   }
 
   set testWidgetsEnabled(bool testWidgetsEnabled) {
-    assert(testWidgetsEnabled != null);
-
     _testWidgetsEnabled = testWidgetsEnabled;
     _controller?.add(null);
   }
 
   set widgetOverlayBuilder(WidgetOverlayBuilder widgetOverlayBuilder) {
-    assert(widgetOverlayBuilder != null);
-
     _widgetOverlayBuilder = widgetOverlayBuilder;
     _controller?.add(null);
   }
@@ -126,10 +111,10 @@ class TestableRenderController {
   /// [TestRunner] instance, or this will return the default controller if no
   /// [TestRunner] is available.
   static TestableRenderController of(BuildContext context) {
-    TestableRenderController result;
+    TestableRenderController? result;
 
     try {
-      var runner = TestRunner.of(context);
+      var runner = TestRunner.of(context)!;
       result = runner.testableRenderController;
     } catch (e, stack) {
       _logger.severe('Error getting the controller from the context', e, stack);
@@ -142,7 +127,7 @@ class TestableRenderController {
   /// A global overlay that renders with a thin border around the entire
   /// [Testable] widget using the given [color] and border [radius].
   static WidgetBuilder borderGlobalOverlay({
-    Color color,
+    Color? color,
     double radius = 4.0,
   }) =>
       (BuildContext context) => Positioned.fill(
@@ -151,7 +136,7 @@ class TestableRenderController {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(radius),
                   border: Border.all(
-                    color: TestableRenderController.of(context)?.overlayColor ??
+                    color: TestableRenderController.of(context).overlayColor ??
                         color ??
                         Theme.of(context).errorColor,
                   ),
@@ -163,7 +148,7 @@ class TestableRenderController {
   /// A global overlay that renders with a solid [color] with a given [opacity]
   /// over the  entire [Testable] widget.
   static WidgetBuilder fullGlobalOverlay({
-    Color color,
+    Color? color,
     double opacity = 0.1,
   }) =>
       (BuildContext context) => Positioned.fill(
@@ -171,7 +156,7 @@ class TestableRenderController {
               child: Opacity(
                 opacity: opacity,
                 child: Container(
-                  color: TestableRenderController.of(context)?.overlayColor ??
+                  color: TestableRenderController.of(context).overlayColor ??
                       color ??
                       Theme.of(context).errorColor,
                 ),
@@ -182,13 +167,13 @@ class TestableRenderController {
   /// An individual overlay for a [Testable] widget that renders with a given
   /// [color] and centered [icon] using a border [radius].
   static WidgetOverlayBuilder iconWidgetOverlay({
-    Color color,
-    IconData icon,
+    Color? color,
+    IconData? icon,
     double radius = 0.0,
   }) =>
       ({
-        BuildContext context,
-        Testable testable,
+        required BuildContext context,
+        required Testable testable,
       }) =>
           Container(
             alignment: Alignment.center,
@@ -196,7 +181,7 @@ class TestableRenderController {
               borderRadius: BorderRadius.circular(radius),
               border: Border.all(
                 color: TinyColor(
-                  TestableRenderController.of(context)?.overlayColor ??
+                  TestableRenderController.of(context).overlayColor ??
                       color ??
                       Theme.of(context).errorColor,
                 ).darken(20).color,
@@ -215,13 +200,13 @@ class TestableRenderController {
   /// [color] and border [radius].  This will render the current status text
   /// from the active [TestRunner] in the center of the widget.
   static WidgetOverlayBuilder idWidgetOverlay({
-    Color color,
+    Color? color,
     Color textColor = Colors.white,
     double radius = 0.0,
   }) =>
       ({
-        BuildContext context,
-        Testable testable,
+        required BuildContext context,
+        required Testable testable,
       }) =>
           Container(
             alignment: Alignment.center,
@@ -230,7 +215,7 @@ class TestableRenderController {
               borderRadius: BorderRadius.circular(radius),
               border: Border.all(
                 color: TinyColor(
-                  TestableRenderController.of(context)?.overlayColor ??
+                  TestableRenderController.of(context).overlayColor ??
                       color ??
                       Theme.of(context).errorColor,
                 ).darken(20).color,
@@ -238,7 +223,7 @@ class TestableRenderController {
             ),
             child: ClipRect(
               child: Text(
-                testable.id,
+                testable.id!,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: textColor,

@@ -1,22 +1,24 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
-import 'package:websafe_platform/websafe_platform.dart';
 
 /// Page that shows all the test steps and their values for a current test.
 class TestStepsPage extends StatefulWidget {
   TestStepsPage({
     this.fromDialog,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final bool fromDialog;
+  final bool? fromDialog;
 
   @override
   _TestStepsPageState createState() => _TestStepsPageState();
@@ -31,8 +33,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
   bool _exporting = false;
 
-  TestableRenderController _renderController;
-  TestController _testController;
+  late TestableRenderController _renderController;
+  TestController? _testController;
 
   @override
   void initState() {
@@ -43,18 +45,18 @@ class _TestStepsPageState extends State<TestStepsPage> {
   }
 
   Future<void> _onEditStep({
-    @required TestStep step,
-    @required ThemeData theme,
-    @required Translator translator,
+    required TestStep step,
+    required ThemeData theme,
+    required Translator translator,
   }) async {
     var steps = List<TestStep>.from(
-      _testController.currentTest.steps,
+      _testController!.currentTest.steps,
     );
 
-    var values = step?.values ?? {};
+    var values = step.values ?? <String, dynamic>{};
     var idx = steps.indexOf(step);
     var availableStep = TestStepRegistry.of(context).getAvailableTestStep(
-      step?.id,
+      step.id,
     );
 
     if (availableStep != null) {
@@ -75,7 +77,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
             values: newValues,
           ),
         );
-        _testController.currentTest = _testController.currentTest.copyWith(
+        _testController!.currentTest = _testController!.currentTest.copyWith(
           steps: steps,
         );
 
@@ -117,7 +119,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
               children: <Widget>[
                 Icon(
                   Icons.warning,
-                  color: theme.textTheme.bodyText2.color,
+                  color: theme.textTheme.bodyText2!.color,
                   size: 54.0,
                 ),
                 SizedBox(
@@ -137,8 +139,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
   }
 
   Future<void> _onEditTestName({
-    @required TestController tester,
-    @required Translator translator,
+    required TestController tester,
+    required Translator translator,
   }) async {
     var label = translator.translate(TestTranslations.atf_test_name);
     var testName = tester.currentTest.name ?? '';
@@ -164,7 +166,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    var valid = Form.of(context).validate();
+                    var valid = Form.of(context)!.validate();
                     if (valid == true) {
                       Navigator.of(context).pop(testName);
                     }
@@ -217,9 +219,9 @@ class _TestStepsPageState extends State<TestStepsPage> {
       ),
     );
     if (endTestName?.isNotEmpty == true) {
-      _testController.currentTest = _testController.currentTest.copyWith(
+      _testController!.currentTest = _testController!.currentTest.copyWith(
         name: endTestName,
-        suiteName: suiteName?.isEmpty == true ? null : suiteName,
+        suiteName: suiteName.isEmpty == true ? null : suiteName,
       );
       if (mounted == true) {
         setState(() {});
@@ -229,8 +231,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
   Widget _buildFullStep(
     BuildContext context, {
-    @required int index,
-    @required TestStep step,
+    required int index,
+    required TestStep step,
   }) {
     var tester = TestController.of(context);
     var translator = Translator.of(context);
@@ -255,7 +257,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   height: 200.0,
                   padding: EdgeInsets.all(16.0),
                   child: Image.memory(
-                    step.image,
+                    step.image!,
                     fit: BoxFit.scaleDown,
                   ),
                 ),
@@ -287,13 +289,13 @@ class _TestStepsPageState extends State<TestStepsPage> {
                           ? null
                           : () {
                               var steps = List<TestStep>.from(
-                                _testController.currentTest.steps,
+                                _testController!.currentTest.steps,
                               );
 
                               steps.removeAt(index);
                               steps.insert(index - 1, step);
 
-                              _testController.currentTest = _testController
+                              _testController!.currentTest = _testController!
                                   .currentTest
                                   .copyWith(steps: steps);
                               if (mounted == true) {
@@ -313,18 +315,18 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       color: theme.iconTheme.color,
                       icon: Icon(Icons.arrow_downward),
                       onPressed:
-                          index == _testController.currentTest.steps.length - 1
+                          index == _testController!.currentTest.steps.length - 1
                               ? null
                               : () {
                                   var steps = List<TestStep>.from(
-                                    _testController.currentTest.steps,
+                                    _testController!.currentTest.steps,
                                   );
 
                                   steps.removeAt(index);
                                   steps.insert(index + 1, step);
 
-                                  _testController.currentTest =
-                                      _testController.currentTest.copyWith(
+                                  _testController!.currentTest =
+                                      _testController!.currentTest.copyWith(
                                     steps: steps,
                                   );
                                   if (mounted == true) {
@@ -345,12 +347,12 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         var steps = List<TestStep>.from(
-                          _testController.currentTest.steps,
+                          _testController!.currentTest.steps,
                         );
 
                         steps.remove(step);
-                        _testController.currentTest =
-                            _testController.currentTest.copyWith(
+                        _testController!.currentTest =
+                            _testController!.currentTest.copyWith(
                           steps: steps,
                         );
                         if (mounted == true) {
@@ -393,13 +395,14 @@ class _TestStepsPageState extends State<TestStepsPage> {
                         Navigator.of(context).pop();
 
                         try {
-                          await tester.execute(
+                          await tester!.execute(
                             reset: false,
                             steps: [step],
                             submitReport: false,
+                            version: 0,
                           );
                         } catch (e) {
-                          tester.sleep = null;
+                          tester!.sleep = null;
                           tester.step = null;
                         }
                       },
@@ -416,8 +419,8 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
   Widget _buildMinifiedStep(
     BuildContext context, {
-    @required int index,
-    @required TestStep step,
+    required int index,
+    required TestStep step,
   }) {
     var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
@@ -449,7 +452,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       top: 4.0,
                     ),
                     child: Text(
-                      step.values['testableId'],
+                      step.values!['testableId'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.caption,
@@ -473,12 +476,12 @@ class _TestStepsPageState extends State<TestStepsPage> {
               ),
               onPressed: () {
                 var steps = List<TestStep>.from(
-                  _testController.currentTest.steps,
+                  _testController!.currentTest.steps,
                 );
 
                 steps.remove(step);
-                _testController.currentTest =
-                    _testController.currentTest.copyWith(
+                _testController!.currentTest =
+                    _testController!.currentTest.copyWith(
                   steps: steps,
                 );
                 if (mounted == true) {
@@ -548,7 +551,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () => _onEditTestName(
-                  tester: tester,
+                  tester: tester!,
                   translator: translator,
                 ),
                 tooltip: translator.translate(TestTranslations.atf_button_edit),
@@ -558,7 +561,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                   icon: Icon(Icons.content_copy),
                   onPressed: () async {
                     var encoder = JsonEncoder.withIndent('  ');
-                    var steps = testController.currentTest.steps;
+                    var steps = testController!.currentTest.steps;
                     var simpleSteps = [];
                     for (var step in steps) {
                       simpleSteps.add(
@@ -603,13 +606,13 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 ),
               ),
             ],
-            centerTitle: WebsafePlatform().isIOS(),
+            centerTitle: !kIsWeb && Platform.isIOS,
             title: Text(
-              (_testController.currentTest.name ??
+              (_testController!.currentTest.name ??
                       translator.translate(
                         TestTranslations.atf_unnamed_test,
                       )) +
-                  (testController.currentTest.suiteName?.isNotEmpty == true
+                  (testController!.currentTest.suiteName?.isNotEmpty == true
                       ? ' (${testController.currentTest.suiteName})'
                       : ''),
             ),
@@ -625,7 +628,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                         ? ReorderableListView(
                             onReorder: (int oldIndex, int newIndex) {
                               var steps = List<TestStep>.from(
-                                _testController.currentTest.steps,
+                                _testController!.currentTest.steps,
                               );
                               var step = steps[oldIndex];
 
@@ -636,7 +639,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                                 steps.insert(newIndex - 1, step);
                               }
 
-                              _testController.currentTest = _testController
+                              _testController!.currentTest = _testController!
                                   .currentTest
                                   .copyWith(steps: steps);
                               if (mounted == true) {
@@ -760,7 +763,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                               children: <Widget>[
                                 Icon(
                                   Icons.warning,
-                                  color: theme.textTheme.bodyText2.color,
+                                  color: theme.textTheme.bodyText2!.color,
                                   size: 54.0,
                                 ),
                                 SizedBox(
@@ -778,7 +781,9 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       );
 
                       if (clear == true) {
-                        testController.currentTest = Test();
+                        testController.currentTest = Test(
+                          name: 'Change Me ${Random().nextInt(1000)}',
+                        );
                         Navigator.of(context).pop();
                       }
                       break;
@@ -806,17 +811,17 @@ class _TestStepsPageState extends State<TestStepsPage> {
                     case _kRunAllTabIndex:
                       var controller = TestableRenderController.of(context);
                       controller.showGlobalOverlay = false;
-                      var tester = TestController.of(context);
+                      var tester = TestController.of(context)!;
                       Navigator.of(context).pop();
                       await Future.delayed(Duration(milliseconds: 500));
                       try {
                         await tester.execute(
-                          name: _testController.currentTest.name,
+                          name: _testController!.currentTest.name,
                           reset: true,
-                          steps: _testController.currentTest.steps,
+                          steps: _testController!.currentTest.steps,
                           submitReport: false,
-                          suiteName: _testController.currentTest.suiteName,
-                          version: _testController.currentTest.version,
+                          suiteName: _testController!.currentTest.suiteName,
+                          version: _testController!.currentTest.version,
                         );
                       } catch (e, stack) {
                         _logger.severe(e, stack);

@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 class TestStepRegistry {
   TestStepRegistry({
     this.debugLabel,
-    List<TestStepBuilder> steps,
+    List<TestStepBuilder>? steps,
   }) {
     registerCustomSteps(steps);
     for (var builder in _all) {
@@ -217,7 +217,7 @@ class TestStepRegistry {
   ];
 
   /// Label that can be used to assist with debugging
-  final String debugLabel;
+  final String? debugLabel;
 
   final Map<String, TestStepBuilder> _builtInSteps = {};
   final Map<String, TestStepBuilder> _customSteps = {};
@@ -250,7 +250,7 @@ class TestStepRegistry {
   /// instance, unless specific parts of an application require highly
   /// specialized test steps.
   static TestStepRegistry of(BuildContext context) {
-    TestStepRegistry result;
+    TestStepRegistry? result;
 
     try {
       result = Provider.of<TestStepRegistry>(
@@ -268,7 +268,7 @@ class TestStepRegistry {
   /// in the registered custom steps and then if no custom step with the given
   /// [id] exists, this will look in the built in steps.  If no step for the
   /// given [id] can be found, this will return [null].
-  AvailableTestStep getAvailableTestStep(String id) =>
+  AvailableTestStep? getAvailableTestStep(String id) =>
       _customSteps[id]?.availableTestStep ??
       _builtInSteps[id]?.availableTestStep;
 
@@ -276,18 +276,18 @@ class TestStepRegistry {
   /// registered custom steps and then if no custom step with the given [id]
   /// exists, this will look in the built in steps.  If no step for the given
   /// [id] can be found, this will return [null].
-  TestStepBuilder getBuilder(String id) =>
+  TestStepBuilder? getBuilder(String id) =>
       _customSteps[id] ?? _builtInSteps[id];
 
   /// Returns a [TestRunnerStep] for the given [id] and given set of [values].
   /// This will first look in the registered custom steps and then fall back to
   /// the built in steps.  If no step can be located for the given [id] then
   /// this will return [null].
-  TestRunnerStep getRunnerStep({
-    @required String id,
-    @required dynamic values,
+  TestRunnerStep? getRunnerStep({
+    required String id,
+    required dynamic values,
   }) {
-    TestRunnerStep result;
+    TestRunnerStep? result;
     var builder = getBuilder(id);
 
     if (builder != null) {
@@ -302,14 +302,12 @@ class TestStepRegistry {
   /// If a built in step is registered with the same ultimate id then this will
   /// shadow the built in step such that this step will now be used in place of
   /// the built in step.
-  void registerCustomStep(TestStepBuilder step) {
-    assert(step != null);
-    _customSteps[step.availableTestStep.id] = step;
-  }
+  void registerCustomStep(TestStepBuilder step) =>
+      _customSteps[step.availableTestStep.id] = step;
 
   /// Simple convenience method that calls [registerCustomStep] for every entity
   /// in the given list.
-  void registerCustomSteps(List<TestStepBuilder> steps) {
+  void registerCustomSteps(List<TestStepBuilder>? steps) {
     if (steps != null) {
       for (var step in steps) {
         registerCustomStep(step);

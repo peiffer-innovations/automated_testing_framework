@@ -4,24 +4,23 @@ import 'package:static_translations/static_translations.dart';
 
 class TestStepPicker extends StatefulWidget {
   TestStepPicker({
-    Key key,
-    @required this.label,
-    @required this.onStepChanged,
+    Key? key,
+    required this.label,
+    required this.onStepChanged,
     this.step,
-  })  : assert(label?.isNotEmpty == true),
-        super(key: key);
+  }) : super(key: key);
 
   final String label;
-  final ValueChanged<TestStep> onStepChanged;
-  final TestStep step;
+  final ValueChanged<TestStep?> onStepChanged;
+  final TestStep? step;
 
   @override
   _TestStepPickerState createState() => _TestStepPickerState();
 }
 
 class _TestStepPickerState extends State<TestStepPicker> {
-  TestRunnerState _testRunner;
-  TestStep _step;
+  TestRunnerState? _testRunner;
+  TestStep? _step;
 
   @override
   void initState() {
@@ -32,16 +31,16 @@ class _TestStepPickerState extends State<TestStepPicker> {
   }
 
   Future<void> _openTestStep({
-    AvailableTestStep aStep,
-    BuildContext context,
-    ThemeData theme,
+    AvailableTestStep? aStep,
+    required BuildContext context,
+    ThemeData? theme,
   }) async {
     var values = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) => Theme(
-          data: theme,
+          data: theme!,
           child: TestableFormPage(
-            form: aStep.form,
+            form: aStep!.form,
             values: _step?.values ?? {},
           ),
         ),
@@ -50,7 +49,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
 
     if (values != null) {
       _step = TestStep(
-        id: aStep.id,
+        id: aStep!.id,
         values: values,
       );
     }
@@ -65,9 +64,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
     var theme = _testRunner?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
     var steps = (_testRunner?.controller?.registry ?? TestStepRegistry.instance)
-        .availableSteps
-        .where((s) => s.form != null)
-        .toList();
+        .availableSteps;
 
     await showDialog(
       context: context,
@@ -141,7 +138,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
         ListTile(
           onTap: () => _showAvailableSteps(context),
           subtitle: _step?.values?.containsKey('testableId') == true
-              ? Text(_step.values['testableId'] ?? '')
+              ? Text(_step!.values!['testableId'] ?? '')
               : null,
           title: Text(
             _step?.id ??

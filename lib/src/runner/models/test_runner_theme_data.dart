@@ -18,17 +18,7 @@ class TestRunnerThemeData implements JsonClass {
     this.statusProgressColor = Colors.black,
     this.statusSuccessColor = Colors.green,
     this.statusTextColor = Colors.white,
-  })  : assert(runnerOverlayColor != null),
-        assert(showRunnerStatus != null),
-        assert(showStepText != null),
-        assert(statusAlignment != null),
-        assert(statusBackgroundColor != null),
-        assert(statusErrorColor != null),
-        assert(statusOpacity != null),
-        assert(statusOpacity >= 0.0 && statusOpacity <= 1.0),
-        assert(statusProgressColor != null),
-        assert(statusSuccessColor != null),
-        assert(statusTextColor != null);
+  }) : assert(statusOpacity >= 0.0 && statusOpacity <= 1.0);
 
   /// Default theme for dark mode.
   factory TestRunnerThemeData.dark({
@@ -142,23 +132,25 @@ class TestRunnerThemeData implements JsonClass {
   /// * [JsonClass.parseDouble]
   /// * [ThemeDecoder.decodeColor]
   /// * [TestStatusAlignment.fromString]
-  static TestRunnerThemeData fromDynamic(dynamic map) {
-    TestRunnerThemeData result;
+  static TestRunnerThemeData? fromDynamic(dynamic map) {
+    TestRunnerThemeData? result;
 
     if (map != null) {
       result = TestRunnerThemeData(
-        runnerOverlayColor: ThemeDecoder.decodeColor(map['runnerOverlayColor']),
+        runnerOverlayColor:
+            ThemeDecoder.decodeColor(map['runnerOverlayColor'])!,
         showRunnerStatus: JsonClass.parseBool(map['showRunnerStatus']),
         showStepText: JsonClass.parseBool(map['showStepText']),
         statusAlignment: TestStatusAlignment.fromString(map['statusAlignment']),
         statusBackgroundColor:
-            ThemeDecoder.decodeColor(map['statusBackgroundColor']),
-        statusErrorColor: ThemeDecoder.decodeColor(map['statusErrorColor']),
-        statusOpacity: JsonClass.parseDouble(map['statusOpacity']),
+            ThemeDecoder.decodeColor(map['statusBackgroundColor'])!,
+        statusErrorColor: ThemeDecoder.decodeColor(map['statusErrorColor'])!,
+        statusOpacity: JsonClass.parseDouble(map['statusOpacity'])!,
         statusProgressColor:
-            ThemeDecoder.decodeColor(map['statusProgressColor']),
-        statusSuccessColor: ThemeDecoder.decodeColor(map['statusSuccessColor']),
-        statusTextColor: ThemeDecoder.decodeColor(map['statusTextColor']),
+            ThemeDecoder.decodeColor(map['statusProgressColor'])!,
+        statusSuccessColor:
+            ThemeDecoder.decodeColor(map['statusSuccessColor'])!,
+        statusTextColor: ThemeDecoder.decodeColor(map['statusTextColor'])!,
       );
     }
 
@@ -205,8 +197,8 @@ class TestStatusAlignment {
 
   /// Converts the alignment from a string to an actual object.  This will throw
   /// an exception if the string does not match any valid value.
-  static TestStatusAlignment fromString(String data) {
-    TestStatusAlignment result;
+  static TestStatusAlignment fromString(String? data) {
+    TestStatusAlignment? result;
 
     if (data != null) {
       switch (data) {

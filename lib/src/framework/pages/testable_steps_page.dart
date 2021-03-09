@@ -4,7 +4,8 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:static_translations/static_translations.dart';
-import 'package:tinycolor/tinycolor.dart';
+
+import '../../tinycolor/tinycolor.dart';
 
 /// Page that displays all the test steps for the current test.  This will allow
 /// the reordering, clearing, editing, and saving of the steps w/in a current
@@ -13,18 +14,18 @@ class TestableStepsPage extends StatefulWidget {
   TestableStepsPage({
     this.error,
     this.image,
-    Key key,
+    Key? key,
     this.scrollableId,
     this.testableId,
     this.types,
     this.value,
   }) : super(key: key);
 
-  final String error;
-  final Uint8List image;
-  final String scrollableId;
-  final String testableId;
-  final List<TestableType> types;
+  final String? error;
+  final Uint8List? image;
+  final String? scrollableId;
+  final String? testableId;
+  final List<TestableType>? types;
   final dynamic value;
 
   @override
@@ -43,12 +44,10 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
     var availSteps = registry.availableSteps;
 
     availSteps
-        .where((step) => step.form != null && step.widgetless == true)
+        .where((step) => step.widgetless == true)
         .forEach((step) => _globalSteps.add(step));
 
-    availSteps
-        .where((step) => step.form != null && step.widgetless == false)
-        .forEach((step) {
+    availSteps.where((step) => step.widgetless == false).forEach((step) {
       if (step.supports(widget.types)) {
         _widgetSteps.add(step);
       }
@@ -82,7 +81,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
         );
 
         if (values != null) {
-          testController.currentTest.addTestStep(TestStep(
+          testController!.currentTest.addTestStep(TestStep(
             id: step.id,
             image: step.widgetless == true ? null : widget.image,
             values: step.minify(values),
@@ -109,13 +108,13 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                 onPressed: () async {
                   var values = <String, dynamic>{}
                     ..addAll(_createValues(step))
-                    ..addAll(step.quickAddValues);
+                    ..addAll(step.quickAddValues!);
                   var testStep = TestStep(
                     id: step.id,
                     image: step.widgetless == true ? null : widget.image,
                     values: step.minify(values),
                   );
-                  testController.currentTest.addTestStep(testStep);
+                  testController!.currentTest.addTestStep(testStep);
 
                   if (mounted == true) {
                     Navigator.of(context).pop();
@@ -125,6 +124,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                       reset: false,
                       steps: [testStep],
                       submitReport: false,
+                      version: 0,
                     );
                   }
                 },
@@ -141,8 +141,8 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                 onPressed: () {
                   var values = <String, dynamic>{}
                     ..addAll(_createValues(step))
-                    ..addAll(step.quickAddValues);
-                  testController.currentTest.addTestStep(TestStep(
+                    ..addAll(step.quickAddValues!);
+                  testController!.currentTest.addTestStep(TestStep(
                     id: step.id,
                     image: step.widgetless == true ? null : widget.image,
                     values: step.minify(values),
@@ -315,7 +315,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                                 children: <Widget>[
                                   Flexible(
                                     child: Text(
-                                      widget.testableId,
+                                      widget.testableId!,
                                       maxLines: 1,
                                       style: theme.textTheme.subtitle2,
                                       textAlign: TextAlign.center,
@@ -361,7 +361,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                                       .color,
                               height: 200.0,
                               child: Image.memory(
-                                widget.image,
+                                widget.image!,
                                 fit: BoxFit.scaleDown,
                                 scale: MediaQuery.of(context).devicePixelRatio,
                               ),
@@ -401,7 +401,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                               context,
                               step,
                             ),
-                          if (testController.customRoutes?.isNotEmpty ==
+                          if (testController!.customRoutes.isNotEmpty ==
                               true) ...[
                             Divider(),
                             Padding(
@@ -440,7 +440,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                   wide == true ? Alignment.centerRight : Alignment.center,
               height: 40.0,
               child: TextButton(
-                onPressed: (testController.currentTest.steps?.length ?? 0) == 0
+                onPressed: testController!.currentTest.steps.isEmpty == true
                     ? null
                     : () async {
                         await Navigator.of(context).push(
@@ -456,7 +456,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                   translator.translate(
                     TestTranslations.atf_button_view_test_steps,
                     {
-                      'count': testController.currentTest.steps?.length ?? 0,
+                      'count': testController.currentTest.steps.length,
                     },
                   ),
                 ),

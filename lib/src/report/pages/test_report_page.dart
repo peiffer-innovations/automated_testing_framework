@@ -7,7 +7,7 @@ import 'package:static_translations/static_translations.dart';
 /// Page that can display a full test report.
 class TestReportPage extends StatefulWidget {
   TestReportPage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -20,11 +20,9 @@ class _TestReportPageState extends State<TestReportPage> {
 
   Future<void> _saveGoldenImages(
     BuildContext context, {
-    @required TestReport report,
-    @required TestController tester,
+    required TestReport report,
+    required TestController tester,
   }) async {
-    assert(report != null);
-    assert(tester != null);
     var translator = Translator.of(context);
 
     _saving = true;
@@ -66,7 +64,7 @@ class _TestReportPageState extends State<TestReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    var report = ModalRoute.of(context).settings.arguments as TestReport;
+    var report = ModalRoute.of(context)!.settings.arguments as TestReport?;
     var tester = TestController.of(context);
     var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
@@ -77,7 +75,7 @@ class _TestReportPageState extends State<TestReportPage> {
         builder: (BuildContext context) => Scaffold(
           appBar: AppBar(
             actions: [
-              if (tester.currentTest?.steps?.isNotEmpty == true)
+              if (tester!.currentTest.steps.isNotEmpty == true)
                 IconButton(
                   icon: Icon(Icons.refresh),
                   onPressed: () async {
@@ -110,7 +108,8 @@ class _TestReportPageState extends State<TestReportPage> {
                           itemBuilder: (BuildContext context, int index) {
                             Widget result;
                             if (index == 0) {
-                              if (report.runtimeException?.isNotEmpty == true) {
+                              if (report!.runtimeException?.isNotEmpty ==
+                                  true) {
                                 result = Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Column(
@@ -121,14 +120,14 @@ class _TestReportPageState extends State<TestReportPage> {
                                         size: 64.0,
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyText2
+                                            .bodyText2!
                                             .color,
                                       ),
                                       SizedBox(
                                         height: 8.0,
                                       ),
                                       Text(
-                                        report.runtimeException,
+                                        report.runtimeException!,
                                         maxLines: 5,
                                       ),
                                       SizedBox(
@@ -189,7 +188,7 @@ class _TestReportPageState extends State<TestReportPage> {
                                                             color: Theme.of(
                                                                     context)
                                                                 .textTheme
-                                                                .bodyText2
+                                                                .bodyText2!
                                                                 .color,
                                                           ),
                                                         ),
@@ -253,7 +252,7 @@ class _TestReportPageState extends State<TestReportPage> {
                                                     ),
                                                     Flexible(
                                                       child: Text(
-                                                        report.suiteName,
+                                                        report.suiteName!,
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
@@ -300,7 +299,7 @@ class _TestReportPageState extends State<TestReportPage> {
                                   ),
                                 );
                               }
-                            } else if (index - 1 < report.steps.length) {
+                            } else if (index - 1 < report!.steps.length) {
                               index--;
                               result = Padding(
                                 padding: EdgeInsets.symmetric(
@@ -336,7 +335,7 @@ class _TestReportPageState extends State<TestReportPage> {
                                     Material(
                                       elevation: 2.0,
                                       child: Image.memory(
-                                        report.images[index].image,
+                                        report.images[index].image!,
                                         fit: BoxFit.contain,
                                       ),
                                     ),
@@ -346,14 +345,12 @@ class _TestReportPageState extends State<TestReportPage> {
                             }
                             return result;
                           },
-                          itemCount: report.steps.length +
-                              1 +
-                              (report.images?.length ?? 0),
+                          itemCount:
+                              report!.steps.length + 1 + report.images.length,
                         ),
                       ),
-                      if (report.images?.isNotEmpty == true &&
+                      if (report.images.isNotEmpty == true &&
                           report.name?.isNotEmpty == true &&
-                          report.version != null &&
                           tester.goldenImageWriter !=
                               TestStore.goldenImageWriter)
                         Builder(

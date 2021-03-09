@@ -32,15 +32,14 @@ class TestRunner extends StatefulWidget {
   /// If a [theme] is passed in then that will be used by the framework's built
   /// in pages and widgets.
   TestRunner({
-    @required this.child,
-    @required TestController controller,
-    bool enabled,
-    Key key,
+    required this.child,
+    TestController? controller,
+    bool? enabled,
+    Key? key,
     this.progressBuilder = const TestProgressBuilder(),
-    TestableRenderController testableRenderController,
+    TestableRenderController? testableRenderController,
     this.theme,
-  })  : assert(child != null),
-        assert(controller != null ||
+  })  : assert(controller != null ||
             enabled == false ||
             (enabled == null && foundation.kReleaseMode == true)),
         _enabled = enabled ?? foundation.kReleaseMode != true,
@@ -51,15 +50,15 @@ class TestRunner extends StatefulWidget {
         super(key: key);
 
   final Widget child;
-  final TestController controller;
+  final TestController? controller;
   final Widget progressBuilder;
-  final ThemeData theme;
+  final ThemeData? theme;
 
   final bool _enabled;
   final TestableRenderController _testableRenderController;
 
-  static TestRunnerState of(BuildContext context) {
-    TestRunnerState runner;
+  static TestRunnerState? of(BuildContext context) {
+    TestRunnerState? runner;
     try {
       runner = context.findAncestorStateOfType<TestRunnerState>();
     } catch (e) {
@@ -81,15 +80,15 @@ class TestRunnerState extends State<TestRunner> {
   final GlobalKey _globalKey = GlobalKey();
   final List<StreamSubscription> _subscriptions = [];
 
-  AnimationController _animationController;
-  bool _enabled;
-  MediaQueryData _mediaQuery;
+  AnimationController? _animationController;
+  bool? _enabled;
+  MediaQueryData? _mediaQuery;
 
-  TestController get controller => widget.controller;
-  bool get enabled => _enabled;
+  TestController? get controller => widget.controller;
+  bool? get enabled => _enabled;
   TestableRenderController get testableRenderController =>
       widget.testableRenderController;
-  ThemeData get theme => widget.theme;
+  ThemeData? get theme => widget.theme;
 
   @override
   void initState() {
@@ -99,10 +98,10 @@ class TestRunnerState extends State<TestRunner> {
 
     if (widget.enabled == true) {
       _subscriptions
-          .add(controller.screencapStream.listen((captureContext) async {
+          .add(controller!.screencapStream.listen((captureContext) async {
         var captured = await capture();
         if (captured?.isNotEmpty == true) {
-          captureContext.image.addAll(captured);
+          captureContext.image.addAll(captured!);
         }
       }));
     }
@@ -115,22 +114,22 @@ class TestRunnerState extends State<TestRunner> {
     super.dispose();
   }
 
-  Future<Uint8List> capture() async {
+  Future<Uint8List?> capture() async {
     await Future.delayed(Duration(milliseconds: 100));
 
-    Uint8List image;
+    Uint8List? image;
 
     if (!foundation.kIsWeb) {
-      RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
+      var boundary = _globalKey.currentContext!.findRenderObject()
+          as RenderRepaintBoundary?;
       if (!foundation.kDebugMode || boundary?.debugNeedsPaint != true) {
-        var img = await boundary.toImage(
+        var img = await boundary!.toImage(
           pixelRatio: _mediaQuery?.devicePixelRatio ?? 1.0,
         );
         var byteData = await img.toByteData(
           format: ui.ImageByteFormat.png,
         );
-        image = byteData.buffer.asUint8List();
+        image = byteData?.buffer.asUint8List();
       }
     }
 
@@ -143,7 +142,7 @@ class TestRunnerState extends State<TestRunner> {
         ? widget.child
         : MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: Provider<TestController>.value(
+            home: Provider<TestController?>.value(
               value: controller,
               child: Builder(builder: (BuildContext context) {
                 _mediaQuery = MediaQuery.of(context);
@@ -155,11 +154,9 @@ class TestRunnerState extends State<TestRunner> {
                         child: widget.child,
                       ),
                     ),
-                    if (widget.progressBuilder != null)
-                      Builder(
-                        builder: (BuildContext context) =>
-                            widget.progressBuilder,
-                      ),
+                    Builder(
+                      builder: (BuildContext context) => widget.progressBuilder,
+                    ),
                   ],
                 );
               }),

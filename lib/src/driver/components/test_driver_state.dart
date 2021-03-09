@@ -1,4 +1,4 @@
 class TestDriverState {
-  bool active;
-  String driverName;
+  bool? active;
+  String? driverName;
 }

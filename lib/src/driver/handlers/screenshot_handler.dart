@@ -9,9 +9,9 @@ class ScreenshotHandler {
   ScreenshotHandler._internal();
   static final ScreenshotHandler _singleton = ScreenshotHandler._internal();
 
-  TestDriver _driver;
-  Uint8List _screenshot;
-  Timer _timer;
+  late TestDriver _driver;
+  Uint8List? _screenshot;
+  Timer? _timer;
 
   set driver(TestDriver driver) => _driver = driver;
 
@@ -27,7 +27,8 @@ class ScreenshotHandler {
         success: false,
       );
     } else {
-      var screenshot = await _driver.testController.screencap();
+      var screenshot =
+          await (_driver.testController!.screencap() as FutureOr<Uint8List>);
       result = CommandAck(
         commandId: command.id,
         response: ScreenshotResponse(image: screenshot),
@@ -80,12 +81,13 @@ class ScreenshotHandler {
   Future<void> _sendScreenshot(
     StartScreenshotStreamCommand command,
   ) async {
-    var screenshot = await _driver.testController.screencap();
-    var differ = _screenshot == null || _screenshot.length != screenshot.length;
+    var screenshot = await _driver.testController!.screencap();
+    var differ =
+        _screenshot == null || _screenshot!.length != screenshot!.length;
 
     if (differ != true) {
-      for (var i = 0; i < screenshot.length; i++) {
-        if (screenshot[i] != _screenshot[i]) {
+      for (var i = 0; i < screenshot!.length; i++) {
+        if (screenshot[i] != _screenshot![i]) {
           differ = true;
           break;
         }
@@ -93,10 +95,10 @@ class ScreenshotHandler {
     }
 
     if (differ == true) {
-      await _driver.communicator.sendCommand(
+      await _driver.communicator!.sendCommand(
         CommandAck(
           commandId: command.id,
-          response: ScreenshotResponse(image: screenshot),
+          response: ScreenshotResponse(image: screenshot!),
           success: true,
         ),
       );

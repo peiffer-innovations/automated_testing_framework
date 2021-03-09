@@ -56,42 +56,41 @@ class Testable extends StatefulWidget {
   /// * [TextField]: onRequestValue; if a [TextEditingController] is set then also: onSetValue
   /// * [TextFormField]: onRequestValue; if a [TextEditingController] is set then also: onSetValue
   Testable({
-    @required this.child,
+    required this.child,
     this.gestures,
-    @required this.id,
+    required this.id,
     this.onRequestError,
     this.onRequestValue,
     this.onSetValue,
     this.scrollableId,
-  })  : assert(child != null),
-        super(key: ValueKey(id));
+  }) : super(key: ValueKey(id));
 
   /// The child widget the test framework should be testing.
   final Widget child;
 
   /// The gesture overrides for this [Testable] widget.
-  final TestableGestures gestures;
+  final TestableGestures? gestures;
 
   /// The page-unique identifier for the widget.  This is required for the
   /// framework to be able to locate then widget when runnning in test mode.
-  final String id;
+  final String? id;
 
   /// Callback function that can provide the error message from the [child]
   /// widget to the testing framework.
-  final String Function() onRequestError;
+  final String? Function()? onRequestError;
 
   /// Callback function that can provide the value from the [child] widget to
   /// the testing framework.
-  final dynamic Function() onRequestValue;
+  final dynamic Function()? onRequestValue;
 
   /// Callback funcation that can be used to set the value to the [child]
   /// widget.
-  final ValueChanged<dynamic> onSetValue;
+  final ValueChanged<dynamic>? onSetValue;
 
   /// The page-unique id of the [Scrollable] widget containing this [Testable]
   /// widget.  This is required to be able to identify the propery [Scrollable]
   /// when there are multiple [Scrollable] widgets on a single plage.
-  final String scrollableId;
+  final String? scrollableId;
 
   @override
   TestableState createState() => TestableState();
@@ -105,37 +104,37 @@ class TestableState extends State<Testable>
   final List<StreamSubscription> _subscriptions = [];
   final Set<TestableType> _types = {TestableType.tappable};
 
-  Animation<Color> _animation;
-  AnimationController _animationController;
-  Color _backgroundColor;
-  bool _isDialogOpen;
+  late Animation<Color?> _animation;
+  AnimationController? _animationController;
+  Color? _backgroundColor;
+  bool? _isDialogOpen;
   Color _obscureColor = Colors.transparent;
-  dynamic Function() _onRequestError;
-  dynamic Function() _onRequestValue;
-  ValueChanged<dynamic> _onSetValue;
+  dynamic Function()? _onRequestError;
+  dynamic Function()? _onRequestValue;
+  ValueChanged<dynamic>? _onSetValue;
   double _opacity = 1.0;
-  TestableRenderController _renderController;
-  GlobalKey _renderKey;
-  String _scrollableId;
+  late TestableRenderController _renderController;
+  GlobalKey? _renderKey;
+  String? _scrollableId;
 
   /// Global key that provides the ability for the scroll_until_visible step to
   /// actually scroll to this widget.
-  GlobalKey _scrollKey;
+  GlobalKey? _scrollKey;
   bool _showTestableOverlay = false;
-  TestController _testController;
-  TestRunnerState _testRunner;
+  TestController? _testController;
+  TestRunnerState? _testRunner;
 
   /// Returns the callback function capable of prividing the current error
   /// message from the [child] widget.
-  dynamic Function() get onRequestError => _onRequestError;
+  dynamic Function()? get onRequestError => _onRequestError;
 
   /// Returns the callback function capable of prividing the current value from
   /// the [child] widget.
-  dynamic Function() get onRequestValue => _onRequestValue;
+  dynamic Function()? get onRequestValue => _onRequestValue;
 
   /// Returns the callback funcation that can be used to set the value to the
   /// [child]  widget.
-  ValueChanged<dynamic> get onSetValue => _onSetValue;
+  ValueChanged<dynamic>? get onSetValue => _onSetValue;
 
   @override
   void initState() {
@@ -168,7 +167,7 @@ class TestableState extends State<Testable>
         if (_renderController.testWidgetsEnabled == true) {
           _renderKey = GlobalKey();
 
-          _subscriptions.add(_renderController.stream.listen((_) {
+          _subscriptions.add(_renderController.stream!.listen((_) {
             if (mounted == true) {
               setState(() {});
             }
@@ -183,7 +182,7 @@ class TestableState extends State<Testable>
           _animation = ColorTween(
             begin: Colors.transparent,
             end: _renderController.flashColor,
-          ).animate(_animationController)
+          ).animate(_animationController!)
             ..addListener(() {
               if (mounted == true) {
                 setState(() {});
@@ -213,7 +212,7 @@ class TestableState extends State<Testable>
             try {
               var scrollable = Scrollable.of(context);
               canBeScrolled = scrollable != null;
-              _scrollableId = scrollable?.widget?.key?.toString();
+              _scrollableId = scrollable?.widget.key?.toString();
             } catch (e, stack) {
               _logger.severe(e, stack);
             }
@@ -230,7 +229,7 @@ class TestableState extends State<Testable>
 
   @override
   void didUpdateWidget(Widget oldWidget) {
-    super.didUpdateWidget(oldWidget);
+    super.didUpdateWidget(oldWidget as Testable);
 
     if (widget.id?.isNotEmpty == true) {
       _testRunner = TestRunner.of(context);
@@ -265,7 +264,7 @@ class TestableState extends State<Testable>
   void dispose() {
     _animationController?.dispose();
     _animationController = null;
-    _subscriptions?.forEach((sub) => sub.cancel());
+    _subscriptions.forEach((sub) => sub.cancel());
 
     super.dispose();
   }
@@ -280,12 +279,12 @@ class TestableState extends State<Testable>
   /// image will be painted.  This can be useful when widgets inherit a
   /// background from their parent because that background would not be part of
   /// the captured value.
-  Future<Uint8List> captureImage([
-    Color backgroundColor,
+  Future<Uint8List?> captureImage([
+    Color? backgroundColor,
   ]) async {
-    RenderRepaintBoundary boundary =
-        _renderKey.currentContext.findRenderObject();
-    Uint8List image;
+    var boundary = _renderKey!.currentContext!.findRenderObject()
+        as RenderRepaintBoundary?;
+    Uint8List? image;
     if (!kIsWeb) {
       if (!kDebugMode || boundary?.debugNeedsPaint != true) {
         _backgroundColor = backgroundColor;
@@ -294,14 +293,15 @@ class TestableState extends State<Testable>
         }
 
         await Future.delayed(Duration(milliseconds: 500));
-        boundary = _renderKey.currentContext.findRenderObject();
-        var img = await boundary.toImage(
+        boundary = _renderKey!.currentContext!.findRenderObject()
+            as RenderRepaintBoundary?;
+        var img = await boundary!.toImage(
           pixelRatio: MediaQuery.of(context).devicePixelRatio,
         );
         var byteData = await img.toByteData(
           format: ui.ImageByteFormat.png,
         );
-        image = byteData.buffer.asUint8List();
+        image = byteData?.buffer.asUint8List();
         _backgroundColor = null;
         if (mounted == true) {
           setState(() {});
@@ -317,15 +317,15 @@ class TestableState extends State<Testable>
   Future<void> flash() async {
     if (_renderController.testWidgetsEnabled == true) {
       for (var i = 0; i < _renderController.flashCount; i++) {
-        await _animationController?.forward(from: 0.0)?.orCancel;
-        await _animationController?.reverse(from: 1.0)?.orCancel;
+        await _animationController?.forward(from: 0.0).orCancel;
+        await _animationController?.reverse(from: 1.0).orCancel;
       }
     }
   }
 
   /// Obscures the testable widget using the given color.  This provides a way
   /// to obscure / exclude dynamic widgets from golden screenshot calculations.
-  Future<void> obscure(Color color) async {
+  Future<void> obscure(Color? color) async {
     _obscureColor = color ?? Colors.transparent;
     if (mounted == true) {
       setState(() {});
@@ -335,7 +335,7 @@ class TestableState extends State<Testable>
 
   /// Sets the opacity on the widget to hide it or show it for golden image
   /// tests.
-  Future<void> opacity(double opacity) async {
+  Future<void> opacity(double? opacity) async {
     _opacity = opacity ?? 0;
     if (mounted == true) {
       setState(() {});
@@ -343,11 +343,11 @@ class TestableState extends State<Testable>
     }
   }
 
-  VoidCallback _getGestureAction({
-    TestableGestureAction widget,
-    TestableGestureAction overlay,
+  VoidCallback? _getGestureAction({
+    TestableGestureAction? widget,
+    TestableGestureAction? overlay,
   }) {
-    VoidCallback result;
+    VoidCallback? result;
 
     if (_showTestableOverlay == true) {
       if (overlay != null) {
@@ -362,7 +362,7 @@ class TestableState extends State<Testable>
     return result;
   }
 
-  Future<void> _fireTestableAction(TestableGestureAction action) async {
+  Future<void> _fireTestableAction(TestableGestureAction? action) async {
     if (mounted == true) {
       switch (action) {
         case TestableGestureAction.open_test_actions_dialog:
@@ -392,7 +392,7 @@ class TestableState extends State<Testable>
     }
   }
 
-  Future<void> _openTestActions({@required bool page}) async {
+  Future<void> _openTestActions({required bool page}) async {
     var overlayShowing = _showTestableOverlay;
     _showTestableOverlay = false;
     if (mounted == true) {
@@ -413,12 +413,12 @@ class TestableState extends State<Testable>
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) => TestableStepsPage(
-              error: _onRequestError == null ? null : _onRequestError(),
+              error: _onRequestError == null ? null : _onRequestError!(),
               image: image,
               scrollableId: _scrollableId,
               testableId: widget.id,
               types: _types.toList(),
-              value: _onRequestValue == null ? null : _onRequestValue(),
+              value: _onRequestValue == null ? null : _onRequestValue!(),
             ),
           ),
         );
@@ -428,12 +428,12 @@ class TestableState extends State<Testable>
           context: context,
           useRootNavigator: false,
           builder: (BuildContext context) => TestableStepsDialog(
-            error: _onRequestError == null ? null : _onRequestError(),
+            error: _onRequestError == null ? null : _onRequestError!(),
             image: image,
             scrollableId: _scrollableId,
             testableId: widget.id,
             types: _types.toList(),
-            value: _onRequestValue == null ? null : _onRequestValue(),
+            value: _onRequestValue == null ? null : _onRequestValue!(),
           ),
         );
         _isDialogOpen = false;
@@ -442,7 +442,7 @@ class TestableState extends State<Testable>
           var translator = Translator.of(context);
           try {
             var snackBar = SnackBar(
-              content: Text(result),
+              content: Text(result!),
               duration: Duration(seconds: 4),
               action: SnackBarAction(
                 label: translator
@@ -468,7 +468,7 @@ class TestableState extends State<Testable>
                     ),
                   ),
                 ],
-                content: Text(result),
+                content: Text(result!),
               ),
             );
           }
@@ -481,13 +481,13 @@ class TestableState extends State<Testable>
     }
   }
 
-  dynamic Function() _tryCommonGetErrorMethods(
+  dynamic Function()? _tryCommonGetErrorMethods(
     dynamic widget, {
     int depth = 0,
   }) {
-    dynamic Function() result;
+    dynamic Function()? result;
 
-    if (depth < _testController.maxCommonSearchDepth) {
+    if (depth < _testController!.maxCommonSearchDepth) {
       if (widget is FormField) {
         var key = widget.key;
         if (key is GlobalKey) {
@@ -510,13 +510,13 @@ class TestableState extends State<Testable>
     return result;
   }
 
-  dynamic Function() _tryCommonGetValueMethods(
+  dynamic Function()? _tryCommonGetValueMethods(
     dynamic widget, {
     int depth = 0,
   }) {
-    dynamic Function() result;
+    dynamic Function()? result;
 
-    if (depth < _testController.maxCommonSearchDepth) {
+    if (depth < _testController!.maxCommonSearchDepth) {
       if (widget is Text) {
         result = () => widget.data ?? widget.textSpan?.toPlainText();
       } else if ((widget is TextField ||
@@ -558,13 +558,13 @@ class TestableState extends State<Testable>
     return result;
   }
 
-  ValueChanged<dynamic> _tryCommonSetValueMethods(
+  ValueChanged<dynamic>? _tryCommonSetValueMethods(
     dynamic widget, {
     int depth = 0,
   }) {
-    ValueChanged<dynamic> result;
+    ValueChanged<dynamic>? result;
 
-    if (depth < _testController.maxCommonSearchDepth) {
+    if (depth < _testController!.maxCommonSearchDepth) {
       if ((widget is TextField ||
           widget is TextFormField ||
           widget is CupertinoTextField)) {
@@ -675,7 +675,7 @@ class TestableState extends State<Testable>
                 key: _renderKey,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: _opacity ?? 1.0,
+                  opacity: _opacity,
                   child: Stack(
                     children: <Widget>[
                       if (_backgroundColor != null)
@@ -702,7 +702,7 @@ class TestableState extends State<Testable>
             ),
           ),
           if (_renderController.showGlobalOverlay == true &&
-              _testController.runningTest != true)
+              _testController!.runningTest != true)
             _renderController.globalOverlayBuilder(context),
           overlay,
           if (_renderController.flashCount > 0)

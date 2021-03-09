@@ -12,25 +12,20 @@ abstract class TestStepForm {
 
   Widget buildForm(
     BuildContext context,
-    Map<String, dynamic> values, {
+    Map<String, dynamic>? values, {
     bool minify = false,
   });
 
   @protected
   Widget buildDropdown({
-    @required BuildContext context,
-    @required String id,
-    String defaultValue,
-    List<String> items,
-    @required TranslationEntry label,
-    List<ValueValidator> validators,
-    @required Map<String, dynamic> values,
+    required BuildContext context,
+    required String id,
+    String? defaultValue,
+    required List<String> items,
+    required TranslationEntry label,
+    List<ValueValidator>? validators,
+    required Map<String, dynamic> values,
   }) {
-    assert(context != null);
-    assert(id?.isNotEmpty == true);
-    assert(label != null);
-    assert(values != null);
-
     if (values[id] == null && defaultValue != null) {
       values[id] = defaultValue;
     }
@@ -51,7 +46,7 @@ abstract class TestStepForm {
       onChanged: (value) => values[id] = value,
       value: values[id]?.toString(),
       validator: (value) => validators?.isNotEmpty == true
-          ? Validator(validators: validators).validate(
+          ? Validator(validators: validators!).validate(
               context: context,
               label: translator.translate(label),
               value: value,
@@ -62,18 +57,13 @@ abstract class TestStepForm {
 
   @protected
   Widget buildEditText({
-    @required BuildContext context,
-    @required String id,
-    String defaultValue,
-    @required TranslationEntry label,
-    List<ValueValidator> validators,
-    @required Map<String, dynamic> values,
+    required BuildContext context,
+    required String id,
+    String? defaultValue,
+    required TranslationEntry label,
+    List<ValueValidator>? validators,
+    required Map<String, dynamic> values,
   }) {
-    assert(context != null);
-    assert(id?.isNotEmpty == true);
-    assert(label != null);
-    assert(values != null);
-
     if (values[id] == null && defaultValue != null) {
       values[id] = defaultValue;
     }
@@ -89,7 +79,7 @@ abstract class TestStepForm {
       smartDashesType: SmartDashesType.disabled,
       smartQuotesType: SmartQuotesType.disabled,
       validator: (value) => validators?.isNotEmpty == true
-          ? Validator(validators: validators).validate(
+          ? Validator(validators: validators!).validate(
               context: context,
               label: translator.translate(label),
               value: value,
@@ -125,7 +115,7 @@ abstract class TestStepForm {
             children: <Widget>[
               Icon(
                 Icons.help,
-                color: theme.textTheme.bodyText2.color,
+                color: theme.textTheme.bodyText2!.color,
               ),
               SizedBox(
                 width: 8.0,
@@ -144,13 +134,10 @@ abstract class TestStepForm {
 
   @protected
   Widget buildTimeoutSection({
-    @required BuildContext context,
-    Duration defaultTimeout,
-    @required Map<String, dynamic> values,
+    required BuildContext context,
+    Duration? defaultTimeout,
+    required Map<String, dynamic> values,
   }) {
-    assert(context != null);
-    assert(values != null);
-
     const id = 'timeout';
     final label = TestTranslations.atf_timeout_seconds;
 
@@ -164,7 +151,7 @@ abstract class TestStepForm {
         labelText: translator.translate(label),
       ),
       initialValue:
-          JsonClass.parseDurationFromSeconds(values[id], defaultTimeout)
+          JsonClass.parseDurationFromSeconds(values[id], defaultTimeout)!
               .inSeconds
               .toString(),
       keyboardType: TextInputType.phone,

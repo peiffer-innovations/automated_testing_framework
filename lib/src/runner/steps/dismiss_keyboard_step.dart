@@ -1,6 +1,5 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 /// Test step that dismisses the keyboard.
 class DismissKeyboardStep extends TestRunnerStep {
@@ -11,8 +10,8 @@ class DismissKeyboardStep extends TestRunnerStep {
   /// {
   /// }
   /// ```
-  static DismissKeyboardStep fromDynamic(dynamic map) {
-    DismissKeyboardStep result;
+  static DismissKeyboardStep? fromDynamic(dynamic map) {
+    DismissKeyboardStep? result;
 
     if (map != null) {
       result = DismissKeyboardStep();
@@ -25,9 +24,9 @@ class DismissKeyboardStep extends TestRunnerStep {
   /// currently showing.
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
     log(
       'dismiss_keyboard',

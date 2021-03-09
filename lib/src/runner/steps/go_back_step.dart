@@ -1,6 +1,5 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
 
 /// Step that attempts to execute a Back action against the current navigation
 /// stack.
@@ -12,8 +11,8 @@ class GoBackStep extends TestRunnerStep {
   /// {
   /// }
   /// ```
-  static GoBackStep fromDynamic(dynamic map) {
-    GoBackStep result;
+  static GoBackStep? fromDynamic(dynamic map) {
+    GoBackStep? result;
 
     if (map != null) {
       result = GoBackStep();
@@ -26,9 +25,9 @@ class GoBackStep extends TestRunnerStep {
   /// tapping it.
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
     log(
       'go_back',

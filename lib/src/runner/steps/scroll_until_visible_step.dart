@@ -1,33 +1,32 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 import '../../flutter_test/flutter_test.dart' as test;
 
 /// Step that will attempt to scroll another widget until it becomes visible.
 class ScrollUntilVisibleStep extends TestRunnerStep {
   ScrollUntilVisibleStep({
-    @required this.increment,
+    required this.increment,
     this.scrollableId,
-    @required this.testableId,
+    required this.testableId,
     this.timeout,
   }) : assert(testableId?.isNotEmpty == true);
 
   /// The increment in device-independent-pixels.  This may be a positive or
   /// negative number.  Positive to scroll "forward" and negative to scroll
   /// "backward".
-  final String increment;
+  final String? increment;
 
   /// The id of the [Scrollable] widget to perform the scrolling actions on.
-  final String scrollableId;
+  final String? scrollableId;
 
   /// The id of the [Testable] widget to interact with.
-  final String testableId;
+  final String? testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
-  final Duration timeout;
+  final Duration? timeout;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -44,8 +43,8 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
   /// See also:
   /// * [JsonClass.parseDouble]
   /// * [JsonClass.parseDurationFromSeconds]
-  static ScrollUntilVisibleStep fromDynamic(dynamic map) {
-    ScrollUntilVisibleStep result;
+  static ScrollUntilVisibleStep? fromDynamic(dynamic map) {
+    ScrollUntilVisibleStep? result;
 
     if (map != null) {
       result = ScrollUntilVisibleStep(
@@ -74,14 +73,14 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
   /// scroll and find the [Testable] identified by [testableId].
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
     var increment =
         JsonClass.parseDouble(tester.resolveVariable(this.increment)) ?? 200;
-    String scrollableId = tester.resolveVariable(this.scrollableId);
-    String testableId = tester.resolveVariable(this.testableId);
+    String? scrollableId = tester.resolveVariable(this.scrollableId);
+    String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
     var name =
@@ -92,25 +91,26 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
       tester: tester,
     );
 
-    test.Finder finder;
+    late test.Finder finder;
 
     if (scrollableId == null) {
       try {
-        finder = find.byType(Scrollable)?.first;
+        finder = find.byType(Scrollable).first;
       } catch (e) {
         // no-op, will be handled later
       }
     } else {
+      var scroller = await waitFor(
+        scrollableId,
+        cancelToken: cancelToken,
+        tester: tester,
+      );
       finder = find
           .descendant(
-            of: await waitFor(
-              scrollableId,
-              cancelToken: cancelToken,
-              tester: tester,
-            ),
+            of: scroller,
             matching: find.byType(Scrollable),
           )
-          ?.first;
+          .first;
     }
 
     if (cancelToken.cancelled == true) {
@@ -139,7 +139,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
           'ScrollableId: $scrollableId -- Widget is not a Scrollable.');
     }
 
-    Offset offset;
+    late Offset offset;
     switch (scrollable.axisDirection) {
       case AxisDirection.down:
         offset = Offset(0.0, -1.0 * increment);
@@ -162,9 +162,9 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     var start = DateTime.now().millisecondsSinceEpoch;
     var end = start + timeout.inMilliseconds;
 
-    var widgetFinder = find.byKey(Key(testableId));
+    var widgetFinder = find.byKey(ValueKey<String?>(testableId!));
     var count = 0;
-    var found = widgetFinder.evaluate()?.isNotEmpty == true;
+    var found = widgetFinder.evaluate().isNotEmpty == true;
     while (found != true && DateTime.now().millisecondsSinceEpoch < end) {
       if (cancelToken.cancelled == true) {
         throw Exception('[CANCELLED]: step was cancelled by the test');
@@ -192,10 +192,10 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         throw Exception('[CANCELLED]: step was cancelled by the test');
       }
 
-      var widgetFinder = find.byKey(Key(testableId)).evaluate();
+      var widgetFinder = find.byKey(ValueKey<String?>(testableId)).evaluate();
 
       count++;
-      found = widgetFinder?.isNotEmpty == true;
+      found = widgetFinder.isNotEmpty == true;
 
       diff = end - DateTime.now().millisecondsSinceEpoch;
       tester.sleep = ProgressValue(
@@ -220,12 +220,13 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
           )
           .evaluate();
 
-      GlobalKey globalKey = widgetFinder.first.widget.key;
+      var globalKey =
+          widgetFinder.first.widget.key as GlobalKey<State<StatefulWidget>>;
       if (cancelToken.cancelled == true) {
         throw Exception('[CANCELLED]: step was cancelled by the test');
       }
 
-      await Scrollable.ensureVisible(globalKey.currentContext);
+      await Scrollable.ensureVisible(globalKey.currentContext!);
     } else {
       throw Exception(
         'testableId: [$testableId] -- time out trying to scroll widget to visible.',

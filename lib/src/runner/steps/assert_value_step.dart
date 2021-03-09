@@ -1,20 +1,17 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 /// Test step that asserts that the value equals (or does not equal) a specific
 /// value.
 class AssertValueStep extends TestRunnerStep {
   AssertValueStep({
-    @required this.caseSensitive,
-    @required this.equals,
-    @required this.testableId,
+    required this.caseSensitive,
+    required this.equals,
+    required this.testableId,
     this.timeout,
-    @required this.value,
-  })  : assert(caseSensitive != null),
-        assert(equals != null),
-        assert(testableId?.isNotEmpty == true);
+    required this.value,
+  }) : assert(testableId?.isNotEmpty == true);
 
   /// Set to [true] if the comparison should be case sensitive.  Set to [false]
   /// to allow the comparison to be case insensitive.
@@ -26,14 +23,14 @@ class AssertValueStep extends TestRunnerStep {
   final bool equals;
 
   /// The id of the [Testable] widget to interact with.
-  final String testableId;
+  final String? testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
-  final Duration timeout;
+  final Duration? timeout;
 
   /// The [value] to test againt when comparing the [Testable]'s value.
-  final String value;
+  final String? value;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -51,8 +48,8 @@ class AssertValueStep extends TestRunnerStep {
   /// See also:
   /// * [JsonClass.parseBool]
   /// * [JsonClass.parseDurationFromSeconds]
-  static AssertValueStep fromDynamic(dynamic map) {
-    AssertValueStep result;
+  static AssertValueStep? fromDynamic(dynamic map) {
+    AssertValueStep? result;
 
     if (map != null) {
       result = AssertValueStep(
@@ -74,11 +71,11 @@ class AssertValueStep extends TestRunnerStep {
   /// from the [Testable], then compare it against the set [value].
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
-    String testableId = tester.resolveVariable(this.testableId);
+    String? testableId = tester.resolveVariable(this.testableId);
     var value = tester.resolveVariable(this.value)?.toString();
     assert(testableId?.isNotEmpty == true);
 
@@ -107,18 +104,18 @@ class AssertValueStep extends TestRunnerStep {
     var widgetFinder = finder.evaluate();
     var match = false;
     dynamic actual;
-    if (widgetFinder?.isNotEmpty == true) {
-      StatefulElement element = widgetFinder.first;
+    if (widgetFinder.isNotEmpty == true) {
+      var element = widgetFinder.first as StatefulElement;
 
       var state = element.state;
       if (state is TestableState) {
         try {
-          actual = state.onRequestValue();
+          actual = state.onRequestValue!();
           if (equals ==
               (caseSensitive == true
                   ? (actual?.toString() == value)
-                  : (actual?.toString()?.toLowerCase() ==
-                      value?.toString()?.toLowerCase()))) {
+                  : (actual?.toString().toLowerCase() ==
+                      value?.toString().toLowerCase()))) {
             match = true;
           }
         } catch (e) {

@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 /// Enum-like class that describes the various capabilities of a [Testable]
 @immutable
 class TestableType {
-  const TestableType._(this._code) : assert(_code != null);
+  const TestableType._(this._code);
 
   static const error_requestable = TestableType._('error_requestable');
   static const scrollable = TestableType._('scrollable');

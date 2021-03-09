@@ -27,11 +27,11 @@ class AssetTestStore {
 
   /// Set this to the path of an asset file containing an array with the list of
   /// other JSON files to load.
-  String testAssetIndex;
+  String? testAssetIndex;
 
   /// Set this to the list of asset files to use when loading the tests before
   /// calling [testReader].
-  List<String> testAssets;
+  List<String>? testAssets;
 
   /// Reads and returns zero or more tests from the assets defined by
   /// [testAssets].  This ignores the [context] that is passed in.  This will
@@ -41,14 +41,14 @@ class AssetTestStore {
   /// If the [suiteName] is not-null, this will exclude any tests that are not
   /// same test suite.
   Future<List<PendingTest>> testReader(
-    BuildContext context, {
-    String suiteName,
+    BuildContext? context, {
+    String? suiteName,
   }) async {
-    var files = <String>[];
+    List<String>? files = <String>[];
 
     if (testAssetIndex?.isNotEmpty == true) {
       try {
-        var indexData = await rootBundle.loadString(testAssetIndex);
+        var indexData = await rootBundle.loadString(testAssetIndex!);
         files = List<String>.from(json.decode(indexData));
       } catch (e, stack) {
         _logger.severe('Error in AssetTestStore.testReader', e, stack);
@@ -60,10 +60,10 @@ class AssetTestStore {
     var tests = <PendingTest>[];
 
     if (files?.isNotEmpty == true) {
-      for (var asset in files) {
+      for (var asset in files!) {
         try {
           var text = await rootBundle.loadString(asset);
-          if (text?.isNotEmpty == true) {
+          if (text.isNotEmpty == true) {
             var parsed = json.decode(text);
 
             tests.addAll(TestStore.createMemoryTests(parsed));
@@ -73,11 +73,11 @@ class AssetTestStore {
         }
       }
 
-      tests?.removeWhere(
+      tests.removeWhere(
         (test) => suiteName?.isNotEmpty == true && suiteName != test.suiteName,
       );
     }
 
-    return tests ?? <PendingTest>[];
+    return tests;
   }
 }

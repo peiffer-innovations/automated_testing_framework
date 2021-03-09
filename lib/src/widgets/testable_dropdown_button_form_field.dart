@@ -40,33 +40,33 @@ class TestableDropdownButtonFormField<T> extends StatefulWidget {
   });
 
   final bool autofocus;
-  final bool autovalidate;
-  final AutovalidateMode autovalidateMode;
+  final bool? autovalidate;
+  final AutovalidateMode? autovalidateMode;
   final dynamic decoration;
-  final Widget disabledHint;
-  final Color dropdownColor;
+  final Widget? disabledHint;
+  final Color? dropdownColor;
   final int elevation;
   final bool enabled;
-  final Color focusColor;
-  final FocusNode focusNode;
-  final Widget hint;
-  final Widget icon;
-  final String id;
-  final List<DropdownMenuItem<T>> items;
-  final Color iconDisabledColor;
+  final Color? focusColor;
+  final FocusNode? focusNode;
+  final Widget? hint;
+  final Widget? icon;
+  final String? id;
+  final List<DropdownMenuItem<T>>? items;
+  final Color? iconDisabledColor;
   final double iconSize;
-  final Color iconEnabledColor;
+  final Color? iconEnabledColor;
   final bool isDense;
   final bool isExpanded;
-  final double itemHeight;
-  final ValueChanged onChanged;
-  final FormFieldSetter<T> onSaved;
-  final VoidCallback onTap;
-  final String scrollableId;
+  final double? itemHeight;
+  final ValueChanged? onChanged;
+  final FormFieldSetter<T>? onSaved;
+  final VoidCallback? onTap;
+  final String? scrollableId;
   final dynamic selectedItemBuilder;
-  final FormFieldValidator<T> validator;
-  final TextStyle style;
-  final T value;
+  final FormFieldValidator<T>? validator;
+  final TextStyle? style;
+  final T? value;
 
   @override
   _TestableDropdownButtonFormFieldState<T> createState() =>
@@ -75,7 +75,7 @@ class TestableDropdownButtonFormField<T> extends StatefulWidget {
 
 class _TestableDropdownButtonFormFieldState<T>
     extends State<TestableDropdownButtonFormField<T>> {
-  String _error;
+  String? _error;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class _TestableDropdownButtonFormFieldState<T>
       onRequestError: () => _error,
       onRequestValue: () => widget.value,
       onSetValue:
-          widget.onChanged == null ? null : (value) => widget.onChanged(value),
+          widget.onChanged == null ? null : (value) => widget.onChanged!(value),
       scrollableId: widget.scrollableId,
       child: DropdownButtonFormField<T>(
         autofocus: widget.autofocus,
@@ -115,7 +115,7 @@ class _TestableDropdownButtonFormFieldState<T>
         validator: widget.validator == null
             ? null
             : (value) {
-                _error = widget.validator(value);
+                _error = widget.validator!(value);
                 return _error;
               },
         style: widget.style,

@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 @immutable
 class CaptureContext {
   CaptureContext({
-    @required this.image,
+    required this.image,
   });
 
   /// The resulting image from the screen capture.

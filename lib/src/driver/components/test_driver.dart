@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 
 class TestDriver {
   TestDriver({
-    @required this.communicator,
-    @required this.testController,
+    required this.communicator,
+    required this.testController,
   }) : assert(communicator != null || testController == null) {
     LogHandler().driver = this;
     ReservationHandler().driver = this;
@@ -17,8 +16,8 @@ class TestDriver {
 
   static final Logger _logger = Logger('TestDriver');
 
-  final TestDeviceCommunicator communicator;
-  final TestController testController;
+  final TestDeviceCommunicator? communicator;
+  final TestController? testController;
   final Map<String, DeviceCommandHandler> _builtInHandlers = {
     AbortTestCommand.kCommandType: RunTestHandler().abort,
     ReleaseDeviceCommand.kCommandType: ReservationHandler().release,
@@ -32,23 +31,23 @@ class TestDriver {
   final Map<String, DeviceCommandHandler> _handlers = {};
   final TestDriverState _state = TestDriverState();
 
-  StreamSubscription<DeviceCommand> _commandSubscription;
+  StreamSubscription<DeviceCommand>? _commandSubscription;
 
   TestDriverState get state => _state;
 
   /// Activates the test driver, which will also activate the [communicator].
-  void activate([ConnectionChangedCallback onConnectionChanged]) async {
+  void activate([ConnectionChangedCallback? onConnectionChanged]) async {
     if (testController != null) {
       state.active = true;
-      communicator.onConnectionChanged =
+      communicator!.onConnectionChanged =
           onConnectionChanged ?? _onConnectionChanged;
 
-      if (communicator.active != true) {
-        await communicator.activate(
+      if (communicator!.active != true) {
+        await communicator!.activate(
           () => TestDeviceInfoHelper.initialize(null),
         );
       }
-      _commandSubscription = communicator.commandStream.listen(
+      _commandSubscription = communicator!.commandStream.listen(
         (command) => _onCommandReceived(command),
       );
     }
@@ -59,7 +58,7 @@ class TestDriver {
       state.active = false;
       await _commandSubscription?.cancel();
       _commandSubscription = null;
-      await communicator.deactivate();
+      await communicator!.deactivate();
     }
   }
 
@@ -76,7 +75,7 @@ class TestDriver {
       if (handler != null) {
         _logger.info('[COMMAND]: handling command: [${command.type}]');
         var ack = await handler(command);
-        await communicator.sendCommand(ack);
+        await communicator!.sendCommand(ack);
       }
     }
   }

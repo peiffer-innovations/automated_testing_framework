@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 
 class TestDriverStatus extends StatefulWidget {
   TestDriverStatus({
-    @required this.child,
+    required this.child,
     this.displayStatus = true,
-    @required this.statusStream,
-    Key key,
-  })  : assert(child != null),
-        assert(displayStatus != null),
-        super(key: key);
+    required this.statusStream,
+    Key? key,
+  }) : super(key: key);
 
   final Widget child;
   final bool displayStatus;
@@ -23,8 +21,8 @@ class TestDriverStatus extends StatefulWidget {
 class _TestDriverStatusState extends State<TestDriverStatus> {
   final List<StreamSubscription> _subscriptions = [];
   bool _statusShowing = false;
-  String _status;
-  Timer _timer;
+  late String _status;
+  Timer? _timer;
 
   @override
   void initState() {

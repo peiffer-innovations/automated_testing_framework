@@ -32,11 +32,11 @@ class OverrideWidgetTester extends WidgetController
 
   @override
   Future<void> pump([
-    Duration duration,
+    Duration? duration,
   ]) async {
-    if (duration != null)
-      // ignore: curly_braces_in_flow_control_structures
+    if (duration != null) {
       await Future<void>.delayed(duration);
+    }
     binding.scheduleFrame();
     await binding.endOfFrame;
   }
@@ -57,21 +57,21 @@ class OverrideWidgetTester extends WidgetController
   ///    scheduled. This is what [pumpAndSettle] uses.
   bool get hasRunningAnimations => binding.transientCallbackCount > 0;
 
-  Set<Ticker> _tickers;
+  Set<Ticker>? _tickers;
 
   @override
   Ticker createTicker(TickerCallback onTick) {
     _tickers ??= <_TestTicker>{};
     // ignore: omit_local_variable_types
     final _TestTicker result = _TestTicker(onTick, _removeTicker);
-    _tickers.add(result);
+    _tickers!.add(result);
     return result;
   }
 
   void _removeTicker(_TestTicker ticker) {
     assert(_tickers != null);
-    assert(_tickers.contains(ticker));
-    _tickers.remove(ticker);
+    assert(_tickers!.contains(ticker));
+    _tickers!.remove(ticker);
   }
 
   /// Throws an exception if any tickers created by the [WidgetTester] are still
@@ -84,7 +84,7 @@ class OverrideWidgetTester extends WidgetController
     assert(when != null);
     if (_tickers != null) {
       // ignore: omit_local_variable_types
-      for (final Ticker ticker in _tickers) {
+      for (final Ticker ticker in _tickers!) {
         if (ticker.isActive) {
           throw FlutterError.fromParts(<DiagnosticsNode>[
             ErrorSummary('A Ticker was active $when.'),
@@ -108,7 +108,7 @@ class OverrideWidgetTester extends WidgetController
   void _verifySemanticsHandlesWereDisposed() {
     assert(_lastRecordedSemanticsHandles != null);
     if (binding.pipelineOwner.debugOutstandingSemanticsHandles >
-        _lastRecordedSemanticsHandles) {
+        _lastRecordedSemanticsHandles!) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('A SemanticsHandle was active at the end of the test.'),
         ErrorDescription(
@@ -122,7 +122,7 @@ class OverrideWidgetTester extends WidgetController
     _lastRecordedSemanticsHandles = null;
   }
 
-  int _lastRecordedSemanticsHandles;
+  int? _lastRecordedSemanticsHandles;
 
   // ignore: unused_element
   void _recordNumberOfSemanticsHandles() {
@@ -168,12 +168,12 @@ class OverrideWidgetTester extends WidgetController
     // ignore: omit_local_variable_types
     final Element element = candidates.single;
     // ignore: omit_local_variable_types
-    RenderObject renderObject = element.findRenderObject();
+    RenderObject? renderObject = element.findRenderObject();
     // ignore: omit_local_variable_types
-    SemanticsNode result = renderObject.debugSemantics;
+    SemanticsNode? result = renderObject?.debugSemantics;
     while (renderObject != null && result == null) {
-      renderObject = renderObject?.parent as RenderObject;
-      result = renderObject?.debugSemantics;
+      renderObject = renderObject.parent as RenderObject;
+      result = renderObject.debugSemantics;
     }
     if (result == null) throw StateError('No Semantics data found.');
     return result;

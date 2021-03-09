@@ -14,7 +14,7 @@ class ScreenshotForm extends TestStepForm {
   @override
   Widget buildForm(
     BuildContext context,
-    Map<String, dynamic> values, {
+    Map<String, dynamic>? values, {
     bool minify = false,
   }) {
     return Column(
@@ -33,7 +33,7 @@ class ScreenshotForm extends TestStepForm {
               context: context,
               id: 'imageId',
               label: TestStepTranslations.atf_form_image_id,
-              values: values,
+              values: values!,
             ),
             SizedBox(height: 16.0),
             buildDropdown(

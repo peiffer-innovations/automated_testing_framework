@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// Builds and displays the test progress.
 class TestProgressBuilder extends StatefulWidget {
   const TestProgressBuilder({
-    Key key,
+    Key? key,
     this.theme = const TestRunnerThemeData(),
   }) : super(key: key);
 
@@ -19,9 +19,9 @@ class TestProgressBuilder extends StatefulWidget {
 class _TestProgressBuilderStart extends State<TestProgressBuilder> {
   final List<StreamSubscription> _subscriptions = [];
 
-  TestController _controller;
-  bool _error;
-  int _max;
+  TestController? _controller;
+  bool? _error;
+  int? _max;
   Key _sleepKey = UniqueKey();
   bool _sleeping = false;
 
@@ -32,8 +32,8 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
     var testRunner = TestRunner.of(context);
 
     if (testRunner?.enabled == true) {
-      _controller = testRunner.controller;
-      _subscriptions.add(_controller.sleepStream.listen((event) {
+      _controller = testRunner!.controller;
+      _subscriptions.add(_controller!.sleepStream.listen((event) {
         var sleeping = event?.progress != null;
         _error = event?.error == true;
         _max = event?.max;
@@ -61,31 +61,31 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
         children: <Widget>[
           Positioned.fill(
             child: IgnorePointer(
-              child: StreamBuilder<ProgressValue>(
+              child: StreamBuilder<ProgressValue?>(
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<ProgressValue> sleepValue,
+                  AsyncSnapshot<ProgressValue?> sleepValue,
                 ) =>
-                    StreamBuilder<ProgressValue>(
+                    StreamBuilder<ProgressValue?>(
                   builder: (
                     BuildContext context,
-                    AsyncSnapshot<ProgressValue> value,
+                    AsyncSnapshot<ProgressValue?> value,
                   ) =>
                       value.data == null && sleepValue.data == null
                           ? SizedBox()
                           : Container(
                               color: widget.theme.runnerOverlayColor,
                             ),
-                  stream: _controller.stepStream,
+                  stream: _controller!.stepStream,
                 ),
-                stream: _controller.sleepStream,
+                stream: _controller!.sleepStream,
               ),
             ),
           ),
-          StreamBuilder<ProgressValue>(
+          StreamBuilder<ProgressValue?>(
             builder: (
               BuildContext context,
-              AsyncSnapshot<ProgressValue> value,
+              AsyncSnapshot<ProgressValue?> value,
             ) =>
                 value.data == null
                     ? SizedBox()
@@ -126,8 +126,8 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
                                   SleepProgress(
                                     error: _error,
                                     key: _sleepKey,
-                                    max: _max,
-                                    stream: _controller.sleepStream,
+                                    max: _max!,
+                                    stream: _controller!.sleepStream,
                                     theme: widget.theme,
                                   ),
                                 _buildStatusListener(context),
@@ -136,7 +136,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
                           ),
                         ),
                       ),
-            stream: _controller.stepStream,
+            stream: _controller!.stepStream,
           ),
         ],
       );
@@ -164,7 +164,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
                         color: widget.theme.statusTextColor,
                       ),
                     ),
-                    stream: _controller.statusStream,
+                    stream: _controller!.statusStream,
                   ),
                 ),
               ),
@@ -174,10 +174,10 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
       );
 
   Widget _buildStepListener(BuildContext context) => Positioned.fill(
-        child: StreamBuilder<ProgressValue>(
+        child: StreamBuilder<ProgressValue?>(
           builder: (
             BuildContext context,
-            AsyncSnapshot<ProgressValue> value,
+            AsyncSnapshot<ProgressValue?> value,
           ) =>
               value.data == null
                   ? SizedBox()
@@ -186,9 +186,9 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
                       valueColor: AlwaysStoppedAnimation(
                         widget.theme.statusSuccessColor,
                       ),
-                      value: value.data.progress,
+                      value: value.data!.progress,
                     ),
-          stream: _controller.stepStream,
+          stream: _controller!.stepStream,
         ),
       );
 

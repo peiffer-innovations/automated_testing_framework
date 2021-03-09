@@ -1,21 +1,20 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 /// Test step that ensures a particular widget exists on the widget tree before
 /// continuing.
 class EnsureExistsStep extends TestRunnerStep {
   EnsureExistsStep({
-    @required this.testableId,
+    required this.testableId,
     this.timeout,
   }) : assert(testableId?.isNotEmpty == true);
 
   /// The id of the [Testable] widget to interact with.
-  final String testableId;
+  final String? testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
-  final Duration timeout;
+  final Duration? timeout;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -29,8 +28,8 @@ class EnsureExistsStep extends TestRunnerStep {
   ///
   /// See also:
   /// * [JsonClass.parseDurationFromSeconds]
-  static EnsureExistsStep fromDynamic(dynamic map) {
-    EnsureExistsStep result;
+  static EnsureExistsStep? fromDynamic(dynamic map) {
+    EnsureExistsStep? result;
 
     if (map != null) {
       result = EnsureExistsStep(
@@ -48,11 +47,11 @@ class EnsureExistsStep extends TestRunnerStep {
   /// the [timeout] is exceeded.
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
-    String testableId = tester.resolveVariable(this.testableId);
+    String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
     var name = "ensure_exists('$testableId')";
@@ -77,7 +76,7 @@ class EnsureExistsStep extends TestRunnerStep {
       throw Exception('[CANCELLED]: step was cancelled by the test');
     }
     var widgetFinder = finder.evaluate();
-    if (widgetFinder?.isNotEmpty != true) {
+    if (widgetFinder.isNotEmpty != true) {
       throw Exception('testableId: [$testableId] -- could not locate widget.');
     }
   }

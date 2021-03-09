@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
-import 'package:websafe_platform/websafe_platform.dart';
 
 /// Controller that allows for the creation, loading, saving, and running of
 /// automated tests.
@@ -61,36 +61,25 @@ class TestController {
   /// * [AssetTestStore]
   /// * [ClipboardTestStore]
   TestController({
-    Map<String, PageRoute> customRoutes,
+    Map<String, PageRoute>? customRoutes,
     this.delays = const TestStepDelays(),
     this.goldenImageWriter = TestStore.goldenImageWriter,
     this.maxCommonSearchDepth = 3,
-    @required GlobalKey<NavigatorState> navigatorKey,
-    @required this.onReset,
+    required GlobalKey<NavigatorState> navigatorKey,
+    required this.onReset,
     this.screenshotOnFail = false,
     this.selectedSuiteName,
     this.stopOnFirstFail = false,
-    TestStepRegistry registry,
+    TestStepRegistry? registry,
     this.testImageReader = TestStore.testImageReader,
     TestReader testReader = TestStore.testReader,
-    WidgetBuilder testReportBuilder,
+    WidgetBuilder? testReportBuilder,
     Level testReportLogLevel = Level.INFO,
     TestReporter testReporter = TestStore.testReporter,
-    WidgetBuilder testSuiteReportBuilder,
+    WidgetBuilder? testSuiteReportBuilder,
     TestWriter testWriter = TestStore.testWriter,
-    Map<String, dynamic> variables,
-  })  : assert(goldenImageWriter != null),
-        assert(maxCommonSearchDepth != null),
-        assert(maxCommonSearchDepth >= 0),
-        assert(navigatorKey != null),
-        assert(onReset != null),
-        assert(screenshotOnFail != null),
-        assert(stopOnFirstFail != null),
-        assert(testImageReader != null),
-        assert(testReader != null),
-        assert(testReporter != null),
-        assert(testWriter != null),
-        _navigatorKey = navigatorKey,
+    Map<String, dynamic>? variables,
+  })  : _navigatorKey = navigatorKey,
         _registry = registry ?? TestStepRegistry.instance,
         _testReader = testReader,
         _testReportBuilder = testReportBuilder,
@@ -119,7 +108,7 @@ class TestController {
   /// Callback function that the application must register with the controller
   /// so that when a reset is requested by a test, the application properly
   /// resets to the initial state.
-  final AsyncCallback onReset;
+  final AsyncCallback? onReset;
 
   /// Defines whether the framework should take a screenshot automatically
   /// whenever a failure is detected or not.
@@ -139,23 +128,23 @@ class TestController {
   final TestStepRegistry _registry;
   final StreamController<CaptureContext> _screencapController =
       StreamController<CaptureContext>.broadcast();
-  final StreamController<ProgressValue> _sleepController =
-      StreamController<ProgressValue>.broadcast();
+  final StreamController<ProgressValue?> _sleepController =
+      StreamController<ProgressValue?>.broadcast();
   final StreamController<String> _statusController =
       StreamController<String>.broadcast();
-  final StreamController<ProgressValue> _stepController =
-      StreamController<ProgressValue>.broadcast();
+  final StreamController<ProgressValue?> _stepController =
+      StreamController<ProgressValue?>.broadcast();
   final TestControllerState _testControllerState = TestControllerState();
   final TestReader _testReader;
-  final WidgetBuilder _testReportBuilder;
+  final WidgetBuilder? _testReportBuilder;
   final Level _testReportLogLevel;
   final TestReporter _testReporter;
-  final WidgetBuilder _testSuiteReportBuilder;
+  final WidgetBuilder? _testSuiteReportBuilder;
   final TestWriter _testWriter;
   final Map<String, dynamic> _variables = {};
 
   /// The currently selected test suite name.
-  String selectedSuiteName;
+  String? selectedSuiteName;
 
   Test _currentTest = Test();
 
@@ -178,7 +167,7 @@ class TestController {
   Stream<CaptureContext> get screencapStream => _screencapController.stream;
 
   /// Returns the stream that will fire updates as a test is sleeping / waiting.
-  Stream<ProgressValue> get sleepStream => _sleepController.stream;
+  Stream<ProgressValue?> get sleepStream => _sleepController.stream;
 
   /// Returns the current state for the test controller.
   TestControllerState get state => _testControllerState;
@@ -188,7 +177,7 @@ class TestController {
 
   /// Returns the stream that will fire updates when a test moves from step to
   /// step.
-  Stream<ProgressValue> get stepStream => _stepController.stream;
+  Stream<ProgressValue?> get stepStream => _stepController.stream;
 
   /// Returns an unmodifiable map of all the currently set variables.
   Map<String, dynamic> get variables =>
@@ -196,22 +185,22 @@ class TestController {
 
   /// Sets the current test.  If the given test is [null] then a blank test will
   /// be set instead.
-  set currentTest(Test test) => _currentTest = test ?? Test();
+  set currentTest(Test? test) => _currentTest = test ?? Test();
 
   /// Informs the controller that a sleep status update has happened.
-  set sleep(ProgressValue value) => _sleepController?.add(value);
+  set sleep(ProgressValue? value) => _sleepController.add(value);
 
   /// Informs the controller that a test status update has happened.
-  set status(String value) => _statusController?.add(value);
+  set status(String value) => _statusController.add(value);
 
   /// Informs the controller that a test step update has happened.
-  set step(ProgressValue value) => _stepController?.add(value);
+  set step(ProgressValue? value) => _stepController.add(value);
 
   /// Returns the [TestController] provided by the widget tree.  This will never
   /// throw an exception but may return [null] if no controller is available on
   /// the widget tree.
-  static TestController of(BuildContext context) {
-    TestController result;
+  static TestController? of(BuildContext context) {
+    TestController? result;
 
     try {
       var runner = TestRunner.of(context);
@@ -253,11 +242,11 @@ class TestController {
 
   /// Disposes the controller.  Once disposed, a controller can not be reused.
   void dispose() {
-    _cancelController?.close();
-    _screencapController?.close();
-    _sleepController?.close();
-    _statusController?.close();
-    _stepController?.close();
+    _cancelController.close();
+    _screencapController.close();
+    _sleepController.close();
+    _statusController.close();
+    _stepController.close();
   }
 
   /// Executes a series of tests steps.  This accepts the [name] of the test
@@ -276,16 +265,16 @@ class TestController {
   /// The [version] defines the overall test version.  This may be [null] or
   /// empty and should always be a value of 0 or higher when set.
   Future<TestReport> execute({
-    String name,
-    TestReport report,
+    String? name,
+    TestReport? report,
     bool reset = true,
-    Duration stepTimeout,
-    @required List<TestStep> steps,
+    Duration? stepTimeout,
+    required List<TestStep> steps,
     bool submitReport = true,
-    String suiteName,
-    TestSuiteReport testSuiteReport,
-    Duration testTimeout,
-    int version,
+    String? suiteName,
+    TestSuiteReport? testSuiteReport,
+    Duration? testTimeout,
+    required int version,
   }) async {
     if (_testControllerState.runningTest == true) {
       await cancelRunningTests();
@@ -315,27 +304,24 @@ class TestController {
       status = '<set up>';
       await Future.delayed(Duration(milliseconds: 100));
 
-      StreamSubscription logSubscription;
       report ??= TestReport(
         name: name,
         suiteName: suiteName,
         version: version,
       );
-      if (_testReportLogLevel != null) {
-        logSubscription = Logger.root.onRecord.listen((record) {
-          if (_testReportLogLevel <= record.level) {
-            report.appendLog(
-              '${record.level.name}: ${record.time}: ${record.message}',
-            );
-            if (record.error != null) {
-              report.appendLog('${record.error}');
-            }
-            if (record.stackTrace != null) {
-              report.appendLog('${record.stackTrace}');
-            }
+      var logSubscription = Logger.root.onRecord.listen((record) {
+        if (_testReportLogLevel <= record.level) {
+          report!.appendLog(
+            '${record.level.name}: ${record.time}: ${record.message}',
+          );
+          if (record.error != null) {
+            report.appendLog('${record.error}');
           }
-        });
-      }
+          if (record.stackTrace != null) {
+            report.appendLog('${record.stackTrace}');
+          }
+        }
+      });
 
       try {
         setVariable(
@@ -348,9 +334,9 @@ class TestController {
             break;
           }
 
-          Timer timeoutTimer;
+          Timer? timeoutTimer;
           if (stepTimeout != null) {
-            timeoutTimer = Timer(stepTimeout, () => cancelToken?.cancel());
+            timeoutTimer = Timer(stepTimeout, () => cancelToken.cancel());
           }
 
           try {
@@ -375,24 +361,25 @@ class TestController {
           }
         }
       } catch (e, stack) {
-        report?.exception('Exception in test', e, stack);
+        report.exception('Exception in test', e, stack);
         _logger.severe('EXCEPTION IN TEST: ', e, stack);
       } finally {
-        await logSubscription?.cancel();
+        await logSubscription.cancel();
 
         await _sleep(delays.testTearDown);
         step = null;
-        report?.complete();
+        report.complete();
 
         if (cancelToken.cancelled == false &&
             (reset == true || submitReport == true)) {
+          _testControllerState.runningTest = false;
           testSuiteReport?.addTestReport(report);
           var futures = <Future>[];
           futures.add(
-            _navigatorKey.currentState.push(
+            _navigatorKey.currentState!.push(
               MaterialPageRoute(
                 builder: _testReportBuilder ??
-                    (BuildContext context) => TestReportPage(),
+                    ((BuildContext context) => TestReportPage()),
                 settings: RouteSettings(
                   name: '/atf/test-report',
                   arguments: report,
@@ -412,9 +399,9 @@ class TestController {
 
       return report;
     } finally {
+      _testControllerState.runningTest = false;
       await cancelSubscription.cancel();
       await cancelToken.complete();
-      _testControllerState.runningTest = false;
     }
   }
 
@@ -423,16 +410,16 @@ class TestController {
   /// Whenever a step has a loop or a long running task, it should listen to the
   /// stream from the token or read the flag from the token.
   Future<bool> executeStep({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestStep step,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestStep step,
     bool subStep = true,
   }) async {
     var passed = true;
     var runnerStep = _registry.getRunnerStep(
       id: step.id,
       values: step.values,
-    );
+    )!;
 
     if (cancelToken.cancelled == true) {
       throw Exception('[CANCELLED]: step was canceled by the test');
@@ -442,11 +429,11 @@ class TestController {
       await runnerStep.preStepSleep(delays.preStep);
     }
 
-    report?.startStep(
+    report.startStep(
       step,
       subStep: subStep,
     );
-    String error;
+    String? error;
     try {
       if (cancelToken.cancelled == true) {
         throw Exception('[CANCELLED]: step was cancelled by the test');
@@ -463,7 +450,7 @@ class TestController {
       }
       if (screenshotOnFail == true) {
         try {
-          var imageNum = (report?.images?.length ?? 0) + 1;
+          var imageNum = report.images.length + 1;
           await ScreenshotStep(
             goldenCompatible: false,
             imageId: 'failure_${step.id}_${imageNum}',
@@ -486,7 +473,7 @@ class TestController {
       passed = false;
     } finally {
       _testControllerState.currentStep = null;
-      report?.endStep(step, error);
+      report.endStep(step, error);
     }
 
     if (cancelToken.cancelled == true) {
@@ -503,8 +490,8 @@ class TestController {
   /// report.  If the [report] is set it will be used, otherwise a net-new
   /// [TestReport] will be created and returned.
   Future<TestReport> executeTest({
-    @required Test test,
-    TestReport report,
+    required Test test,
+    TestReport? report,
   }) async {
     return await execute(
       name: test.name,
@@ -529,7 +516,7 @@ class TestController {
   /// successful export or not.
   Future<bool> exportCurrentTest({
     bool clear = true,
-    @required BuildContext context,
+    required BuildContext context,
   }) async {
     var save = true;
     var exported = false;
@@ -537,7 +524,7 @@ class TestController {
     if (currentTest.name?.isNotEmpty != true) {
       var translator = Translator.of(context);
 
-      var name = '';
+      String? name = '';
       var suiteName = currentTest.suiteName ?? '';
       name = await showDialog<String>(
         context: context,
@@ -606,7 +593,7 @@ class TestController {
         save = true;
         currentTest = currentTest.copyWith(
           name: name,
-          suiteName: suiteName?.isNotEmpty == true ? suiteName : null,
+          suiteName: suiteName.isNotEmpty == true ? suiteName : null,
         );
         selectedSuiteName = suiteName;
       } else {
@@ -627,7 +614,7 @@ class TestController {
 
   /// Returns the variable from the controller.  This will return [null] if the
   /// variable is not currently set on the controller.
-  dynamic getVariable(String variableName) {
+  dynamic getVariable(String? variableName) {
     dynamic result;
 
     switch (variableName) {
@@ -635,24 +622,24 @@ class TestController {
         result = DateTime.now().toUtc();
         break;
       case '_platform':
-        if (WebsafePlatform().isAndroid()) {
-          result = 'android';
-        } else if (WebsafePlatform().isFuchsia()) {
-          result = 'fuchsia';
-        } else if (WebsafePlatform().isIOS()) {
-          result = 'ios';
-        } else if (WebsafePlatform().isMacOS()) {
-          result = 'macos';
-        } else if (WebsafePlatform().isWeb()) {
+        if (kIsWeb) {
           result = 'web';
-        } else if (WebsafePlatform().isWindows()) {
+        } else if (Platform.isAndroid) {
+          result = 'android';
+        } else if (Platform.isFuchsia) {
+          result = 'fuchsia';
+        } else if (Platform.isIOS) {
+          result = 'ios';
+        } else if (Platform.isMacOS) {
+          result = 'macos';
+        } else if (Platform.isWindows) {
           result = 'windows';
         } else {
           result = 'unknown';
         }
         break;
       default:
-        result = _variables[variableName];
+        result = _variables[variableName!];
     }
 
     return result;
@@ -661,9 +648,9 @@ class TestController {
   /// Loads the list of tests from the assigned [TestReader].  This accepts the
   /// [BuildContext] to allow the reader to provide visual feedback to the user
   /// in case the load takes a while.
-  Future<List<PendingTest>> loadTests(
-    BuildContext context, {
-    String suiteName,
+  Future<List<PendingTest>?> loadTests(
+    BuildContext? context, {
+    String? suiteName,
   }) =>
       _testReader(
         context,
@@ -676,21 +663,18 @@ class TestController {
   /// [route].  If the route is [null], this will remove any route registered to
   /// the [display].  If the [display] is already registered, it will be
   /// replaced with the new [route]
-  void registerCustomRoute(String display, PageRoute route) => route == null
+  void registerCustomRoute(String display, PageRoute? route) => route == null
       ? _customRoutes.remove(display)
       : _customRoutes[display] = route;
 
   /// Removes the variable with the given [variableName] from the controller.
-  void removeVariable({@required String variableName}) {
-    assert(variableName != null);
-
-    _variables.remove(variableName);
-  }
+  void removeVariable({required String variableName}) =>
+      _variables.remove(variableName);
 
   /// Requests the application to perform a reset.
   Future<void> reset() async {
     if (onReset != null) {
-      await onReset();
+      await onReset!();
     }
     // This covers the minimum animation time for Material animations to
     // complete.  This may or may not be enough time, which is why apps can add
@@ -712,8 +696,8 @@ class TestController {
       var regex = RegExp(r'\{\{[^(})]*}}]*');
 
       var matches = regex.allMatches(input);
-      if (matches?.isNotEmpty == true) {
-        if (matches?.length == 1 &&
+      if (matches.isNotEmpty == true) {
+        if (matches.length == 1 &&
             input.startsWith('{{') &&
             input.endsWith('}}')) {
           var match = matches.first;
@@ -765,7 +749,7 @@ class TestController {
 
     var testSuiteReport = TestSuiteReport();
     _testControllerState.runningSuite = true;
-    if (tests != null) {
+    if (tests.isNotEmpty == true) {
       try {
         for (var pendingTest in tests) {
           if (pendingTest.active == true) {
@@ -790,10 +774,10 @@ class TestController {
       } finally {
         _testControllerState.runningSuite = false;
       }
-      await _navigatorKey.currentState.push(
+      await _navigatorKey.currentState!.push(
         MaterialPageRoute(
           builder: _testSuiteReportBuilder ??
-              (BuildContext context) => TestSuiteReportPage(),
+              ((BuildContext context) => TestSuiteReportPage()),
           settings: RouteSettings(
             arguments: testSuiteReport,
           ),
@@ -809,7 +793,7 @@ class TestController {
   /// front and then loads the full test data on an as needed basis.
   Future<TestSuiteReport> runTests(
     List<Test> tests, {
-    Duration stepTimeout,
+    Duration? stepTimeout,
     Duration waitTimeout = _kSuiteStartTimeout,
   }) async {
     var startTime = DateTime.now();
@@ -826,7 +810,7 @@ class TestController {
 
     var testSuiteReport = TestSuiteReport();
     _testControllerState.runningSuite = true;
-    if (tests != null) {
+    if (tests.isNotEmpty == true) {
       try {
         for (var test in tests) {
           try {
@@ -849,10 +833,10 @@ class TestController {
       } finally {
         _testControllerState.runningSuite = false;
       }
-      await _navigatorKey.currentState.push(
+      await _navigatorKey.currentState!.push(
         MaterialPageRoute(
           builder: _testSuiteReportBuilder ??
-              (BuildContext context) => TestSuiteReportPage(),
+              ((BuildContext context) => TestSuiteReportPage()),
           settings: RouteSettings(
             arguments: testSuiteReport,
           ),
@@ -870,8 +854,8 @@ class TestController {
   ///
   /// This will never trigger a failure, but it will return [null] if the device
   /// does not respond before the timeout.
-  Future<Uint8List> screencap() async {
-    Uint8List image;
+  Future<Uint8List?> screencap() async {
+    Uint8List? image;
 
     if (!kIsWeb) {
       var captureContext = CaptureContext(
@@ -882,7 +866,7 @@ class TestController {
         _screencapController.add(captureContext);
 
         var now = DateTime.now().millisecondsSinceEpoch;
-        while (captureContext.image?.isNotEmpty != true &&
+        while (captureContext.image.isNotEmpty != true &&
             now + delays.screenshot.inMilliseconds >
                 DateTime.now().millisecondsSinceEpoch) {
           await Future.delayed(Duration(milliseconds: 100));
@@ -891,9 +875,9 @@ class TestController {
         _logger.severe(e, stack);
       }
 
-      image = captureContext?.image?.isNotEmpty != true
+      image = captureContext.image.isNotEmpty != true
           ? null
-          : Uint8List.fromList(captureContext?.image);
+          : Uint8List.fromList(captureContext.image);
     }
 
     return image;
@@ -901,13 +885,10 @@ class TestController {
 
   /// Sets the variable with the [variableName] to the [value].
   void setVariable({
-    @required dynamic value,
-    @required String variableName,
-  }) {
-    assert(variableName != null);
-
-    _variables[variableName] = value;
-  }
+    required dynamic value,
+    required String variableName,
+  }) =>
+      _variables[variableName] = value;
 
   /// Submits the test report through the [TestReporter].
   Future<bool> submitReport(TestReport report) => _testReporter(report);

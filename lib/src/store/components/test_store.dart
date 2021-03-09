@@ -22,16 +22,16 @@ class TestStore {
   /// this will return an empty array.
   static List<PendingTest> createMemoryTests(dynamic object,
       {bool ignoreImages = true}) {
-    List<PendingTest> tests;
+    List<PendingTest>? tests;
 
     if (object is List) {
       var tempTests = JsonClass.fromDynamicList(
         object,
         (map) => Test.fromDynamic(map),
-      );
+      )!;
       tempTests.removeWhere(
         (test) =>
-            test.name?.isNotEmpty != true && test.steps?.isNotEmpty != true,
+            test.name?.isNotEmpty != true && test.steps.isNotEmpty != true,
       );
 
       tests = [];
@@ -41,31 +41,31 @@ class TestStore {
     } else {
       var test = Test.fromDynamic(object);
 
-      if (test.name?.isNotEmpty == true && test.steps?.isNotEmpty == true) {
+      if (test.name?.isNotEmpty == true && test.steps.isNotEmpty == true) {
         tests = [PendingTest.memory(test)];
       }
     }
 
-    return tests ?? <Test>[];
+    return (tests ?? <Test>[]) as List<PendingTest>;
   }
 
   /// Generic no-op function compatible with the [GoldenImageWriter] definition.
   static Future<void> goldenImageWriter(TestReport testReport) async => null;
 
   /// Generic no-op function compatible with the [TestImageReader] definition.
-  static Future<Uint8List> testImageReader({
-    @required TestDeviceInfo deviceInfo,
-    String suiteName,
-    @required String testName,
-    @required String imageId,
-    int testVersion,
+  static Future<Uint8List?> testImageReader({
+    required TestDeviceInfo deviceInfo,
+    String? suiteName,
+    required String testName,
+    required String imageId,
+    int? testVersion,
   }) async =>
       null;
 
   /// Generic no-op function compatible with the [TestReader] definition.
-  static Future<List<PendingTest>> testReader(
-    BuildContext context, {
-    String suiteName,
+  static Future<List<PendingTest>?> testReader(
+    BuildContext? context, {
+    String? suiteName,
   }) async {
     await _showNotSupported(context);
     return null;
@@ -83,8 +83,8 @@ class TestStore {
     return false;
   }
 
-  static Future<void> _showNotSupported(BuildContext context,
-      [TranslationEntry entry]) async {
+  static Future<void> _showNotSupported(BuildContext? context,
+      [TranslationEntry? entry]) async {
     var translator = Translator.of(context);
     var snackBar = SnackBar(
       content: Text(
@@ -93,8 +93,10 @@ class TestStore {
         ),
       ),
     );
-    // ignore: deprecated_member_use
-    var controller = Scaffold.of(context).showSnackBar(snackBar);
-    await controller.closed;
+
+    if (context != null) {
+      var controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      await controller.closed;
+    }
   }
 }

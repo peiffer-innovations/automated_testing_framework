@@ -1,6 +1,5 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 class ScreenshotStep extends TestRunnerStep {
   ScreenshotStep({
@@ -14,7 +13,7 @@ class ScreenshotStep extends TestRunnerStep {
 
   /// The id of the screenshot.  This will be saved in the report along with the
   /// screenshot itself.
-  final String imageId;
+  final String? imageId;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -25,8 +24,8 @@ class ScreenshotStep extends TestRunnerStep {
   ///   "imageId": <String>
   /// }
   /// ```
-  static ScreenshotStep fromDynamic(dynamic map) {
-    ScreenshotStep result;
+  static ScreenshotStep? fromDynamic(dynamic map) {
+    ScreenshotStep? result;
 
     if (map != null) {
       result = ScreenshotStep(
@@ -43,11 +42,11 @@ class ScreenshotStep extends TestRunnerStep {
   /// Requests a screenshot from the framework and attaches it to the [report].
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
-    var imageId = this.imageId ?? 'screenshot_${report?.images?.length ?? 0}';
+    var imageId = this.imageId ?? 'screenshot_${report.images.length}';
     var name = "screenshot('$imageId', '$goldenCompatible')";
     log(
       name,
@@ -56,7 +55,7 @@ class ScreenshotStep extends TestRunnerStep {
     var image = await tester.screencap();
 
     if (image != null) {
-      report?.attachScreenshot(
+      report.attachScreenshot(
         image,
         goldenCompatible: goldenCompatible,
         id: imageId,

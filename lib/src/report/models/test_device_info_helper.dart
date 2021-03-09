@@ -1,26 +1,27 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
-import 'package:websafe_platform/websafe_platform.dart';
 
 /// Container class for the device information for the device the test is being
 /// executed on.
 @immutable
 class TestDeviceInfoHelper {
-  static Completer<TestDeviceInfo> _completer;
-  static TestDeviceInfo _instance;
+  static Completer<TestDeviceInfo>? _completer;
+  static TestDeviceInfo? _instance;
 
-  static TestDeviceInfo get instance => _instance ?? initialize(null);
+  static TestDeviceInfo get instance =>
+      _instance ?? initialize(null) as TestDeviceInfo;
 
-  static Future<TestDeviceInfo> initialize(BuildContext context) async {
+  static Future<TestDeviceInfo> initialize(BuildContext? context) async {
     var result = _instance;
 
     while (_completer != null) {
-      await _completer.future;
+      await _completer!.future;
     }
     result = _instance;
 
@@ -28,20 +29,19 @@ class TestDeviceInfoHelper {
       _completer = Completer<TestDeviceInfo>();
 
       var appIdentifier = '<unknown>';
-      String brand;
-      String buildNumber;
-      String device;
-      double devicePixelRatio;
-      BaseSize dips;
+      late String brand;
+      late String buildNumber;
+      late String device;
+      double? devicePixelRatio;
+      BaseSize? dips;
       var id = '<unknown>';
-      String manufacturer;
-      String model;
-      String os;
-      String orientation;
-      bool physicalDevice;
-      BaseSize pixels;
-      String systemVersion;
-      var wsp = WebsafePlatform();
+      late String manufacturer;
+      late String model;
+      late String os;
+      String? orientation;
+      late bool physicalDevice;
+      BaseSize? pixels;
+      late String systemVersion;
 
       if (kIsWeb) {
         brand = 'web';
@@ -59,7 +59,7 @@ class TestDeviceInfoHelper {
         } catch (e) {
           // No-op; don't fail because we can't get the build number.
         }
-        if (wsp.isAndroid()) {
+        if (Platform.isAndroid) {
           os = 'android';
 
           try {
@@ -76,7 +76,7 @@ class TestDeviceInfoHelper {
           } catch (e) {
             // No-op; don't fail because we can't get the device info.
           }
-        } else if (wsp.isIOS()) {
+        } else if (Platform.isIOS) {
           brand = 'apple';
           manufacturer = 'apple';
           os = 'ios';
@@ -93,7 +93,7 @@ class TestDeviceInfoHelper {
           } catch (e) {
             // No-op; don't fail because we can't get the device info.
           }
-        } else if (wsp.isFuchsia()) {
+        } else if (Platform.isFuchsia) {
           brand = '<unknown>';
           device = '<unknown>';
           manufacturer = '<unknown>';
@@ -101,7 +101,7 @@ class TestDeviceInfoHelper {
           physicalDevice = true;
           os = 'fuchsia';
           systemVersion = '<unknown>';
-        } else if (wsp.isLinux()) {
+        } else if (Platform.isLinux) {
           brand = '<unknown>';
           device = '<unknown>';
           manufacturer = '<unknown>';
@@ -109,7 +109,7 @@ class TestDeviceInfoHelper {
           physicalDevice = true;
           os = 'linux';
           systemVersion = '<unknown>';
-        } else if (wsp.isMacOS()) {
+        } else if (Platform.isMacOS) {
           brand = 'apple';
           device = 'macos';
           manufacturer = 'apple';

@@ -8,8 +8,8 @@ class LogHandler {
   LogHandler._internal();
   static final LogHandler _singleton = LogHandler._internal();
 
-  TestDriver _driver;
-  StreamSubscription _logSubscription;
+  late TestDriver _driver;
+  StreamSubscription? _logSubscription;
 
   set driver(TestDriver driver) => _driver = driver;
 
@@ -39,7 +39,7 @@ class LogHandler {
             commandId: command.id,
             response: response,
           );
-          _driver.communicator.sendCommand(ack);
+          _driver.communicator!.sendCommand(ack);
         }
       });
     }

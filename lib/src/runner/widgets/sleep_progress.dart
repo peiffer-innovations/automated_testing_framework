@@ -7,18 +7,15 @@ import 'package:flutter/material.dart';
 class SleepProgress extends StatefulWidget {
   SleepProgress({
     this.error,
-    Key key,
-    @required this.max,
-    @required this.stream,
-    @required this.theme,
-  })  : assert(max != null),
-        assert(max >= 0),
-        assert(stream != null),
-        assert(theme != null),
+    Key? key,
+    required this.max,
+    required this.stream,
+    required this.theme,
+  })   : assert(max >= 0),
         super(key: key);
 
   /// States whether this progress counter will result in an error or not.
-  final bool error;
+  final bool? error;
 
   /// The max number of seconds this sleep may take.  The sleep progress will
   /// animate to this max value unless
@@ -26,7 +23,7 @@ class SleepProgress extends StatefulWidget {
 
   /// The stream to listen to for progress updates.  These updates will override
   /// the built in update timer.
-  final Stream<ProgressValue> stream;
+  final Stream<ProgressValue?> stream;
 
   /// The theme data for rendering the progress.
   final TestRunnerThemeData theme;
@@ -39,8 +36,8 @@ class _SleepProgressState extends State<SleepProgress>
     with SingleTickerProviderStateMixin {
   final List<StreamSubscription> _subscriptions = [];
 
-  AnimationController _animationController;
-  bool _error;
+  AnimationController? _animationController;
+  bool? _error;
 
   @override
   void initState() {
@@ -51,7 +48,7 @@ class _SleepProgressState extends State<SleepProgress>
       vsync: this,
     );
 
-    _animationController.addListener(() {
+    _animationController!.addListener(() {
       if (mounted == true) {
         setState(() {});
       }
@@ -60,9 +57,9 @@ class _SleepProgressState extends State<SleepProgress>
     _subscriptions.add(widget.stream.listen((event) {
       _error = _error == true || event?.error == true;
       if (event?.progress != null) {
-        _animationController.animateTo(event.progress);
+        _animationController!.animateTo(event!.progress);
       } else {
-        _animationController.animateTo(1.0);
+        _animationController!.animateTo(1.0);
       }
     }));
   }
@@ -70,7 +67,7 @@ class _SleepProgressState extends State<SleepProgress>
   @override
   void dispose() {
     _animationController?.dispose();
-    _subscriptions?.forEach((sub) => sub.cancel());
+    _subscriptions.forEach((sub) => sub.cancel());
 
     super.dispose();
   }
@@ -87,7 +84,7 @@ class _SleepProgressState extends State<SleepProgress>
                 ? widget.theme.statusErrorColor
                 : widget.theme.statusProgressColor,
           ),
-          value: _animationController.value,
+          value: _animationController!.value,
         ),
       ),
     );

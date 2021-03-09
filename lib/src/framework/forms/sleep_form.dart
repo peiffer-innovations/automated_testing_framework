@@ -15,7 +15,7 @@ class SleepForm extends TestStepForm {
   @override
   Widget buildForm(
     BuildContext context,
-    Map<String, dynamic> values, {
+    Map<String, dynamic>? values, {
     bool minify = false,
   }) {
     return Column(
@@ -40,7 +40,7 @@ class SleepForm extends TestStepForm {
                 NumberValidator(),
                 MinNumberValidator(number: 1),
               ],
-              values: values,
+              values: values!,
             ),
           ],
           minify: minify,

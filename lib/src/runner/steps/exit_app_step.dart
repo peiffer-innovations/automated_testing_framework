@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-import 'package:flutter/material.dart';
 import 'package:json_class/json_class.dart';
-import 'package:meta/meta.dart';
 
 /// Test step that exits the application.
 class ExitAppStep extends TestRunnerStep {
@@ -18,8 +16,8 @@ class ExitAppStep extends TestRunnerStep {
   /// See also:
   /// * [JsonClass.parseBool]
   /// * [JsonClass.parseDurationFromSeconds]
-  static ExitAppStep fromDynamic(dynamic map) {
-    ExitAppStep result;
+  static ExitAppStep? fromDynamic(dynamic map) {
+    ExitAppStep? result;
 
     if (map != null) {
       result = ExitAppStep();
@@ -31,9 +29,9 @@ class ExitAppStep extends TestRunnerStep {
   /// Executes the step and exits the application.
   @override
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   }) async {
     var name = 'exit_app()';
     log(

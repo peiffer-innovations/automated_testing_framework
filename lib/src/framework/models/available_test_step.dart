@@ -11,19 +11,15 @@ import 'package:static_translations/static_translations.dart';
 @immutable
 class AvailableTestStep {
   const AvailableTestStep({
-    @required this.form,
+    required this.form,
     this.keys = const <String>{},
-    @required this.help,
-    @required this.id,
+    required this.help,
+    required this.id,
     this.quickAddValues,
-    @required this.title,
+    required this.title,
     this.type,
-    @required this.widgetless,
-  })  : assert(form != null),
-        assert(help != null),
-        assert(id != null),
-        assert(title != null),
-        assert(widgetless != null);
+    required this.widgetless,
+  });
 
   /// Binds the input form associated with the test step.  This must
   /// self-validate and ensure all required values exist before allowing
@@ -47,7 +43,7 @@ class AvailableTestStep {
   /// Map of key / value pairs that can be used to quick add (form less add) the
   /// step to a test.  This must be `null` if forms are always required to be
   /// filled out before adding the step.
-  final Map<String, dynamic> quickAddValues;
+  final Map<String, dynamic>? quickAddValues;
 
   /// Translation key for the title text that tescribes the test step.
   final TranslationEntry title;
@@ -57,7 +53,7 @@ class AvailableTestStep {
   /// the test supports all types.
   ///
   /// This will be ignored whenever [widgetless] is set to [true].
-  final TestableType type;
+  final TestableType? type;
 
   /// Sets whether this step is dependent on a [Testable] widget or not.  If
   /// this value is [true] then it is assumed the step is [Testable] agnostic
@@ -73,11 +69,11 @@ class AvailableTestStep {
   /// Returns [true] if this step supports any of the given [types] or if this
   /// step has no specific type requirement.  Returns [false] if this has a type
   /// requirement that the [Testable] does not support the required type.
-  bool supports(List<TestableType> types) {
+  bool supports(List<TestableType>? types) {
     var supported = types?.isNotEmpty != true || type == null;
 
     if (supported != true) {
-      types.forEach(
+      types!.forEach(
         (type) => supported = supported || type == this.type,
       );
     }

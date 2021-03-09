@@ -5,12 +5,10 @@ import 'package:static_translations/static_translations.dart';
 /// Form that displays all the input options for an individual test step.
 class TestableFormPage extends StatefulWidget {
   TestableFormPage({
-    @required this.form,
-    @required this.values,
-    Key key,
-  })  : assert(form != null),
-        assert(values != null),
-        super(key: key);
+    required this.form,
+    required this.values,
+    Key? key,
+  }) : super(key: key);
 
   final TestStepForm form;
   final Map<String, dynamic> values;
@@ -20,7 +18,7 @@ class TestableFormPage extends StatefulWidget {
 }
 
 class _TestableFormPageState extends State<TestableFormPage> {
-  Map<String, dynamic> _values;
+  Map<String, dynamic>? _values;
 
   @override
   void initState() {
@@ -40,7 +38,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
             onPressed: () => Navigator.of(context).pop(false),
             style: ButtonStyle(
               textStyle: MaterialStateProperty.all(
-                TextStyle(color: theme.textTheme.bodyText2.color),
+                TextStyle(color: theme.textTheme.bodyText2!.color),
               ),
             ),
             child: Text(
@@ -68,7 +66,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
           children: <Widget>[
             Icon(
               Icons.warning,
-              color: theme.textTheme.bodyText2.color,
+              color: theme.textTheme.bodyText2!.color,
               size: 54.0,
             ),
             SizedBox(
@@ -150,7 +148,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
                             flex: wide == true ? 0 : 1,
                             child: TextButton(
                               onPressed: () {
-                                var valid = Form.of(context).validate();
+                                var valid = Form.of(context)!.validate();
                                 if (valid == true) {
                                   Navigator.of(context).pop(_values);
                                 } else {
@@ -176,7 +174,7 @@ class _TestableFormPageState extends State<TestableFormPage> {
                                             Icon(
                                               Icons.warning,
                                               color: theme
-                                                  .textTheme.bodyText2.color,
+                                                  .textTheme.bodyText2!.color,
                                               size: 54,
                                             ),
                                             SizedBox(

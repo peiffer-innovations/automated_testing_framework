@@ -62,61 +62,61 @@ class TestableTextFormField extends StatefulWidget {
   });
 
   final bool autocorrect;
-  final Iterable<String> autofillHints;
+  final Iterable<String>? autofillHints;
   final bool autofocus;
-  final bool autovalidate;
-  final AutovalidateMode autovalidateMode;
-  final InputCounterWidgetBuilder buildCounter;
-  final TextEditingController controller;
-  final Color cursorColor;
-  final double cursorHeight;
-  final Radius cursorRadius;
+  final bool? autovalidate;
+  final AutovalidateMode? autovalidateMode;
+  final InputCounterWidgetBuilder? buildCounter;
+  final TextEditingController? controller;
+  final Color? cursorColor;
+  final double? cursorHeight;
+  final Radius? cursorRadius;
   final double cursorWidth;
   final dynamic decoration;
   final bool enableInteractiveSelection;
   final bool enableSuggestions;
   final bool enabled;
   final bool expands;
-  final FocusNode focusNode;
-  final String id;
-  final String initialValue;
-  final List<TextInputFormatter> inputFormatters;
-  final Brightness keyboardAppearance;
-  final TextInputType keyboardType;
-  final int maxLength;
+  final FocusNode? focusNode;
+  final String? id;
+  final String? initialValue;
+  final List<TextInputFormatter>? inputFormatters;
+  final Brightness? keyboardAppearance;
+  final TextInputType? keyboardType;
+  final int? maxLength;
   final bool maxLengthEnforced;
-  final int maxLines;
-  final int minLines;
+  final int? maxLines;
+  final int? minLines;
   final bool obscureText;
   final String obscuringCharacter;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onEditingComplete;
-  final ValueChanged<String> onFieldSubmitted;
-  final FormFieldSetter<String> onSaved;
-  final VoidCallback onTap;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onEditingComplete;
+  final ValueChanged<String>? onFieldSubmitted;
+  final FormFieldSetter<String>? onSaved;
+  final VoidCallback? onTap;
   final bool readOnly;
   final EdgeInsetsGeometry scrollPadding;
-  final ScrollPhysics scrollPhysics;
-  final String scrollableId;
-  final bool showCursor;
-  final SmartDashesType smartDashesType;
-  final SmartQuotesType smartQuotesType;
-  final StrutStyle strutStyle;
-  final TextStyle style;
+  final ScrollPhysics? scrollPhysics;
+  final String? scrollableId;
+  final bool? showCursor;
+  final SmartDashesType? smartDashesType;
+  final SmartQuotesType? smartQuotesType;
+  final StrutStyle? strutStyle;
+  final TextStyle? style;
   final TextAlign textAlign;
-  final TextAlignVertical textAlignVertical;
+  final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
-  final TextDirection textDirection;
-  final TextInputAction textInputAction;
-  final ToolbarOptions toolbarOptions;
-  final String Function(String) validator;
+  final TextDirection? textDirection;
+  final TextInputAction? textInputAction;
+  final ToolbarOptions? toolbarOptions;
+  final String? Function(String?)? validator;
 
   @override
   _TestableTextFormFieldState createState() => _TestableTextFormFieldState();
 }
 
 class _TestableTextFormFieldState extends State<TestableTextFormField> {
-  TextEditingController _controller;
+  TextEditingController? _controller;
 
   @override
   void initState() {
@@ -133,7 +133,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
     // If the controller on the widget isn't null then we don't own the
     // controller so don't dispose it.
     if (widget.controller == null) {
-      _controller.dispose();
+      _controller!.dispose();
     }
 
     super.dispose();
@@ -143,9 +143,9 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
   Widget build(BuildContext context) => Testable(
         id: widget.id,
         scrollableId: widget.scrollableId,
-        onRequestValue: () => _controller.text,
+        onRequestValue: () => _controller!.text,
         onSetValue: widget.enabled == true
-            ? (dynamic value) => _controller.text = value
+            ? (dynamic value) => _controller!.text = value
             : null,
         child: TextFormField(
           autocorrect: widget.autocorrect,
@@ -186,7 +186,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           onSaved: widget.onSaved,
           onTap: widget.onTap,
           readOnly: widget.readOnly,
-          scrollPadding: widget.scrollPadding,
+          scrollPadding: widget.scrollPadding as EdgeInsets,
           scrollPhysics: widget.scrollPhysics,
           showCursor: widget.showCursor,
           smartDashesType: widget.smartDashesType,

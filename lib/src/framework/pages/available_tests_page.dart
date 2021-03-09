@@ -8,13 +8,12 @@ import 'package:static_translations/static_translations.dart';
 class AvailableTestsPage extends StatefulWidget {
   AvailableTestsPage({
     this.autoRun = false,
-    Key key,
+    Key? key,
     this.suiteName,
-  })  : assert(autoRun != null),
-        super(key: key);
+  }) : super(key: key);
 
   final bool autoRun;
-  final String suiteName;
+  final String? suiteName;
 
   @override
   _AvailableTestsPageState createState() => _AvailableTestsPageState();
@@ -22,11 +21,11 @@ class AvailableTestsPage extends StatefulWidget {
 
 class _AvailableTestsPageState extends State<AvailableTestsPage> {
   final Map<String, bool> _active = {};
-  String _suiteName;
-  List<String> _testSuites = [];
-  List<PendingTest> _tests;
-  Translator _translator;
-  TestController _testController;
+  String? _suiteName;
+  List<String?> _testSuites = [];
+  List<PendingTest>? _tests;
+  late Translator _translator;
+  TestController? _testController;
 
   @override
   void initState() {
@@ -35,7 +34,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     _translator = Translator.of(context);
 
     _testController = TestController.of(context);
-    _suiteName = widget.suiteName ?? _testController.selectedSuiteName;
+    _suiteName = widget.suiteName ?? _testController!.selectedSuiteName;
 
     _loadTests();
   }
@@ -44,7 +43,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
 
   Future<void> _loadTest(PendingTest pendingTest) async {
     var test = await pendingTest.loader.load();
-    _testController.currentTest = test;
+    _testController!.currentTest = test;
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (BuildContext context) => TestStepsPage(),
@@ -53,13 +52,13 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
   }
 
   Future<void> _loadTests() async {
-    _tests = (await _testController.loadTests(
+    _tests = (await _testController!.loadTests(
           context,
         )) ??
         [];
     _active.clear();
 
-    var suites = <String>{};
+    var suites = <String?>{};
     _tests?.forEach((test) {
       _active[test.id] = test.active;
       if (test.suiteName != null) {
@@ -67,7 +66,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
       }
     });
     _testSuites = suites.toList()
-      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+      ..sort((a, b) => a!.toLowerCase().compareTo(b!.toLowerCase()));
     if (mounted == true) {
       setState(() {});
     }
@@ -80,9 +79,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
           .compareTo((b.suiteName ?? '').toLowerCase());
 
       if (result == 0) {
-        result = (a.name ?? '')
-            .toLowerCase()
-            .compareTo((b.name ?? '').toLowerCase());
+        result = a.name.toLowerCase().compareTo(b.name.toLowerCase());
       }
 
       if (result == 0) {
@@ -100,7 +97,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
   Future<void> _runTests() async {
     var tests = <Test>[];
 
-    for (var test in _tests) {
+    for (var test in _tests!) {
       if (_isActive(test) &&
           test.numSteps > 0 &&
           (_suiteName == null || _suiteName == test.suiteName)) {
@@ -168,7 +165,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     var translator = Translator.of(context);
     var suiteTests = _tests
         ?.where((test) => _suiteName == null || _suiteName == test.suiteName)
-        ?.toList();
+        .toList();
 
     return Theme(
       data: theme,
@@ -202,7 +199,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
                           trailing: _suiteName == null
                               ? Icon(
                                   Icons.check_circle,
-                                  color: theme.textTheme.bodyText2.color,
+                                  color: theme.textTheme.bodyText2!.color,
                                 )
                               : null,
                         ),
@@ -213,11 +210,11 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
                                 setState(() => _suiteName = suite);
                                 Navigator.of(context).pop();
                               },
-                              title: Text(suite),
+                              title: Text(suite!),
                               trailing: _suiteName == suite
                                   ? Icon(
                                       Icons.check_circle,
-                                      color: theme.textTheme.bodyText2.color,
+                                      color: theme.textTheme.bodyText2!.color,
                                     )
                                   : null,
                             ),
@@ -239,7 +236,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
               _translator.translate(TestTranslations.atf_tests),
             ),
           ),
-          body: suiteTests == null || suiteTests?.isEmpty == true
+          body: suiteTests == null || suiteTests.isEmpty == true
               ? Center(
                   child: _tests == null
                       ? CircularProgressIndicator()

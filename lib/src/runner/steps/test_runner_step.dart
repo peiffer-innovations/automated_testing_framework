@@ -16,10 +16,10 @@ abstract class TestRunnerStep extends JsonClass {
   static final Logger _logger = Logger('TestRunnerStep');
 
   static final OverrideWidgetTester _driver =
-      OverrideWidgetTester(WidgetsBinding.instance);
+      OverrideWidgetTester(WidgetsBinding.instance!);
 
   /// Returns the function to call when logging is required
-  static void _console(Object message, [Level level = Level.INFO]) =>
+  static void _console(Object? message, [Level level = Level.INFO]) =>
       _logger.log(level, message);
 
   /// Returns the default timeout for the step.  Steps that should respond
@@ -36,16 +36,16 @@ abstract class TestRunnerStep extends JsonClass {
 
   /// Function that is called when the step needs to execute.
   Future<void> execute({
-    @required CancelToken cancelToken,
-    @required TestReport report,
-    @required TestController tester,
+    required CancelToken cancelToken,
+    required TestReport report,
+    required TestController tester,
   });
 
   /// Logs a message and posts it as a status update to the [TestRunner].
   @protected
   void log(
     String message, {
-    @required TestController tester,
+    required TestController tester,
   }) {
     _console(message);
     tester.status = message;
@@ -73,10 +73,10 @@ abstract class TestRunnerStep extends JsonClass {
   @protected
   Future<void> sleep(
     Duration duration, {
-    @required Stream<void> cancelStream,
+    required Stream<void>? cancelStream,
     bool error = false,
-    String message,
-    @required TestController tester,
+    String? message,
+    required TestController tester,
   }) async {
     if (duration.inMilliseconds > 0) {
       // Let's reduce the number of log entries to 1 per 100ms or 10 per second.
@@ -147,9 +147,9 @@ abstract class TestRunnerStep extends JsonClass {
   @protected
   Future<test.Finder> waitFor(
     dynamic testableId, {
-    @required CancelToken cancelToken,
-    @required TestController tester,
-    Duration timeout,
+    required CancelToken cancelToken,
+    required TestController tester,
+    Duration? timeout,
   }) async {
     timeout ??= tester.delays.defaultTimeout;
 
@@ -158,12 +158,12 @@ abstract class TestRunnerStep extends JsonClass {
     try {
       var waiter = () async {
         var end =
-            DateTime.now().millisecondsSinceEpoch + timeout.inMilliseconds;
-        test.Finder finder;
+            DateTime.now().millisecondsSinceEpoch + timeout!.inMilliseconds;
+        test.Finder? finder;
         var found = false;
         while (found != true && DateTime.now().millisecondsSinceEpoch < end) {
           try {
-            finder = test.find.byKey(Key(testableId));
+            finder = test.find.byKey(ValueKey<String?>(testableId));
             finder.evaluate().first;
             found = true;
           } catch (e) {
@@ -178,7 +178,7 @@ abstract class TestRunnerStep extends JsonClass {
         if (found != true) {
           throw Exception('testableId: [$testableId] -- Timeout exceeded.');
         }
-        return finder;
+        return finder!;
       };
 
       var sleeper = sleep(
@@ -201,9 +201,9 @@ abstract class TestRunnerStep extends JsonClass {
       }
 
       try {
-        var finder = result.evaluate()?.first;
+        var finder = result.evaluate().first;
         if (finder.widget is Testable) {
-          StatefulElement element = finder;
+          var element = finder as StatefulElement;
           var state = element.state;
           if (state is TestableState) {
             _console('flash: [$testableId]', Level.FINEST);

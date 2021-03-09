@@ -6,22 +6,21 @@ import 'package:json_class/json_class.dart';
 /// Widget for rendering a test step from a test report.
 class TestReportStepWidget extends StatelessWidget {
   TestReportStepWidget({
-    Key key,
-    @required this.step,
-  })  : assert(step != null),
-        super(key: key);
+    Key? key,
+    required this.step,
+  }) : super(key: key);
 
   final TestReportStep step;
 
   Widget _buildStepDetail({
-    @required BuildContext context,
-    @required TestReportStep step,
-    @required ThemeData theme,
+    required BuildContext context,
+    required TestReportStep step,
+    required ThemeData theme,
   }) {
-    Widget result;
+    Widget? result;
 
     var values = JsonClass.removeNull(step.step);
-    if (values is Map && values?.isNotEmpty == true) {
+    if (values is Map && values.isNotEmpty == true) {
       result = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -41,7 +40,7 @@ class TestReportStepWidget extends StatelessWidget {
                   ),
                   TextSpan(
                     text: entry.value?.toString() ?? '<null>',
-                    style: theme.textTheme.subtitle2.copyWith(
+                    style: theme.textTheme.subtitle2!.copyWith(
                       fontFamily: 'monospaced',
                     ),
                   ),
@@ -81,8 +80,8 @@ class TestReportStepWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      step.id ?? '<unknown>',
-                      style: theme.textTheme.bodyText2.copyWith(
+                      step.id,
+                      style: theme.textTheme.bodyText2!.copyWith(
                         fontSize: 18.0,
                       ),
                     ),
@@ -90,7 +89,7 @@ class TestReportStepWidget extends StatelessWidget {
                   SizedBox(width: 16.0),
                   Text(
                     NumberFormat('#,##0ms').format(
-                      step.endTime.millisecondsSinceEpoch -
+                      step.endTime!.millisecondsSinceEpoch -
                           step.startTime.millisecondsSinceEpoch,
                     ),
                   ),

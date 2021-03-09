@@ -8,7 +8,7 @@ class ReservationHandler {
 
   static final Logger _logger = Logger('ReservationHandler');
 
-  TestDriver _driver;
+  late TestDriver _driver;
 
   set driver(TestDriver driver) => _driver = driver;
 

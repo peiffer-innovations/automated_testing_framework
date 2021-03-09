@@ -29,7 +29,7 @@ class ClipboardTestStore {
   /// same test suite.
   static Future<List<PendingTest>> testReader(
     BuildContext context, {
-    String suiteName,
+    String? suiteName,
   }) async {
     var tests = <PendingTest>[];
 
@@ -37,18 +37,18 @@ class ClipboardTestStore {
       var data = await Clipboard.getData('text/plain');
       var text = data?.text;
       if (text?.isNotEmpty == true) {
-        var parsed = json.decode(text);
+        var parsed = json.decode(text!);
         tests = TestStore.createMemoryTests(parsed);
       }
 
-      tests?.removeWhere(
+      tests.removeWhere(
         (test) => suiteName?.isNotEmpty == true && suiteName != test.suiteName,
       );
     } catch (e, stack) {
       _logger.severe('Error in ClipboardTestStore.testReader', e, stack);
     }
 
-    return tests ?? <PendingTest>[];
+    return tests;
   }
 
   /// Saves the [test] to the clipboard.

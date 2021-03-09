@@ -5,7 +5,7 @@ void main() {
   test('assert_error', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'assert_error',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, AssertErrorForm);
     expect(availStep.help, TestStepTranslations.atf_help_assert_error);
@@ -18,7 +18,7 @@ void main() {
   test('assert_value', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'assert_value',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, AssertValueForm);
     expect(availStep.help, TestStepTranslations.atf_help_assert_value);
@@ -31,7 +31,7 @@ void main() {
   test('dismiss_keyboard', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'dismiss_keyboard',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, DismissKeyboardForm);
     expect(availStep.help, TestStepTranslations.atf_help_dismiss_keyboard);
@@ -44,7 +44,7 @@ void main() {
   test('double_tap', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'double_tap',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, DoubleTapForm);
     expect(availStep.help, TestStepTranslations.atf_help_double_tap);
@@ -57,7 +57,7 @@ void main() {
   test('ensure_exists', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'ensure_exists',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, EnsureExistsForm);
     expect(availStep.help, TestStepTranslations.atf_help_ensure_exists);
@@ -70,7 +70,7 @@ void main() {
   test('exit_app', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'exit_app',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, ExitAppForm);
     expect(availStep.help, TestStepTranslations.atf_help_exit_app);
@@ -83,7 +83,7 @@ void main() {
   test('go_back', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'go_back',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, GoBackForm);
     expect(availStep.help, TestStepTranslations.atf_help_go_back);
@@ -96,7 +96,7 @@ void main() {
   test('long_press', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'long_press',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, LongPressForm);
     expect(availStep.help, TestStepTranslations.atf_help_long_press);
@@ -109,7 +109,7 @@ void main() {
   test('screenshot', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'screenshot',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, ScreenshotForm);
     expect(availStep.help, TestStepTranslations.atf_help_screenshot);
@@ -122,7 +122,7 @@ void main() {
   test('scroll_until_visible', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'scroll_until_visible',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, ScrollUntilVisibleForm);
     expect(availStep.help, TestStepTranslations.atf_help_scroll_until_visible);
@@ -138,7 +138,7 @@ void main() {
   test('set_value', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'set_value',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, SetValueForm);
     expect(availStep.help, TestStepTranslations.atf_help_set_value);
@@ -151,7 +151,7 @@ void main() {
   test('set_variable', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'set_variable',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, SetVariableForm);
     expect(availStep.help, TestStepTranslations.atf_help_set_variable);
@@ -164,7 +164,7 @@ void main() {
   test('sleep', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'sleep',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, SleepForm);
     expect(availStep.help, TestStepTranslations.atf_help_sleep);
@@ -177,7 +177,7 @@ void main() {
   test('tap', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'tap',
-    );
+    )!;
 
     expect(availStep.form.runtimeType, TapForm);
     expect(availStep.help, TestStepTranslations.atf_help_tap);

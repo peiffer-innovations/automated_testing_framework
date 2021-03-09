@@ -47,7 +47,7 @@ abstract class WidgetController {
   /// Can contain duplicates, since widgets can be used in multiple
   /// places in the widget tree.
   Iterable<Widget> get allWidgets {
-    return allElements.map<Widget>((Element element) => element.widget);
+    return allElements.map<Widget>((Element? element) => element!.widget);
   }
 
   /// The matching widget in the widget tree.
@@ -76,8 +76,8 @@ abstract class WidgetController {
   /// * Use [widget] if you only expect to match one widget.
   /// * Use [firstWidget] if you expect to match several but only want the first.
   Iterable<T> widgetList<T extends Widget>(Finder finder) {
-    return finder.evaluate().map<T>((Element element) {
-      final result = element.widget as T;
+    return finder.evaluate().map<T>((Element? element) {
+      final result = element!.widget as T;
       return result;
     });
   }
@@ -88,7 +88,7 @@ abstract class WidgetController {
   /// immediately, but rather a chunk at a time as the iteration progresses
   /// using [Iterator.moveNext].
   Iterable<Element> get allElements {
-    return collectAllElementsFrom(binding.renderViewElement,
+    return collectAllElementsFrom(binding.renderViewElement!,
         skipOffstage: false);
   }
 
@@ -164,13 +164,13 @@ abstract class WidgetController {
   Iterable<T> stateList<T extends State>(Finder finder) {
     return finder
         .evaluate()
-        .map<T>((Element element) => _stateOf<T>(element, finder));
+        .map<T>((Element? element) => _stateOf<T>(element, finder));
   }
 
-  T _stateOf<T extends State>(Element element, Finder finder) {
+  T _stateOf<T extends State>(Element? element, Finder finder) {
     if (element is StatefulElement) return element.state as T;
     throw StateError(
-        'Widget of type ${element.widget.runtimeType}, with ${finder.description}, is not a StatefulWidget.');
+        'Widget of type ${element!.widget.runtimeType}, with ${finder.description}, is not a StatefulWidget.');
   }
 
   /// Render objects of all the widgets currently in the widget tree
@@ -180,9 +180,9 @@ abstract class WidgetController {
   /// render object of a [StatelessWidget] or [StatefulWidget] is the
   /// render object of its child; only [RenderObjectWidget]s have
   /// their own render object.
-  Iterable<RenderObject> get allRenderObjects {
+  Iterable<RenderObject?> get allRenderObjects {
     return allElements
-        .map<RenderObject>((Element element) => element.renderObject);
+        .map<RenderObject?>((Element? element) => element!.renderObject);
   }
 
   /// The render object of the matching widget in the widget tree.
@@ -192,8 +192,8 @@ abstract class WidgetController {
   ///
   /// * Use [firstRenderObject] if you expect to match several render objects but only want the first.
   /// * Use [renderObjectList] if you expect to match several render objects and want all of them.
-  T renderObject<T extends RenderObject>(Finder finder) {
-    return finder.evaluate().single.renderObject as T;
+  T? renderObject<T extends RenderObject?>(Finder finder) {
+    return finder.evaluate().single.renderObject as T?;
   }
 
   /// The render object of the first matching widget according to a
@@ -202,25 +202,25 @@ abstract class WidgetController {
   /// Throws a [StateError] if `finder` is empty.
   ///
   /// * Use [renderObject] if you only expect to match one render object.
-  T firstRenderObject<T extends RenderObject>(Finder finder) {
-    return finder.evaluate().first.renderObject as T;
+  T? firstRenderObject<T extends RenderObject?>(Finder finder) {
+    return finder.evaluate().first.renderObject as T?;
   }
 
   /// The render objects of the matching widgets in the widget tree.
   ///
   /// * Use [renderObject] if you only expect to match one render object.
   /// * Use [firstRenderObject] if you expect to match several but only want the first.
-  Iterable<T> renderObjectList<T extends RenderObject>(Finder finder) {
-    return finder.evaluate().map<T>((Element element) {
-      final result = element.renderObject as T;
+  Iterable<T?> renderObjectList<T extends RenderObject?>(Finder finder) {
+    return finder.evaluate().map<T?>((Element? element) {
+      final result = element!.renderObject as T?;
       return result;
     });
   }
 
   /// Returns a list of all the [Layer] objects in the rendering.
   List<Layer> get layers => _walkLayers(binding.renderView.debugLayer).toList();
-  Iterable<Layer> _walkLayers(Layer layer) sync* {
-    yield layer;
+  Iterable<Layer> _walkLayers(Layer? layer) sync* {
+    yield layer!;
     if (layer is ContainerLayer) {
       final root = layer;
       var child = root.firstChild;
@@ -238,13 +238,14 @@ abstract class WidgetController {
   ///
   /// If the center of the widget is not exposed, this might send events to
   /// another object.
-  Future<void> tap(Finder finder, {int pointer, int buttons = kPrimaryButton}) {
+  Future<void> tap(Finder finder,
+      {int? pointer, int buttons = kPrimaryButton}) {
     return tapAt(getCenter(finder), pointer: pointer, buttons: buttons);
   }
 
   /// Dispatch a pointer down / pointer up sequence at the given location.
   Future<void> tapAt(Offset location,
-      {int pointer, int buttons = kPrimaryButton}) async {
+      {int? pointer, int buttons = kPrimaryButton}) async {
     final gesture =
         await startGesture(location, pointer: pointer, buttons: buttons);
     await gesture.up();
@@ -256,7 +257,7 @@ abstract class WidgetController {
   /// If the center of the widget is not exposed, this might send events to
   /// another object.
   Future<TestGesture> press(Finder finder,
-      {int pointer, int buttons = kPrimaryButton}) async {
+      {int? pointer, int buttons = kPrimaryButton}) async {
     return startGesture(getCenter(finder), pointer: pointer, buttons: buttons);
   }
 
@@ -267,14 +268,14 @@ abstract class WidgetController {
   /// If the center of the widget is not exposed, this might send events to
   /// another object.
   Future<void> longPress(Finder finder,
-      {int pointer, int buttons = kPrimaryButton}) {
+      {int? pointer, int buttons = kPrimaryButton}) {
     return longPressAt(getCenter(finder), pointer: pointer, buttons: buttons);
   }
 
   /// Dispatch a pointer down / pointer up sequence at the given location with
   /// a delay of [kLongPressTimeout] + [kPressTimeout] between the two events.
   Future<void> longPressAt(Offset location,
-      {int pointer, int buttons = kPrimaryButton}) async {
+      {int? pointer, int buttons = kPrimaryButton}) async {
     final gesture =
         await startGesture(location, pointer: pointer, buttons: buttons);
     await pump(kLongPressTimeout + kPressTimeout);
@@ -305,7 +306,7 @@ abstract class WidgetController {
     Finder finder,
     Offset offset,
     double speed, {
-    int pointer,
+    int? pointer,
     int buttons = kPrimaryButton,
     Duration frameInterval = const Duration(milliseconds: 16),
     Offset initialOffset = Offset.zero,
@@ -352,7 +353,7 @@ abstract class WidgetController {
     Offset startLocation,
     Offset offset,
     double speed, {
-    int pointer,
+    int? pointer,
     int buttons = kPrimaryButton,
     Duration frameInterval = const Duration(milliseconds: 16),
     Offset initialOffset = Offset.zero,
@@ -383,7 +384,7 @@ abstract class WidgetController {
     for (var i = 0; i <= kMoveCount; i += 1) {
       final location = startLocation +
           initialOffset +
-          Offset.lerp(Offset.zero, offset, i / kMoveCount);
+          Offset.lerp(Offset.zero, offset, i / kMoveCount)!;
       await sendEventToBinding(
           testPointer.move(location,
               timeStamp: Duration(milliseconds: timeStamp.round())),
@@ -409,7 +410,7 @@ abstract class WidgetController {
   ///
   /// See also [SchedulerBinding.endOfFrame], which returns a future that could
   /// be appropriate to return in the implementation of this method.
-  Future<void> pump(Duration duration);
+  Future<void> pump(Duration? duration);
 
   /// Attempts to drag the given widget by the given offset, by
   /// starting a drag in the middle of the widget.
@@ -440,7 +441,7 @@ abstract class WidgetController {
   Future<void> drag(
     Finder finder,
     Offset offset, {
-    int pointer,
+    int? pointer,
     int buttons = kPrimaryButton,
     double touchSlopX = kDragSlopDefault,
     double touchSlopY = kDragSlopDefault,
@@ -467,7 +468,7 @@ abstract class WidgetController {
   Future<void> dragFrom(
     Offset startLocation,
     Offset offset, {
-    int pointer,
+    int? pointer,
     int buttons = kPrimaryButton,
     double touchSlopX = kDragSlopDefault,
     double touchSlopY = kDragSlopDefault,
@@ -475,7 +476,6 @@ abstract class WidgetController {
     assert(kDragSlopDefault > kTouchSlop);
     final gesture =
         await startGesture(startLocation, pointer: pointer, buttons: buttons);
-    assert(gesture != null);
 
     final xSign = offset.dx.sign;
     final ySign = offset.dy.sign;
@@ -569,7 +569,7 @@ abstract class WidgetController {
   /// You can use [startGesture] instead if your gesture begins with a down
   /// event.
   Future<TestGesture> createGesture({
-    int pointer,
+    int? pointer,
     PointerDeviceKind kind = PointerDeviceKind.touch,
     int buttons = kPrimaryButton,
   }) async {
@@ -590,7 +590,7 @@ abstract class WidgetController {
   /// down gesture.
   Future<TestGesture> startGesture(
     Offset downLocation, {
-    int pointer,
+    int? pointer,
     PointerDeviceKind kind = PointerDeviceKind.touch,
     int buttons = kPrimaryButton,
   }) async {
@@ -612,7 +612,7 @@ abstract class WidgetController {
 
   /// Forwards the given pointer event to the binding.
   Future<void> sendEventToBinding(
-      PointerEvent event, HitTestResult result) async {
+      PointerEvent event, HitTestResult? result) async {
     binding.dispatchEvent(event, result);
   }
 
@@ -652,7 +652,6 @@ abstract class WidgetController {
       Finder finder, Offset Function(Size size) sizeToPoint) {
     final element = finder.evaluate().single;
     final box = element.renderObject as RenderBox;
-    assert(box != null);
     return box.localToGlobal(sizeToPoint(box.size));
   }
 
@@ -661,7 +660,6 @@ abstract class WidgetController {
   Size getSize(Finder finder) {
     final element = finder.evaluate().single;
     final box = element.renderObject as RenderBox;
-    assert(box != null);
     return box.size;
   }
 
@@ -679,7 +677,7 @@ class LiveWidgetController extends WidgetController {
   LiveWidgetController(WidgetsBinding binding) : super(binding);
 
   @override
-  Future<void> pump(Duration duration) async {
+  Future<void> pump(Duration? duration) async {
     if (duration != null) await Future<void>.delayed(duration);
     binding.scheduleFrame();
     await binding.endOfFrame;
