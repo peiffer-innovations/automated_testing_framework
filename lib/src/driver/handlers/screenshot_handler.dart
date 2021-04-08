@@ -15,6 +15,11 @@ class ScreenshotHandler {
 
   set driver(TestDriver driver) => _driver = driver;
 
+  void cancel() {
+    _timer?.cancel();
+    _screenshot = null;
+  }
+
   Future<CommandAck> screenshot(
     DeviceCommand command,
   ) async {
@@ -68,8 +73,7 @@ class ScreenshotHandler {
   Future<CommandAck> stopStream(
     DeviceCommand command,
   ) async {
-    _timer?.cancel();
-    _screenshot = null;
+    cancel();
 
     return CommandAck(
       commandId: command.id,
@@ -95,6 +99,7 @@ class ScreenshotHandler {
     }
 
     if (differ == true) {
+      _screenshot = screenshot;
       await _driver.communicator!.sendCommand(
         CommandAck(
           commandId: command.id,
@@ -105,10 +110,15 @@ class ScreenshotHandler {
     }
 
     if (_timer != null) {
-      _timer = Timer(
-        command.interval,
-        () => _sendScreenshot(command),
-      );
+      if (_driver.state.driverName != null) {
+        _timer = Timer(
+          command.interval,
+          () => _sendScreenshot(command),
+        );
+      } else {
+        _timer?.cancel();
+        _timer = null;
+      }
     }
   }
 }

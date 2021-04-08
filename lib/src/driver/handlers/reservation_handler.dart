@@ -15,7 +15,7 @@ class ReservationHandler {
   Future<CommandAck> release(
     DeviceCommand command,
   ) async {
-    _driver.state.driverName = null;
+    _driver.disconnectDriver();
 
     return CommandAck(
       commandId: command.id,

@@ -1,3 +1,8 @@
+## [3.0.1] - April 7th, 2021
+
+* Adjusted how the driver works to better clean up hanging driver sessions.
+
+
 ## [3.0.0] - March 8th, 2021
 
 * Null Safety

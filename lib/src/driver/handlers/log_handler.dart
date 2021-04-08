@@ -13,6 +13,11 @@ class LogHandler {
 
   set driver(TestDriver driver) => _driver = driver;
 
+  void cancel() {
+    _logSubscription?.cancel();
+    _logSubscription = null;
+  }
+
   Future<CommandAck> startStream(
     DeviceCommand command,
   ) async {
@@ -32,14 +37,18 @@ class LogHandler {
       );
 
       Logger.root.onRecord.listen((record) {
-        if (record.level.value <= command.level.value) {
-          var jrecord = JsonLogRecord.fromLogRecord(record);
-          var response = LogResponse(record: jrecord);
-          var ack = CommandAck(
-            commandId: command.id,
-            response: response,
-          );
-          _driver.communicator!.sendCommand(ack);
+        if (_driver.state.driverName == null) {
+          cancel();
+        } else {
+          if (record.level.value <= command.level.value) {
+            var jrecord = JsonLogRecord.fromLogRecord(record);
+            var response = LogResponse(record: jrecord);
+            var ack = CommandAck(
+              commandId: command.id,
+              response: response,
+            );
+            _driver.communicator!.sendCommand(ack);
+          }
         }
       });
     }
@@ -50,8 +59,7 @@ class LogHandler {
   Future<CommandAck> stopStream(
     DeviceCommand command,
   ) async {
-    await _logSubscription?.cancel();
-    _logSubscription = null;
+    cancel();
 
     return CommandAck(
       commandId: command.id,

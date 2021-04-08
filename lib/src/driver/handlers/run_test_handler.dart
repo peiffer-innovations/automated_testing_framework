@@ -58,7 +58,11 @@ class RunTestHandler {
 
     if (command is RunTestCommand) {
       if (command.test.steps.isNotEmpty == true) {
-        var report = TestReport(version: command.test.version);
+        var report = TestReport(
+          name: command.test.name,
+          suiteName: command.test.suiteName,
+          version: command.test.version,
+        );
         var logSub = report.logStream!.listen((data) {
           _driver.communicator!.sendCommand(
             CommandAck(

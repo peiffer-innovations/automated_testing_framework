@@ -62,6 +62,13 @@ class TestDriver {
     }
   }
 
+  void disconnectDriver() {
+    state.driverName = null;
+    LogHandler().cancel();
+    ScreenshotHandler().cancel();
+    _logger.info('[DRIVER]: device reservation released.');
+  }
+
   /// Registers custom command handlers.  Commands with a type that matches the
   /// key in the custom handlers map will allow the
   void registerCustomCommandHandlers(
