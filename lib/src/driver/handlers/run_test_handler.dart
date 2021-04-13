@@ -63,6 +63,8 @@ class RunTestHandler {
           suiteName: command.test.suiteName,
           version: command.test.version,
         );
+
+        var status = '';
         var logSub = report.logStream!.listen((data) {
           _driver.communicator!.sendCommand(
             CommandAck(
@@ -72,7 +74,23 @@ class RunTestHandler {
                 complete: false,
                 progress: report.steps.length / command.test.steps.length,
                 report: report,
-                status: '[STARTUP]',
+                status: status,
+              ),
+            ),
+          );
+        });
+
+        var stepSub = report.stepStream!.listen((step) {
+          status = step.id;
+          _driver.communicator!.sendCommand(
+            CommandAck(
+              commandId: command.id,
+              message: null,
+              response: TestStatusResponse(
+                complete: false,
+                progress: report.steps.length / command.test.steps.length,
+                report: report,
+                status: status,
               ),
             ),
           );
@@ -114,6 +132,7 @@ class RunTestHandler {
         } finally {
           await imageSub?.cancel();
           await logSub.cancel();
+          await stepSub.cancel();
         }
       } else {
         result = CommandAck(

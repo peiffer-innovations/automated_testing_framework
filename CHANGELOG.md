@@ -1,3 +1,8 @@
+## [3.0.1+1] - April 13th, 2021
+
+* Added a listener to each step to update the status on driven tests.
+
+
 ## [3.0.1] - April 7th, 2021
 
 * Adjusted how the driver works to better clean up hanging driver sessions.
