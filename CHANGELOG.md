@@ -1,3 +1,9 @@
+## [3.0.2] - April 19th, 2021
+
+* Added a comment test step
+* Switched from using the `identifierForVendor` for iOS as the default device id for use with the test driver to `Uuid().v4()` to create a unique id in order to comply with: https://developer.apple.com/app-store/review/guidelines/#5.1.2
+
+
 ## [3.0.1+1] - April 13th, 2021
 
 * Added a listener to each step to update the status on driven tests.

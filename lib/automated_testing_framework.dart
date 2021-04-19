@@ -15,6 +15,7 @@ export 'src/framework/dialog/testable_steps_dialog.dart';
 
 export 'src/framework/forms/assert_error_form.dart';
 export 'src/framework/forms/assert_value_form.dart';
+export 'src/framework/forms/comment_form.dart';
 export 'src/framework/forms/dismiss_keyboard_form.dart';
 export 'src/framework/forms/double_tap_form.dart';
 export 'src/framework/forms/ensure_exists_form.dart';
@@ -57,6 +58,7 @@ export 'src/runner/models/test_runner_theme_data.dart';
 
 export 'src/runner/steps/assert_error_step.dart';
 export 'src/runner/steps/assert_value_step.dart';
+export 'src/runner/steps/comment_step.dart';
 export 'src/runner/steps/dismiss_keyboard_step.dart';
 export 'src/runner/steps/double_tap_step.dart';
 export 'src/runner/steps/ensure_exists_step.dart';

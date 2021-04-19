@@ -28,6 +28,19 @@ void main() {
     expect(availStep.widgetless, false);
   });
 
+  test('comment', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'comment',
+    )!;
+
+    expect(availStep.form.runtimeType, CommentForm);
+    expect(availStep.help, TestStepTranslations.atf_help_comment);
+    expect(availStep.id, 'comment');
+    expect(availStep.title, TestStepTranslations.atf_title_comment);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, true);
+  });
+
   test('dismiss_keyboard', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'dismiss_keyboard',

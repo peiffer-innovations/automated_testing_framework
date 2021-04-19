@@ -577,8 +577,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
                     var translator = Translator.of(context);
 
                     await Clipboard.setData(ClipboardData(text: encoded));
-                    // ignore: deprecated_member_use
-                    Scaffold.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         translator.translate(
                           TestTranslations.atf_copied_to_clipboard,

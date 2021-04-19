@@ -61,6 +61,8 @@ abstract class TestStepForm {
     required String id,
     String? defaultValue,
     required TranslationEntry label,
+    int? maxLines = 1,
+    int? minLines,
     List<ValueValidator>? validators,
     required Map<String, dynamic> values,
   }) {
@@ -75,6 +77,8 @@ abstract class TestStepForm {
         labelText: translator.translate(label),
       ),
       initialValue: values[id]?.toString(),
+      maxLines: maxLines,
+      minLines: minLines,
       onChanged: (value) => values[id] = value,
       smartDashesType: SmartDashesType.disabled,
       smartQuotesType: SmartQuotesType.disabled,

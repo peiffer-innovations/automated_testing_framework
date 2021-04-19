@@ -68,6 +68,20 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: CommentForm(),
+        help: TestStepTranslations.atf_help_comment,
+        id: 'comment',
+        keys: const {
+          'comment',
+        },
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_comment,
+        widgetless: true,
+      ),
+      testRunnerStepBuilder: CommentStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: DoubleTapForm(),
         help: TestStepTranslations.atf_help_double_tap,
         id: 'double_tap',

@@ -159,8 +159,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                     ),
                     duration: Duration(seconds: 1),
                   );
-                  // ignore: deprecated_member_use
-                  Scaffold.of(context).showSnackBar(snackBar);
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   if (mounted == true) {
                     setState(() {});
                   }
@@ -340,8 +339,7 @@ class _TestableStepsPageState extends State<TestableStepsPage> {
                                           ),
                                           duration: Duration(seconds: 1),
                                         );
-                                        Scaffold.of(context)
-                                            // ignore: deprecated_member_use
+                                        ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                       }),
                                 ],

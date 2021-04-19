@@ -8,6 +8,7 @@
 * [Details](#details)
   * [assert_error](#assert_error)
   * [assert_value](#assert_value)
+  * [comment](#comment)
   * [dismiss_keyboard](#dismiss_keyboard)
   * [double_tap](#double_tap)
   * [ensure_exists](#ensure_exists)
@@ -145,6 +146,32 @@ Key             | Type    | Required | Supports Variable | Description
 `testableId`    | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
 `timeout`       | integer | No       | Yes               | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
 `value`         | String  | Yes      | Yes               | The value to evaluate against.
+
+
+---
+
+### comment
+
+**How it Works**
+
+1. Simply emits the `comment` into the logs.
+
+**Example**
+
+```json
+{
+  "id": "comment",
+  "values": {
+    "comment": "My Comment Here"
+  }
+}
+```
+
+**Values**
+
+Key       | Type   | Required | Supports Variable | Description
+----------|--------|----------|-------------------|-------------
+`comment` | String | Yes      | Yes               | The comment to emit to the logs.
 
 
 ---

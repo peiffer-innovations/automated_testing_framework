@@ -454,8 +454,7 @@ class TestableState extends State<Testable>
                 ),
               ),
             );
-            // ignore: deprecated_member_use
-            Scaffold.of(context).showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } catch (e) {
             await showDialog(
               context: context,

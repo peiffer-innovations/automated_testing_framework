@@ -8,6 +8,11 @@ class TestStepTranslations {
     value: 'Case Must Match',
   );
 
+  static const atf_form_comment = TranslationEntry(
+    key: 'atf_form_comment',
+    value: 'Comment',
+  );
+
   static const atf_form_equals = TranslationEntry(
     key: 'atf_form_equals',
     value: 'Actual Must Equal Expected',
@@ -71,6 +76,11 @@ class TestStepTranslations {
   static const atf_help_assert_value = TranslationEntry(
     key: 'atf_help_assert_value',
     value: 'Asserts the value from the widget equals the given value.',
+  );
+
+  static const atf_help_comment = TranslationEntry(
+    key: 'atf_help_comment',
+    value: 'Simply emits the comment to the logs.',
   );
 
   static const atf_help_dismiss_keyboard = TranslationEntry(
@@ -158,6 +168,11 @@ class TestStepTranslations {
   static const atf_title_assert_value = TranslationEntry(
     key: 'atf_title_assert_value',
     value: 'Assert Value',
+  );
+
+  static const atf_title_comment = TranslationEntry(
+    key: 'atf_title_comment',
+    value: 'Comment',
   );
 
   static const atf_title_dismiss_keyboard = TranslationEntry(

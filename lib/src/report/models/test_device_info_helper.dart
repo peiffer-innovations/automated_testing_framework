@@ -6,6 +6,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:uuid/uuid.dart';
 
 /// Container class for the device information for the device the test is being
 /// executed on.
@@ -34,7 +35,7 @@ class TestDeviceInfoHelper {
       late String device;
       double? devicePixelRatio;
       BaseSize? dips;
-      var id = '<unknown>';
+      var id = Uuid().v4();
       late String manufacturer;
       late String model;
       late String os;
@@ -86,7 +87,6 @@ class TestDeviceInfoHelper {
             var info = await plugin.iosInfo;
 
             device = info.name;
-            id = info.identifierForVendor;
             model = info.model;
             physicalDevice = info.isPhysicalDevice;
             systemVersion = info.systemVersion;

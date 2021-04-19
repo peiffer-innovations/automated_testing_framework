@@ -72,8 +72,7 @@ class ClipboardTestStore {
     );
 
     try {
-      // ignore: deprecated_member_use
-      var controller = Scaffold.of(context).showSnackBar(snackBar);
+      var controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
       await controller.closed;
     } catch (e) {
       // no-op
