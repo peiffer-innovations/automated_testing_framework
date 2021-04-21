@@ -635,9 +635,10 @@ class _KeyFinder extends MatchFinder {
         ? candidate.widget.key as ValueKey
         : null;
     var vk2 = key is ValueKey ? key as ValueKey : null;
-    if (candidate.widget.key is ValueKey) {
-      match = vk1 == vk2;
+    if (vk1 != null && vk2 != null) {
+      match = vk1.value == vk2.value;
     }
+
     return match;
   }
 }

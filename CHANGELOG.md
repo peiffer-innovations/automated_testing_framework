@@ -1,3 +1,8 @@
+## [3.0.3] - April 20th, 2021
+
+* Minor fix so that when using the matcher a `ValueKey<String>` and a `ValueKey<String?>` will match correctly.
+
+
 ## [3.0.2] - April 19th, 2021
 
 * Added a comment test step
