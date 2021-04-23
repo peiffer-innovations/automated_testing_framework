@@ -208,6 +208,7 @@ abstract class TestRunnerStep extends JsonClass {
           if (state is TestableState) {
             _console('flash: [$testableId]', Level.FINEST);
             await state.flash();
+            _console('flash complete: [$testableId]', Level.FINEST);
           }
         }
       } catch (e) {

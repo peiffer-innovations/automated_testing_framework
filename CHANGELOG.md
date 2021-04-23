@@ -1,3 +1,8 @@
+## [3.0.4] - April 22th, 2021
+
+* Fix for `flash` for when the widget is removed before the flash animation is complete.
+
+
 ## [3.0.3] - April 20th, 2021
 
 * Minor fix so that when using the matcher a `ValueKey<String>` and a `ValueKey<String?>` will match correctly.

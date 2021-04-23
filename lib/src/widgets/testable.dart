@@ -315,10 +315,29 @@ class TestableState extends State<Testable>
   /// Flashes the [Testable] widget to give a visual indicator that the
   /// framework is interactging with the widget.
   Future<void> flash() async {
+    // Sometimes the
+    var timeout = Future.delayed(Duration(seconds: 10));
+
     if (_renderController.testWidgetsEnabled == true) {
-      for (var i = 0; i < _renderController.flashCount; i++) {
-        await _animationController?.forward(from: 0.0).orCancel;
-        await _animationController?.reverse(from: 1.0).orCancel;
+      try {
+        for (var i = 0; i < _renderController.flashCount; i++) {
+          await Future.any(
+            [
+              timeout,
+              _animationController?.forward(from: 0.0).orCancel ??
+                  Future.value(null)
+            ],
+          );
+          await Future.any(
+            [
+              timeout,
+              _animationController?.reverse(from: 1.0).orCancel ??
+                  Future.value(null)
+            ],
+          );
+        }
+      } catch (e) {
+        // no-op
       }
     }
   }
