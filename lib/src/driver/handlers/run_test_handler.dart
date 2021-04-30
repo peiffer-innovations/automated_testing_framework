@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 
@@ -107,6 +108,18 @@ class RunTestHandler {
         }
 
         try {
+          var deviceInfo = await TestDeviceInfoHelper.initialize(null);
+          result = CommandAck(
+            commandId: command.id,
+            message: json.encode(deviceInfo),
+            response: TestStatusResponse(
+              complete: false,
+              progress: 0.0,
+              report: report,
+              status: '[STARTING]',
+            ),
+          );
+
           await controller.executeTest(
             report: report,
             test: command.test,

@@ -1,3 +1,8 @@
+## [3.0.5] - April 30th, 2021
+
+* Updated to Ack a run test command with the device info and startup status
+
+
 ## [3.0.4] - April 22th, 2021
 
 * Fix for `flash` for when the widget is removed before the flash animation is complete.

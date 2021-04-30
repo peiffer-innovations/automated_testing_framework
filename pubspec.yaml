@@ -1,13 +1,13 @@
 name: automated_testing_framework
 description: A testing framework that allows in app tests to be built and executed in an automated way.
-version: 3.0.4
+version: 3.0.5
 homepage: https://github.com/peiffer-innovations/automated_testing_framework
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  automated_testing_framework_models: ^2.0.1
+  automated_testing_framework_models: ^2.0.2
   child_builder: ^2.0.0
   convert: ^3.0.0
   device_info: ^2.0.0
