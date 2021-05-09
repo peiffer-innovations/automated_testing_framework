@@ -51,7 +51,8 @@ class ExitAppStep extends TestRunnerStep {
   }
 
   @override
-  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0];
+  String getBehaviorDrivenDescription(TestController tester) =>
+      behaviorDrivenDescriptions[0];
 
   /// Overidden to ignore the delay
   @override

@@ -62,7 +62,7 @@ class CommentStep extends TestRunnerStep {
   }
 
   @override
-  String getBehaviorDrivenDescription() =>
+  String getBehaviorDrivenDescription(TestController tester) =>
       behaviorDrivenDescriptions[0].replaceAll(
         '{{comment}}',
         comment,

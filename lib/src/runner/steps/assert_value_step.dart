@@ -145,7 +145,7 @@ class AssertValueStep extends TestRunnerStep {
   }
 
   @override
-  String getBehaviorDrivenDescription() {
+  String getBehaviorDrivenDescription(TestController tester) {
     String result;
 
     if (timeout == null) {

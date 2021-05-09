@@ -56,7 +56,7 @@ abstract class TestRunnerStep extends JsonClass {
   });
 
   /// Gets the most appropriate BDD string based on the values set on the step.
-  String getBehaviorDrivenDescription() {
+  String getBehaviorDrivenDescription(TestController tester) {
     var result = behaviorDrivenDescriptions[0];
 
     result = result.replaceAll('{{stepId}}', stepId);

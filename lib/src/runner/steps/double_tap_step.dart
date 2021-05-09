@@ -97,7 +97,7 @@ class DoubleTapStep extends TestRunnerStep {
   }
 
   @override
-  String getBehaviorDrivenDescription() {
+  String getBehaviorDrivenDescription(TestController tester) {
     String result;
 
     if (timeout == null) {

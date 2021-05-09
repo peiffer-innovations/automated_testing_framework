@@ -90,10 +90,11 @@ class SetVariableStep extends TestRunnerStep {
   }
 
   @override
-  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0]
-      .replaceAll('{{variableName}}', variableName)
-      .replaceAll('{{type}}', type)
-      .replaceAll('{{value}}', value ?? 'null');
+  String getBehaviorDrivenDescription(TestController tester) =>
+      behaviorDrivenDescriptions[0]
+          .replaceAll('{{variableName}}', variableName)
+          .replaceAll('{{type}}', type)
+          .replaceAll('{{value}}', value ?? 'null');
 
   /// Overidden to ignore the delay
   @override

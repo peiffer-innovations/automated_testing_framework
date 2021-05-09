@@ -937,7 +937,7 @@ class TestController {
         values: step.values,
       )!;
       result +=
-          ' * ${first == true ? 'First,' : 'And then'} I will ${runnerStep.getBehaviorDrivenDescription()}\n';
+          ' * ${first == true ? 'First,' : 'And then'} I will ${runnerStep.getBehaviorDrivenDescription(this)}\n';
       first = false;
     }
 

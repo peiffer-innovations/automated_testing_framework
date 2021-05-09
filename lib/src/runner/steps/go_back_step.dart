@@ -60,7 +60,8 @@ class GoBackStep extends TestRunnerStep {
   }
 
   @override
-  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0];
+  String getBehaviorDrivenDescription(TestController tester) =>
+      behaviorDrivenDescriptions[0];
 
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].
