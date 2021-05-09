@@ -40,6 +40,7 @@ export 'src/framework/pages/testable_steps_page.dart';
 export 'src/framework/widgets/test_step_list_full_tab.dart';
 export 'src/framework/widgets/test_step_list_markdown_tab.dart';
 export 'src/framework/widgets/test_step_list_minified_tab.dart';
+export 'src/framework/widgets/test_step_picker.dart';
 
 export 'src/registry/test_step_builder.dart';
 export 'src/registry/test_step_registry.dart';
