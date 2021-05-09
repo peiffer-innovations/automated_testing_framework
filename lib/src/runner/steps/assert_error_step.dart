@@ -11,7 +11,16 @@ class AssertErrorStep extends TestRunnerStep {
     required this.error,
     required this.testableId,
     this.timeout,
-  }) : assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId.isNotEmpty == true);
+
+  static const id = 'assert_error';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        "assert that the `{{testableId}}` widget's error `{{equals}}` `null` and fail if the widget cannot be found in `{{timeout}}` seconds.",
+        "assert that the `{{testableId}}` widget's error `{{equals}}` `null`.",
+        "assert that the `{{testableId}}` widget's error `{{equals}}` `{{error}}` using a case `{{caseSensitive}}` comparison and fail if the widget cannot be found in `{{timeout}}` seconds.",
+        "assert that the `{{testableId}}` widget's error `{{equals}}` `{{error}}` using a case `{{caseSensitive}}` comparison.",
+      ]);
 
   /// Set to [true] if the comparison should be case sensitive.  Set to [false]
   /// to allow the comparison to be case insensitive.
@@ -26,11 +35,14 @@ class AssertErrorStep extends TestRunnerStep {
   final String? error;
 
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
   final Duration? timeout;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -59,7 +71,7 @@ class AssertErrorStep extends TestRunnerStep {
         error: map['error'],
         equals:
             map['equals'] == null ? true : JsonClass.parseBool(map['equals']),
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
       );
     }
@@ -132,6 +144,42 @@ class AssertErrorStep extends TestRunnerStep {
         'testableId: [$testableId] -- could not locate Testable with a functional [onRequestError] method.',
       );
     }
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      if (error == null) {
+        result = behaviorDrivenDescriptions[1];
+      } else {
+        result = behaviorDrivenDescriptions[3];
+      }
+    } else {
+      if (error == null) {
+        result = behaviorDrivenDescriptions[0];
+      } else {
+        result = behaviorDrivenDescriptions[2];
+      }
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll(
+      '{{caseSensitive}}',
+      caseSensitive ? 'sensitive' : 'insensitive',
+    );
+    result = result.replaceAll(
+      '{{equals}}',
+      equals ? 'equals' : 'does not equal',
+    );
+    result = result.replaceAll('{{testableId}}', testableId);
+    result = result.replaceAll('{{value}}', error ?? 'null');
+
+    return result;
   }
 
   /// Overidden to ignore the delay

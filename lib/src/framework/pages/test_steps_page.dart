@@ -24,7 +24,8 @@ class TestStepsPage extends StatefulWidget {
   _TestStepsPageState createState() => _TestStepsPageState();
 }
 
-class _TestStepsPageState extends State<TestStepsPage> {
+class _TestStepsPageState extends State<TestStepsPage>
+    with SingleTickerProviderStateMixin {
   static const _kClearTabIndex = 0;
   static const _kExportTabIndex = 1;
   static const _kRunAllTabIndex = 2;
@@ -33,109 +34,31 @@ class _TestStepsPageState extends State<TestStepsPage> {
 
   bool _exporting = false;
 
-  late TestableRenderController _renderController;
-  TestController? _testController;
+  late TabController _tabController;
+  late TestController _testController;
 
   @override
   void initState() {
     super.initState();
 
-    _renderController = TestableRenderController.of(context);
-    _testController = TestController.of(context);
+    _testController = TestController.of(context)!;
+
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+    );
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging == false) {
+        setState(() {});
+      }
+    });
   }
 
-  Future<void> _onEditStep({
-    required TestStep step,
-    required ThemeData theme,
-    required Translator translator,
-  }) async {
-    var steps = List<TestStep>.from(
-      _testController!.currentTest.steps,
-    );
-
-    var values = step.values ?? <String, dynamic>{};
-    var idx = steps.indexOf(step);
-    var availableStep = TestStepRegistry.of(context).getAvailableTestStep(
-      step.id,
-    );
-
-    if (availableStep != null) {
-      var newValues = await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) => TestableFormPage(
-            form: availableStep.form,
-            values: values,
-          ),
-        ),
-      );
-
-      if (newValues != null) {
-        steps.removeAt(idx);
-        steps.insert(
-          idx,
-          step.copyWith(
-            values: newValues,
-          ),
-        );
-        _testController!.currentTest = _testController!.currentTest.copyWith(
-          steps: steps,
-        );
-
-        if (mounted == true) {
-          setState(() {});
-        }
-      }
-    } else {
-      await showDialog<bool>(
-        context: context,
-        builder: (BuildContext context) => Theme(
-          data: theme,
-          child: AlertDialog(
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  translator.translate(
-                    TestTranslations.atf_button_cancel,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: ButtonStyle(
-                  textStyle: MaterialStateProperty.all(
-                    TextStyle(color: theme.errorColor),
-                  ),
-                ),
-                child: Text(
-                  translator.translate(
-                    TestTranslations.atf_button_clear,
-                  ),
-                ),
-              ),
-            ],
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(
-                  Icons.warning,
-                  color: theme.textTheme.bodyText2!.color,
-                  size: 54.0,
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                Text(
-                  translator.translate(
-                    TestTranslations.atf_clear_confirmation,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   Future<void> _onEditTestName({
@@ -219,7 +142,7 @@ class _TestStepsPageState extends State<TestStepsPage> {
       ),
     );
     if (endTestName?.isNotEmpty == true) {
-      _testController!.currentTest = _testController!.currentTest.copyWith(
+      _testController.currentTest = _testController.currentTest.copyWith(
         name: endTestName,
         suiteName: suiteName.isEmpty == true ? null : suiteName,
       );
@@ -227,312 +150,6 @@ class _TestStepsPageState extends State<TestStepsPage> {
         setState(() {});
       }
     }
-  }
-
-  Widget _buildFullStep(
-    BuildContext context, {
-    required int index,
-    required TestStep step,
-  }) {
-    var tester = TestController.of(context);
-    var translator = Translator.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    return Padding(
-      key: ValueKey(step.key),
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(16.0),
-        elevation: 2.0,
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (step.image != null) ...[
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.black12,
-                  height: 200.0,
-                  padding: EdgeInsets.all(16.0),
-                  child: Image.memory(
-                    step.image!,
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-                Divider(),
-              ],
-              Container(
-                width: double.infinity,
-                child: Text(
-                  '${index + 1}) ${step.id}',
-                  style: theme.textTheme.headline6,
-                ),
-              ),
-              for (var entry in (step.values ?? {}).entries)
-                _buildValueEntry(context, entry),
-              Divider(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_tooltip_move_up,
-                    ),
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.arrow_upward),
-                      onPressed: index == 0
-                          ? null
-                          : () {
-                              var steps = List<TestStep>.from(
-                                _testController!.currentTest.steps,
-                              );
-
-                              steps.removeAt(index);
-                              steps.insert(index - 1, step);
-
-                              _testController!.currentTest = _testController!
-                                  .currentTest
-                                  .copyWith(steps: steps);
-                              if (mounted == true) {
-                                setState(() {});
-                              }
-                            },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_tooltip_move_down,
-                    ),
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.arrow_downward),
-                      onPressed:
-                          index == _testController!.currentTest.steps.length - 1
-                              ? null
-                              : () {
-                                  var steps = List<TestStep>.from(
-                                    _testController!.currentTest.steps,
-                                  );
-
-                                  steps.removeAt(index);
-                                  steps.insert(index + 1, step);
-
-                                  _testController!.currentTest =
-                                      _testController!.currentTest.copyWith(
-                                    steps: steps,
-                                  );
-                                  if (mounted == true) {
-                                    setState(() {});
-                                  }
-                                },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_button_delete,
-                    ),
-                    child: IconButton(
-                      color: theme.errorColor,
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        var steps = List<TestStep>.from(
-                          _testController!.currentTest.steps,
-                        );
-
-                        steps.remove(step);
-                        _testController!.currentTest =
-                            _testController!.currentTest.copyWith(
-                          steps: steps,
-                        );
-                        if (mounted == true) {
-                          setState(() {});
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_button_edit,
-                    ),
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.edit),
-                      onPressed: () => _onEditStep(
-                        step: step,
-                        theme: theme,
-                        translator: translator,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Tooltip(
-                    message: translator.translate(
-                      TestTranslations.atf_button_run,
-                    ),
-                    child: IconButton(
-                      color: theme.iconTheme.color,
-                      icon: Icon(Icons.play_arrow),
-                      onPressed: () async {
-                        if (widget.fromDialog != true) {
-                          Navigator.of(context).pop();
-                        }
-                        Navigator.of(context).pop();
-
-                        try {
-                          await tester!.execute(
-                            reset: false,
-                            steps: [step],
-                            submitReport: false,
-                            version: 0,
-                          );
-                        } catch (e) {
-                          tester!.sleep = null;
-                          tester.step = null;
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMinifiedStep(
-    BuildContext context, {
-    required int index,
-    required TestStep step,
-  }) {
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    return ListTile(
-      key: ValueKey(step.key),
-      title: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: 48.0,
-            child: Text('${index + 1}'),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  step.id,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontFamily: 'monospaced'),
-                ),
-                if ((step.values ?? {})['testableId']?.isNotEmpty == true)
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 4.0,
-                    ),
-                    child: Text(
-                      step.values!['testableId'],
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.caption,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      trailing: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Tooltip(
-            message: translator.translate(TestTranslations.atf_button_delete),
-            child: IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: theme.errorColor,
-              ),
-              onPressed: () {
-                var steps = List<TestStep>.from(
-                  _testController!.currentTest.steps,
-                );
-
-                steps.remove(step);
-                _testController!.currentTest =
-                    _testController!.currentTest.copyWith(
-                  steps: steps,
-                );
-                if (mounted == true) {
-                  setState(() {});
-                }
-              },
-            ),
-          ),
-          SizedBox(
-            width: 16.0,
-          ),
-          Tooltip(
-            message: translator.translate(TestTranslations.atf_button_edit),
-            child: IconButton(
-              icon: Icon(
-                Icons.edit,
-                color: theme.iconTheme.color,
-              ),
-              onPressed: () => _onEditStep(
-                step: step,
-                theme: theme,
-                translator: translator,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildValueEntry(
-    BuildContext context,
-    MapEntry<String, dynamic> entry,
-  ) {
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Divider(),
-        Text(
-          entry.key,
-          style: theme.textTheme.bodyText1,
-        ),
-        Text(
-          entry.value?.toString() ?? '',
-          style: theme.textTheme.subtitle1,
-        ),
-      ],
-    );
   }
 
   @override
@@ -586,28 +203,24 @@ class _TestStepsPageState extends State<TestStepsPage> {
                     ));
                   },
                   tooltip: translator.translate(
-                    TestTranslations.atf_tooltip_copy_steps,
+                    _tabController.index == 2
+                        ? TestTranslations.atf_tooltip_copy_steps
+                        : TestTranslations.atf_tooltip_copy_bdd,
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  _renderController.minifyTestSteps == true
-                      ? Icons.fullscreen
-                      : Icons.fullscreen_exit,
-                ),
-                onPressed: () => setState(() => _renderController
-                    .minifyTestSteps = !_renderController.minifyTestSteps),
-                tooltip: translator.translate(
-                  _renderController.minifyTestSteps == true
-                      ? TestTranslations.atf_maximize_step_details
-                      : TestTranslations.atf_minimize_step_details,
-                ),
-              ),
             ],
+            bottom: TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: 'FULL'),
+                Tab(text: 'MINIFIED'),
+                Tab(text: 'BDD'),
+              ],
+            ),
             centerTitle: !kIsWeb && Platform.isIOS,
             title: Text(
-              (_testController!.currentTest.name ??
+              (_testController.currentTest.name ??
                       translator.translate(
                         TestTranslations.atf_unnamed_test,
                       )) +
@@ -623,52 +236,14 @@ class _TestStepsPageState extends State<TestStepsPage> {
                 Positioned.fill(
                   child: IgnorePointer(
                     ignoring: _exporting == true,
-                    child: _renderController.minifyTestSteps == true
-                        ? ReorderableListView(
-                            onReorder: (int oldIndex, int newIndex) {
-                              var steps = List<TestStep>.from(
-                                _testController!.currentTest.steps,
-                              );
-                              var step = steps[oldIndex];
-
-                              steps.removeAt(oldIndex);
-                              if (oldIndex > newIndex) {
-                                steps.insert(newIndex, step);
-                              } else {
-                                steps.insert(newIndex - 1, step);
-                              }
-
-                              _testController!.currentTest = _testController!
-                                  .currentTest
-                                  .copyWith(steps: steps);
-                              if (mounted == true) {
-                                setState(() {});
-                              }
-                            },
-                            children: <Widget>[
-                              for (var i = 0;
-                                  i < testController.currentTest.steps.length;
-                                  i++)
-                                _buildMinifiedStep(
-                                  context,
-                                  index: i,
-                                  step: testController.currentTest.steps[i],
-                                ),
-                            ],
-                          )
-                        : ListView(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            children: <Widget>[
-                              for (var i = 0;
-                                  i < testController.currentTest.steps.length;
-                                  i++)
-                                _buildFullStep(
-                                  context,
-                                  index: i,
-                                  step: testController.currentTest.steps[i],
-                                ),
-                            ],
-                          ),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        TestStepListFullTab(),
+                        TestStepListMinifiedTab(),
+                        TestStepListMarkdownTab(),
+                      ],
+                    ),
                   ),
                 ),
                 if (_exporting == true) ...[
@@ -815,12 +390,12 @@ class _TestStepsPageState extends State<TestStepsPage> {
                       await Future.delayed(Duration(milliseconds: 500));
                       try {
                         await tester.execute(
-                          name: _testController!.currentTest.name,
+                          name: _testController.currentTest.name,
                           reset: true,
-                          steps: _testController!.currentTest.steps,
+                          steps: _testController.currentTest.steps,
                           submitReport: false,
-                          suiteName: _testController!.currentTest.suiteName,
-                          version: _testController!.currentTest.version,
+                          suiteName: _testController.currentTest.suiteName,
+                          version: _testController.currentTest.version,
                         );
                       } catch (e, stack) {
                         _logger.severe(e, stack);

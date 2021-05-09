@@ -7,14 +7,24 @@ class EnsureExistsStep extends TestRunnerStep {
   EnsureExistsStep({
     required this.testableId,
     this.timeout,
-  }) : assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId.isNotEmpty == true);
+
+  static const id = 'ensure_exists';
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'ensure the `{{testableId}}` widget exists.',
+    'ensure the `{{testableId}}` widget exists and fail if it cannot be found in `{{timeout}}` seconds.',
+  ]);
 
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
   final Duration? timeout;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -33,7 +43,7 @@ class EnsureExistsStep extends TestRunnerStep {
 
     if (map != null) {
       result = EnsureExistsStep(
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
       );
     }
@@ -79,6 +89,25 @@ class EnsureExistsStep extends TestRunnerStep {
     if (widgetFinder.isNotEmpty != true) {
       throw Exception('testableId: [$testableId] -- could not locate widget.');
     }
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      result = behaviorDrivenDescriptions[0];
+    } else {
+      result = behaviorDrivenDescriptions[1];
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll('{{testableId}}', testableId);
+
+    return result;
   }
 
   /// Overidden to ignore the delay

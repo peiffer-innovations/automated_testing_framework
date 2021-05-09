@@ -11,7 +11,16 @@ class AssertValueStep extends TestRunnerStep {
     required this.testableId,
     this.timeout,
     required this.value,
-  }) : assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId.isNotEmpty == true);
+
+  static const id = 'assert_value';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        "assert that the `{{testableId}}` widget's value `{{equals}}` `null` and fail if the widget cannot be found in `{{timeout}}` seconds.",
+        "assert that the `{{testableId}}` widget's value `{{equals}}` `null`.",
+        "assert that the `{{testableId}}` widget's value `{{equals}}` `{{value}}` using a case `{{caseSensitive}}` comparison and fail if the widget cannot be found in `{{timeout}}` seconds.",
+        "assert that the `{{testableId}}` widget's value `{{equals}}` `{{value}}` using a case `{{caseSensitive}}` comparison.",
+      ]);
 
   /// Set to [true] if the comparison should be case sensitive.  Set to [false]
   /// to allow the comparison to be case insensitive.
@@ -23,7 +32,7 @@ class AssertValueStep extends TestRunnerStep {
   final bool equals;
 
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
@@ -31,6 +40,9 @@ class AssertValueStep extends TestRunnerStep {
 
   /// The [value] to test againt when comparing the [Testable]'s value.
   final String? value;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -58,7 +70,7 @@ class AssertValueStep extends TestRunnerStep {
             : JsonClass.parseBool(map['caseSensitive']),
         equals:
             map['equals'] == null ? true : JsonClass.parseBool(map['equals']),
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
         value: map['value']?.toString(),
       );
@@ -130,6 +142,42 @@ class AssertValueStep extends TestRunnerStep {
         'testableId: [$testableId] -- actualValue: [$actual] ${equals == true ? '!=' : '=='} [$value] (caseSensitive = [$caseSensitive]).',
       );
     }
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      if (value == null) {
+        result = behaviorDrivenDescriptions[1];
+      } else {
+        result = behaviorDrivenDescriptions[3];
+      }
+    } else {
+      if (value == null) {
+        result = behaviorDrivenDescriptions[0];
+      } else {
+        result = behaviorDrivenDescriptions[2];
+      }
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll(
+      '{{caseSensitive}}',
+      caseSensitive ? 'sensitive' : 'insensitive',
+    );
+    result = result.replaceAll(
+      '{{equals}}',
+      equals ? 'equals' : 'does not equal',
+    );
+    result = result.replaceAll('{{testableId}}', testableId);
+    result = result.replaceAll('{{value}}', value ?? 'null');
+
+    return result;
   }
 
   /// Overidden to ignore the delay

@@ -5,6 +5,15 @@ import 'package:json_class/json_class.dart';
 
 /// Test step that exits the application.
 class ExitAppStep extends TestRunnerStep {
+  static const id = 'exit_app';
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'exit the application.',
+  ]);
+
+  @override
+  String get stepId => id;
+
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
   ///
@@ -40,6 +49,9 @@ class ExitAppStep extends TestRunnerStep {
     );
     exit(1);
   }
+
+  @override
+  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0];
 
   /// Overidden to ignore the delay
   @override

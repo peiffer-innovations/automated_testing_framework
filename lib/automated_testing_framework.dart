@@ -37,7 +37,9 @@ export 'src/framework/pages/test_steps_page.dart';
 export 'src/framework/pages/testable_form_page.dart';
 export 'src/framework/pages/testable_steps_page.dart';
 
-export 'src/framework/widgets/test_step_picker.dart';
+export 'src/framework/widgets/test_step_list_full_tab.dart';
+export 'src/framework/widgets/test_step_list_markdown_tab.dart';
+export 'src/framework/widgets/test_step_list_minified_tab.dart';
 
 export 'src/registry/test_step_builder.dart';
 export 'src/registry/test_step_registry.dart';
@@ -51,6 +53,8 @@ export 'src/report/widgets/test_report_step_widget.dart';
 export 'src/report/widgets/test_suite_result_widget.dart';
 
 export 'src/runner/components/test_controller.dart';
+export 'src/runner/components/unknown_variable_exception.dart';
+export 'src/runner/components/variable_resolver.dart';
 
 export 'src/runner/models/capture_context.dart';
 export 'src/runner/models/progress_value.dart';

@@ -11,7 +11,29 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     this.scrollableId,
     required this.testableId,
     this.timeout,
-  }) : assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId.isNotEmpty == true);
+
+  static const id = 'scroll_until_visible';
+
+  static const _scrollableIdNotNullIncrementNotNullTimeoutNotNull = 0;
+  static const _scrollableIdNotNullIncrementNullTimeoutNotNull = 1;
+  static const _scrollableIdNullIncrementNotNullTimeoutNotNull = 2;
+  static const _scrollableIdNullIncrementNullTimeoutNotNull = 3;
+  static const _scrollableIdNotNullIncrementNotNullTimeoutNull = 4;
+  static const _scrollableIdNotNullIncrementNullTimeoutNull = 5;
+  static const _scrollableIdNullIncrementNotNullTimeoutNull = 6;
+  static const _scrollableIdNullIncrementNullTimeoutNull = 7;
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'scroll the `{{scrollableId}}` widget `{{increment}}` pixels at a time until the `{{testableId}}` widget is visible and fail if it cannot be found in `{{timeout}}` seconds.',
+    'scroll the `{{scrollableId}}` widget until the `{{testableId}}` widget is visible and fail if it cannot be found in `{{timeout}}` seconds.',
+    'scroll `{{increment}}` pixels at a time until the `{{testableId}}` widget is visible and fail if it cannot be found in `{{timeout}}` seconds.',
+    'scroll until the `{{testableId}}` widget is visible and fail if it cannot be found in `{{timeout}}` seconds.',
+    'scroll the `{{scrollableId}}` widget {{increment}} pixels at a time until the `{{testableId}}` widget is visible.',
+    'scroll the `{{scrollableId}}` widget until the `{{testableId}}` widget is visible.',
+    'scroll `{{increment}}` pixels at a time until the `{{testableId}}` widget is visible.',
+    'scroll until the `{{testableId}}` widget is visible.',
+  ]);
 
   /// The increment in device-independent-pixels.  This may be a positive or
   /// negative number.  Positive to scroll "forward" and negative to scroll
@@ -22,11 +44,14 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
   final String? scrollableId;
 
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
   final Duration? timeout;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -50,7 +75,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
       result = ScrollUntilVisibleStep(
         increment: map['increment'],
         scrollableId: map['scrollableId'],
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
       );
     }
@@ -232,6 +257,60 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         'testableId: [$testableId] -- time out trying to scroll widget to visible.',
       );
     }
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      if (scrollableId == null) {
+        if (increment == null) {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNullIncrementNullTimeoutNull];
+        } else {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNullIncrementNotNullTimeoutNull];
+        }
+      } else {
+        if (increment == null) {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNotNullIncrementNullTimeoutNull];
+        } else {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNotNullIncrementNotNullTimeoutNull];
+        }
+      }
+    } else {
+      if (scrollableId == null) {
+        if (increment == null) {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNullIncrementNullTimeoutNotNull];
+        } else {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNullIncrementNotNullTimeoutNotNull];
+        }
+      } else {
+        if (increment == null) {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNotNullIncrementNullTimeoutNotNull];
+        } else {
+          result = behaviorDrivenDescriptions[
+              _scrollableIdNotNullIncrementNotNullTimeoutNotNull];
+        }
+      }
+
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll('{{increment}}', increment ?? 'null');
+    result = result.replaceAll('{{scrollableId}}', scrollableId ?? 'null');
+    result = result.replaceAll('{{testableId}}', testableId);
+
+    return result;
   }
 
   /// Converts this to a JSON compatible map.  For a description of the format,

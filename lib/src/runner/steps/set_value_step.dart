@@ -9,15 +9,24 @@ class SetValueStep extends TestRunnerStep {
     this.timeout,
     String type = 'String',
     required this.value,
-  })   : assert(testableId?.isNotEmpty == true),
+  })   : assert(testableId.isNotEmpty == true),
         assert(type == 'bool' ||
             type == 'double' ||
             type == 'int' ||
             type == 'String'),
         type = type;
 
+  static const id = 'set_value';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        "set the `{{testableId}}` widget's value to `null` and fail if the widget cannot be found in `{{timeout}}` seconds.",
+        "set the `{{testableId}}` widget's value to `null`.",
+        "set the `{{testableId}}` widget's value to `{{value}}` using a `{{type}}` type and fail if the widget cannot be found in `{{timeout}}` seconds.",
+        "set the `{{testableId}}` widget's value to `{{value}}` using a `{{type}}` type.",
+      ]);
+
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
@@ -32,6 +41,9 @@ class SetValueStep extends TestRunnerStep {
 
   /// The string representation of the value to set.
   final String? value;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -52,7 +64,7 @@ class SetValueStep extends TestRunnerStep {
 
     if (map != null) {
       result = SetValueStep(
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
         type: map['type'] ?? 'String',
         value: map['value']?.toString(),
@@ -147,6 +159,35 @@ class SetValueStep extends TestRunnerStep {
         'testableId: [$testableId] -- could not locate Testable with a functional [onSetValue] method.',
       );
     }
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      if (value == null) {
+        result = behaviorDrivenDescriptions[1];
+      } else {
+        result = behaviorDrivenDescriptions[3];
+      }
+    } else {
+      if (value == null) {
+        result = behaviorDrivenDescriptions[0];
+      } else {
+        result = behaviorDrivenDescriptions[2];
+      }
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll('{{testableId}}', testableId);
+    result = result.replaceAll('{{type}}', type);
+    result = result.replaceAll('{{value}}', value ?? 'null');
+
+    return result;
   }
 
   /// Converts this to a JSON compatible map.  For a description of the format,

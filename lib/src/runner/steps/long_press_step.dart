@@ -9,14 +9,24 @@ class LongPressStep extends TestRunnerStep {
   LongPressStep({
     required this.testableId,
     this.timeout,
-  }) : assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId.isNotEmpty == true);
+
+  static const id = 'long_press';
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'long press the `{{testableId}}` widget.'
+        'long press the `{{testableId}}` widget and fail if it cannot be found in `{{timeout}}` seconds.',
+  ]);
 
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
   final Duration? timeout;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -35,7 +45,7 @@ class LongPressStep extends TestRunnerStep {
 
     if (map != null) {
       result = LongPressStep(
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
       );
     }
@@ -74,6 +84,25 @@ class LongPressStep extends TestRunnerStep {
     );
 
     await driver.longPress(finder);
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      result = behaviorDrivenDescriptions[0];
+    } else {
+      result = behaviorDrivenDescriptions[1];
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll('{{testableId}}', testableId);
+
+    return result;
   }
 
   /// Converts this to a JSON compatible map.  For a description of the format,

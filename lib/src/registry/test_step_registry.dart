@@ -32,7 +32,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: AssertErrorForm(),
         help: TestStepTranslations.atf_help_assert_error,
-        id: 'assert_error',
+        id: AssertErrorStep.id,
         keys: const {
           'caseSensitive',
           'equals',
@@ -51,7 +51,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: AssertValueForm(),
         help: TestStepTranslations.atf_help_assert_value,
-        id: 'assert_value',
+        id: AssertValueStep.id,
         keys: const {
           'caseSensitive',
           'equals',
@@ -70,7 +70,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: CommentForm(),
         help: TestStepTranslations.atf_help_comment,
-        id: 'comment',
+        id: CommentStep.id,
         keys: const {
           'comment',
         },
@@ -84,7 +84,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: DoubleTapForm(),
         help: TestStepTranslations.atf_help_double_tap,
-        id: 'double_tap',
+        id: DoubleTapStep.id,
         keys: const {'testableId', 'timeout'},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_double_tap,
@@ -96,7 +96,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: DismissKeyboardForm(),
         help: TestStepTranslations.atf_help_dismiss_keyboard,
-        id: 'dismiss_keyboard',
+        id: DismissKeyboardStep.id,
         keys: const {'timeout'},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_dismiss_keyboard,
@@ -108,7 +108,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: EnsureExistsForm(),
         help: TestStepTranslations.atf_help_ensure_exists,
-        id: 'ensure_exists',
+        id: EnsureExistsStep.id,
         keys: const {'testableId'},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_ensure_exists,
@@ -120,7 +120,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: ExitAppForm(),
         help: TestStepTranslations.atf_help_exit_app,
-        id: 'exit_app',
+        id: ExitAppStep.id,
         keys: const {},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_exit_app,
@@ -132,7 +132,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: GoBackForm(),
         help: TestStepTranslations.atf_help_go_back,
-        id: 'go_back',
+        id: GoBackStep.id,
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_go_back,
         widgetless: true,
@@ -143,7 +143,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: LongPressForm(),
         help: TestStepTranslations.atf_help_long_press,
-        id: 'long_press',
+        id: LongPressStep.id,
         keys: const {'testableId', 'timeout'},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_long_press,
@@ -156,7 +156,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: ScreenshotForm(),
         help: TestStepTranslations.atf_help_screenshot,
-        id: 'screenshot',
+        id: ScreenshotStep.id,
         keys: const {'goldenCompatible', 'imageId'},
         quickAddValues: const {'goldenCompatible': true},
         title: TestStepTranslations.atf_title_screenshot,
@@ -168,7 +168,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: ScrollUntilVisibleForm(),
         help: TestStepTranslations.atf_help_scroll_until_visible,
-        id: 'scroll_until_visible',
+        id: ScrollUntilVisibleStep.id,
         keys: const {'increment', 'scrollableId', 'testableId', 'timeout'},
         quickAddValues: const {'increment': '200'},
         title: TestStepTranslations.atf_title_scroll_until_visible,
@@ -181,7 +181,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: SetValueForm(),
         help: TestStepTranslations.atf_help_set_value,
-        id: 'set_value',
+        id: SetValueStep.id,
         keys: const {'testableId', 'timeout', 'type', 'value'},
         quickAddValues: const {'type': 'String'},
         title: TestStepTranslations.atf_title_set_value,
@@ -194,7 +194,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: SetVariableForm(),
         help: TestStepTranslations.atf_help_set_variable,
-        id: 'set_variable',
+        id: SetVariableStep.id,
         keys: const {'type', 'value', 'variableName'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_set_variable,
@@ -207,7 +207,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: SleepForm(),
         help: TestStepTranslations.atf_help_sleep,
-        id: 'sleep',
+        id: SleepStep.id,
         keys: const {'timeout'},
         quickAddValues: const {'timeout': '5'},
         title: TestStepTranslations.atf_title_sleep,
@@ -219,7 +219,7 @@ class TestStepRegistry {
       availableTestStep: AvailableTestStep(
         form: TapForm(),
         help: TestStepTranslations.atf_help_tap,
-        id: 'tap',
+        id: TapStep.id,
         keys: const {'testableId', 'timeout'},
         quickAddValues: const {},
         title: TestStepTranslations.atf_title_tap,

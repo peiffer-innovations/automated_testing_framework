@@ -6,14 +6,24 @@ class DoubleTapStep extends TestRunnerStep {
   DoubleTapStep({
     required this.testableId,
     this.timeout,
-  }) : assert(testableId?.isNotEmpty == true);
+  }) : assert(testableId.isNotEmpty == true);
+
+  static const id = 'double_tap';
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'double tap the `{{testableId}}` widget.',
+    'double tap the `{{testableId}}` widget and fail if it cannot be found in `{{timeout}}` seconds.',
+  ]);
 
   /// The id of the [Testable] widget to interact with.
-  final String? testableId;
+  final String testableId;
 
   /// The maximum amount of time this step will wait while searching for the
   /// [Testable] on the widget tree.
   final Duration? timeout;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -32,7 +42,7 @@ class DoubleTapStep extends TestRunnerStep {
 
     if (map != null) {
       result = DoubleTapStep(
-        testableId: map['testableId'],
+        testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
       );
     }
@@ -84,6 +94,25 @@ class DoubleTapStep extends TestRunnerStep {
       throw Exception('[CANCELLED]: step was cancelled by the test');
     }
     await driver.tap(finder);
+  }
+
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (timeout == null) {
+      result = behaviorDrivenDescriptions[0];
+    } else {
+      result = behaviorDrivenDescriptions[1];
+      result = result.replaceAll(
+        '{{timeout}}',
+        timeout!.inSeconds.toString(),
+      );
+    }
+
+    result = result.replaceAll('{{testableId}}', testableId);
+
+    return result;
   }
 
   /// Converts this to a JSON compatible map.  For a description of the format,

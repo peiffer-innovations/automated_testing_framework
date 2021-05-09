@@ -1,3 +1,9 @@
+## [3.0.6] - May 9th, 2021
+
+* Added a new `VariableResolver` class to allow applications to pass in custom resolvers.
+* Added a new view that can render the test in a more [Behavior Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) view.
+
+
 ## [3.0.5] - April 30th, 2021
 
 * Updated to Ack a run test command with the device info and startup status

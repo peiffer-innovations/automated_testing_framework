@@ -7,8 +7,17 @@ class SleepStep extends TestRunnerStep {
     required this.timeout,
   }) : assert(timeout.inMilliseconds >= 0);
 
+  static const id = 'sleep';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        'sleep for `{{timeout}}` seconds.',
+      ]);
+
   /// The maximum amount of time to sleep for.
   final Duration timeout;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -54,6 +63,13 @@ class SleepStep extends TestRunnerStep {
       tester: tester,
     );
   }
+
+  @override
+  String getBehaviorDrivenDescription() =>
+      behaviorDrivenDescriptions[0].replaceAll(
+        '{{timeout}}',
+        timeout.inSeconds.toString(),
+      );
 
   /// Overidden to ignore the delay
   @override

@@ -4,6 +4,15 @@ import 'package:flutter/cupertino.dart';
 /// Step that attempts to execute a Back action against the current navigation
 /// stack.
 class GoBackStep extends TestRunnerStep {
+  static const id = 'go_back';
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'go back.',
+  ]);
+
+  @override
+  String get stepId => id;
+
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
   ///
@@ -49,6 +58,9 @@ class GoBackStep extends TestRunnerStep {
 
     await driver.tap(backButton);
   }
+
+  @override
+  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0];
 
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].

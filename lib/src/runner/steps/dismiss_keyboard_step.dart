@@ -3,6 +3,15 @@ import 'package:flutter/services.dart';
 
 /// Test step that dismisses the keyboard.
 class DismissKeyboardStep extends TestRunnerStep {
+  static const id = 'dismiss_keyboard';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        'dismiss the keyboard.',
+      ]);
+
+  @override
+  String get stepId => id;
+
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
   ///
@@ -34,6 +43,9 @@ class DismissKeyboardStep extends TestRunnerStep {
     );
     await SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
+
+  @override
+  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0];
 
   /// Overidden to ignore the delay
   @override

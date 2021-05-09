@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
@@ -13,6 +14,17 @@ import '../overrides/override_widget_tester.dart';
 /// Abstract step that all other test steps must extend.
 @immutable
 abstract class TestRunnerStep extends JsonClass {
+  /// Returns the Behavior Driven Development description for the test step.
+  /// The results of this may be in Markdown and this provides a description of
+  /// the test step in a way that is more easily understood by non-developers.
+  ///
+  /// Variables in the step should be encoded with the mustache template format
+  /// like `{{variable}}`.  Consumers of this call can match this up with the
+  /// [toJson] call to convert variables to specific values.
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'an unknown step of `{{stepId}}` type and using `{{values}}` as the parameters.',
+  ]);
+
   static final Logger _logger = Logger('TestRunnerStep');
 
   static final OverrideWidgetTester _driver =
@@ -24,8 +36,7 @@ abstract class TestRunnerStep extends JsonClass {
 
   /// Returns the default timeout for the step.  Steps that should respond
   /// quickly should use a relatively low value and steps that may take a long
-  /// time should return an appropriately longer time.  Defaults [null] which
-  ///
+  /// time should return an appropriately longer time.
   Duration get defaultStepTimeout => Duration(minutes: 1);
 
   /// Returns the test driver that can be used to interact with widgets.
@@ -34,12 +45,25 @@ abstract class TestRunnerStep extends JsonClass {
   /// Returns the finder that can be used to locate widgets.
   test.CommonFinders get find => test.find;
 
+  // The test step's identifier.
+  String get stepId;
+
   /// Function that is called when the step needs to execute.
   Future<void> execute({
     required CancelToken cancelToken,
     required TestReport report,
     required TestController tester,
   });
+
+  /// Gets the most appropriate BDD string based on the values set on the step.
+  String getBehaviorDrivenDescription() {
+    var result = behaviorDrivenDescriptions[0];
+
+    result = result.replaceAll('{{stepId}}', stepId);
+    result = result.replaceAll('{{values}}', json.encode(toJson()));
+
+    return result;
+  }
 
   /// Logs a message and posts it as a status update to the [TestRunner].
   @protected

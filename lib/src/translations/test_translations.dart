@@ -233,6 +233,11 @@ class TestTranslations {
     value: 'Add step and immediately execute',
   );
 
+  static const atf_tooltip_copy_bdd = TranslationEntry(
+    key: 'atf_tooltip_copy_bdd',
+    value: 'COPY BDD TEXT',
+  );
+
   static const atf_tooltip_copy_steps = TranslationEntry(
     key: 'atf_tooltip_copy_steps',
     value: 'COPY STEPS',

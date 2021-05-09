@@ -40,6 +40,9 @@ class TestController {
   /// building tests as well as running test steps.  In general, the default
   /// [TestStepRegistry] is sufficient.
   ///
+  /// If provided, the [variableResolvers] will be used to resolve all variables
+  /// before the default internal resolver will be consulted.
+  ///
   /// The [testImageReader] will be used when golden images are requested from a
   /// data store.  The default [testImageReader] is a no-op that will always
   /// return [null] for all image requests.
@@ -60,6 +63,8 @@ class TestController {
   /// See also:
   /// * [AssetTestStore]
   /// * [ClipboardTestStore]
+  /// * [UnknownVariableException]
+  /// * [VariableResolver]
   TestController({
     Map<String, PageRoute>? customRoutes,
     this.delays = const TestStepDelays(),
@@ -78,6 +83,7 @@ class TestController {
     TestReporter testReporter = TestStore.testReporter,
     WidgetBuilder? testSuiteReportBuilder,
     TestWriter testWriter = TestStore.testWriter,
+    List<VariableResolver>? variableResolvers,
     Map<String, dynamic>? variables,
   })  : _navigatorKey = navigatorKey,
         _registry = registry ?? TestStepRegistry.instance,
@@ -86,7 +92,8 @@ class TestController {
         _testReportLogLevel = testReportLogLevel,
         _testReporter = testReporter,
         _testSuiteReportBuilder = testSuiteReportBuilder,
-        _testWriter = testWriter {
+        _testWriter = testWriter,
+        _variableResolvers = variableResolvers ?? <VariableResolver>[] {
     _customRoutes.addAll(customRoutes ?? {});
     _variables.addAll(variables ?? {});
   }
@@ -141,6 +148,7 @@ class TestController {
   final TestReporter _testReporter;
   final WidgetBuilder? _testSuiteReportBuilder;
   final TestWriter _testWriter;
+  final List<VariableResolver> _variableResolvers;
   final Map<String, dynamic> _variables = {};
 
   /// The currently selected test suite name.
@@ -612,34 +620,59 @@ class TestController {
     return exported;
   }
 
-  /// Returns the variable from the controller.  This will return [null] if the
-  /// variable is not currently set on the controller.
-  dynamic getVariable(String? variableName) {
+  /// Returns the variable from the controller.  This will first iterate through
+  /// each [VariableResolver] given to the controller and will return the value
+  /// from the first resolver that did not throw an [UnknownVariableException].
+  ///
+  /// If there are no resolvers on the controller, or all resolvers throw an
+  /// [UnknownVariableException], then this will next check the reserved
+  /// variable names and the associated values.
+  ///
+  /// Finally, if neither check resolves the variable, this will return the
+  /// value from the variables map that has been set, and will return [null] if
+  /// no value had been set for [variableName].
+  dynamic getVariable(String variableName) {
+    var resolved = false;
     dynamic result;
 
-    switch (variableName) {
-      case '_now':
-        result = DateTime.now().toUtc();
-        break;
-      case '_platform':
-        if (kIsWeb) {
-          result = 'web';
-        } else if (Platform.isAndroid) {
-          result = 'android';
-        } else if (Platform.isFuchsia) {
-          result = 'fuchsia';
-        } else if (Platform.isIOS) {
-          result = 'ios';
-        } else if (Platform.isMacOS) {
-          result = 'macos';
-        } else if (Platform.isWindows) {
-          result = 'windows';
+    for (var resolver in _variableResolvers) {
+      try {
+        result = resolver(variableName);
+        resolved = true;
+      } catch (e) {
+        if (e is UnknownVariableException) {
+          // no-op
         } else {
-          result = 'unknown';
+          rethrow;
         }
-        break;
-      default:
-        result = _variables[variableName!];
+      }
+    }
+
+    if (resolved != true) {
+      switch (variableName) {
+        case '_now':
+          result = DateTime.now().toUtc();
+          break;
+        case '_platform':
+          if (kIsWeb) {
+            result = 'web';
+          } else if (Platform.isAndroid) {
+            result = 'android';
+          } else if (Platform.isFuchsia) {
+            result = 'fuchsia';
+          } else if (Platform.isIOS) {
+            result = 'ios';
+          } else if (Platform.isMacOS) {
+            result = 'macos';
+          } else if (Platform.isWindows) {
+            result = 'windows';
+          } else {
+            result = 'unknown';
+          }
+          break;
+        default:
+          result = _variables[variableName];
+      }
     }
 
     return result;
@@ -892,6 +925,24 @@ class TestController {
 
   /// Submits the test report through the [TestReporter].
   Future<bool> submitReport(TestReport report) => _testReporter(report);
+
+  String toBehaviorDrivenDescription(Test test) {
+    var result =
+        '## As a test named `${test.name}`${test.suiteName == null ? '' : ' in the `${test.suiteName}` suite'}\n';
+
+    var first = true;
+    for (var step in test.steps) {
+      var runnerStep = _registry.getRunnerStep(
+        id: step.id,
+        values: step.values,
+      )!;
+      result +=
+          ' * ${first == true ? 'First,' : 'And then'} I will ${runnerStep.getBehaviorDrivenDescription()}\n';
+      first = false;
+    }
+
+    return result;
+  }
 
   /// Sleeps for the given duration.
   Future<void> _sleep(Duration duration) async =>

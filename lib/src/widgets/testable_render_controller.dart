@@ -24,7 +24,6 @@ class TestableRenderController {
     Duration flashDuration = const Duration(milliseconds: 100),
     TestableGestures? gestures,
     WidgetBuilder? globalOverlayBuilder,
-    bool minifyTestSteps = false,
     Color? overlayColor,
     bool showGlobalOverlay = false,
     bool testWidgetsEnabled = kDebugMode == true,
@@ -35,7 +34,6 @@ class TestableRenderController {
         _flashDuration = flashDuration,
         _gestures = gestures ?? TestableGestures(),
         _globalOverlayBuilder = globalOverlayBuilder ?? fullGlobalOverlay(),
-        _minifyTestSteps = minifyTestSteps,
         _overlayColor = overlayColor ?? Colors.red.shade300,
         _showGlobalOverlay = showGlobalOverlay,
         _testWidgetsEnabled = testWidgetsEnabled,
@@ -54,7 +52,6 @@ class TestableRenderController {
   StreamController<void>? _controller = StreamController<void>.broadcast();
   TestableGestures _gestures;
   WidgetBuilder _globalOverlayBuilder;
-  bool _minifyTestSteps;
   Color? _overlayColor;
   bool _showGlobalOverlay;
   bool _testWidgetsEnabled;
@@ -65,7 +62,6 @@ class TestableRenderController {
   Duration get flashDuration => _flashDuration;
   TestableGestures get gestures => _gestures;
   WidgetBuilder get globalOverlayBuilder => _globalOverlayBuilder;
-  bool get minifyTestSteps => _minifyTestSteps;
   Color? get overlayColor => _overlayColor;
   bool get showGlobalOverlay => _showGlobalOverlay;
   Stream<void>? get stream => _controller?.stream;
@@ -79,11 +75,6 @@ class TestableRenderController {
 
   set globalOverlayBuilder(WidgetBuilder globalOverlayBuilder) {
     _globalOverlayBuilder = globalOverlayBuilder;
-    _controller?.add(null);
-  }
-
-  set minifyTestSteps(bool minifyTestSteps) {
-    _minifyTestSteps = minifyTestSteps;
     _controller?.add(null);
   }
 

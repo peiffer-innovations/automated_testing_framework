@@ -11,7 +11,13 @@ class SetVariableStep extends TestRunnerStep {
             type == 'int' ||
             type == 'String'),
         type = type,
-        assert(variableName?.isNotEmpty == true);
+        assert(variableName.isNotEmpty == true);
+
+  static const id = 'set_variable';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        'set the `{{variableName}}` to `{{value}}` using a `{{type}}` type.',
+      ]);
 
   /// The type of value to set.  This must be one of:
   /// * `bool`
@@ -24,7 +30,10 @@ class SetVariableStep extends TestRunnerStep {
   final String? value;
 
   /// The variable name of the variable to set on the controller.
-  final String? variableName;
+  final String variableName;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -79,6 +88,12 @@ class SetVariableStep extends TestRunnerStep {
       value: value,
     );
   }
+
+  @override
+  String getBehaviorDrivenDescription() => behaviorDrivenDescriptions[0]
+      .replaceAll('{{variableName}}', variableName)
+      .replaceAll('{{type}}', type)
+      .replaceAll('{{value}}', value ?? 'null');
 
   /// Overidden to ignore the delay
   @override

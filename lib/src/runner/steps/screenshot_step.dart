@@ -7,6 +7,15 @@ class ScreenshotStep extends TestRunnerStep {
     this.imageId,
   });
 
+  static const id = 'screenshot';
+
+  static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
+    'take a screenshot.',
+    'take a screenshot and name it `{{imageId}}`.',
+    'take a screenshot and tag it as `{{goldenCompatible}}`.',
+    'take a screenshot, name it `{{imageId}}`, and tag it as `{{goldenCompatible}}`.',
+  ]);
+
   /// Set to [false] if this image is known to be capturing dynamic information
   /// that is incompatible with golden images.
   final bool goldenCompatible;
@@ -14,6 +23,9 @@ class ScreenshotStep extends TestRunnerStep {
   /// The id of the screenshot.  This will be saved in the report along with the
   /// screenshot itself.
   final String? imageId;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -63,6 +75,29 @@ class ScreenshotStep extends TestRunnerStep {
     }
   }
 
+  @override
+  String getBehaviorDrivenDescription() {
+    String result;
+
+    if (imageId == null && goldenCompatible == false) {
+      result = behaviorDrivenDescriptions[0];
+    } else if (imageId != null && goldenCompatible == false) {
+      result = behaviorDrivenDescriptions[1];
+    } else if (imageId == null && goldenCompatible == true) {
+      result = behaviorDrivenDescriptions[2];
+    } else {
+      result = behaviorDrivenDescriptions[3];
+    }
+
+    result = result.replaceAll('{{imageId}}', imageId ?? 'null');
+    result = result.replaceAll(
+      '{{goldenCompatible}}',
+      goldenCompatible == true ? 'golden' : 'not golden',
+    );
+
+    return result;
+  }
+
   /// Overidden to ignore the delay
   @override
   Future<void> postStepSleep(Duration duration) async {}
@@ -70,5 +105,8 @@ class ScreenshotStep extends TestRunnerStep {
   /// Converts this to a JSON compatible map.  For a description of the format,
   /// see [fromDynamic].
   @override
-  Map<String, dynamic> toJson() => {};
+  Map<String, dynamic> toJson() => {
+        'imageId': imageId,
+        'goldenCompatible': goldenCompatible,
+      };
 }

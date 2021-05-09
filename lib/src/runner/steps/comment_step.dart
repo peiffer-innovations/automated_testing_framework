@@ -9,8 +9,17 @@ class CommentStep extends TestRunnerStep {
     required this.comment,
   });
 
+  static const id = 'comment';
+
+  static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
+        'write the comment "`{{comment}}`" to the log.',
+      ]);
+
   /// The comment to put in the test.
   final String comment;
+
+  @override
+  String get stepId => id;
 
   /// Creates an instance from a JSON-like map structure.  This expects the
   /// following format:
@@ -51,6 +60,13 @@ class CommentStep extends TestRunnerStep {
       tester: tester,
     );
   }
+
+  @override
+  String getBehaviorDrivenDescription() =>
+      behaviorDrivenDescriptions[0].replaceAll(
+        '{{comment}}',
+        comment,
+      );
 
   @override
   Future<void> postStepSleep(Duration duration) async {}
