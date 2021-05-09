@@ -22,7 +22,7 @@ abstract class TestRunnerStep extends JsonClass {
   /// like `{{variable}}`.  Consumers of this call can match this up with the
   /// [toJson] call to convert variables to specific values.
   static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
-    'an unknown step of `{{stepId}}` type and using `{{values}}` as the parameters.',
+    'run an unknown step of `{{stepId}}` type and using `{{values}}` as the parameters.',
   ]);
 
   static final Logger _logger = Logger('TestRunnerStep');
