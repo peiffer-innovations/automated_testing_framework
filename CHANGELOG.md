@@ -1,3 +1,8 @@
+## [3.0.7] - May 11th, 2021
+
+* Added `drag` step.
+
+
 ## [3.0.6+3] - May 9th, 2021
 
 * Added a new `VariableResolver` class to allow applications to pass in custom resolvers.

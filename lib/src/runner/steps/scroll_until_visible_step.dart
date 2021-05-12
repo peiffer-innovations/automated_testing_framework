@@ -73,7 +73,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
 
     if (map != null) {
       result = ScrollUntilVisibleStep(
-        increment: map['increment'],
+        increment: map['increment']?.toString(),
         scrollableId: map['scrollableId'],
         testableId: map['testableId']!,
         timeout: JsonClass.parseDurationFromSeconds(map['timeout']),
@@ -103,13 +103,12 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     required TestController tester,
   }) async {
     var increment =
-        JsonClass.parseDouble(tester.resolveVariable(this.increment)) ?? 200;
+        JsonClass.parseDouble(tester.resolveVariable(this.increment)) ?? 200.0;
     String? scrollableId = tester.resolveVariable(this.scrollableId);
     String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name =
-        "scroll_until_visible('$testableId', '$scrollableId', '$increment')";
+    var name = "$id('$testableId', '$scrollableId', '$increment')";
     var timeout = this.timeout ?? tester.delays.defaultTimeout;
     log(
       name,

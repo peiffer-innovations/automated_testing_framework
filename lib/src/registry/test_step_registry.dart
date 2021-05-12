@@ -106,6 +106,18 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: DragForm(),
+        help: TestStepTranslations.atf_help_drag,
+        id: DragStep.id,
+        keys: const {'dx', 'dy', 'testableId', 'timeout'},
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_drag,
+        widgetless: false,
+      ),
+      testRunnerStepBuilder: DragStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: EnsureExistsForm(),
         help: TestStepTranslations.atf_help_ensure_exists,
         id: EnsureExistsStep.id,

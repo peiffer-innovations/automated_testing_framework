@@ -67,6 +67,19 @@ void main() {
     expect(availStep.widgetless, false);
   });
 
+  test('drag', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'drag',
+    )!;
+
+    expect(availStep.form.runtimeType, DragForm);
+    expect(availStep.help, TestStepTranslations.atf_help_drag);
+    expect(availStep.id, 'drag');
+    expect(availStep.title, TestStepTranslations.atf_title_drag);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, false);
+  });
+
   test('ensure_exists', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'ensure_exists',

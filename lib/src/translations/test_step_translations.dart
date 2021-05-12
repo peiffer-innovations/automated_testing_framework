@@ -13,6 +13,16 @@ class TestStepTranslations {
     value: 'Comment',
   );
 
+  static const atf_form_dx = TranslationEntry(
+    key: 'atf_form_dx',
+    value: 'DX',
+  );
+
+  static const atf_form_dy = TranslationEntry(
+    key: 'atf_form_dy',
+    value: 'DY',
+  );
+
   static const atf_form_equals = TranslationEntry(
     key: 'atf_form_equals',
     value: 'Actual Must Equal Expected',
@@ -93,6 +103,12 @@ class TestStepTranslations {
     key: 'atf_help_double_tap',
     value:
         'Double Taps the selected widget.  An error will occur if the widget is not found on the tree before the timeout is exceeded.',
+  );
+
+  static const atf_help_drag = TranslationEntry(
+    key: 'atf_help_drag',
+    value:
+        "Drag's the widget in the direction of 'dx' and 'dy'.  One must be set, but both may be.",
   );
 
   static const atf_help_ensure_exists = TranslationEntry(
@@ -183,6 +199,11 @@ class TestStepTranslations {
   static const atf_title_double_tap = TranslationEntry(
     key: 'atf_title_double_tap',
     value: 'Double Tap',
+  );
+
+  static const atf_title_drag = TranslationEntry(
+    key: 'atf_title_drag',
+    value: 'Drag',
   );
 
   static const atf_title_ensure_exists = TranslationEntry(
