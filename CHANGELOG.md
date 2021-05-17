@@ -1,6 +1,7 @@
-## [3.0.7+1] - May 17th, 2021
+## [3.0.7+2] - May 17th, 2021
 
 * Fix for `drag` step when setting only `dy`.
+* Updated to ensure `screenshot` always has a stable id from run to run.
 
 
 ## [3.0.7] - May 11th, 2021

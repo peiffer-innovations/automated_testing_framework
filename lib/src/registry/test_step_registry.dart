@@ -1,6 +1,7 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 /// Registry that allows for the binding of custom test steps.  There exists a
 /// default instance that will always be used when a custom instance is not
@@ -170,7 +171,7 @@ class TestStepRegistry {
         help: TestStepTranslations.atf_help_screenshot,
         id: ScreenshotStep.id,
         keys: const {'goldenCompatible', 'imageId'},
-        quickAddValues: const {'goldenCompatible': true},
+        quickAddValues: {'goldenCompatible': true, 'id': Uuid().v4()},
         title: TestStepTranslations.atf_title_screenshot,
         widgetless: true,
       ),
