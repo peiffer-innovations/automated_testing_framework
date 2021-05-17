@@ -1,3 +1,8 @@
+## [3.0.7+1] - May 17th, 2021
+
+* Fix for `drag` step when setting only `dy`.
+
+
 ## [3.0.7] - May 11th, 2021
 
 * Added `drag` step.

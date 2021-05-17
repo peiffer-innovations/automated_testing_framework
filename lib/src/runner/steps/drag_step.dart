@@ -10,7 +10,7 @@ class DragStep extends TestRunnerStep {
     required this.testableId,
     this.timeout,
   })  : assert((dx != null && JsonClass.parseDouble(dx) != 0.0) ||
-            (dx != null && JsonClass.parseDouble(dx) != 0.0)),
+            (dy != null && JsonClass.parseDouble(dy) != 0.0)),
         assert(testableId.isNotEmpty == true);
 
   static const id = 'drag';
