@@ -1,3 +1,8 @@
+## [3.0.7+3] - May 21st, 2021
+
+* Dependency updates
+
+
 ## [3.0.7+2] - May 17th, 2021
 
 * Fix for `drag` step when setting only `dy`.
