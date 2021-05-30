@@ -61,7 +61,7 @@ class TapStep extends TestRunnerStep {
     String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "tap('$testableId')";
+    var name = "$id('$testableId')";
     log(
       name,
       tester: tester,

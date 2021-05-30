@@ -64,7 +64,7 @@ class LongPressStep extends TestRunnerStep {
     String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "long_press('$testableId')";
+    var name = "$id('$testableId')";
     log(
       name,
       tester: tester,

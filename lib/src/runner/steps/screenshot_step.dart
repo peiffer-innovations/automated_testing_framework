@@ -58,8 +58,8 @@ class ScreenshotStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var imageId = this.imageId ?? 'screenshot_${report.images.length}';
-    var name = "screenshot('$imageId', '$goldenCompatible')";
+    var imageId = this.imageId ?? '${id}_${report.images.length}';
+    var name = "$id('$imageId', '$goldenCompatible')";
     log(
       name,
       tester: tester,

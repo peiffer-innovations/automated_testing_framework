@@ -9,7 +9,7 @@ class ProgressValue {
     this.error = false,
     required this.max,
     required int value,
-  })   : assert(max > 0),
+  })  : assert(max > 0),
         assert(value >= 0),
         value = min(value, max);
 

@@ -11,7 +11,7 @@ class SleepProgress extends StatefulWidget {
     required this.max,
     required this.stream,
     required this.theme,
-  })   : assert(max >= 0),
+  })  : assert(max >= 0),
         super(key: key);
 
   /// States whether this progress counter will result in an error or not.

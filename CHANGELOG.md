@@ -1,3 +1,8 @@
+## [3.0.8] - May 30th, 2021
+
+* Added `assert_semantics` step
+
+
 ## [3.0.7+3] - May 21st, 2021
 
 * Dependency updates

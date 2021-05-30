@@ -33,6 +33,11 @@ class TestStepTranslations {
     value: 'Error',
   );
 
+  static const atf_form_field = TranslationEntry(
+    key: 'atf_form_field',
+    value: 'Field',
+  );
+
   static const atf_form_golden_compatible = TranslationEntry(
     key: 'atf_form_colden_compatible',
     value: 'Golden Compatible',
@@ -80,6 +85,11 @@ class TestStepTranslations {
 
   static const atf_help_assert_error = TranslationEntry(
     key: 'atf_help_assert_error',
+    value: 'Asserts the error from the widget equals the given value.',
+  );
+
+  static const atf_help_assert_semantics = TranslationEntry(
+    key: 'atf_help_assert_semantics',
     value: 'Asserts the error from the widget equals the given value.',
   );
 
@@ -179,6 +189,11 @@ class TestStepTranslations {
   static const atf_title_assert_error = TranslationEntry(
     key: 'atf_title_assert_errro',
     value: 'Assert Error',
+  );
+
+  static const atf_title_assert_semantics = TranslationEntry(
+    key: 'atf_title_assert_semantics',
+    value: 'Assert Semantics',
   );
 
   static const atf_title_assert_value = TranslationEntry(

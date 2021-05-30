@@ -9,7 +9,7 @@ class SetValueStep extends TestRunnerStep {
     this.timeout,
     String type = 'String',
     required this.value,
-  })   : assert(testableId.isNotEmpty == true),
+  })  : assert(testableId.isNotEmpty == true),
         assert(type == 'bool' ||
             type == 'double' ||
             type == 'int' ||
@@ -91,7 +91,7 @@ class SetValueStep extends TestRunnerStep {
         type == 'double' ||
         type == 'int' ||
         type == 'String');
-    var name = "set_value('$testableId', '$type', '$value')";
+    var name = "$id('$testableId', '$type', '$value')";
 
     log(
       name,

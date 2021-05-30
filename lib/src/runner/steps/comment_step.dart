@@ -53,7 +53,7 @@ class CommentStep extends TestRunnerStep {
     required TestController tester,
   }) async {
     var comment = tester.resolveVariable(this.comment)?.toString() ?? '';
-    var name = "comment('$comment')";
+    var name = "$id('$comment')";
 
     log(
       name,

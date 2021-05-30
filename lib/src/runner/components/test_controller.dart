@@ -377,6 +377,7 @@ class TestController {
         await _sleep(delays.testTearDown);
         step = null;
         report.complete();
+        _testControllerState.runningTest = false;
 
         if (cancelToken.cancelled == false &&
             (reset == true || submitReport == true)) {
@@ -407,7 +408,6 @@ class TestController {
 
       return report;
     } finally {
-      _testControllerState.runningTest = false;
       await cancelSubscription.cancel();
       await cancelToken.complete();
     }

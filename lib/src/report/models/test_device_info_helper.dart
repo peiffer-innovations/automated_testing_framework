@@ -31,7 +31,7 @@ class TestDeviceInfoHelper {
 
       var appIdentifier = '<unknown>';
       late String brand;
-      late String buildNumber;
+      var buildNumber = '<unknown>';
       late String device;
       double? devicePixelRatio;
       BaseSize? dips;

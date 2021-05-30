@@ -50,6 +50,23 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: AssertSemanticsForm(),
+        help: TestStepTranslations.atf_help_assert_semantics,
+        id: AssertSemanticsStep.id,
+        keys: const {
+          'field',
+          'timeout',
+          'testableId',
+          'value',
+        },
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_assert_semantics,
+        widgetless: false,
+      ),
+      testRunnerStepBuilder: AssertSemanticsStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: AssertValueForm(),
         help: TestStepTranslations.atf_help_assert_value,
         id: AssertValueStep.id,

@@ -91,8 +91,7 @@ class AssertErrorStep extends TestRunnerStep {
     String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name =
-        "assert_error('$testableId', '$error', '$equals', '$caseSensitive')";
+    var name = "$id('$testableId', '$error', '$equals', '$caseSensitive')";
     log(
       name,
       tester: tester,

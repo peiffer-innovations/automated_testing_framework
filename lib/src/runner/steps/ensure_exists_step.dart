@@ -64,7 +64,7 @@ class EnsureExistsStep extends TestRunnerStep {
     String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "ensure_exists('$testableId')";
+    var name = "$id('$testableId')";
     log(
       name,
       tester: tester,

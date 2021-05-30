@@ -39,7 +39,7 @@ class GoBackStep extends TestRunnerStep {
     required TestController tester,
   }) async {
     log(
-      'go_back',
+      '$id',
       tester: tester,
     );
 

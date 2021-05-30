@@ -7,6 +7,7 @@
 * [Test Step Summary](#test-step-summary)
 * [Details](#details)
   * [assert_error](#assert_error)
+  * [assert_semantics](#assert_semantics)
   * [assert_value](#assert_value)
   * [comment](#comment)
   * [dismiss_keyboard](#dismiss_keyboard)
@@ -57,6 +58,7 @@ The variables will be evaluated when the Test Step executes.
 Test Step IDs                                 | Description
 ----------------------------------------------|-------------
 [assert_error](#assert_error)                 | Asserts the error message on the `Testable` equals (or does not equal) a specified value.
+[assert_semantics](#assert_semantics)         | Asserts the semantics field value on the `Testable` equals a specified value.
 [assert_value](#assert_value)                 | Asserts the value on the `Testable` equals (or does not equal) a specified value.
 [dismiss_keyboard](#dismiss_keyboard)         | Dismisses the keyboard, if it is currently visible.  Does nothing otherwise.
 [double_tap](#double_tap)                     | Executes a double tap gesture on the associated `Testable`.
@@ -109,6 +111,41 @@ Key             | Type    | Required | Supports Variable | Description
 `error`         | String  | Yes      | Yes               | The error message evaluate against.
 `testableId`    | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the error message.
 `timeout`       | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+
+---
+
+### assert_semantics
+
+**How it Works**
+
+1. Looks for the `Testable` on the widget tree.  If not found before `timeout` the step will fail.
+2. Compares the error message from the `Testable` to the assigned `error`.  The step will fail if either statement is not true:
+    1. The `equals` is `true` or undefined and the `Testable`'s error message does not match the `error`.
+    2. The `equals` is `false` and the `Testable`'s error message does match the `error`.
+
+**Example**
+
+```json
+{
+  "id": "assert_semantics",
+  "image": "<optional_base_64_image>",
+  "values": {
+    "field": "semanticNodeFieldName",
+    "testableId": "my-text-id",
+    "timeout": 10,
+    "value": "String value for the semantic node field's value",
+  }
+}
+```
+
+**Values**
+
+Key             | Type    | Required | Supports Variable | Description
+----------------|---------|----------|-------------------|-------------
+`field`         | boolean | Yes      | No                | Defines whether the `Testable`'s error message must equal the `error` or must not equal the `error`.  Defaults to `true` if not defined.
+`testableId`    | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the error message.
+`timeout`       | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+`value`         | String  | Yes      | Yes               | The error message evaluate against.
 
 ---
 

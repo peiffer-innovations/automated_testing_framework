@@ -61,7 +61,7 @@ class DoubleTapStep extends TestRunnerStep {
     String? testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "double_tap('$testableId')";
+    var name = "$id('$testableId')";
     log(
       name,
       tester: tester,

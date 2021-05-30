@@ -14,6 +14,7 @@ export 'src/framework/dialog/testable_form_dialog.dart';
 export 'src/framework/dialog/testable_steps_dialog.dart';
 
 export 'src/framework/forms/assert_error_form.dart';
+export 'src/framework/forms/assert_semantics_form.dart';
 export 'src/framework/forms/assert_value_form.dart';
 export 'src/framework/forms/comment_form.dart';
 export 'src/framework/forms/dismiss_keyboard_form.dart';
@@ -63,6 +64,7 @@ export 'src/runner/models/progress_value.dart';
 export 'src/runner/models/test_runner_theme_data.dart';
 
 export 'src/runner/steps/assert_error_step.dart';
+export 'src/runner/steps/assert_semantics_step.dart';
 export 'src/runner/steps/assert_value_step.dart';
 export 'src/runner/steps/comment_step.dart';
 export 'src/runner/steps/dismiss_keyboard_step.dart';

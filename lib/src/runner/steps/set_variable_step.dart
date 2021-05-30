@@ -6,7 +6,7 @@ class SetVariableStep extends TestRunnerStep {
     String type = 'String',
     required this.value,
     required this.variableName,
-  })   : assert(type == 'bool' ||
+  })  : assert(type == 'bool' ||
             type == 'double' ||
             type == 'int' ||
             type == 'String'),
@@ -77,7 +77,7 @@ class SetVariableStep extends TestRunnerStep {
         type == 'int' ||
         type == 'String');
     assert(variableName.isNotEmpty == true);
-    var name = "set_variable('$variableName', '$type', '$value')";
+    var name = "$id('$variableName', '$type', '$value')";
 
     log(
       name,

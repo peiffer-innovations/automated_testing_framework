@@ -15,6 +15,19 @@ void main() {
     expect(availStep.widgetless, false);
   });
 
+  test('assert_semantics', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'assert_semantics',
+    )!;
+
+    expect(availStep.form.runtimeType, AssertSemanticsForm);
+    expect(availStep.help, TestStepTranslations.atf_help_assert_semantics);
+    expect(availStep.id, 'assert_semantics');
+    expect(availStep.title, TestStepTranslations.atf_title_assert_semantics);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, false);
+  });
+
   test('assert_value', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'assert_value',

@@ -115,6 +115,7 @@ class TestableState extends State<Testable>
   double _opacity = 1.0;
   late TestableRenderController _renderController;
   GlobalKey? _renderKey;
+  bool _runningTest = false;
   String? _scrollableId;
 
   /// Global key that provides the ability for the scroll_until_visible step to
@@ -139,6 +140,8 @@ class TestableState extends State<Testable>
   @override
   void initState() {
     super.initState();
+
+    _updateRunningState();
 
     if (widget.id?.isNotEmpty == true) {
       _testRunner = TestRunner.of(context);
@@ -188,6 +191,17 @@ class TestableState extends State<Testable>
                 setState(() {});
               }
             });
+        }
+
+        if (_testController != null) {
+          var nn = _testController!;
+
+          _subscriptions.add(nn.state.runningSuiteStream.listen(
+            (_) => _updateRunningState(),
+          ));
+          _subscriptions.add(nn.state.runningTestStream.listen(
+            (_) => _updateRunningState(),
+          ));
         }
 
         _isDialogOpen = false;
@@ -611,6 +625,52 @@ class TestableState extends State<Testable>
     return result;
   }
 
+  void _updateRunningState() {
+    var state = _testController?.state;
+    var running = state?.runningSuite == true || state?.runningTest == true;
+
+    if (running != _runningTest) {
+      _runningTest = running;
+
+      if (mounted == true) {
+        setState(() {});
+      }
+    }
+  }
+
+  Widget _buildActualTestWidget(BuildContext context) => RepaintBoundary(
+        key: _renderKey,
+        child: AnimatedOpacity(
+          duration: Duration(milliseconds: 300),
+          opacity: _opacity,
+          child: Stack(
+            children: <Widget>[
+              if (_backgroundColor != null)
+                Positioned.fill(
+                  child: ExcludeSemantics(
+                    child: IgnorePointer(
+                      child: Container(
+                        color: _backgroundColor,
+                      ),
+                    ),
+                  ),
+                ),
+              widget.child,
+              Positioned.fill(
+                child: ExcludeSemantics(
+                  child: IgnorePointer(
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      color: _obscureColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     Widget result;
@@ -656,71 +716,48 @@ class TestableState extends State<Testable>
         fit: StackFit.passthrough,
         key: _scrollKey,
         children: [
-          IgnorePointer(
-            ignoring: _showTestableOverlay == true,
-            child: GestureDetector(
-              onDoubleTap: _getGestureAction(
-                widget: gestures.widgetDoubleTap,
-              ),
-              onForcePressEnd: gestures.widgetForcePressEnd == null
-                  ? null
-                  : (_) => _fireTestableAction(gestures.widgetForcePressEnd),
-              onForcePressStart: gestures.widgetForcePressStart == null
-                  ? null
-                  : (_) => _fireTestableAction(gestures.widgetForcePressStart),
-              onLongPress: _getGestureAction(
-                widget: gestures.widgetLongPress,
-              ),
-              onLongPressMoveUpdate: gestures.widgetLongPressMoveUpdate == null
-                  ? null
-                  : (details) {
-                      if (details.localOffsetFromOrigin.distance != 0) {
-                        _fireTestableAction(
-                          gestures.widgetLongPressMoveUpdate,
-                        );
-                      }
-                    },
-              onSecondaryLongPress: _getGestureAction(
-                widget: gestures.widgetSecondaryLongPress,
-              ),
-              onSecondaryTap: _getGestureAction(
-                widget: gestures.widgetSecondaryTap,
-              ),
-              onTap: _getGestureAction(
-                widget: gestures.widgetTap,
-              ),
-              child: RepaintBoundary(
-                key: _renderKey,
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: _opacity,
-                  child: Stack(
-                    children: <Widget>[
-                      if (_backgroundColor != null)
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            child: Container(
-                              color: _backgroundColor,
-                            ),
-                          ),
-                        ),
-                      widget.child,
-                      Positioned.fill(
-                        child: IgnorePointer(
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 300),
-                            color: _obscureColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          if (_runningTest != true)
+            IgnorePointer(
+              ignoring: _showTestableOverlay == true,
+              child: GestureDetector(
+                onDoubleTap: _getGestureAction(
+                  widget: gestures.widgetDoubleTap,
                 ),
+                onForcePressEnd: gestures.widgetForcePressEnd == null
+                    ? null
+                    : (_) => _fireTestableAction(gestures.widgetForcePressEnd),
+                onForcePressStart: gestures.widgetForcePressStart == null
+                    ? null
+                    : (_) =>
+                        _fireTestableAction(gestures.widgetForcePressStart),
+                onLongPress: _getGestureAction(
+                  widget: gestures.widgetLongPress,
+                ),
+                onLongPressMoveUpdate:
+                    gestures.widgetLongPressMoveUpdate == null
+                        ? null
+                        : (details) {
+                            if (details.localOffsetFromOrigin.distance != 0) {
+                              _fireTestableAction(
+                                gestures.widgetLongPressMoveUpdate,
+                              );
+                            }
+                          },
+                onSecondaryLongPress: _getGestureAction(
+                  widget: gestures.widgetSecondaryLongPress,
+                ),
+                onSecondaryTap: _getGestureAction(
+                  widget: gestures.widgetSecondaryTap,
+                ),
+                onTap: _getGestureAction(
+                  widget: gestures.widgetTap,
+                ),
+                child: _buildActualTestWidget(context),
               ),
             ),
-          ),
+          if (_runningTest == true) _buildActualTestWidget(context),
           if (_renderController.showGlobalOverlay == true &&
-              _testController!.runningTest != true)
+              _runningTest != true)
             _renderController.globalOverlayBuilder(context),
           overlay,
           if (_renderController.flashCount > 0)

@@ -91,8 +91,7 @@ class AssertValueStep extends TestRunnerStep {
     var value = tester.resolveVariable(this.value)?.toString();
     assert(testableId?.isNotEmpty == true);
 
-    var name =
-        "assert_value('$testableId', '$value', '$equals', '$caseSensitive')";
+    var name = "$id('$testableId', '$value', '$equals', '$caseSensitive')";
     log(
       name,
       tester: tester,
