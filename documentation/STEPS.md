@@ -118,10 +118,9 @@ Key             | Type    | Required | Supports Variable | Description
 
 **How it Works**
 
-1. Looks for the `Testable` on the widget tree.  If not found before `timeout` the step will fail.
-2. Compares the error message from the `Testable` to the assigned `error`.  The step will fail if either statement is not true:
-    1. The `equals` is `true` or undefined and the `Testable`'s error message does not match the `error`.
-    2. The `equals` is `false` and the `Testable`'s error message does match the `error`.
+1. Will automatically fail if `kReleaseMode` is `true` as the components this step requires do not exist in Release builds.
+2. Looks for the `Testable` on the widget tree.  If not found before `timeout` the step will fail.
+3. Compares the `field`'s String value on the `SemanticsNode` from the `Testable` to the given `value` and will fail if they do not match.
 
 **Example**
 
