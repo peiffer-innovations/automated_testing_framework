@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +8,11 @@ import 'package:static_translations/static_translations.dart';
 /// Tab that shows the test steps in a drag-and-drop reorderable format.
 class TestStepListMinifiedTab extends StatefulWidget {
   TestStepListMinifiedTab({
-    this.fromDialog,
+    this.doublePop = true,
     Key? key,
   }) : super(key: key);
 
-  final bool? fromDialog;
+  final bool? doublePop;
 
   @override
   _TestStepListMinifiedTabState createState() =>
@@ -25,6 +27,22 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
     super.initState();
 
     _testController = TestController.of(context)!;
+  }
+
+  void _onDeleteStep({
+    required TestStep step,
+  }) {
+    var steps = List<TestStep>.from(
+      _testController.currentTest.steps,
+    );
+
+    steps.remove(step);
+    _testController.currentTest = _testController.currentTest.copyWith(
+      steps: steps,
+    );
+    if (mounted == true) {
+      setState(() {});
+    }
   }
 
   Future<void> _onEditStep({
@@ -121,13 +139,40 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
     }
   }
 
+  Future<void> _run({
+    required TestStep step,
+    required TestController tester,
+  }) async {
+    if (widget.doublePop == true) {
+      Navigator.of(context).pop();
+    }
+
+    Navigator.of(context).pop();
+
+    try {
+      await tester.execute(
+        reset: false,
+        steps: [step],
+        submitReport: false,
+        version: 0,
+      );
+    } catch (e) {
+      tester.sleep = null;
+      tester.step = null;
+    }
+  }
+
   Widget _buildMinifiedStep(
     BuildContext context, {
     required int index,
     required TestStep step,
   }) {
+    var mq = MediaQuery.of(context);
+    var narrow = mq.size.width - mq.padding.horizontal < 500.0;
+    var tester = TestController.of(context);
     var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var translator = Translator.of(context);
+
     return ListTile(
       key: ValueKey(step.key),
       title: Row(
@@ -135,8 +180,43 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            width: 48.0,
-            child: Text('${index + 1}'),
+            width: 40.0 + 16.0 + 48.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: tester!.currentTest.pinnedStepIndex == index
+                      ? Center(
+                          child: Tooltip(
+                            message: translator.translate(
+                              TestTranslations.atf_step_currently_pinned,
+                            ),
+                            child: Icon(
+                              Icons.label,
+                              color: Colors.green,
+                            ),
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            tester.currentTest.pinnedStepIndex = index;
+
+                            if (mounted == true) {
+                              setState(() {});
+                            }
+                          },
+                          tooltip: translator.translate(
+                            TestTranslations.atf_pin_step,
+                          ),
+                          icon: Icon(Icons.label_outline),
+                        ),
+                ),
+                SizedBox(width: 16.0),
+                Text('${index + 1}'),
+              ],
+            ),
           ),
           Expanded(
             child: Column(
@@ -148,7 +228,10 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                   step.id,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontFamily: 'monospaced'),
+                  style: TextStyle(
+                    fontFamily: 'Courier New',
+                    fontFamilyFallback: ['monospace', 'Courier'],
+                  ),
                 ),
                 if ((step.values ?? {})['testableId']?.isNotEmpty == true)
                   Padding(
@@ -168,51 +251,89 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
         ],
       ),
       trailing: Padding(
-        padding: EdgeInsets.only(right: 32.0),
+        padding: EdgeInsets.only(
+            right: (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+                ? 0.0
+                : 32.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Tooltip(
-              message: translator.translate(TestTranslations.atf_button_delete),
-              child: IconButton(
-                icon: Icon(
-                  Icons.delete,
-                  color: theme.errorColor,
+            if (narrow != true) ...[
+              Tooltip(
+                message:
+                    translator.translate(TestTranslations.atf_button_delete),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: theme.errorColor,
+                  ),
+                  onPressed: () => _onDeleteStep(step: step),
                 ),
-                onPressed: () {
-                  var steps = List<TestStep>.from(
-                    _testController.currentTest.steps,
-                  );
-
-                  steps.remove(step);
-                  _testController.currentTest =
-                      _testController.currentTest.copyWith(
-                    steps: steps,
-                  );
-                  if (mounted == true) {
-                    setState(() {});
+              ),
+              SizedBox(width: 16.0),
+              Tooltip(
+                message: translator.translate(TestTranslations.atf_button_edit),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: theme.iconTheme.color,
+                  ),
+                  onPressed: () => _onEditStep(
+                    step: step,
+                    theme: theme,
+                    translator: translator,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16.0),
+              Tooltip(
+                message: translator.translate(
+                  TestTranslations.atf_button_run,
+                ),
+                child: IconButton(
+                  color: theme.iconTheme.color,
+                  icon: Icon(Icons.play_arrow),
+                  onPressed: () => _run(step: step, tester: tester),
+                ),
+              ),
+            ],
+            if (narrow) ...[
+              SizedBox(width: 16.0),
+              PopupMenuButton(
+                itemBuilder: (context) => <PopupMenuItem<VoidCallback>>[
+                  PopupMenuItem(
+                    value: () => _run(tester: tester, step: step),
+                    child: Text(
+                      translator.translate(TestTranslations.atf_button_run),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: () => _onEditStep(
+                      step: step,
+                      theme: theme,
+                      translator: translator,
+                    ),
+                    child: Text(
+                      translator.translate(TestTranslations.atf_button_edit),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: () => _onDeleteStep(step: step),
+                    child: Text(
+                      translator.translate(TestTranslations.atf_button_delete),
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+                onSelected: (Function? value) {
+                  if (value != null) {
+                    value();
                   }
                 },
+                child: Icon(Icons.more_horiz),
               ),
-            ),
-            SizedBox(
-              width: 16.0,
-            ),
-            Tooltip(
-              message: translator.translate(TestTranslations.atf_button_edit),
-              child: IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  color: theme.iconTheme.color,
-                ),
-                onPressed: () => _onEditStep(
-                  step: step,
-                  theme: theme,
-                  translator: translator,
-                ),
-              ),
-            ),
+            ]
           ],
         ),
       ),

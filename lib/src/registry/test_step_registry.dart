@@ -209,6 +209,45 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
+        form: RemoveGlobalVariableForm(),
+        help: TestStepTranslations.atf_help_remove_global_variable,
+        id: RemoveGlobalVariableStep.id,
+        keys: const {'variableName'},
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_remove_global_variable,
+        type: null,
+        widgetless: true,
+      ),
+      testRunnerStepBuilder: RemoveGlobalVariableStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
+        form: RemoveVariableForm(),
+        help: TestStepTranslations.atf_help_remove_variable,
+        id: RemoveVariableStep.id,
+        keys: const {'variableName'},
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_remove_variable,
+        type: null,
+        widgetless: true,
+      ),
+      testRunnerStepBuilder: RemoveVariableStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
+        form: SetGlobalVariableForm(),
+        help: TestStepTranslations.atf_help_set_global_variable,
+        id: SetGlobalVariableStep.id,
+        keys: const {'type', 'value', 'variableName'},
+        quickAddValues: null,
+        title: TestStepTranslations.atf_title_set_global_variable,
+        type: null,
+        widgetless: true,
+      ),
+      testRunnerStepBuilder: SetGlobalVariableStep.fromDynamic,
+    ),
+    TestStepBuilder(
+      availableTestStep: AvailableTestStep(
         form: SetValueForm(),
         help: TestStepTranslations.atf_help_set_value,
         id: SetValueStep.id,
@@ -311,7 +350,7 @@ class TestStepRegistry {
   /// Returns the test step that matches the given [id].  This will first look
   /// in the registered custom steps and then if no custom step with the given
   /// [id] exists, this will look in the built in steps.  If no step for the
-  /// given [id] can be found, this will return [null].
+  /// given [id] can be found, this will return `null`.
   AvailableTestStep? getAvailableTestStep(String id) =>
       _customSteps[id]?.availableTestStep ??
       _builtInSteps[id]?.availableTestStep;
@@ -319,14 +358,14 @@ class TestStepRegistry {
   /// Returns the builder for the given [id].  This will first look in the
   /// registered custom steps and then if no custom step with the given [id]
   /// exists, this will look in the built in steps.  If no step for the given
-  /// [id] can be found, this will return [null].
+  /// [id] can be found, this will return `null`.
   TestStepBuilder? getBuilder(String id) =>
       _customSteps[id] ?? _builtInSteps[id];
 
   /// Returns a [TestRunnerStep] for the given [id] and given set of [values].
   /// This will first look in the registered custom steps and then fall back to
   /// the built in steps.  If no step can be located for the given [id] then
-  /// this will return [null].
+  /// this will return `null`.
   TestRunnerStep? getRunnerStep({
     required String id,
     required dynamic values,

@@ -148,6 +148,16 @@ class TestStepTranslations {
     value: 'Opens the \"hamburger\" menu.',
   );
 
+  static const atf_help_remove_global_variable = TranslationEntry(
+    key: 'atf_help_remove_global_variable',
+    value: 'Removes a global variable.',
+  );
+
+  static const atf_help_remove_variable = TranslationEntry(
+    key: 'atf_help_remove_variable',
+    value: 'Removes a test variable.',
+  );
+
   static const atf_help_screenshot = TranslationEntry(
     key: 'atf_help_screenshot',
     value:
@@ -159,6 +169,11 @@ class TestStepTranslations {
     value: 'Scrolls container widget until the selected widget is visible.',
   );
 
+  static const atf_help_set_global_variable = TranslationEntry(
+    key: 'atf_help_set_global_variable',
+    value: 'Sets a global variable that persists across test runs.',
+  );
+
   static const atf_help_set_value = TranslationEntry(
     key: 'atf_help_set_value',
     value: 'Sets a value from the widget.',
@@ -167,7 +182,7 @@ class TestStepTranslations {
   static const atf_help_set_variable = TranslationEntry(
     key: 'atf_help_set_variable',
     value:
-        'Sets a variable on the Test Controller for use in other test steps.',
+        'Sets a variable on for use in other test steps within the current test.',
   );
 
   static const atf_help_sleep = TranslationEntry(
@@ -246,6 +261,16 @@ class TestStepTranslations {
     value: 'Open Menu',
   );
 
+  static const atf_title_remove_global_variable = TranslationEntry(
+    key: 'atf_title_remove_global_variable',
+    value: 'Remove Global Variable',
+  );
+
+  static const atf_title_remove_variable = TranslationEntry(
+    key: 'atf_title_remove_variable',
+    value: 'Remove Variable',
+  );
+
   static const atf_title_screenshot = TranslationEntry(
     key: 'atf_title_screenshot',
     value: 'Screenshot',
@@ -254,6 +279,11 @@ class TestStepTranslations {
   static const atf_title_scroll_until_visible = TranslationEntry(
     key: 'atf_title_scroll_until_visible',
     value: 'Scroll Until Visible',
+  );
+
+  static const atf_title_set_global_variable = TranslationEntry(
+    key: 'atf_title_set_global_variable',
+    value: 'Set Global Variable',
   );
 
   static const atf_title_set_value = TranslationEntry(

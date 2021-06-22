@@ -15,7 +15,7 @@ class TestRunner extends StatefulWidget {
   /// Constructs the runner.  The [child] is the application to be tested.
   ///
   /// The [controller] is used to perform the actual test executions as well as
-  /// loading and saving tests.  The [controller] may be [null] if, and only if,
+  /// loading and saving tests.  The [controller] may be `null` if, and only if,
   /// [enabled] is [false].
   ///
   /// Set [enabled] to [false] to disable the entire testing framework.  If

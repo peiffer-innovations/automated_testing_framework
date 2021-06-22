@@ -46,7 +46,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage> {
     _testController!.currentTest = test;
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (BuildContext context) => TestStepsPage(),
+        builder: (BuildContext context) => TestStepsPage(doublePop: false),
       ),
     );
   }

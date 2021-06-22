@@ -41,7 +41,8 @@ class TestReportStepWidget extends StatelessWidget {
                   TextSpan(
                     text: entry.value?.toString() ?? '<null>',
                     style: theme.textTheme.subtitle2!.copyWith(
-                      fontFamily: 'monospaced',
+                      fontFamily: 'Courier New',
+                      fontFamilyFallback: ['monospace', 'Courier'],
                     ),
                   ),
                 ],

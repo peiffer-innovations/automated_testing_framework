@@ -16,8 +16,11 @@
   * [exit_app](#exit_app)
   * [go_back](#go_back)
   * [long_press](#long_press)
+  * [remove_global_variable](#remove_global_variable)
+  * [remove_variable](#remove_variable)
   * [screenshot](#screenshot)
   * [scroll_until_visible](#scroll_until_visible)
+  * [set_global_variable](#set_global_variable)
   * [set_value](#set_value)
   * [set_variable](#set_variable)
   * [sleep](#sleep)
@@ -267,6 +270,40 @@ Key          | Type    | Required | Supports Variable | Description
 
 ---
 
+### drag
+
+**How it Works**
+
+1. Looks for the `Testable` on the widget tree.  If not found before `timeout` the step will fail.
+2. Executes a drag gesture in the number of pixels in the horizontal direction of `dx` and the vertical direction of `dy`.
+
+**Example**
+
+```json
+{
+  "id": "drag",
+  "image": "<optional_base_64_image>",
+  "values": {
+    "dx": -100,
+    "dy": 100,
+    "testableId": "my-draggable-id",
+    "timeout": 10
+  }
+}
+```
+
+**Values**
+
+Key          | Type    | Required | Supports Variable | Description
+-------------|---------|----------|-------------------|-------------
+`dx`         | number  | no       | Yes               | The number of pixels to scroll in the horizontal direction.
+`dy`         | number  | no       | Yes               | The number of pixels to scroll in the vertical direction.
+`testableId` | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
+`timeout`    | integer | No       | No                | Number of seconds the step will wait for the `Testable` widget to be available on the widget tree.
+
+
+---
+
 ### ensure_exists
 
 **How it Works**
@@ -375,12 +412,69 @@ Key          | Type    | Required | Supports Variable | Description
 
 ---
 
+
+### remove_global_variable
+
+**How it Works**
+
+1. Removes global variable named `variableName`.
+
+**Example**
+
+```json
+{
+  "id": "remove_global_variable",
+  "image": "<optional_base_64_image>",
+  "values": {
+    "variableName": "my-variable-key"
+  }
+}
+```
+
+**Values**
+
+Key            | Type    | Required | Supports Variable | Description
+---------------|---------|----------|-------------------|-------------
+`variableName` | String  | Yes      | Yes               | The name of the variable to set.
+
+
+---
+
+
+### remove_variable
+
+**How it Works**
+
+1. Removes the variable named `variableName` from the current test run.
+
+**Example**
+
+```json
+{
+  "id": "remove_variable",
+  "image": "<optional_base_64_image>",
+  "values": {
+    "variableName": "my-variable-key"
+  }
+}
+```
+
+**Values**
+
+Key            | Type    | Required | Supports Variable | Description
+---------------|---------|----------|-------------------|-------------
+`variableName` | String  | Yes      | Yes               | The name of the variable to remove.
+
+
+---
+
 ### screenshot
 
 **How it Works**
 
 1. If running on Web, this does nothing.
-2. Otherwise, takes a screenshot and saves it in memory on the current test report.
+2. If the `disable_screen_shots` variable on the `TestController` is `true`, this does nothing.
+3. Otherwise, takes a screenshot and saves it in memory on the current test report.
 
 **Example**
 
@@ -439,6 +533,37 @@ Key            | Type    | Required | Supports Variable | Description
 
 ---
 
+### set_global_variable
+
+**How it Works**
+
+1. Sets the `value` to the global `variableName` on the `TestController` so that it is accessible by all tests.
+
+**Example**
+
+```json
+{
+  "id": "set_global_variable",
+  "image": "<optional_base_64_image>",
+  "values": {
+    "type": "String",
+    "value": "My Set Value",
+    "variableName": "my-variable-key"
+  }
+}
+```
+
+**Values**
+
+Key            | Type    | Required | Supports Variable | Description
+---------------|---------|----------|-------------------|-------------
+`type`         | String  | No       | Yes               | Defines the data type to set.  This can be `String`, `int`, `double`, or `bool`.  Defaults to `String` if not set.
+`value`        | String  | No       | Yes               | The value to set on the variable.
+`variableName` | String  | Yes      | Yes               | The name of the variable to set.
+
+
+---
+
 ### set_value
 
 **How it Works**
@@ -477,7 +602,7 @@ Key          | Type    | Required | Supports Variable | Description
 
 **How it Works**
 
-1. Sets the `value` for the `key` on the `TestController`.
+1. Sets the `value` to the current test's `variableName` on the `TestController`.
 
 **Example**
 
@@ -495,11 +620,11 @@ Key          | Type    | Required | Supports Variable | Description
 
 **Values**
 
-Key     | Type    | Required | Supports Variable | Description
---------|---------|----------|-------------------|-------------
-`key`   | String  | Yes      | Yes               | The `id` of the `Testable` to evaluate the value.
-`type`  | String  | No       | Yes               | Defines the data type to set.  This can be `String`, `int`, `double`, or `bool`.  Defaults to `String` if not set.
-`value` | String  | No       | Yes               | The value to evaluate against.
+Key            | Type    | Required | Supports Variable | Description
+---------------|---------|----------|-------------------|-------------
+`type`         | String  | No       | Yes               | Defines the data type to set.  This can be `String`, `int`, `double`, or `bool`.  Defaults to `String` if not set.
+`value`        | String  | No       | Yes               | The value to set on the variable.
+`variableName` | String  | Yes      | Yes               | The name of the variable to set.
 
 
 ---

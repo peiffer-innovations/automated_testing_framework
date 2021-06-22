@@ -14,11 +14,11 @@ import 'package:static_translations/static_translations.dart';
 /// Page that shows all the test steps and their values for a current test.
 class TestStepsPage extends StatefulWidget {
   TestStepsPage({
-    this.fromDialog,
+    this.doublePop = true,
     Key? key,
   }) : super(key: key);
 
-  final bool? fromDialog;
+  final bool doublePop;
 
   @override
   _TestStepsPageState createState() => _TestStepsPageState();
@@ -213,9 +213,9 @@ class _TestStepsPageState extends State<TestStepsPage>
             bottom: TabBar(
               controller: _tabController,
               tabs: [
-                Tab(text: 'FULL'),
-                Tab(text: 'MINIFIED'),
-                Tab(text: 'BDD'),
+                Tab(text: translator.translate(TestTranslations.atf_minified)),
+                Tab(text: translator.translate(TestTranslations.atf_full)),
+                Tab(text: translator.translate(TestTranslations.atf_bdd)),
               ],
             ),
             centerTitle: !kIsWeb && Platform.isIOS,
@@ -239,8 +239,12 @@ class _TestStepsPageState extends State<TestStepsPage>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        TestStepListFullTab(),
-                        TestStepListMinifiedTab(),
+                        TestStepListMinifiedTab(
+                          doublePop: widget.doublePop,
+                        ),
+                        TestStepListFullTab(
+                          doublePop: widget.doublePop,
+                        ),
                         TestStepListMarkdownTab(),
                       ],
                     ),

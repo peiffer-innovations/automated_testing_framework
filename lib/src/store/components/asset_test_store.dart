@@ -35,7 +35,7 @@ class AssetTestStore {
 
   /// Reads and returns zero or more tests from the assets defined by
   /// [testAssets].  This ignores the [context] that is passed in.  This will
-  /// never throw an error or return [null] and will instead return an empty
+  /// never throw an error or return `null` and will instead return an empty
   /// array if it encounters issues loading the tests.
   ///
   /// If the [suiteName] is not-null, this will exclude any tests that are not

@@ -45,7 +45,7 @@ class TestController {
   ///
   /// The [testImageReader] will be used when golden images are requested from a
   /// data store.  The default [testImageReader] is a no-op that will always
-  /// return [null] for all image requests.
+  /// return `null` for all image requests.
   ///
   /// This expects a [testReader] to be able to load tests into the platform for
   /// editing and / or execution.  The default [testReader] is a no-op that will
@@ -95,7 +95,7 @@ class TestController {
         _testWriter = testWriter,
         _variableResolvers = variableResolvers ?? <VariableResolver>[] {
     _customRoutes.addAll(customRoutes ?? {});
-    _variables.addAll(variables ?? {});
+    _testVariables.addAll(variables ?? {});
   }
 
   static const Duration _kSuiteStartTimeout = Duration(minutes: 2);
@@ -131,6 +131,7 @@ class TestController {
   final StreamController<void> _cancelController =
       StreamController<void>.broadcast();
   final Map<String, PageRoute> _customRoutes = SplayTreeMap();
+  final Map<String, dynamic> _globalVariables = {};
   final GlobalKey<NavigatorState> _navigatorKey;
   final TestStepRegistry _registry;
   final StreamController<CaptureContext> _screencapController =
@@ -147,16 +148,16 @@ class TestController {
   final Level _testReportLogLevel;
   final TestReporter _testReporter;
   final WidgetBuilder? _testSuiteReportBuilder;
+  final Map<String, dynamic> _testVariables = {};
   final TestWriter _testWriter;
   final List<VariableResolver> _variableResolvers;
-  final Map<String, dynamic> _variables = {};
 
   /// The currently selected test suite name.
   String? selectedSuiteName;
 
   Test _currentTest = Test();
 
-  /// Returns the current from the controller.  This will never be [null].
+  /// Returns the current from the controller.  This will never be `null`.
   Test get currentTest => _currentTest;
 
   /// Returns the custom routes, sorted by the display name.
@@ -188,10 +189,10 @@ class TestController {
   Stream<ProgressValue?> get stepStream => _stepController.stream;
 
   /// Returns an unmodifiable map of all the currently set variables.
-  Map<String, dynamic> get variables =>
-      Map<String, dynamic>.unmodifiable(_variables);
+  Map<String, dynamic> get variables => Map<String, dynamic>.unmodifiable(
+      <String, dynamic>{}..addAll(_globalVariables)..addAll(_testVariables));
 
-  /// Sets the current test.  If the given test is [null] then a blank test will
+  /// Sets the current test.  If the given test is `null` then a blank test will
   /// be set instead.
   set currentTest(Test? test) => _currentTest = test ?? Test();
 
@@ -205,7 +206,7 @@ class TestController {
   set step(ProgressValue? value) => _stepController.add(value);
 
   /// Returns the [TestController] provided by the widget tree.  This will never
-  /// throw an exception but may return [null] if no controller is available on
+  /// throw an exception but may return `null` if no controller is available on
   /// the widget tree.
   static TestController? of(BuildContext context) {
     TestController? result;
@@ -246,7 +247,14 @@ class TestController {
   void clearCustomRoutes() => _customRoutes.clear();
 
   /// Clears all the variables.
-  void clearVariables() => _variables.clear();
+  @Deprecated('Deprecated in 3.1.0: use [clearGlobalVariables] instead')
+  void clearVariables() => clearGlobalVariables();
+
+  /// Clears all the currently set global variables.
+  void clearGlobalVariables() => _globalVariables.clear();
+
+  /// Clears all the currently set test variables.
+  void clearTestVariables() => _testVariables.clear();
 
   /// Disposes the controller.  Once disposed, a controller can not be reused.
   void dispose() {
@@ -258,11 +266,11 @@ class TestController {
   }
 
   /// Executes a series of tests steps.  This accepts the [name] of the test
-  /// which may be [null] or empty.  The [reset] defines if the controller
+  /// which may be `null` or empty.  The [reset] defines if the controller
   /// should ask the application to perform a full reset before running or if it
   /// should attempt to run for the current state.
   ///
-  /// The list of [steps] may not be [null] or empty and define the steps that
+  /// The list of [steps] may not be `null` or empty and define the steps that
   /// the controller should execute.
   ///
   /// The [submitReport] value determines if the [testReporter] should be
@@ -270,7 +278,7 @@ class TestController {
   /// will be [true] when running full tests and [false] when running debugging
   /// level tests.
   ///
-  /// The [version] defines the overall test version.  This may be [null] or
+  /// The [version] defines the overall test version.  This may be `null` or
   /// empty and should always be a value of 0 or higher when set.
   Future<TestReport> execute({
     String? name,
@@ -332,7 +340,7 @@ class TestController {
       });
 
       try {
-        setVariable(
+        setGlobalVariable(
           value: _testControllerState.passing,
           variableName: '_passing',
         );
@@ -629,7 +637,7 @@ class TestController {
   /// variable names and the associated values.
   ///
   /// Finally, if neither check resolves the variable, this will return the
-  /// value from the variables map that has been set, and will return [null] if
+  /// value from the variables map that has been set, and will return `null` if
   /// no value had been set for [variableName].
   dynamic getVariable(String variableName) {
     var resolved = false;
@@ -671,7 +679,9 @@ class TestController {
           }
           break;
         default:
-          result = _variables[variableName];
+          result = _testVariables.containsKey(variableName)
+              ? _testVariables[variableName]
+              : _globalVariables[variableName];
       }
     }
 
@@ -693,19 +703,30 @@ class TestController {
   /// Registers a custom [route] with the framework.  These routes will be
   /// displayed on the [TestStepsDialog] and [TestStepsPage].  The [display] is
   /// the string to display in a [ListTile]'s title to trigger navigation to the
-  /// [route].  If the route is [null], this will remove any route registered to
+  /// [route].  If the route is `null`, this will remove any route registered to
   /// the [display].  If the [display] is already registered, it will be
   /// replaced with the new [route]
   void registerCustomRoute(String display, PageRoute? route) => route == null
       ? _customRoutes.remove(display)
       : _customRoutes[display] = route;
 
+  /// Removes the value for [variableName] globally.
+  void removeGlobalVariable({required String variableName}) =>
+      _globalVariables.remove(variableName);
+
+  /// Removes the value for [variableName] for the current test.
+  void removeTestVariable({required String variableName}) =>
+      _testVariables.remove(variableName);
+
   /// Removes the variable with the given [variableName] from the controller.
+  @Deprecated('Deprecated in 3.1.0: use [removeGlobalVariable] instead')
   void removeVariable({required String variableName}) =>
-      _variables.remove(variableName);
+      removeGlobalVariable(variableName: variableName);
 
   /// Requests the application to perform a reset.
   Future<void> reset() async {
+    clearTestVariables();
+
     if (onReset != null) {
       await onReset!();
     }
@@ -737,7 +758,9 @@ class TestController {
           var variableName =
               result.substring(match.start + 2, match.end - 2).trim();
           var value = getVariable(variableName);
-          if (value != null || _variables.containsKey(variableName) == true) {
+          if (value != null ||
+              _testVariables.containsKey(variableName) == true ||
+              _globalVariables.containsKey(variableName) == true) {
             result = value;
           }
         } else {
@@ -748,7 +771,9 @@ class TestController {
                 result.substring(match.start + 2, match.end - 2).trim();
 
             var value = getVariable(variableName);
-            if (value != null || _variables.containsKey(variableName) == true) {
+            if (value != null ||
+                _testVariables.containsKey(variableName) == true ||
+                _globalVariables.containsKey(variableName) == true) {
               result = value == null
                   ? null
                   : '${result.substring(0, match.start)}$value${result.substring(match.end, result.length)}';
@@ -885,7 +910,7 @@ class TestController {
   /// async so this will wait until up to [TestStepDelays.screenshot] for the
   /// response.
   ///
-  /// This will never trigger a failure, but it will return [null] if the device
+  /// This will never trigger a failure, but it will return `null` if the device
   /// does not respond before the timeout.
   Future<Uint8List?> screencap() async {
     Uint8List? image;
@@ -916,12 +941,35 @@ class TestController {
     return image;
   }
 
+  /// Sets the variable with the [variableName] to the [value] to be accessible
+  /// by all running tests.
+  ///
+  /// To set a variable so that it clears before the next test begins, use
+  /// [setTestVariable].
+  void setGlobalVariable({
+    required dynamic value,
+    required String variableName,
+  }) =>
+      _globalVariables[variableName] = value;
+
+  /// Sets the variable with the [variableName] to the [value] to be accessible
+  /// by the currently running test.
+  ///
+  /// To set a variable so that it is accessible by all tests, use
+  /// [setGlobalVariable].
+  void setTestVariable({
+    required dynamic value,
+    required String variableName,
+  }) =>
+      _testVariables[variableName] = value;
+
   /// Sets the variable with the [variableName] to the [value].
+  @Deprecated('Deprecated in 3.1.0: use [setGlobalVariable] instead')
   void setVariable({
     required dynamic value,
     required String variableName,
   }) =>
-      _variables[variableName] = value;
+      setGlobalVariable(value: value, variableName: variableName);
 
   /// Submits the test report through the [TestReporter].
   Future<bool> submitReport(TestReport report) => _testReporter(report);

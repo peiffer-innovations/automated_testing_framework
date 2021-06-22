@@ -19,7 +19,7 @@ class Testable extends StatefulWidget {
   /// This requires an [id] for the test framework to be able to find the widget
   /// on the tree when running tests.  Ideally this [id] is human readable but
   /// id can technically be any string that is valid w/in a [ValueKey].  If the
-  /// [id] is either [null] or empty then this will disable the test framework
+  /// [id] is either `null` or empty then this will disable the test framework
   /// for the child wildget and act as a simple passthrough.
   ///
   /// The [gestures] can be passed in as an override from the values set on the
@@ -283,10 +283,10 @@ class TestableState extends State<Testable>
     super.dispose();
   }
 
-  /// Captures the image from the current widget.  This will return [null] if
+  /// Captures the image from the current widget.  This will return `null` if
   /// the image cannot be captured for any reason.
   ///
-  /// This will always return [null] on the Web platform.
+  /// This will always return `null` on the Web platform.
   ///
   /// This accepts an optional [backgroundColor].  When set, the
   /// [backgroundColor] will be painted on the image first and then the widget

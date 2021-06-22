@@ -18,7 +18,7 @@ class TestStore {
   /// large number of tests are loaded.  By ignoring the images, the memory
   /// required to host those images is removed.
   ///
-  /// This will never return [null].  If no tests exists in the [object] then
+  /// This will never return `null`.  If no tests exists in the [object] then
   /// this will return an empty array.
   static List<PendingTest> createMemoryTests(dynamic object,
       {bool ignoreImages = true}) {

@@ -44,16 +44,28 @@ class GoBackStep extends TestRunnerStep {
     );
 
     var backButton = find.byTooltip('Back');
-    if (backButton.evaluate().isEmpty == true) {
+    var evaluated = backButton.evaluate().toList();
+    if (evaluated.isEmpty == true) {
       backButton = find.byType(CupertinoNavigationBarBackButton);
 
-      if (backButton.evaluate().isEmpty == true) {
+      evaluated = backButton.evaluate().toList();
+      if (evaluated.isEmpty == true) {
         throw Exception('Unable to locate Back button.');
       }
     }
 
     if (cancelToken.cancelled == true) {
       throw Exception('[CANCELLED]: step was cancelled by the test');
+    }
+
+    if (evaluated.length > 1) {
+      var error =
+          '[ERROR]: found (${evaluated.length}) widgets; expected only one.';
+      var index = 0;
+      for (var w in evaluated) {
+        error += '\n  ${++index}: ${w.widget.runtimeType} [${w.widget.key}]';
+      }
+      throw Exception(error);
     }
 
     await driver.tap(backButton);

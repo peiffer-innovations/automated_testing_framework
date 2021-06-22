@@ -225,7 +225,11 @@ class _TestReportPageState extends State<TestReportPage> {
                                                           TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                         fontFamily:
-                                                            'monospaced',
+                                                            'Courier New',
+                                                        fontFamilyFallback: [
+                                                          'monospace',
+                                                          'Courier'
+                                                        ],
                                                       ),
                                                     ),
                                                   ),
@@ -255,7 +259,11 @@ class _TestReportPageState extends State<TestReportPage> {
                                                             .ellipsis,
                                                         style: TextStyle(
                                                           fontFamily:
-                                                              'monospaced',
+                                                              'Courier New',
+                                                          fontFamilyFallback: [
+                                                            'monospace',
+                                                            'Courier'
+                                                          ],
                                                         ),
                                                       ),
                                                     ),
@@ -283,7 +291,11 @@ class _TestReportPageState extends State<TestReportPage> {
                                                           TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                         fontFamily:
-                                                            'monospaced',
+                                                            'Courier New',
+                                                        fontFamilyFallback: [
+                                                          'monospace',
+                                                          'Courier'
+                                                        ],
                                                       ),
                                                     ),
                                                   ),

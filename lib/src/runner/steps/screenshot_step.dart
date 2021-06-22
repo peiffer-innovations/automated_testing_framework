@@ -9,6 +9,10 @@ class ScreenshotStep extends TestRunnerStep {
 
   static const id = 'screenshot';
 
+  /// Name of the variable that when set to `true` can be set on a
+  /// [TestController] to be able disable all screenshots.
+  static const kDisableScreenshotVariable = 'disable_screenshot';
+
   static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
     'take a screenshot.',
     'take a screenshot and name it `{{imageId}}`.',
@@ -58,20 +62,28 @@ class ScreenshotStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var imageId = this.imageId ?? '${id}_${report.images.length}';
-    var name = "$id('$imageId', '$goldenCompatible')";
-    log(
-      name,
-      tester: tester,
-    );
-    var image = await tester.screencap();
+    var enabled = JsonClass.parseBool(
+          tester.getVariable(ScreenshotStep.kDisableScreenshotVariable),
+        ) !=
+        true;
 
-    if (image != null) {
-      report.attachScreenshot(
-        image,
-        goldenCompatible: goldenCompatible,
-        id: imageId,
+    if (enabled == true) {
+      var imageId = tester.resolveVariable(this.imageId) ??
+          '${id}_${report.images.length}';
+      var name = "$id('$imageId', '$goldenCompatible')";
+      log(
+        name,
+        tester: tester,
       );
+      var image = await tester.screencap();
+
+      if (image != null) {
+        report.attachScreenshot(
+          image,
+          goldenCompatible: goldenCompatible,
+          id: imageId,
+        );
+      }
     }
   }
 

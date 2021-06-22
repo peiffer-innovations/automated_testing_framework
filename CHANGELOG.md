@@ -1,3 +1,12 @@
+## [3.1.0] - June 21st, 2021
+
+* Added variable `disable_screenshot` that can be set on the `TestController` to allow for disabling the `screenshot` step when set to `true`.
+* Updated the `TestController` to isolate variables set in a test vs set globally for the application.
+* Added `set_global_variable`, `remove_global_variable`, and `remove_variable` steps.
+* Added the ability to pin a step so that steps can be added anywhere in an already existing test vs always at the end.
+* Fixed an issue where attempting to run a single step from an immediately loaded test would pop too far off the stack.
+
+
 ## [3.0.8] - May 30th, 2021
 
 * Added `assert_semantics` step

@@ -65,12 +65,18 @@ From here you can hit the "VIEW TEST STEPS" button to open the [View Test Steps 
 
 The View Test Steps page can be accessed through either the [Test Steps Dialog](#test-steps-dialog) or the [Test Steps Page](#test-steps-page).  This page will show all the test steps for the test currently being edited.
 
-<img src="images/view_test_steps_page.gif" width="300px"/>
-
-The top right action icon will switch between "full mode" and "minimized mode" when showing the test steps.  The Clear action will clear all the steps from the current.  The Export will attempt to export / save the current test to whatever system the application is set up with.  The Run All option will reset the application and run all the test steps and the present you with a [Test Report](#test-report) that details the results of the test run.
 
 This page also allows you to edit any particular step's values, delete a step, move steps up or down, or even execute a single step.  When executing a single step, it is executed as-is meaning the framework will pop back to the core application and then execute the step rather than performing a reset in the way that Run All would.
 
+The page can pin a test step.  The pinned step is the one with the solid green flag on the left of it.  When building a test in an application, all new steps are added automatically added after the pinned step.  This provides the ability for test creators to be able to add new steps anywhere within a test as the test is being created or edited.
+
+Finally, the page provides three separate views of the test.  The first is the most concise and displays relatively little information.  It's most useful to someone familiar with the test in question and allows quick scrolling through steps on large tests.
+
+The next option is the full data option.  This tab can show things like the images for the widget being tested, all the values for each step, etc.  It uses significantly more vertical space, but is helpful for people who may be less familiar with the test.
+
+The last option is the BDD view.  That is meant to be a human readable text view of the test, but is also the only view that is entirely read only.
+
+<img src="images/view_test_steps_page.gif" width="300px"/>
 
 ---
 

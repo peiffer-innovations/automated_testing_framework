@@ -13,19 +13,14 @@ class TestTranslations {
     value: 'Available Test Steps',
   );
 
+  static const atf_bdd = TranslationEntry(
+    key: 'atf_bdd',
+    value: 'BDD',
+  );
+
   static const atf_button_cancel = TranslationEntry(
     key: 'atf_button_cancel',
     value: 'CANCEL',
-  );
-
-  static const atf_button_discard = TranslationEntry(
-    key: 'atf_button_discard',
-    value: 'DISCARD',
-  );
-
-  static const atf_button_delete = TranslationEntry(
-    key: 'atf_button_delete',
-    value: 'DELETE',
   );
 
   static const atf_button_clear = TranslationEntry(
@@ -36,6 +31,16 @@ class TestTranslations {
   static const atf_button_close = TranslationEntry(
     key: 'atf_button_close',
     value: 'CLOSE',
+  );
+
+  static const atf_button_discard = TranslationEntry(
+    key: 'atf_button_discard',
+    value: 'DISCARD',
+  );
+
+  static const atf_button_delete = TranslationEntry(
+    key: 'atf_button_delete',
+    value: 'DELETE',
   );
 
   static const atf_button_edit = TranslationEntry(
@@ -123,9 +128,19 @@ class TestTranslations {
     value: 'Export successful',
   );
 
+  static const atf_full = TranslationEntry(
+    key: 'atf_full',
+    value: 'FULL',
+  );
+
   static const atf_maximize_step_details = TranslationEntry(
     key: 'atf_maximize_step_details',
     value: 'Show full step details',
+  );
+
+  static const atf_minified = TranslationEntry(
+    key: 'atf_minified',
+    value: 'MINIFIED',
   );
 
   static const atf_minimize_step_details = TranslationEntry(
@@ -163,6 +178,11 @@ class TestTranslations {
     value: 'Options',
   );
 
+  static const atf_pin_step = TranslationEntry(
+    key: 'atf_pin_step',
+    value: 'PIN STEP',
+  );
+
   static const atf_quick_add = TranslationEntry(
     key: 'atf_quick_add',
     value: 'Quick Add Step',
@@ -181,6 +201,11 @@ class TestTranslations {
   static const atf_show_global_overlays = TranslationEntry(
     key: 'atf_show_global_overlays',
     value: 'Show global overlays',
+  );
+
+  static const atf_step_currently_pinned = TranslationEntry(
+    key: 'atf_step_currently_pinned',
+    value: 'STEP CURRENTLY PINNED',
   );
 
   static const atf_suite_name = TranslationEntry(

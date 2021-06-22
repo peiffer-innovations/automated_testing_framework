@@ -24,7 +24,7 @@ class TestableType {
   final String _code;
 
   /// Gets the [TestableType] from the given string [code].  This will return
-  /// [null] if the [code] is not one that is supported.
+  /// `null` if the [code] is not one that is supported.
   static TestableType lookup(String code) => _all.firstWhere(
         (type) => type._code == code,
       );

@@ -145,6 +145,34 @@ void main() {
     expect(availStep.widgetless, false);
   });
 
+  test('remove_global_variable', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'remove_global_variable',
+    )!;
+
+    expect(availStep.form.runtimeType, RemoveGlobalVariableForm);
+    expect(
+        availStep.help, TestStepTranslations.atf_help_remove_global_variable);
+    expect(availStep.id, 'remove_global_variable');
+    expect(
+        availStep.title, TestStepTranslations.atf_title_remove_global_variable);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, true);
+  });
+
+  test('remove_variable', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'remove_variable',
+    )!;
+
+    expect(availStep.form.runtimeType, RemoveVariableForm);
+    expect(availStep.help, TestStepTranslations.atf_help_remove_variable);
+    expect(availStep.id, 'remove_variable');
+    expect(availStep.title, TestStepTranslations.atf_title_remove_variable);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, true);
+  });
+
   test('screenshot', () {
     var availStep = TestStepRegistry.instance.getAvailableTestStep(
       'screenshot',
@@ -185,6 +213,19 @@ void main() {
     expect(availStep.title, TestStepTranslations.atf_title_set_value);
     expect(availStep.type, TestableType.value_settable);
     expect(availStep.widgetless, false);
+  });
+
+  test('set_global_variable', () {
+    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+      'set_global_variable',
+    )!;
+
+    expect(availStep.form.runtimeType, SetGlobalVariableForm);
+    expect(availStep.help, TestStepTranslations.atf_help_set_global_variable);
+    expect(availStep.id, 'set_global_variable');
+    expect(availStep.title, TestStepTranslations.atf_title_set_global_variable);
+    expect(availStep.type, null);
+    expect(availStep.widgetless, true);
   });
 
   test('set_variable', () {

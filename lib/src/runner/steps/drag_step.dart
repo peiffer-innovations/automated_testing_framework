@@ -111,6 +111,17 @@ class DragStep extends TestRunnerStep {
       timeout: timeout,
     );
 
+    var evaluated = finder.evaluate();
+    if (evaluated.length > 1) {
+      var error =
+          '[ERROR]: found (${evaluated.length}) widgets; expected only one.';
+      var index = 0;
+      for (var w in evaluated) {
+        error += '\n  ${++index}: ${w.widget.runtimeType} [${w.widget.key}]';
+      }
+      throw Exception(error);
+    }
+
     await driver.drag(finder, Offset(dx, dy));
   }
 

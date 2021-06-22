@@ -84,8 +84,10 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                           ),
                           TextSpan(
                             text: ' | ',
-                            style: theme.textTheme.bodyText2!
-                                .copyWith(fontFamily: 'monospaced'),
+                            style: theme.textTheme.bodyText2!.copyWith(
+                              fontFamily: 'Courier New',
+                              fontFamilyFallback: ['monospace', 'Courier'],
+                            ),
                           ),
                           TextSpan(
                             text: (widget.result.numStepsPassed -

@@ -16,7 +16,7 @@ class SetVariableStep extends TestRunnerStep {
   static const id = 'set_variable';
 
   static List<String> get behaviorDrivenDescriptions => List.unmodifiable([
-        'set the `{{variableName}}` to `{{value}}` using a `{{type}}` type.',
+        'set the `{{variableName}}` variable for the test to `{{value}}` using a `{{type}}` type.',
       ]);
 
   /// The type of value to set.  This must be one of:
@@ -61,7 +61,7 @@ class SetVariableStep extends TestRunnerStep {
     return result;
   }
 
-  /// Sets the variable on the [TestController].
+  /// Sets the variable on the [TestController] for the currently running test.
   @override
   Future<void> execute({
     required CancelToken cancelToken,
@@ -83,7 +83,7 @@ class SetVariableStep extends TestRunnerStep {
       name,
       tester: tester,
     );
-    tester.setVariable(
+    tester.setTestVariable(
       variableName: variableName,
       value: value,
     );

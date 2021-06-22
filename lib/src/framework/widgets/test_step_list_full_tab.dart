@@ -6,11 +6,11 @@ import 'package:static_translations/static_translations.dart';
 /// Tab that shows the test steps in the full list view.
 class TestStepListFullTab extends StatefulWidget {
   TestStepListFullTab({
-    this.fromDialog,
+    this.doublePop = true,
     Key? key,
   }) : super(key: key);
 
-  final bool? fromDialog;
+  final bool? doublePop;
 
   @override
   _TestStepListFullTabState createState() => _TestStepListFullTabState();
@@ -156,9 +156,46 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
               ],
               Container(
                 width: double.infinity,
-                child: Text(
-                  '${index + 1}) ${step.id}',
-                  style: theme.textTheme.headline6,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 40.0,
+                      width: 40.0,
+                      child: tester!.currentTest.pinnedStepIndex == index
+                          ? Center(
+                              child: Tooltip(
+                                message: translator.translate(
+                                  TestTranslations.atf_step_currently_pinned,
+                                ),
+                                child: Icon(
+                                  Icons.label,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () {
+                                tester.currentTest.pinnedStepIndex = index;
+
+                                if (mounted == true) {
+                                  setState(() {});
+                                }
+                              },
+                              tooltip: translator.translate(
+                                TestTranslations.atf_pin_step,
+                              ),
+                              icon: Icon(Icons.label_outline),
+                            ),
+                    ),
+                    SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        '${index + 1}) ${step.id}',
+                        style: theme.textTheme.headline6,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               for (var entry in (step.values ?? {}).entries)
@@ -195,9 +232,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                             },
                     ),
                   ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
+                  SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_tooltip_move_down,
@@ -226,9 +261,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                                 },
                     ),
                   ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
+                  SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_button_delete,
@@ -252,9 +285,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                       },
                     ),
                   ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
+                  SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_button_edit,
@@ -269,9 +300,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
+                  SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_button_run,
@@ -280,20 +309,20 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                       color: theme.iconTheme.color,
                       icon: Icon(Icons.play_arrow),
                       onPressed: () async {
-                        if (widget.fromDialog != true) {
+                        if (widget.doublePop == true) {
                           Navigator.of(context).pop();
                         }
                         Navigator.of(context).pop();
 
                         try {
-                          await tester!.execute(
+                          await tester.execute(
                             reset: false,
                             steps: [step],
                             submitReport: false,
                             version: 0,
                           );
                         } catch (e) {
-                          tester!.sleep = null;
+                          tester.sleep = null;
                           tester.step = null;
                         }
                       },
