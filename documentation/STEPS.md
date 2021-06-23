@@ -495,7 +495,7 @@ Key            | Type    | Required | Supports Variable | Description
 Key                | Type    | Required | Supports Variable | Description
 -------------------|---------|----------|-------------------|-------------
 `goldenCompatible` | bool    | No       | No                | Defaults to `true`.  Set to `false` if the image contains dynamic information that is known to be incompatible with automated tests.
-`imageId`          | String  | No       | No                | Defaults to `screenshot_$index` when not set.
+`imageId`          | String  | No       | Yes               | Defaults to `screenshot_$index` when not set.
 
 
 ---
