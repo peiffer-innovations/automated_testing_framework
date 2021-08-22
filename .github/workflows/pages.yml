@@ -43,6 +43,6 @@ jobs:
           build_mode: profile
           build_number: ${{ needs.build_number.outputs.buildnumber }}
           deploy_path: web
-          repo_url: ${{ GITHUB_SERVER }}/${{ GITHUB_REPOSITORY }}
+          repo_url: $GITHUB_SERVER/$GITHUB_REPOSITORY
           source_path: example
           token: ${{ secrets.GITHUB_TOKEN }}
