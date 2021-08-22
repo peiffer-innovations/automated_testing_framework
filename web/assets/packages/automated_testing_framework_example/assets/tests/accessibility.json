@@ -1,0 +1,87 @@
+{
+  "active": true,
+  "name": "Accessibility",
+  "steps": [
+    {
+      "id": "tap",
+      "values": {
+        "testableId": "test_page_Accessibility"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "enabled_elevated_button",
+        "value": "Enabled Button",
+        "field": "label"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "selectable_text",
+        "field": "value",
+        "value": "Selectable Text"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "enabled_checkbox_1",
+        "field": "label",
+        "value": "Enabled Checkbox 1"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "enabled_checkbox_1",
+        "field": "isChecked",
+        "value": "false"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "enabled_checkbox_2",
+        "field": "isChecked",
+        "value": "true"
+      }
+    },
+    {
+      "id": "set_value",
+      "values": {
+        "testableId": "text_form_field",
+        "value": "My New Value",
+        "type": "String"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "text_form_field",
+        "value": "My New Value",
+        "field": "value"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "text_form_field",
+        "value": "true",
+        "field": "isTextField"
+      }
+    },
+    {
+      "id": "assert_semantics",
+      "values": {
+        "testableId": "text_form_field",
+        "value": "Text Field",
+        "field": "label"
+      }
+    }
+  ],
+  "suiteName": "Core",
+  "timestamp": 1622330955572,
+  "version": 0
+}
