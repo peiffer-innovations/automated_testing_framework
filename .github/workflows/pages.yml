@@ -38,7 +38,7 @@ jobs:
           flutter_package: true
 
       - name: Web
-        uses: peiffer-innovations/actions-flutter-deploy-pages@v1.0.0
+        uses: peiffer-innovations/actions-flutter-deploy-pages@v1.1.0
         with:
           build_mode: profile
           build_number: ${{ needs.build_number.outputs.buildnumber }}
