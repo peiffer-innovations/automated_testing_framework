@@ -1,0 +1,12 @@
+{
+  "active": true,
+  "name": "Screenshot",
+  "suiteName": "Core",
+  "steps": [{
+    "id": "screenshot",
+    "values": {
+      "imageId": "core_screenshot"
+    }
+  }],
+  "version": 2
+}
