@@ -5,7 +5,7 @@ import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:uuid/uuid.dart';
 
 /// Container class for the device information for the device the test is being
