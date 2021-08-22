@@ -13,6 +13,9 @@
 * [Reporting Test Results](#reporting-test-results)
 * [Working with Variables](#working-with-variables)
   * [Reserved Variables](#reserved-variables)
+* [Remote Drivers](#remote_drivers)
+  * [Websocket Driver](https://pub.dev/packages/automated_testing_framework_driver_websocket)
+  * [Websocket Server](https://pub.dev/packages/automated_testing_framework_server_websocket)
 * [Framework in Action](#framework-in-action)
 * See Also
   * [Building & Running Tests](https://github.com/peiffer-innovations/automated_testing_framework/blob/main/documentation/BUILDING_RUNNING_TESTS.md)
@@ -276,6 +279,20 @@ Name        | Type       | Example   | Description
 `_now`      | `DateTime` | n/a       | Returns `DateTime.now().toUtc()`.
 `_passing`  | `boolean`  | `true`    | Describes whether the test is currently passing or not.  This will be `true` up until the first failed step at which it will remain `false` for the remainder of the test.
 `_platform` | `String`   | `android` | The current platform running the test.  Will be one of: `android`, `fuchsia`, `ios`, `linux`, `macos`, `windows`, `web`, `unknown`.
+
+
+---
+
+## Remote Drivers
+
+In addition to the ability to execute tests manually or at launch time, libraries exist to allow a device running the application be remotely connected to and have tests executed.
+
+The current libraries utilize a singular realtime websocket based server written in Dart.
+
+For the code hosting the client that needs to be included in the application as well as some example scripts, see: [Websocket Driver](https://pub.dev/packages/automated_testing_framework_driver_websocket).
+
+For the code hosting the server portion, see: [Websocket Server](https://pub.dev/packages/automated_testing_framework_server_websocket).
+
 
 
 ---

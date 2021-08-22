@@ -1,3 +1,8 @@
+## [3.1.0+1] - August 22nd, 2021
+
+* Dependency updates
+
+
 ## [3.1.0] - June 21st, 2021
 
 * Added variable `disable_screenshot` that can be set on the `TestController` to allow for disabling the `screenshot` step when set to `true`.
