@@ -9,7 +9,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  automated_testing_framework_example: ^2.0.2
+  automated_testing_framework_example: ^2.1.0+1
   flutter:
     sdk: flutter
 
