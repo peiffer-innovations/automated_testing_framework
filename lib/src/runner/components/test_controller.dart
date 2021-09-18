@@ -189,8 +189,10 @@ class TestController {
   Stream<ProgressValue?> get stepStream => _stepController.stream;
 
   /// Returns an unmodifiable map of all the currently set variables.
-  Map<String, dynamic> get variables => Map<String, dynamic>.unmodifiable(
-      <String, dynamic>{}..addAll(_globalVariables)..addAll(_testVariables));
+  Map<String, dynamic> get variables =>
+      Map<String, dynamic>.unmodifiable(<String, dynamic>{}
+        ..addAll(_globalVariables)
+        ..addAll(_testVariables));
 
   /// Sets the current test.  If the given test is `null` then a blank test will
   /// be set instead.
