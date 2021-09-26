@@ -1,3 +1,9 @@
+## [3.1.1] - September 26th, 2021
+
+* Added `IoTestStore`
+* Fix for adding global variables to the `TestController` via the constructor
+
+
 ## [3.1.0+4] - September 19th, 2021
 
 * Dependency updates

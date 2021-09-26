@@ -7,6 +7,11 @@ import 'package:static_translations/static_translations.dart';
 
 /// Generic test store that provies no-op implementations of all the test
 /// storage functions.
+///
+/// See also:
+/// * [AssetTestStore]
+/// * [ClipboardTestStore]
+/// * [IoTestStore]
 class TestStore {
   TestStore._();
 
@@ -20,8 +25,10 @@ class TestStore {
   ///
   /// This will never return `null`.  If no tests exists in the [object] then
   /// this will return an empty array.
-  static List<PendingTest> createMemoryTests(dynamic object,
-      {bool ignoreImages = true}) {
+  static List<PendingTest> createMemoryTests(
+    dynamic object, {
+    bool ignoreImages = true,
+  }) {
     List<PendingTest>? tests;
 
     if (object is List) {
@@ -46,7 +53,7 @@ class TestStore {
       }
     }
 
-    return (tests ?? <Test>[]) as List<PendingTest>;
+    return tests ?? <PendingTest>[];
   }
 
   /// Generic no-op function compatible with the [GoldenImageWriter] definition.
@@ -55,9 +62,9 @@ class TestStore {
   /// Generic no-op function compatible with the [TestImageReader] definition.
   static Future<Uint8List?> testImageReader({
     required TestDeviceInfo deviceInfo,
+    required String imageId,
     String? suiteName,
     required String testName,
-    required String imageId,
     int? testVersion,
   }) async =>
       null;

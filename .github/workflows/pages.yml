@@ -3,11 +3,11 @@ name: Flutter Pages Deployer
 on:
   push:
     branches: [main]
-    # paths:
-    #   - .github/workflows/pages.yaml
-    #   - pubspec.yaml
-    #   - lib/**
-    #   - example/**
+    paths:
+      - .github/workflows/pages.yaml
+      - pubspec.yaml
+      - lib/**
+      - example/**
 
 jobs:
   build_number:

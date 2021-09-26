@@ -1,6 +1,6 @@
 name: automated_testing_framework
 description: A testing framework that allows in app tests to be built and executed in an automated way.
-version: 3.1.0+4
+version: 3.1.1
 homepage: https://github.com/peiffer-innovations/automated_testing_framework
 
 environment:

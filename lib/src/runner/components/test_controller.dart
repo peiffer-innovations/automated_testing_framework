@@ -95,7 +95,7 @@ class TestController {
         _testWriter = testWriter,
         _variableResolvers = variableResolvers ?? <VariableResolver>[] {
     _customRoutes.addAll(customRoutes ?? {});
-    _testVariables.addAll(variables ?? {});
+    _globalVariables.addAll(variables ?? {});
   }
 
   static const Duration _kSuiteStartTimeout = Duration(minutes: 2);
