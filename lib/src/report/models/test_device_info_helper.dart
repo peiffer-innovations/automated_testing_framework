@@ -15,9 +15,6 @@ class TestDeviceInfoHelper {
   static Completer<TestDeviceInfo>? _completer;
   static TestDeviceInfo? _instance;
 
-  static TestDeviceInfo get instance =>
-      _instance ?? initialize(null) as TestDeviceInfo;
-
   static Future<TestDeviceInfo> initialize(BuildContext? context) async {
     var result = _instance;
 

@@ -3,6 +3,7 @@
 ## Table of Contents
 
 * [Live Example](#live-example)
+* [Platforms](#platforms)
 * [Introduction](#introduction)
 * [Framework Philosophy](#framework-philosophy)
 * [Running the Example](#running-the-example)
@@ -35,6 +36,19 @@
 
 * [Web](https://peiffer-innovations.github.io/automated_testing_framework/web/index.html#/)
   * _Note_: Please wait a few seconds after the example loads for the tests to start.  Once the tests are complete, you can interact with the app and build and run your own tests.
+
+
+---
+
+## Platforms
+
+For some reason, the static analyzer on [pub.dev](https://pub.dev) incorrectly flags this package as Android / iOS only.  That's incorrect as this uses conditionals with constants to let the tree shaker to avoid code that would fail on other platforms.  In fact, this library supports all platforms that Flutter supports (except maybe Fuscia as I cannot currently test there):
+
+* `Android`
+* `iOS`
+* `Linux`
+* `MacOS`
+* `Windows`
 
 
 ---

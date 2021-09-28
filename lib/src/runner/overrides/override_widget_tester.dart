@@ -81,7 +81,6 @@ class OverrideWidgetTester extends WidgetController
   /// error message. It should be an adverbial phrase describing the current
   /// situation, such as "at the end of the test".
   void verifyTickersWereDisposed([String when = 'when none should have been']) {
-    assert(when != null);
     if (_tickers != null) {
       // ignore: omit_local_variable_types
       for (final Ticker ticker in _tickers!) {
@@ -207,7 +206,7 @@ class _TestTicker extends Ticker {
 
   @override
   void dispose() {
-    if (_onDispose != null) _onDispose(this);
+    _onDispose(this);
     super.dispose();
   }
 }
