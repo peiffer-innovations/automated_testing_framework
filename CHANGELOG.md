@@ -1,3 +1,8 @@
+## [3.1.2] - December 28th, 2021
+
+* Fixed test imports
+
+
 ## [3.1.1+2] - November 14th, 2021
 
 * Removed `uses-material-design` from pubspec

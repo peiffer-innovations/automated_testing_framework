@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/semantics.dart';
 import 'package:json_class/json_class.dart';
 
