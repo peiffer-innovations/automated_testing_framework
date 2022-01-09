@@ -27,9 +27,6 @@ jobs:
     needs: build_number
     runs-on: ubuntu-latest
 
-    container:
-      image: dart:latest
-
     steps:
       - uses: actions/checkout@v2
 
