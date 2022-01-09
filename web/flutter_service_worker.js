@@ -32,8 +32,8 @@ const RESOURCES = {
 "assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "0980eeed758c9091b9fe476bbe3aae34",
 "assets/packages/automated_testing_framework_example/assets/tests/theme.json": "5b72a996ff15d64d58b7627f29df05bb",
 "assets/packages/automated_testing_framework_example/assets/tests/stacked_scrolling.json": "a98582489811cc6fc6a56cfcd5835699",
-"index.html": "e877281a5a2a68487ffd11491c540e90",
-"/": "e877281a5a2a68487ffd11491c540e90",
+"index.html": "d86798b648ab122731784d1852fcc96a",
+"/": "d86798b648ab122731784d1852fcc96a",
 "favicon.png": "7d2009652f165b0bc9d9e23452621c35"
 };
 
