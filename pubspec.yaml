@@ -7,7 +7,7 @@ environment:
   sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
-  automated_testing_framework_models: ^2.0.7+4
+  automated_testing_framework_models: ^2.0.8+1
   child_builder: ^2.0.0+2
   convert: ^3.0.1
   device_info: ^2.0.2
