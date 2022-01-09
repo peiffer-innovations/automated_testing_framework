@@ -18,7 +18,8 @@ class AvailableTestsPage extends StatefulWidget {
   _AvailableTestsPageState createState() => _AvailableTestsPageState();
 }
 
-class _AvailableTestsPageState extends State<AvailableTestsPage> {
+class _AvailableTestsPageState extends State<AvailableTestsPage>
+    with ResetNavigationStateMixin {
   final Map<String, bool> _active = {};
   String? _suiteName;
   List<String?> _testSuites = [];

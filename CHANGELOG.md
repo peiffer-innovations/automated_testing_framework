@@ -1,3 +1,10 @@
+## [3.2.0] - January 9th, 2022
+
+* Deprecated `TestController.reset` in favor of a stream approach.
+* Created `ResetNavigationStateMixin` to simplify listening to reset requests and popping a page off the navigation stack.
+* Removed deprecated `setVariable` and `removeVariable` functions.
+
+
 ## [3.1.2] - December 28th, 2021
 
 * Fixed test imports

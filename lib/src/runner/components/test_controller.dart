@@ -16,9 +16,9 @@ class TestController {
   /// A controller for a [TestRunner] that can create, run, load, and save
   /// automated tests.
   ///
-  /// A callback function capable of resetting the applicaiton back to an
-  /// initial state (as defined by the application itself) must be passed via
-  /// [onReset].
+  /// When a new test is about to start, this will fire an event on the
+  /// [resetStream].  Applications can listen to those events to reset
+  /// themselves to a "known good state".
   ///
   /// The [navigatorKey] is required to be the same key attached to a
   /// [MaterialApp] or a [WidgetsApp].  This allows the navigation to the
@@ -71,7 +71,7 @@ class TestController {
     this.goldenImageWriter = TestStore.goldenImageWriter,
     this.maxCommonSearchDepth = 3,
     required GlobalKey<NavigatorState> navigatorKey,
-    required this.onReset,
+    this.onReset,
     this.screenshotOnFail = false,
     this.selectedSuiteName,
     this.stopOnFirstFail = false,
@@ -115,6 +115,7 @@ class TestController {
   /// Callback function that the application must register with the controller
   /// so that when a reset is requested by a test, the application properly
   /// resets to the initial state.
+  @Deprecated('Deprecated in 3.2.0: listen to the [resetStream] instead')
   final AsyncCallback? onReset;
 
   /// Defines whether the framework should take a screenshot automatically
@@ -134,6 +135,8 @@ class TestController {
   final Map<String, dynamic> _globalVariables = {};
   final GlobalKey<NavigatorState> _navigatorKey;
   final TestStepRegistry _registry;
+  final StreamController<void> _resetController =
+      StreamController<void>.broadcast();
   final StreamController<CaptureContext> _screencapController =
       StreamController<CaptureContext>.broadcast();
   final StreamController<ProgressValue?> _sleepController =
@@ -165,6 +168,9 @@ class TestController {
 
   /// Returns the registry that is being used by the controller.
   TestStepRegistry get registry => _registry;
+
+  /// Returns the stream that receives an event whenever a reset is called.
+  Stream<void> get resetStream => _resetController.stream;
 
   /// Returns whether or not the controller is actively running a test now or
   /// not.
@@ -261,6 +267,7 @@ class TestController {
   /// Disposes the controller.  Once disposed, a controller can not be reused.
   void dispose() {
     _cancelController.close();
+    _resetController.close();
     _screencapController.close();
     _sleepController.close();
     _statusController.close();
@@ -720,16 +727,15 @@ class TestController {
   void removeTestVariable({required String variableName}) =>
       _testVariables.remove(variableName);
 
-  /// Removes the variable with the given [variableName] from the controller.
-  @Deprecated('Deprecated in 3.1.0: use [removeGlobalVariable] instead')
-  void removeVariable({required String variableName}) =>
-      removeGlobalVariable(variableName: variableName);
-
   /// Requests the application to perform a reset.
   Future<void> reset() async {
     clearTestVariables();
 
+    _resetController.add(null);
+
+    // ignore: deprecated_member_use_from_same_package
     if (onReset != null) {
+      // ignore: deprecated_member_use_from_same_package
       await onReset!();
     }
     // This covers the minimum animation time for Material animations to
@@ -964,14 +970,6 @@ class TestController {
     required String variableName,
   }) =>
       _testVariables[variableName] = value;
-
-  /// Sets the variable with the [variableName] to the [value].
-  @Deprecated('Deprecated in 3.1.0: use [setGlobalVariable] instead')
-  void setVariable({
-    required dynamic value,
-    required String variableName,
-  }) =>
-      setGlobalVariable(value: value, variableName: variableName);
 
   /// Submits the test report through the [TestReporter].
   Future<bool> submitReport(TestReport report) => _testReporter(report);

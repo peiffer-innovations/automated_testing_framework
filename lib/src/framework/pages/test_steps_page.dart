@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -25,7 +26,7 @@ class TestStepsPage extends StatefulWidget {
 }
 
 class _TestStepsPageState extends State<TestStepsPage>
-    with SingleTickerProviderStateMixin {
+    with ResetNavigationStateMixin, SingleTickerProviderStateMixin {
   static const _kClearTabIndex = 0;
   static const _kExportTabIndex = 1;
   static const _kRunAllTabIndex = 2;
@@ -40,8 +41,6 @@ class _TestStepsPageState extends State<TestStepsPage>
   @override
   void initState() {
     super.initState();
-
-    _testController = TestController.of(context)!;
 
     _tabController = TabController(
       length: 3,

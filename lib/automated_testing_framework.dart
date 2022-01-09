@@ -35,6 +35,8 @@ export 'src/framework/forms/sleep_form.dart';
 export 'src/framework/forms/tap_form.dart';
 export 'src/framework/forms/test_step_form.dart';
 
+export 'src/framework/mixins/reset_navigation_state_mixin.dart';
+
 export 'src/framework/models/available_test_step.dart';
 
 export 'src/framework/pages/available_tests_page.dart';

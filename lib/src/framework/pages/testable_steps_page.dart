@@ -32,7 +32,8 @@ class TestableStepsPage extends StatefulWidget {
   _TestableStepsPageState createState() => _TestableStepsPageState();
 }
 
-class _TestableStepsPageState extends State<TestableStepsPage> {
+class _TestableStepsPageState extends State<TestableStepsPage>
+    with ResetNavigationStateMixin {
   final List<AvailableTestStep> _globalSteps = [];
   final List<AvailableTestStep> _widgetSteps = [];
 

@@ -17,7 +17,8 @@ class TestableFormPage extends StatefulWidget {
   _TestableFormPageState createState() => _TestableFormPageState();
 }
 
-class _TestableFormPageState extends State<TestableFormPage> {
+class _TestableFormPageState extends State<TestableFormPage>
+    with ResetNavigationStateMixin {
   Map<String, dynamic>? _values;
 
   @override
