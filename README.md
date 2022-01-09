@@ -145,6 +145,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   static const _testsEnabled = !kReleaseMode;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  StreamController? _resetController;
+  TestController? _testController;
   UniqueKey _uniqueKey;
 
 
@@ -155,8 +158,9 @@ class _MyAppState extends State<MyApp> {
     if (_testsEnabled) {
       _testController = TestController(
         navigatorKey: _navigatorKey,
-        onReset: _onReset,
       );
+
+      _resetController = _testController!.resetStream.listen((_) => _onReset());
     }
   }
 
