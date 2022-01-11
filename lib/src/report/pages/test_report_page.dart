@@ -14,7 +14,8 @@ class TestReportPage extends StatefulWidget {
   _TestReportPageState createState() => _TestReportPageState();
 }
 
-class _TestReportPageState extends State<TestReportPage> {
+class _TestReportPageState extends State<TestReportPage>
+    with ResetNavigationStateMixin {
   static final _logger = Logger('_TestReportPageState');
   bool _saving = false;
 

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_validation/form_validation.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 import 'package:static_translations/static_translations.dart';
 
 /// Page that shows all the test steps and their values for a current test.
@@ -42,6 +43,7 @@ class _TestStepsPageState extends State<TestStepsPage>
   void initState() {
     super.initState();
 
+    _testController = context.read<TestController>();
     _tabController = TabController(
       length: 3,
       vsync: this,

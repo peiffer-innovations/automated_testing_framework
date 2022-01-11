@@ -1,3 +1,8 @@
+## [3.2.1] - January 10th, 2022
+
+* Bug fixes
+
+
 ## [3.2.0] - January 9th, 2022
 
 * Deprecated `TestController.reset` in favor of a stream approach.

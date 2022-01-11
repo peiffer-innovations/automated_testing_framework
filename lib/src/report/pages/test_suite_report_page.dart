@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:static_translations/static_translations.dart';
 
 /// Page that can display a summarized result from a test suite run.
-class TestSuiteReportPage extends StatelessWidget {
+class TestSuiteReportPage extends StatefulWidget {
   TestSuiteReportPage({
     Key? key,
   })  : timestamp = DateTime.now(),
@@ -13,6 +13,12 @@ class TestSuiteReportPage extends StatelessWidget {
 
   final DateTime timestamp;
 
+  @override
+  _TestSuiteReportPageState createState() => _TestSuiteReportPageState();
+}
+
+class _TestSuiteReportPageState extends State<TestSuiteReportPage>
+    with ResetNavigationStateMixin {
   @override
   Widget build(BuildContext context) {
     var report = ModalRoute.of(context)!.settings.arguments as TestSuiteReport?;
@@ -93,7 +99,9 @@ class TestSuiteReportPage extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Text(
-                              DateFormat("M/d '@' h:mmaa").format(timestamp),
+                              DateFormat("M/d '@' h:mmaa").format(
+                                widget.timestamp,
+                              ),
                             ),
                           ),
                         ),
