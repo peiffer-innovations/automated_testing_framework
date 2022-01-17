@@ -1,3 +1,8 @@
+## [3.2.2] - January 17th, 2022
+
+* Fixed possible race condition with `ResetNavigationStateMixin`.
+
+
 ## [3.2.1] - January 10th, 2022
 
 * Bug fixes

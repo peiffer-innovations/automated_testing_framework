@@ -15,7 +15,10 @@ mixin ResetNavigationStateMixin<T extends StatefulWidget> on State<T> {
     var testController = TestController.of(context);
     _resetSubscription = testController?.resetStream.listen((_) {
       if (mounted) {
-        Navigator.of(context).pop();
+        var nav = Navigator.of(context);
+        if (nav.canPop()) {
+          Navigator.of(context).pop();
+        }
       }
     });
   }
