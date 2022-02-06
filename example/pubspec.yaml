@@ -9,15 +9,15 @@ environment:
   sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
-  automated_testing_framework_example: ^2.2.0
+  automated_testing_framework_example: ^2.2.2
   flutter:
     sdk: flutter
 
-# dependency_overrides:
-#   automated_testing_framework:
-#     path: ../
-#   automated_testing_framework_example:
-#     path: ../../automated_testing_framework_example
+dependency_overrides:
+  automated_testing_framework:
+    path: ../
+  # automated_testing_framework_example:
+  #   path: ../../automated_testing_framework_example
 #   automated_testing_framework_models:
 #     path: ../../automated_testing_framework_models
 

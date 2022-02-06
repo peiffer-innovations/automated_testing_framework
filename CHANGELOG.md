@@ -1,3 +1,8 @@
+## [3.2.3] - February 6th, 2022
+
+* Flutter 2.10
+
+
 ## [3.2.2] - January 17th, 2022
 
 * Fixed possible race condition with `ResetNavigationStateMixin`.
