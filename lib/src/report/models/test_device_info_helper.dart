@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -64,12 +64,12 @@ class TestDeviceInfoHelper {
             var plugin = DeviceInfoPlugin();
             var info = await plugin.androidInfo;
 
-            brand = info.brand;
-            device = info.device;
-            id = info.androidId;
-            manufacturer = info.manufacturer;
-            model = info.model;
-            physicalDevice = info.isPhysicalDevice;
+            brand = info.brand ?? 'unknown';
+            device = info.device ?? 'unknown';
+            id = info.androidId ?? 'unknown';
+            manufacturer = info.manufacturer ?? 'unknown';
+            model = info.model ?? 'unknown';
+            physicalDevice = info.isPhysicalDevice ?? true;
             systemVersion = '${info.version.sdkInt}';
           } catch (e) {
             // No-op; don't fail because we can't get the device info.
@@ -83,10 +83,10 @@ class TestDeviceInfoHelper {
             var plugin = DeviceInfoPlugin();
             var info = await plugin.iosInfo;
 
-            device = info.name;
-            model = info.model;
+            device = info.name ?? 'unknown';
+            model = info.model ?? 'unknown';
             physicalDevice = info.isPhysicalDevice;
-            systemVersion = info.systemVersion;
+            systemVersion = info.systemVersion ?? 'unknown';
           } catch (e) {
             // No-op; don't fail because we can't get the device info.
           }

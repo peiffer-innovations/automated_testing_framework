@@ -13,11 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-dependency_overrides:
-  automated_testing_framework:
-    path: ../
-  # automated_testing_framework_example:
-  #   path: ../../automated_testing_framework_example
+# dependency_overrides:
+#   automated_testing_framework:
+#     path: ../
+#   automated_testing_framework_example:
+#     path: ../../automated_testing_framework_example
 #   automated_testing_framework_models:
 #     path: ../../automated_testing_framework_models
 

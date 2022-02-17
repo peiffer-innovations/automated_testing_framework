@@ -27,6 +27,7 @@ class TestableTextFormField extends StatefulWidget {
     this.enabled = true,
     this.expands = false,
     this.focusNode,
+    this.gestures,
     this.id,
     this.initialValue,
     this.inputFormatters,
@@ -78,6 +79,7 @@ class TestableTextFormField extends StatefulWidget {
   final bool enabled;
   final bool expands;
   final FocusNode? focusNode;
+  final TestableGestures? gestures;
   final String? id;
   final String? initialValue;
   final List<TextInputFormatter>? inputFormatters;
@@ -141,6 +143,7 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
 
   @override
   Widget build(BuildContext context) => Testable(
+        gestures: widget.gestures,
         id: widget.id,
         scrollableId: widget.scrollableId,
         onRequestValue: () => _controller!.text,

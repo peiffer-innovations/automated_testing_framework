@@ -1,3 +1,10 @@
+## [3.3.0] - February 16th, 2022
+
+* Added `gestures` to `TestableTextFormField`, `TestableFormField`, and `TestableDropdownButtonFormField`.
+* Swapped `device_info` for `device_info_plus`
+* Dependency updates to latest
+
+
 ## [3.2.3] - February 6th, 2022
 
 * Flutter 2.10

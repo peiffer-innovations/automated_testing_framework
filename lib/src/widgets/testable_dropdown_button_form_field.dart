@@ -19,6 +19,7 @@ class TestableDropdownButtonFormField<T> extends StatefulWidget {
     this.enabled = true,
     this.focusColor,
     this.focusNode,
+    this.gestures,
     this.hint,
     this.icon,
     this.iconSize = 24.0,
@@ -49,6 +50,7 @@ class TestableDropdownButtonFormField<T> extends StatefulWidget {
   final bool enabled;
   final Color? focusColor;
   final FocusNode? focusNode;
+  final TestableGestures? gestures;
   final Widget? hint;
   final Widget? icon;
   final String? id;
@@ -80,6 +82,7 @@ class _TestableDropdownButtonFormFieldState<T>
   @override
   Widget build(BuildContext context) {
     return Testable(
+      gestures: widget.gestures,
       id: widget.id,
       onRequestError: () => _error,
       onRequestValue: () => widget.value,

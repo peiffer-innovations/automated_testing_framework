@@ -12,6 +12,7 @@ class TestableFormField<T> extends StatelessWidget {
     this.autovalidateMode,
     required this.builder,
     this.enabled = true,
+    this.gestures,
     required this.id,
     this.initialValue,
     this.onSaved,
@@ -23,6 +24,7 @@ class TestableFormField<T> extends StatelessWidget {
   final AutovalidateMode? autovalidateMode;
   final FormFieldBuilder<T> builder;
   final bool enabled;
+  final TestableGestures? gestures;
   final String id;
   final T? initialValue;
   final FormFieldSetter<T>? onSaved;
@@ -37,6 +39,7 @@ class TestableFormField<T> extends StatelessWidget {
                 ? AutovalidateMode.always
                 : AutovalidateMode.disabled,
         builder: (FormFieldState<T> state) => Testable(
+          gestures: gestures,
           id: id,
           onRequestValue: () => state.value,
           onSetValue: (value) => state.didChange(value),
