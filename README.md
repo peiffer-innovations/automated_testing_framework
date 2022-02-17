@@ -28,6 +28,7 @@
   * [Firebase Storage](https://pub.dev/packages/automated_testing_framework_plugin_firebase_storage)
   * [Firebase Realtime Database](https://pub.dev/packages/automated_testing_framework_plugin_firebase)
   * [Flow Control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control)
+  * [GitHub](https://pub.dev/packages/automated_testing_framework_plugin_github)
   * [Images](https://pub.dev/packages/automated_testing_framework_plugin_images)
   * [Logging](https://pub.dev/packages/automated_testing_framework_plugin_logging)
   * [Strings](https://pub.dev/packages/automated_testing_framework_plugin_strings)

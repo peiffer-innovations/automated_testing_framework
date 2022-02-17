@@ -1,4 +1,4 @@
-## [3.3.0] - February 16th, 2022
+## [3.3.0+1] - February 16th, 2022
 
 * Added `gestures` to `TestableTextFormField`, `TestableFormField`, and `TestableDropdownButtonFormField`.
 * Swapped `device_info` for `device_info_plus`
