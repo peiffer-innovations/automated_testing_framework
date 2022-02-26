@@ -86,38 +86,40 @@ class ScreenshotHandler {
     StartScreenshotStreamCommand command,
   ) async {
     var screenshot = await _driver.testController!.screencap();
-    var differ =
-        _screenshot == null || _screenshot!.length != screenshot!.length;
+    if (screenshot != null) {
+      var differ =
+          _screenshot == null || _screenshot!.length != screenshot.length;
 
-    if (differ != true) {
-      for (var i = 0; i < screenshot!.length; i++) {
-        if (screenshot[i] != _screenshot![i]) {
-          differ = true;
-          break;
+      if (differ != true) {
+        for (var i = 0; i < screenshot.length; i++) {
+          if (screenshot[i] != _screenshot![i]) {
+            differ = true;
+            break;
+          }
         }
       }
-    }
 
-    if (differ == true) {
-      _screenshot = screenshot;
-      await _driver.communicator!.sendCommand(
-        CommandAck(
-          commandId: command.id,
-          response: ScreenshotResponse(image: screenshot!),
-          success: true,
-        ),
-      );
-    }
-
-    if (_timer != null) {
-      if (_driver.state.driverName != null) {
-        _timer = Timer(
-          command.interval,
-          () => _sendScreenshot(command),
+      if (differ == true) {
+        _screenshot = screenshot;
+        await _driver.communicator!.sendCommand(
+          CommandAck(
+            commandId: command.id,
+            response: ScreenshotResponse(image: screenshot),
+            success: true,
+          ),
         );
-      } else {
-        _timer?.cancel();
-        _timer = null;
+      }
+
+      if (_timer != null) {
+        if (_driver.state.driverName != null) {
+          _timer = Timer(
+            command.interval,
+            () => _sendScreenshot(command),
+          );
+        } else {
+          _timer?.cancel();
+          _timer = null;
+        }
       }
     }
   }

@@ -1,3 +1,8 @@
+## [3.3.1] - February 26th, 2022
+
+* Fix for screenshot handler
+
+
 ## [3.3.0+1] - February 16th, 2022
 
 * Added `gestures` to `TestableTextFormField`, `TestableFormField`, and `TestableDropdownButtonFormField`.
