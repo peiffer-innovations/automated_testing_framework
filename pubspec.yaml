@@ -14,9 +14,9 @@ dependencies:
   device_info_plus_web: ^2.1.0
   flutter:
     sdk: flutter
+  flutter_markdown: ^0.6.10
   flutter_web_plugins:
     sdk: flutter
-  flutter_markdown: ^0.6.10
   form_validation: ^2.1.0+2
   intl: ^0.17.0
   json_class: ^2.1.2+4
