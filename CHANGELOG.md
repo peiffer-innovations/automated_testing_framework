@@ -1,3 +1,8 @@
+## [3.3.1+1] - April 16th, 2022
+
+* Dependency updates
+
+
 ## [3.3.1] - February 26th, 2022
 
 * Fix for screenshot handler
