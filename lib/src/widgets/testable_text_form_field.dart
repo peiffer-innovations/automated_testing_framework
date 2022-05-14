@@ -34,7 +34,6 @@ class TestableTextFormField extends StatefulWidget {
     this.keyboardAppearance,
     this.keyboardType,
     this.maxLength,
-    this.maxLengthEnforced = true,
     this.maxLines,
     this.minLines,
     this.obscureText = false,
@@ -86,7 +85,6 @@ class TestableTextFormField extends StatefulWidget {
   final Brightness? keyboardAppearance;
   final TextInputType? keyboardType;
   final int? maxLength;
-  final bool maxLengthEnforced;
   final int? maxLines;
   final int? minLines;
   final bool obscureText;
@@ -176,9 +174,6 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           keyboardAppearance: widget.keyboardAppearance,
           keyboardType: widget.keyboardType,
           maxLength: widget.maxLength,
-
-          // ignore: deprecated_member_use
-          maxLengthEnforced: widget.maxLengthEnforced,
           maxLines: widget.maxLines,
           minLines: widget.minLines,
           obscureText: widget.obscureText,

@@ -30,6 +30,7 @@ class TestPointer {
         break;
       case PointerDeviceKind.stylus:
       case PointerDeviceKind.invertedStylus:
+      case PointerDeviceKind.trackpad:
       case PointerDeviceKind.touch:
       case PointerDeviceKind.unknown:
         _device ??= 0;

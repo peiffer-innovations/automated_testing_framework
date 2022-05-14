@@ -332,7 +332,7 @@ class CommonFinders {
   /// If the `skipOffstage` argument is true (the default), then this skips
   /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder bySemanticsLabel(Pattern label, {bool skipOffstage = true}) {
-    if (WidgetsBinding.instance!.pipelineOwner.semanticsOwner == null) {
+    if (WidgetsBinding.instance.pipelineOwner.semanticsOwner == null) {
       throw StateError('Semantics are not enabled. '
           'Make sure to call tester.ensureSemantics() before using '
           'this finder, and call dispose on its return value after.');
@@ -392,7 +392,7 @@ abstract class Finder {
   @protected
   Iterable<Element> get allCandidates {
     return collectAllElementsFrom(
-      WidgetsBinding.instance!.renderViewElement!,
+      WidgetsBinding.instance.renderViewElement!,
       skipOffstage: skipOffstage,
     );
   }
@@ -542,7 +542,7 @@ class _HitTestableFinder extends ChainedFinder {
       final box = candidate.renderObject! as RenderBox;
       final absoluteOffset = box.localToGlobal(alignment.alongSize(box.size));
       final hitResult = HitTestResult();
-      WidgetsBinding.instance!.hitTest(hitResult, absoluteOffset);
+      WidgetsBinding.instance.hitTest(hitResult, absoluteOffset);
       for (final entry in hitResult.path) {
         if (entry.target == candidate.renderObject) {
           yield candidate;

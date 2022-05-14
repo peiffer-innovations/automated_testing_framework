@@ -82,7 +82,7 @@ class AssertSemanticsStep extends TestRunnerStep {
     }
 
     var semanticsHandle =
-        WidgetsBinding.instance!.pipelineOwner.ensureSemantics();
+        WidgetsBinding.instance.pipelineOwner.ensureSemantics();
 
     try {
       String? testableId = tester.resolveVariable(this.testableId);

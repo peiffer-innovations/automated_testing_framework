@@ -12,7 +12,7 @@ import 'package:package_info_plus_web/package_info_plus_web.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 // ignore: public_member_api_docs
-void registerPlugins(final Registrar registrar) {
+void registerPlugins(Registrar registrar) {
   DeviceInfoPlusPlugin.registerWith(registrar);
   PackageInfoPlugin.registerWith(registrar);
   registrar.registerMessageHandler();

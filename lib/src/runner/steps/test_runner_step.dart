@@ -27,7 +27,7 @@ abstract class TestRunnerStep extends JsonClass {
   static final Logger _logger = Logger('TestRunnerStep');
 
   static final OverrideWidgetTester _driver =
-      OverrideWidgetTester(WidgetsBinding.instance!);
+      OverrideWidgetTester(WidgetsBinding.instance);
 
   /// Returns the function to call when logging is required
   static void _console(Object? message, [Level level = Level.INFO]) =>
