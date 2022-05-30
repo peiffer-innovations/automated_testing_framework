@@ -4,7 +4,7 @@ version: 4.0.1
 homepage: https://github.com/peiffer-innovations/automated_testing_framework
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: '>=2.16.0 <3.0.0'
 
 dependencies:
   automated_testing_framework_models: ^2.0.9
@@ -36,3 +36,24 @@ dev_dependencies:
 #   automated_testing_framework_models:
 #     path: ../automated_testing_framework_models
 
+ignore_updates:
+  # Ignoring everything in flutter_test as those are all point-in-time entries
+  # can't upgrade without upgrading Flutter itself.
+  - 'async'
+  - 'boolean_selector'
+  - 'characters'
+  - 'charcode'
+  - 'collection'
+  - 'clock'
+  - 'fake_async'
+  - 'file'
+  - 'matcher'
+  - 'material_color_utilities'
+  - 'meta'
+  - 'path'
+  - 'source_span'
+  - 'stack_trace'
+  - 'stream_channel'
+  - 'string_scanner'
+  - 'term_glyph'
+  - 'vector_math'
