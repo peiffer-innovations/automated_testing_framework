@@ -3,7 +3,7 @@ name: Manual Dependencies Updater
 on: workflow_dispatch
 
 jobs:
-  build:
+  update_dependencies:
     runs-on: ubuntu-latest
 
     steps:
