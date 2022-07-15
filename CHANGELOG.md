@@ -1,3 +1,9 @@
+## [4.0.2] - July 14th, 2022
+
+* Added more support to [TestDeviceInfoHelper] for not mobile platforms.
+* Added screenshot support for Web when on CanvasKit
+
+
 ## [4.0.1+8] - July 12, 2022
 
 * Automated dependency updates

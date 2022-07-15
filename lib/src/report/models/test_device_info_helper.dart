@@ -41,14 +41,16 @@ class TestDeviceInfoHelper {
       BaseSize? pixels;
       late String systemVersion;
 
+      var plugin = DeviceInfoPlugin();
       if (kIsWeb) {
-        brand = 'web';
-        device = 'browser';
-        manufacturer = '<unknown>';
-        model = '<unknown>';
+        var info = await plugin.webBrowserInfo;
+        brand = info.browserName.name;
+        device = info.appName ?? '<unknown>';
+        manufacturer = info.vendor ?? '<unknown>';
+        model = info.userAgent ?? '<unknown>';
         physicalDevice = true;
         os = 'web';
-        systemVersion = 'web';
+        systemVersion = info.platform ?? '<unknown>';
       } else {
         try {
           var pInfo = await PackageInfo.fromPlatform();
@@ -61,7 +63,6 @@ class TestDeviceInfoHelper {
           os = 'android';
 
           try {
-            var plugin = DeviceInfoPlugin();
             var info = await plugin.androidInfo;
 
             brand = info.brand ?? 'unknown';
@@ -80,7 +81,6 @@ class TestDeviceInfoHelper {
           os = 'ios';
 
           try {
-            var plugin = DeviceInfoPlugin();
             var info = await plugin.iosInfo;
 
             device = info.name ?? 'unknown';
@@ -99,20 +99,34 @@ class TestDeviceInfoHelper {
           os = 'fuchsia';
           systemVersion = '<unknown>';
         } else if (Platform.isLinux) {
-          brand = '<unknown>';
-          device = '<unknown>';
-          manufacturer = '<unknown>';
-          model = '<unknown>';
+          var info = await plugin.linuxInfo;
+
+          brand = info.id;
+          device = info.name;
+          manufacturer = info.variant ?? '<unknown>';
+          model = info.prettyName;
           physicalDevice = true;
           os = 'linux';
-          systemVersion = '<unknown>';
+          systemVersion = info.versionId ?? '<unknown>';
         } else if (Platform.isMacOS) {
+          var info = await plugin.macOsInfo;
+
           brand = 'apple';
-          device = 'macos';
+          device = info.arch;
           manufacturer = 'apple';
-          model = 'macos';
+          model = info.model;
           physicalDevice = true;
           os = 'macos';
+          systemVersion = info.osRelease;
+        } else if (Platform.isWindows) {
+          // var info = await plugin.windowsInfo;
+
+          brand = '<unknown>';
+          device = '<unknown>';
+          manufacturer = 'microsoft';
+          model = '<unknown>';
+          physicalDevice = true;
+          os = 'windows';
           systemVersion = '<unknown>';
         }
       }

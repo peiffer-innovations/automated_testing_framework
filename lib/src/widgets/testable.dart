@@ -296,10 +296,11 @@ class TestableState extends State<Testable>
   Future<Uint8List?> captureImage([
     Color? backgroundColor,
   ]) async {
-    var boundary = _renderKey!.currentContext!.findRenderObject()
-        as RenderRepaintBoundary?;
     Uint8List? image;
-    if (!kIsWeb) {
+    try {
+      var boundary = _renderKey!.currentContext!.findRenderObject()
+          as RenderRepaintBoundary?;
+
       if (!kDebugMode || boundary?.debugNeedsPaint != true) {
         _backgroundColor = backgroundColor;
         if (mounted == true) {
@@ -321,9 +322,11 @@ class TestableState extends State<Testable>
           setState(() {});
         }
       }
+    } catch (e) {
+      // no-op; ignore it bacause screenshots may not always be supported
     }
 
-    return image;
+    return image?.isEmpty == true ? null : image;
   }
 
   /// Flashes the [Testable] widget to give a visual indicator that the
