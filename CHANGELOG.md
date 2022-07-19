@@ -1,3 +1,8 @@
+## [4.0.2+1] - July 19, 2022
+
+* Automated dependency updates
+
+
 ## [4.0.2] - July 14th, 2022
 
 * Added more support to [TestDeviceInfoHelper] for not mobile platforms.
@@ -585,6 +590,7 @@
 ## [0.1.0] - August 21st, 2020
 
 * First public release; not for production use.
+
 
 
 

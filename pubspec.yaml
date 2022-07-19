@@ -1,39 +1,40 @@
 name: 'automated_testing_framework'
 description: 'A testing framework that allows in app tests to be built and executed in an automated way.'
-version: '4.0.2'
+version: '4.0.2+1'
 homepage: 'https://github.com/peiffer-innovations/automated_testing_framework'
 
-environment:
+environment: 
   sdk: '>=2.16.0 <3.0.0'
 
-dependencies:
-  automated_testing_framework_models: '^2.0.9+4'
+dependencies: 
+  automated_testing_framework_models: '^2.0.9+5'
   child_builder: '^2.0.0+3'
   convert: '^3.0.2'
-  device_info_plus: '^4.0.0'
+  device_info_plus: '^4.0.1'
   device_info_plus_web: '^2.1.0'
-  flutter:
+  flutter: 
     sdk: 'flutter'
   flutter_markdown: '^0.6.10+2'
-  flutter_web_plugins:
+  flutter_web_plugins: 
     sdk: 'flutter'
-  form_validation: '^2.1.0+9'
+  form_validation: '^2.1.0+10'
   intl: '^0.17.0'
   json_class: '^2.1.2+8'
-  json_theme: '^4.0.0+5'
+  json_theme: '^4.0.0+6'
   logging: '^1.0.2'
   meta: '^1.7.0'
   package_info_plus: '^1.4.2'
   package_info_plus_web: '^1.0.5'
   provider: '^6.0.3'
-  static_translations: '^2.1.1+6'
+  static_translations: '^2.1.1+7'
   uuid: '^3.0.6'
 
-dev_dependencies:
-  flutter_test:
+dev_dependencies: 
+  flutter_test: 
     sdk: 'flutter'
 
-ignore_updates:
+
+ignore_updates: 
   - 'async'
   - 'boolean_selector'
   - 'characters'
