@@ -1,3 +1,8 @@
+## [4.0.3] - July 28th, 2022
+
+* Minr change to how the framework searches for a `Testable`.
+
+
 ## [4.0.2+1] - July 26, 2022
 
 * Automated dependency updates
@@ -5,7 +10,7 @@
 
 ## [4.0.2] - July 14th, 2022
 
-* Added more support to [TestDeviceInfoHelper] for not mobile platforms.
+* Added more support to `TestDeviceInfoHelper` for not mobile platforms.
 * Added screenshot support for Web when on CanvasKit
 
 
