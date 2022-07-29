@@ -187,7 +187,14 @@ abstract class TestRunnerStep extends JsonClass {
         while (found != true && DateTime.now().millisecondsSinceEpoch < end) {
           try {
             finder = test.find.byKey(ValueKey<String?>(testableId));
-            finder.evaluate().first;
+            var item = finder.evaluate().first;
+            if (item is! Testable) {
+              finder = test.find.descendant(
+                of: finder,
+                matching: find.byType(Testable),
+              );
+              finder.evaluate().first;
+            }
             found = true;
           } catch (e) {
             if (cancelToken.cancelled == true) {

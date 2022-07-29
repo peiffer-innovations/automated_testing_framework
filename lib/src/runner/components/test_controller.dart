@@ -20,9 +20,9 @@ class TestController {
   /// [resetStream].  Applications can listen to those events to reset
   /// themselves to a "known good state".
   ///
-  /// The [navigatorKey] is required to be the same key attached to a
-  /// [MaterialApp] or a [WidgetsApp].  This allows the navigation to the
-  /// [TestReportsPage].
+  /// The [navigatorKey] is used to allow for the navigation to the
+  /// [TestReportsPage].  If passed in, it must be attached to a [MaterialApp]
+  /// or [WidgetsApp].
   ///
   /// The [testReportBuilder] allows the overriding of the page to display the
   /// report from a test run.  If omitted, the built in [TestReportPage] will be
@@ -70,7 +70,7 @@ class TestController {
     this.delays = const TestStepDelays(),
     this.goldenImageWriter = TestStore.goldenImageWriter,
     this.maxCommonSearchDepth = 3,
-    required GlobalKey<NavigatorState> navigatorKey,
+    GlobalKey<NavigatorState>? navigatorKey,
     this.onReset,
     this.screenshotOnFail = false,
     this.selectedSuiteName,
@@ -133,7 +133,7 @@ class TestController {
       StreamController<void>.broadcast();
   final Map<String, PageRoute> _customRoutes = SplayTreeMap();
   final Map<String, dynamic> _globalVariables = {};
-  final GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState>? _navigatorKey;
   final TestStepRegistry _registry;
   final StreamController<void> _resetController =
       StreamController<void>.broadcast();
@@ -402,16 +402,19 @@ class TestController {
           testSuiteReport?.addTestReport(report);
           var futures = <Future>[];
           futures.add(
-            _navigatorKey.currentState!.push(
-              MaterialPageRoute(
-                builder: _testReportBuilder ??
-                    ((BuildContext context) => TestReportPage()),
-                settings: RouteSettings(
-                  name: '/atf/test-report',
-                  arguments: report,
+            _navigatorKey?.currentState?.push(
+                  MaterialPageRoute(
+                    builder: _testReportBuilder ??
+                        ((BuildContext context) => TestReportPage()),
+                    settings: RouteSettings(
+                      name: '/atf/test-report',
+                      arguments: report,
+                    ),
+                  ),
+                ) ??
+                Future.delayed(
+                  const Duration(seconds: 1),
                 ),
-              ),
-            ),
           );
           if (submitReport == true) {
             futures.add(this.submitReport(report));
@@ -840,7 +843,7 @@ class TestController {
       } finally {
         _testControllerState.runningSuite = false;
       }
-      await _navigatorKey.currentState!.push(
+      await _navigatorKey?.currentState?.push(
         MaterialPageRoute(
           builder: _testSuiteReportBuilder ??
               ((BuildContext context) => TestSuiteReportPage()),
@@ -899,7 +902,7 @@ class TestController {
       } finally {
         _testControllerState.runningSuite = false;
       }
-      await _navigatorKey.currentState!.push(
+      await _navigatorKey?.currentState?.push(
         MaterialPageRoute(
           builder: _testSuiteReportBuilder ??
               ((BuildContext context) => TestSuiteReportPage()),
