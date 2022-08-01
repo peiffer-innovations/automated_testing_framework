@@ -1,6 +1,11 @@
+## [4.0.4] - August 1st, 2022
+
+* Fix for finding a `Testable`
+
+
 ## [4.0.3] - July 28th, 2022
 
-* Minr change to how the framework searches for a `Testable`.
+* Minor change to how the framework searches for a `Testable`.
 
 
 ## [4.0.2+1] - July 26, 2022

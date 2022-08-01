@@ -4,7 +4,7 @@ publish_to: 'none'
 version: '1.0.0+10'
 
 environment: 
-  sdk: '>=2.16.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies: 
   automated_testing_framework_example: '^2.2.4+10'

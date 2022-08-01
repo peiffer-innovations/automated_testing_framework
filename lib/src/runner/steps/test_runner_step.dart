@@ -186,9 +186,11 @@ abstract class TestRunnerStep extends JsonClass {
         var found = false;
         while (found != true && DateTime.now().millisecondsSinceEpoch < end) {
           try {
-            finder = test.find.byKey(ValueKey<String?>(testableId));
-            var item = finder.evaluate().first;
-            if (item is! Testable) {
+            finder = test.find.byKey(_TestableKey(testableId));
+
+            var items = finder.evaluate();
+            var item = items.first;
+            if (item.widget is! Testable) {
               finder = test.find.descendant(
                 of: finder,
                 matching: find.byType(Testable),
@@ -256,4 +258,21 @@ abstract class TestRunnerStep extends JsonClass {
       await controller.close();
     }
   }
+}
+
+class _TestableKey extends ValueKey<String> {
+  _TestableKey(super.value);
+
+  @override
+  bool operator ==(Object other) {
+    String? value;
+
+    if (other is ValueKey) {
+      value = other.value;
+    }
+    return this.value == value;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
 }
