@@ -1,3 +1,8 @@
+## [4.0.5] - August 11th, 2022
+
+* Fix for updated `device_info_plus`
+
+
 ## [4.0.4+2] - August 9, 2022
 
 * Automated dependency updates

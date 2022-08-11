@@ -1,3 +1,6 @@
+
+# automated_testing_framework
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -21,41 +24,19 @@
   - [Framework in Action](#framework-in-action)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# automated_testing_framework
-
-## Table of Contents
-
-* [Live Example](#live-example)
-* [First Party Plugins](#first-party-plugins)
-* [Platforms](#platforms)
-* [Introduction](#introduction)
-* [Framework Philosophy](#framework-philosophy)
-* [Running the Example](#running-the-example)
-* [Quick Start](#quick-start)
-* [Annotating Testable Widgets](#annotating-testable-widgets)
-* [Creating Tests](#creating-tests)
-* [Saving and Loading Tests](#saving-and-loading-tests)
-* [Reporting Test Results](#reporting-test-results)
-* [Working with Variables](#working-with-variables)
-  * [Reserved Variables](#reserved-variables)
-* [Remote Drivers](#remote_drivers)
-  * [Websocket Driver](https://pub.dev/packages/automated_testing_framework_driver_websocket)
-  * [Websocket Server](https://pub.dev/packages/automated_testing_framework_server_websocket)
-* [Framework in Action](#framework-in-action)
-* See Also
-  * [Building & Running Tests](https://github.com/peiffer-innovations/automated_testing_framework/blob/main/documentation/BUILDING_RUNNING_TESTS.md)
-  * [Built In Test Steps](https://github.com/peiffer-innovations/automated_testing_framework/blob/main/documentation/STEPS.md)
-* Plugins
-  * [Cloud Firestore](https://pub.dev/packages/automated_testing_framework_plugin_firestore)
-  * [Connectivity](https://pub.dev/packages/automated_testing_framework_plugin_connectivity)
-  * [Firebase Storage](https://pub.dev/packages/automated_testing_framework_plugin_firebase_storage)
-  * [Firebase Realtime Database](https://pub.dev/packages/automated_testing_framework_plugin_firebase)
-  * [Flow Control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control)
-  * [GitHub](https://pub.dev/packages/automated_testing_framework_plugin_github)
-  * [Images](https://pub.dev/packages/automated_testing_framework_plugin_images)
-  * [Logging](https://pub.dev/packages/automated_testing_framework_plugin_logging)
-  * [Strings](https://pub.dev/packages/automated_testing_framework_plugin_strings)
+  - See Also
+    - [Building & Running Tests](https://github.com/peiffer-innovations/automated_testing_framework/blob/main/documentation/BUILDING_RUNNING_TESTS.md)
+    - [Built In Test Steps](https://github.com/peiffer-innovations/automated_testing_framework/blob/main/documentation/STEPS.md)
+  - Plugins
+    - [Cloud Firestore](https://pub.dev/packages/automated_testing_framework_plugin_firestore)
+    - [Connectivity](https://pub.dev/packages/automated_testing_framework_plugin_connectivity)
+    - [Firebase Storage](https://pub.dev/packages/automated_testing_framework_plugin_firebase_storage)
+    - [Firebase Realtime Database](https://pub.dev/packages/automated_testing_framework_plugin_firebase)
+    - [Flow Control](https://pub.dev/packages/automated_testing_framework_plugin_flow_control)
+    - [GitHub](https://pub.dev/packages/automated_testing_framework_plugin_github)
+    - [Images](https://pub.dev/packages/automated_testing_framework_plugin_images)
+    - [Logging](https://pub.dev/packages/automated_testing_framework_plugin_logging)
+    - [Strings](https://pub.dev/packages/automated_testing_framework_plugin_strings)
 
 ---
 ## Live Example

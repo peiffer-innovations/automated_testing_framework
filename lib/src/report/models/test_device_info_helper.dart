@@ -67,7 +67,6 @@ class TestDeviceInfoHelper {
 
             brand = info.brand ?? 'unknown';
             device = info.device ?? 'unknown';
-            id = info.androidId ?? 'unknown';
             manufacturer = info.manufacturer ?? 'unknown';
             model = info.model ?? 'unknown';
             physicalDevice = info.isPhysicalDevice ?? true;
