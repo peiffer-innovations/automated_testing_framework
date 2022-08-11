@@ -5,23 +5,21 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [automated_testing_framework](#automated_testing_framework)
-  - [Table of Contents](#table-of-contents)
-  - [Live Example](#live-example)
-  - [First Party Plugins](#first-party-plugins)
-  - [Platforms](#platforms)
-  - [Introduction](#introduction)
-  - [Running the Example](#running-the-example)
-  - [Framework Philosophy](#framework-philosophy)
-  - [Quick Start](#quick-start)
-  - [Annotating Testable Widgets](#annotating-testable-widgets)
-  - [Creating Tests](#creating-tests)
-  - [Saving and Loading Tests](#saving-and-loading-tests)
-  - [Reporting Test Results](#reporting-test-results)
-  - [Working with Variables](#working-with-variables)
-    - [Reserved Variables](#reserved-variables)
-  - [Remote Drivers](#remote-drivers)
-  - [Framework in Action](#framework-in-action)
+- [Live Example](#live-example)
+- [First Party Plugins](#first-party-plugins)
+- [Platforms](#platforms)
+- [Introduction](#introduction)
+- [Running the Example](#running-the-example)
+- [Framework Philosophy](#framework-philosophy)
+- [Quick Start](#quick-start)
+- [Annotating Testable Widgets](#annotating-testable-widgets)
+- [Creating Tests](#creating-tests)
+- [Saving and Loading Tests](#saving-and-loading-tests)
+- [Reporting Test Results](#reporting-test-results)
+- [Working with Variables](#working-with-variables)
+  - [Reserved Variables](#reserved-variables)
+- [Remote Drivers](#remote-drivers)
+- [Framework in Action](#framework-in-action)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
   - See Also
