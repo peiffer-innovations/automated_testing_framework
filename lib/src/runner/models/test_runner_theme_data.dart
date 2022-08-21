@@ -95,20 +95,6 @@ class TestRunnerThemeData implements JsonClass {
       other.statusSuccessColor == statusSuccessColor &&
       other.statusTextColor == statusTextColor;
 
-  @override
-  int get hashCode => hashValues(
-        runnerOverlayColor,
-        showRunnerStatus,
-        showStepText,
-        statusAlignment,
-        statusBackgroundColor,
-        statusErrorColor,
-        statusOpacity,
-        statusProgressColor,
-        statusSuccessColor,
-        statusTextColor,
-      );
-
   /// Creates a theme data object from a JSON compatible map.  This expects the
   /// JSON to follow the format:
   ///

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';

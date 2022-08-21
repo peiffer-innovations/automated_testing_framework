@@ -1,3 +1,8 @@
+## [4.0.6] - August 20th, 2022
+
+* Minor changes to a few classes
+
+
 ## [4.0.5+1] - August 16, 2022
 
 * Automated dependency updates
