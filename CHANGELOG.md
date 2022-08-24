@@ -1,3 +1,8 @@
+## [4.0.7] - August 24th, 2022
+
+* Revert fix for Flutter 3.3 to restore 3.0 compatiblity
+
+
 ## [4.0.6] - August 20th, 2022
 
 * Minor changes to a few classes

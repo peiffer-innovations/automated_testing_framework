@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:automated_testing_framework/automated_testing_framework.dart';
 import 'package:flutter/foundation.dart';
