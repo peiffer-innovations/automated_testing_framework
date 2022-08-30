@@ -1,3 +1,8 @@
+## [4.0.7+1] - August 30, 2022
+
+* Automated dependency updates
+
+
 ## [4.0.7] - August 24th, 2022
 
 * Revert fix for Flutter 3.3 to restore 3.0 compatiblity
@@ -630,6 +635,7 @@
 ## [0.1.0] - August 21st, 2020
 
 * First public release; not for production use.
+
 
 
 
