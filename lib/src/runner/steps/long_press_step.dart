@@ -14,8 +14,8 @@ class LongPressStep extends TestRunnerStep {
   static const id = 'long_press';
 
   static final List<String> behaviorDrivenDescriptions = List.unmodifiable([
-    'long press the `{{testableId}}` widget.'
-        'long press the `{{testableId}}` widget and fail if it cannot be found in `{{timeout}}` seconds.',
+    'long press the `{{testableId}}` widget.',
+    'long press the `{{testableId}}` widget and fail if it cannot be found in `{{timeout}}` seconds.',
   ]);
 
   /// The id of the [Testable] widget to interact with.
