@@ -1,5 +1,4 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:static_translations/static_translations.dart';
@@ -107,8 +106,7 @@ class _TestReportPageState extends State<TestReportPage>
                           itemBuilder: (BuildContext context, int index) {
                             Widget result;
                             if (index == 0) {
-                              if (report!.runtimeException?.isNotEmpty ==
-                                  true) {
+                              if (report.runtimeException?.isNotEmpty == true) {
                                 result = Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Column(
@@ -310,7 +308,7 @@ class _TestReportPageState extends State<TestReportPage>
                                   ),
                                 );
                               }
-                            } else if (index - 1 < report!.steps.length) {
+                            } else if (index - 1 < report.steps.length) {
                               index--;
                               result = Padding(
                                 padding: EdgeInsets.symmetric(
