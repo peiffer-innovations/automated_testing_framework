@@ -65,11 +65,11 @@ class TestDeviceInfoHelper {
           try {
             var info = await plugin.androidInfo;
 
-            brand = info.brand ?? 'unknown';
-            device = info.device ?? 'unknown';
-            manufacturer = info.manufacturer ?? 'unknown';
-            model = info.model ?? 'unknown';
-            physicalDevice = info.isPhysicalDevice ?? true;
+            brand = info.brand;
+            device = info.device;
+            manufacturer = info.manufacturer;
+            model = info.model;
+            physicalDevice = info.isPhysicalDevice;
             systemVersion = '${info.version.sdkInt}';
           } catch (e) {
             // No-op; don't fail because we can't get the device info.
