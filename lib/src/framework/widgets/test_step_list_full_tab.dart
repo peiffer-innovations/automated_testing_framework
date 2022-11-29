@@ -85,7 +85,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                 onPressed: () => Navigator.of(context).pop(true),
                 style: ButtonStyle(
                   textStyle: MaterialStateProperty.all(
-                    TextStyle(color: theme.errorColor),
+                    TextStyle(color: theme.colorScheme.error),
                   ),
                 ),
                 child: Text(
@@ -100,7 +100,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
               children: <Widget>[
                 Icon(
                   Icons.warning,
-                  color: theme.textTheme.bodyText2!.color,
+                  color: theme.textTheme.bodyMedium!.color,
                   size: 54.0,
                 ),
                 SizedBox(
@@ -191,7 +191,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                     Expanded(
                       child: Text(
                         '${index + 1}) ${step.id}',
-                        style: theme.textTheme.headline6,
+                        style: theme.textTheme.titleLarge,
                       ),
                     ),
                   ],
@@ -266,7 +266,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                       TestTranslations.atf_button_delete,
                     ),
                     child: IconButton(
-                      color: theme.errorColor,
+                      color: theme.colorScheme.error,
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         var steps = List<TestStep>.from(
@@ -349,11 +349,11 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
         Divider(),
         Text(
           entry.key,
-          style: theme.textTheme.bodyText1,
+          style: theme.textTheme.bodyLarge,
         ),
         Text(
           entry.value?.toString() ?? '',
-          style: theme.textTheme.subtitle1,
+          style: theme.textTheme.titleMedium,
         ),
       ],
     );

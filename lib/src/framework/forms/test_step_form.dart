@@ -119,7 +119,7 @@ abstract class TestStepForm {
             children: <Widget>[
               Icon(
                 Icons.help,
-                color: theme.textTheme.bodyText2!.color,
+                color: theme.textTheme.bodyMedium!.color,
               ),
               SizedBox(
                 width: 8.0,

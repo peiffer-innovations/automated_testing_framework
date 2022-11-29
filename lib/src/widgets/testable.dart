@@ -223,9 +223,13 @@ class TestableState extends State<Testable>
           var canBeScrolled = false;
           if (_scrollableId?.isNotEmpty != true) {
             try {
-              var scrollable = Scrollable.of(context);
-              canBeScrolled = scrollable != null;
-              _scrollableId = scrollable?.widget.key?.toString();
+              try {
+                var scrollable = Scrollable.of(context);
+                canBeScrolled = true;
+                _scrollableId = scrollable.widget.key?.toString();
+              } catch (_) {
+                canBeScrolled = false;
+              }
             } catch (e, stack) {
               _logger.severe(e, stack);
             }
@@ -696,7 +700,7 @@ class TestableState extends State<Testable>
             opacity: _showTestableOverlay == true ? 1.0 : 0.0,
             child: Material(
               color: _renderController.overlayColor ??
-                  Theme.of(context).errorColor,
+                  Theme.of(context).colorScheme.error,
               child: InkWell(
                 onDoubleTap: _getGestureAction(
                   overlay: gestures.overlayDoubleTap,

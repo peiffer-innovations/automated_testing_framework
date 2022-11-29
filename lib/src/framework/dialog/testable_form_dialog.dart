@@ -74,7 +74,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
                       children: <Widget>[
                         Icon(
                           Icons.warning,
-                          color: theme.textTheme.bodyText2!.color,
+                          color: theme.textTheme.bodyMedium!.color,
                           size: 54,
                         ),
                         SizedBox(

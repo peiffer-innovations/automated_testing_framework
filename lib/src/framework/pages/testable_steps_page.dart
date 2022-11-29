@@ -301,7 +301,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                               child: Text(
                                 translator
                                     .translate(TestTranslations.atf_widget),
-                                style: theme.textTheme.headline6,
+                                style: theme.textTheme.titleLarge,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -315,7 +315,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                     child: Text(
                                       widget.testableId!,
                                       maxLines: 1,
-                                      style: theme.textTheme.subtitle2,
+                                      style: theme.textTheme.titleSmall,
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -372,7 +372,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                 translator.translate(
                                   TestTranslations.atf_selected_widget_steps,
                                 ),
-                                style: theme.textTheme.headline5,
+                                style: theme.textTheme.headlineSmall,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -389,7 +389,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                               translator.translate(
                                 TestTranslations.atf_widgetless_steps,
                               ),
-                              style: theme.textTheme.headline5,
+                              style: theme.textTheme.headlineSmall,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -407,7 +407,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                 translator.translate(
                                   TestTranslations.atf_custom_pages,
                                 ),
-                                style: theme.textTheme.headline5,
+                                style: theme.textTheme.headlineSmall,
                                 textAlign: TextAlign.center,
                               ),
                             ),

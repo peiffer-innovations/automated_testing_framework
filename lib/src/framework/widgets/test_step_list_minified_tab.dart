@@ -105,7 +105,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                 onPressed: () => Navigator.of(context).pop(true),
                 style: ButtonStyle(
                   textStyle: MaterialStateProperty.all(
-                    TextStyle(color: theme.errorColor),
+                    TextStyle(color: theme.colorScheme.error),
                   ),
                 ),
                 child: Text(
@@ -120,7 +120,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
               children: <Widget>[
                 Icon(
                   Icons.warning,
-                  color: theme.textTheme.bodyText2!.color,
+                  color: theme.textTheme.bodyMedium!.color,
                   size: 54.0,
                 ),
                 SizedBox(
@@ -242,7 +242,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                       step.values!['testableId'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.caption,
+                      style: theme.textTheme.bodySmall,
                     ),
                   ),
               ],
@@ -266,7 +266,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                 child: IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: theme.errorColor,
+                    color: theme.colorScheme.error,
                   ),
                   onPressed: () => _onDeleteStep(step: step),
                 ),

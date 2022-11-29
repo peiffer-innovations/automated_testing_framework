@@ -82,7 +82,7 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                                               fontSize: 20,
                                               color: Theme.of(context)
                                                   .textTheme
-                                                  .bodyText2!
+                                                  .bodyMedium!
                                                   .color,
                                             ),
                                           ),

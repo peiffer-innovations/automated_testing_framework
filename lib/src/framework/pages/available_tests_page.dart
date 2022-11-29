@@ -148,7 +148,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
           ),
           style: (TestRunner.of(context)?.theme ?? Theme.of(context))
               .textTheme
-              .subtitle2,
+              .titleSmall,
         ),
         title: Text(test.name),
         trailing: IgnorePointer(
@@ -199,7 +199,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
                           trailing: _suiteName == null
                               ? Icon(
                                   Icons.check_circle,
-                                  color: theme.textTheme.bodyText2!.color,
+                                  color: theme.textTheme.bodyMedium!.color,
                                 )
                               : null,
                         ),
@@ -214,7 +214,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
                               trailing: _suiteName == suite
                                   ? Icon(
                                       Icons.check_circle,
-                                      color: theme.textTheme.bodyText2!.color,
+                                      color: theme.textTheme.bodyMedium!.color,
                                     )
                                   : null,
                             ),

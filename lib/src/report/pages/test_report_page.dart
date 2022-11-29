@@ -117,7 +117,7 @@ class _TestReportPageState extends State<TestReportPage>
                                         size: 64.0,
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyText2!
+                                            .bodyMedium!
                                             .color,
                                       ),
                                       SizedBox(
@@ -185,7 +185,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                             color: Theme.of(
                                                                     context)
                                                                 .textTheme
-                                                                .bodyText2!
+                                                                .bodyMedium!
                                                                 .color,
                                                           ),
                                                         ),

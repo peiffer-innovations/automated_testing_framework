@@ -129,7 +129,7 @@ class TestableRenderController {
                   border: Border.all(
                     color: TestableRenderController.of(context).overlayColor ??
                         color ??
-                        Theme.of(context).errorColor,
+                        Theme.of(context).colorScheme.error,
                   ),
                 ),
               ),
@@ -149,7 +149,7 @@ class TestableRenderController {
                 child: Container(
                   color: TestableRenderController.of(context).overlayColor ??
                       color ??
-                      Theme.of(context).errorColor,
+                      Theme.of(context).colorScheme.error,
                 ),
               ),
             ),
@@ -174,7 +174,7 @@ class TestableRenderController {
                 color: TinyColor(
                   TestableRenderController.of(context).overlayColor ??
                       color ??
-                      Theme.of(context).errorColor,
+                      Theme.of(context).colorScheme.error,
                 ).darken(20).color,
               ),
             ),
@@ -208,7 +208,7 @@ class TestableRenderController {
                 color: TinyColor(
                   TestableRenderController.of(context).overlayColor ??
                       color ??
-                      Theme.of(context).errorColor,
+                      Theme.of(context).colorScheme.error,
                 ).darken(20).color,
               ),
             ),

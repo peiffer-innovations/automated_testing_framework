@@ -80,7 +80,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
-                  TextStyle(color: theme.errorColor),
+                  TextStyle(color: theme.colorScheme.error),
                 ),
               ),
               child: Text(
@@ -133,7 +133,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
       children: <Widget>[
         Text(
           widget.label,
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         ListTile(
           onTap: () => _showAvailableSteps(context),

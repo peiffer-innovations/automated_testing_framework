@@ -58,15 +58,15 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                         children: [
                           Text(
                             '${widget.result.name} (${widget.result.version})',
-                            style: theme.textTheme.bodyText2!.copyWith(
+                            style: theme.textTheme.bodyMedium!.copyWith(
                               fontSize: 18.0,
                             ),
                           ),
                           if (widget.result.suiteName?.isNotEmpty == true) ...[
                             Text(
                               widget.result.suiteName!,
-                              style: theme.textTheme.subtitle2!.copyWith(
-                                color: theme.textTheme.subtitle2!.color!
+                              style: theme.textTheme.titleSmall!.copyWith(
+                                color: theme.textTheme.titleSmall!.color!
                                     .withOpacity(0.5),
                               ),
                             ),
@@ -84,7 +84,7 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                           ),
                           TextSpan(
                             text: ' | ',
-                            style: theme.textTheme.bodyText2!.copyWith(
+                            style: theme.textTheme.bodyMedium!.copyWith(
                               fontFamily: 'Courier New',
                               fontFamilyFallback: ['monospace', 'Courier'],
                             ),

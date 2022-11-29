@@ -89,7 +89,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                 ),
                 TextButton(
                   onPressed: () {
-                    var valid = Form.of(context)!.validate();
+                    var valid = Form.of(context).validate();
                     if (valid == true) {
                       Navigator.of(context).pop(testName);
                     }
@@ -274,7 +274,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.clear,
-                      color: theme.errorColor,
+                      color: theme.colorScheme.error,
                     ),
                     label: translator.translate(
                       TestTranslations.atf_button_clear,
@@ -326,7 +326,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                                     Navigator.of(context).pop(true),
                                 style: ButtonStyle(
                                   textStyle: MaterialStateProperty.all(
-                                    TextStyle(color: theme.errorColor),
+                                    TextStyle(color: theme.colorScheme.error),
                                   ),
                                 ),
                                 child: Text(
@@ -341,7 +341,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                               children: <Widget>[
                                 Icon(
                                   Icons.warning,
-                                  color: theme.textTheme.bodyText2!.color,
+                                  color: theme.textTheme.bodyMedium!.color,
                                   size: 54.0,
                                 ),
                                 SizedBox(

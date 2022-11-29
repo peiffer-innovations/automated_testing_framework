@@ -9,19 +9,18 @@ import 'package:flutter/services.dart';
 /// * [TextFormField]
 class TestableTextFormField extends StatefulWidget {
   TestableTextFormField({
-    this.autocorrect = true,
+    this.autovalidateMode,
     this.autofillHints,
     this.autofocus = false,
-    // ignore: deprecated_member_use_from_same_package
-    @Deprecated('Use [autovalidateMode] instead') this.autovalidate,
-    this.autovalidateMode,
     this.buildCounter,
+    this.contextMenuBuilder,
     this.controller,
     this.cursorColor,
     this.cursorHeight,
     this.cursorRadius,
     this.cursorWidth = 2.0,
     this.decoration = const InputDecoration(),
+    this.enableIMEPersonalizedLearning = true,
     this.enableInteractiveSelection = true,
     this.enableSuggestions = true,
     this.enabled = true,
@@ -34,8 +33,10 @@ class TestableTextFormField extends StatefulWidget {
     this.keyboardAppearance,
     this.keyboardType,
     this.maxLength,
+    this.maxLengthEnforcement,
     this.maxLines,
     this.minLines,
+    this.mouseCursor,
     this.obscureText = false,
     this.obscuringCharacter = '*',
     this.onChanged,
@@ -43,10 +44,14 @@ class TestableTextFormField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onSaved,
     this.onTap,
+    this.onTapOutside,
     this.readOnly = false,
+    this.restorationId,
+    this.scrollController,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.scrollPhysics,
     this.scrollableId,
+    this.selectionControls,
     this.showCursor,
     this.smartDashesType,
     this.smartQuotesType,
@@ -57,22 +62,21 @@ class TestableTextFormField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.textDirection,
     this.textInputAction,
-    this.toolbarOptions,
     this.validator,
   });
 
-  final bool autocorrect;
   final Iterable<String>? autofillHints;
   final bool autofocus;
-  final bool? autovalidate;
   final AutovalidateMode? autovalidateMode;
   final InputCounterWidgetBuilder? buildCounter;
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
   final TextEditingController? controller;
   final Color? cursorColor;
   final double? cursorHeight;
   final Radius? cursorRadius;
   final double cursorWidth;
   final dynamic decoration;
+  final bool enableIMEPersonalizedLearning;
   final bool enableInteractiveSelection;
   final bool enableSuggestions;
   final bool enabled;
@@ -85,8 +89,10 @@ class TestableTextFormField extends StatefulWidget {
   final Brightness? keyboardAppearance;
   final TextInputType? keyboardType;
   final int? maxLength;
+  final MaxLengthEnforcement? maxLengthEnforcement;
   final int? maxLines;
   final int? minLines;
+  final MouseCursor? mouseCursor;
   final bool obscureText;
   final String obscuringCharacter;
   final ValueChanged<String>? onChanged;
@@ -94,9 +100,13 @@ class TestableTextFormField extends StatefulWidget {
   final ValueChanged<String>? onFieldSubmitted;
   final FormFieldSetter<String>? onSaved;
   final VoidCallback? onTap;
+  final TapRegionCallback? onTapOutside;
   final bool readOnly;
+  final String? restorationId;
+  final ScrollController? scrollController;
   final EdgeInsetsGeometry scrollPadding;
   final ScrollPhysics? scrollPhysics;
+  final TextSelectionControls? selectionControls;
   final String? scrollableId;
   final bool? showCursor;
   final SmartDashesType? smartDashesType;
@@ -108,7 +118,6 @@ class TestableTextFormField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final TextDirection? textDirection;
   final TextInputAction? textInputAction;
-  final ToolbarOptions? toolbarOptions;
   final String? Function(String?)? validator;
 
   @override
@@ -149,21 +158,18 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
             ? (dynamic value) => _controller!.text = value
             : null,
         child: TextFormField(
-          autocorrect: widget.autocorrect,
           autofillHints: widget.autofillHints,
           autofocus: widget.autofocus,
-          autovalidateMode: widget.autovalidate == null
-              ? widget.autovalidateMode
-              : widget.autovalidate == true
-                  ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
+          autovalidateMode: widget.autovalidateMode,
           buildCounter: widget.buildCounter,
+          contextMenuBuilder: widget.contextMenuBuilder,
           controller: _controller,
           cursorColor: widget.cursorColor,
           cursorHeight: widget.cursorHeight,
           cursorRadius: widget.cursorRadius,
           cursorWidth: widget.cursorWidth,
           decoration: widget.decoration,
+          enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
           enableInteractiveSelection: widget.enableInteractiveSelection,
           enableSuggestions: widget.enableSuggestions,
           enabled: widget.enabled,
@@ -174,8 +180,10 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           keyboardAppearance: widget.keyboardAppearance,
           keyboardType: widget.keyboardType,
           maxLength: widget.maxLength,
+          maxLengthEnforcement: widget.maxLengthEnforcement,
           maxLines: widget.maxLines,
           minLines: widget.minLines,
+          mouseCursor: widget.mouseCursor,
           obscureText: widget.obscureText,
           obscuringCharacter: widget.obscuringCharacter,
           onChanged: widget.onChanged,
@@ -183,9 +191,13 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           onFieldSubmitted: widget.onFieldSubmitted,
           onSaved: widget.onSaved,
           onTap: widget.onTap,
+          onTapOutside: widget.onTapOutside,
           readOnly: widget.readOnly,
+          restorationId: widget.restorationId,
+          scrollController: widget.scrollController,
           scrollPadding: widget.scrollPadding as EdgeInsets,
           scrollPhysics: widget.scrollPhysics,
+          selectionControls: widget.selectionControls,
           showCursor: widget.showCursor,
           smartDashesType: widget.smartDashesType,
           smartQuotesType: widget.smartQuotesType,
@@ -196,7 +208,6 @@ class _TestableTextFormFieldState extends State<TestableTextFormField> {
           textCapitalization: widget.textCapitalization,
           textDirection: widget.textDirection,
           textInputAction: widget.textInputAction,
-          toolbarOptions: widget.toolbarOptions,
           validator: widget.validator,
         ),
       );
