@@ -29,12 +29,12 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
   void initState() {
     super.initState();
 
-    var testRunner = TestRunner.of(context);
+    final testRunner = TestRunner.of(context);
 
     if (testRunner?.enabled == true) {
       _controller = testRunner!.controller;
       _subscriptions.add(_controller!.sleepStream.listen((event) {
-        var sleeping = event?.progress != null;
+        final sleeping = event?.progress != null;
         _error = event?.error == true;
         _max = event?.max;
 
@@ -72,7 +72,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
                     AsyncSnapshot<ProgressValue?> value,
                   ) =>
                       value.data == null && sleepValue.data == null
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Container(
                               color: widget.theme.runnerOverlayColor,
                             ),
@@ -88,7 +88,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
               AsyncSnapshot<ProgressValue?> value,
             ) =>
                 value.data == null
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Align(
                         alignment: (widget.theme.statusAlignment ==
                                     TestStatusAlignment.top ||
@@ -150,9 +150,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
               child: Material(
                 color: Colors.transparent,
                 child: Padding(
-                  padding: EdgeInsets.all(
-                    8.0,
-                  ),
+                  padding: const EdgeInsets.all(8.0),
                   child: StreamBuilder(
                     builder: (BuildContext context,
                             AsyncSnapshot<String> snapshot) =>
@@ -180,7 +178,7 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
             AsyncSnapshot<ProgressValue?> value,
           ) =>
               value.data == null
-                  ? SizedBox()
+                  ? const SizedBox()
                   : LinearProgressIndicator(
                       backgroundColor: Colors.transparent,
                       valueColor: AlwaysStoppedAnimation(
@@ -196,6 +194,6 @@ class _TestProgressBuilderStart extends State<TestProgressBuilder> {
   Widget build(BuildContext context) {
     return widget.theme.showRunnerStatus == true
         ? _buildProgressWidgets(context)
-        : SizedBox();
+        : const SizedBox();
   }
 }

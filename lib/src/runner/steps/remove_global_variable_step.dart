@@ -45,10 +45,10 @@ class RemoveGlobalVariableStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    String variableName = tester.resolveVariable(this.variableName);
+    final variableName = tester.resolveVariable(this.variableName);
 
     assert(variableName.isNotEmpty == true);
-    var name = "$id('$variableName')";
+    final name = "$id('$variableName')";
 
     log(
       name,

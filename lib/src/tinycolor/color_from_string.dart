@@ -154,7 +154,7 @@ Color colorFromString(String color) {
   Color? finalColor;
   if (_hasCorrectHexPattern(color)) {
     color = color.replaceAll('#', '');
-    var size = color.length;
+    final size = color.length;
     if (size == 6 || size == 3) {
       if (size == 3) {
         color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
@@ -174,9 +174,9 @@ Color colorFromString(String color) {
             color[3] +
             color[3];
       }
-      var alpha = color.substring(6);
+      final alpha = color.substring(6);
       color = alpha + color.substring(0, 6);
-      var value = int.parse(color, radix: 16);
+      final value = int.parse(color, radix: 16);
       finalColor = Color(value);
     }
   }
@@ -202,11 +202,11 @@ Color? _getRGBColorFromString(String string) {
     // Correct
     string = string.replaceAll('rgb(', '');
     string = string.replaceAll(')', '');
-    var rgb = string.split(',');
+    final rgb = string.split(',');
     if (rgb.length == 3) {
-      var r = int.parse(rgb[0]);
-      var g = int.parse(rgb[1]);
-      var b = int.parse(rgb[2]);
+      final r = int.parse(rgb[0]);
+      final g = int.parse(rgb[1]);
+      final b = int.parse(rgb[2]);
       return Color.fromARGB(255, r, g, b);
     }
     return null;
@@ -216,7 +216,7 @@ Color? _getRGBColorFromString(String string) {
 
 bool _hasCorrectHexPattern(String string) {
   string = string.replaceAll('#', '');
-  var validChars = '0123456789AaBbCcDdEeFf';
+  final validChars = '0123456789AaBbCcDdEeFf';
   for (var i = 0; i < string.length; i++) {
     if (!validChars.contains(string[i])) {
       return false;

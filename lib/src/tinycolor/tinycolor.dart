@@ -125,11 +125,11 @@ class TinyColor {
   }
 
   TinyColor tint([int amount = 10]) {
-    return mix(input: Color.fromRGBO(255, 255, 255, 1.0));
+    return mix(input: const Color.fromRGBO(255, 255, 255, 1.0));
   }
 
   TinyColor shade([int amount = 10]) {
-    return mix(input: Color.fromRGBO(0, 0, 0, 1.0));
+    return mix(input: const Color.fromRGBO(0, 0, 0, 1.0));
   }
 
   TinyColor desaturate([int amount = 10]) {

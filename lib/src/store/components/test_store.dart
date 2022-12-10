@@ -32,7 +32,7 @@ class TestStore {
     List<PendingTest>? tests;
 
     if (object is List) {
-      var tempTests = JsonClass.fromDynamicList(
+      final tempTests = JsonClass.fromDynamicList(
         object,
         (map) => Test.fromDynamic(map),
       )!;
@@ -46,7 +46,7 @@ class TestStore {
         tests.add(PendingTest.memory(t));
       }
     } else {
-      var test = Test.fromDynamic(object);
+      final test = Test.fromDynamic(object);
 
       if (test.name?.isNotEmpty == true && test.steps.isNotEmpty == true) {
         tests = [PendingTest.memory(test)];
@@ -92,8 +92,8 @@ class TestStore {
 
   static Future<void> _showNotSupported(BuildContext? context,
       [TranslationEntry? entry]) async {
-    var translator = Translator.of(context);
-    var snackBar = SnackBar(
+    final translator = Translator.of(context);
+    final snackBar = SnackBar(
       content: Text(
         translator.translate(
           entry ?? TestTranslations.atf_operation_not_supported,
@@ -102,7 +102,7 @@ class TestStore {
     );
 
     if (context != null) {
-      var controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
       await controller.closed;
     }
   }

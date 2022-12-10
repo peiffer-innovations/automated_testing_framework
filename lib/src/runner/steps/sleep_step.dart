@@ -49,7 +49,7 @@ class SleepStep extends TestRunnerStep {
     TestReport? report,
     required TestController tester,
   }) async {
-    var name = "$id('${timeout.inMilliseconds}')";
+    final name = "$id('${timeout.inMilliseconds}')";
     log(
       name,
       tester: tester,

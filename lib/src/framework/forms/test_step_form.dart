@@ -30,7 +30,7 @@ abstract class TestStepForm {
       values[id] = defaultValue;
     }
 
-    var translator = Translator.of(context);
+    final translator = Translator.of(context);
     return DropdownButtonFormField<String>(
       autovalidateMode: AutovalidateMode.always,
       decoration: InputDecoration(
@@ -70,7 +70,7 @@ abstract class TestStepForm {
       values[id] = defaultValue;
     }
 
-    var translator = Translator.of(context);
+    final translator = Translator.of(context);
     return TextFormField(
       autovalidateMode: AutovalidateMode.always,
       decoration: InputDecoration(
@@ -98,12 +98,12 @@ abstract class TestStepForm {
     TranslationEntry helpText, {
     bool minify = false,
   }) {
-    var theme = Theme.of(context);
-    var translator = Translator.of(context);
+    final theme = Theme.of(context);
+    final translator = Translator.of(context);
     return Padding(
       padding: minify == true
           ? EdgeInsets.zero
-          : EdgeInsets.fromLTRB(
+          : const EdgeInsets.fromLTRB(
               16.0,
               16.0,
               16.0,
@@ -113,7 +113,7 @@ abstract class TestStepForm {
         borderRadius: minify == true ? null : BorderRadius.circular(16.0),
         elevation: minify == true ? 0.0 : 2.0,
         child: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           width: double.infinity,
           child: Row(
             children: <Widget>[
@@ -121,7 +121,7 @@ abstract class TestStepForm {
                 Icons.help,
                 color: theme.textTheme.bodyMedium!.color,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 8.0,
               ),
               Expanded(
@@ -146,9 +146,10 @@ abstract class TestStepForm {
     final label = TestTranslations.atf_timeout_seconds;
 
     defaultTimeout ??=
-        (TestController.of(context)?.delays ?? TestStepDelays()).defaultTimeout;
+        (TestController.of(context)?.delays ?? const TestStepDelays())
+            .defaultTimeout;
 
-    var translator = Translator.of(context);
+    final translator = Translator.of(context);
     return TextFormField(
       autovalidateMode: AutovalidateMode.always,
       decoration: InputDecoration(
@@ -181,7 +182,7 @@ abstract class TestStepForm {
     return Padding(
       padding: minify == true
           ? EdgeInsets.zero
-          : EdgeInsets.fromLTRB(
+          : const EdgeInsets.fromLTRB(
               16.0,
               16.0,
               16.0,
@@ -191,7 +192,7 @@ abstract class TestStepForm {
         borderRadius: minify == true ? null : BorderRadius.circular(16.0),
         elevation: minify == true ? 0.0 : 2.0,
         child: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           width: double.infinity,
           child: Column(
             children: children,

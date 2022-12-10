@@ -65,12 +65,12 @@ class _TestStepsPageState extends State<TestStepsPage>
     required TestController tester,
     required Translator translator,
   }) async {
-    var label = translator.translate(TestTranslations.atf_test_name);
+    final label = translator.translate(TestTranslations.atf_test_name);
     var testName = tester.currentTest.name ?? '';
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     var suiteName =
         tester.currentTest.suiteName ?? tester.selectedSuiteName ?? '';
-    var endTestName = await showDialog<String>(
+    final endTestName = await showDialog<String>(
       context: context,
       builder: (BuildContext context) => Form(
         autovalidateMode: AutovalidateMode.always,
@@ -89,7 +89,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                 ),
                 TextButton(
                   onPressed: () {
-                    var valid = Form.of(context).validate();
+                    final valid = Form.of(context).validate();
                     if (valid == true) {
                       Navigator.of(context).pop(testName);
                     }
@@ -120,9 +120,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                       value: value,
                     ),
                   ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
+                  const SizedBox(height: 16.0),
                   TextFormField(
                     autocorrect: false,
                     autofocus: false,
@@ -154,10 +152,10 @@ class _TestStepsPageState extends State<TestStepsPage>
 
   @override
   Widget build(BuildContext context) {
-    var tester = TestController.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var testController = TestController.of(context);
+    final tester = TestController.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final testController = TestController.of(context);
 
     return Theme(
       data: theme,
@@ -166,7 +164,7 @@ class _TestStepsPageState extends State<TestStepsPage>
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
                 onPressed: () => _onEditTestName(
                   tester: tester!,
                   translator: translator,
@@ -175,11 +173,11 @@ class _TestStepsPageState extends State<TestStepsPage>
               ),
               Builder(
                 builder: (BuildContext context) => IconButton(
-                  icon: Icon(Icons.content_copy),
+                  icon: const Icon(Icons.content_copy),
                   onPressed: () async {
-                    var encoder = JsonEncoder.withIndent('  ');
-                    var steps = testController!.currentTest.steps;
-                    var simpleSteps = [];
+                    final encoder = const JsonEncoder.withIndent('  ');
+                    final steps = testController!.currentTest.steps;
+                    final simpleSteps = [];
                     for (var step in steps) {
                       simpleSteps.add(
                         step
@@ -189,9 +187,9 @@ class _TestStepsPageState extends State<TestStepsPage>
                             .toJson(),
                       );
                     }
-                    var encoded = encoder.convert(simpleSteps);
+                    final encoded = encoder.convert(simpleSteps);
 
-                    var translator = Translator.of(context);
+                    final translator = Translator.of(context);
 
                     await Clipboard.setData(ClipboardData(text: encoded));
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -256,7 +254,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                       color: Colors.black26,
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     bottom: 0.0,
                     left: 0.0,
                     right: 0.0,
@@ -306,7 +304,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                 onTap: (int index) async {
                   switch (index) {
                     case _kClearTabIndex:
-                      var clear = await showDialog<bool>(
+                      final clear = await showDialog<bool>(
                         context: context,
                         builder: (BuildContext context) => Theme(
                           data: theme,
@@ -344,7 +342,7 @@ class _TestStepsPageState extends State<TestStepsPage>
                                   color: theme.textTheme.bodyMedium!.color,
                                   size: 54.0,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16.0,
                                 ),
                                 Text(
@@ -387,11 +385,11 @@ class _TestStepsPageState extends State<TestStepsPage>
                       break;
 
                     case _kRunAllTabIndex:
-                      var controller = TestableRenderController.of(context);
+                      final controller = TestableRenderController.of(context);
                       controller.showGlobalOverlay = false;
-                      var tester = TestController.of(context)!;
+                      final tester = TestController.of(context)!;
                       Navigator.of(context).pop();
-                      await Future.delayed(Duration(milliseconds: 500));
+                      await Future.delayed(const Duration(milliseconds: 500));
                       try {
                         await tester.execute(
                           name: _testController.currentTest.name,

@@ -29,9 +29,9 @@ class _TestableFormPageState extends State<TestableFormPage>
   }
 
   Future<bool> _showDiscardDialog(BuildContext context) async {
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var result = await showDialog<bool>(
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final result = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         actions: [
@@ -70,7 +70,7 @@ class _TestableFormPageState extends State<TestableFormPage>
               color: theme.textTheme.bodyMedium!.color,
               size: 54.0,
             ),
-            SizedBox(
+            const SizedBox(
               height: 16.0,
             ),
             Text(
@@ -88,10 +88,10 @@ class _TestableFormPageState extends State<TestableFormPage>
 
   @override
   Widget build(BuildContext context) {
-    var mq = MediaQuery.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var wide = mq.size.width >= 600.0;
+    final mq = MediaQuery.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final wide = mq.size.width >= 600.0;
 
     return Theme(
       data: theme,
@@ -109,7 +109,7 @@ class _TestableFormPageState extends State<TestableFormPage>
                     Expanded(
                       child: SingleChildScrollView(
                         child: Container(
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             maxWidth: 600.0,
                           ),
                           child: widget.form.buildForm(context, _values),
@@ -117,7 +117,7 @@ class _TestableFormPageState extends State<TestableFormPage>
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       width: double.infinity,
                       child: Row(
                         mainAxisAlignment: wide
@@ -129,7 +129,8 @@ class _TestableFormPageState extends State<TestableFormPage>
                             flex: wide == true ? 0 : 1,
                             child: TextButton(
                               onPressed: () async {
-                                var result = await _showDiscardDialog(context);
+                                final result =
+                                    await _showDiscardDialog(context);
 
                                 if (mounted == true && result == true) {
                                   Navigator.of(context).pop();
@@ -142,14 +143,14 @@ class _TestableFormPageState extends State<TestableFormPage>
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16.0,
                           ),
                           Expanded(
                             flex: wide == true ? 0 : 1,
                             child: TextButton(
                               onPressed: () {
-                                var valid = Form.of(context).validate();
+                                final valid = Form.of(context).validate();
                                 if (valid == true) {
                                   Navigator.of(context).pop(_values);
                                 } else {
@@ -178,7 +179,7 @@ class _TestableFormPageState extends State<TestableFormPage>
                                                   .textTheme.bodyMedium!.color,
                                               size: 54,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 16.0,
                                             ),
                                             Text(

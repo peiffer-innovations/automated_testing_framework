@@ -42,7 +42,7 @@ class ExitAppStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var name = '$id()';
+    final name = '$id()';
     log(
       name,
       tester: tester,

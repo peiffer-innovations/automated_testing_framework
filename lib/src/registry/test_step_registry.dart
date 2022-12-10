@@ -30,18 +30,18 @@ class TestStepRegistry {
 
   static final List<TestStepBuilder> _all = [
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: AssertErrorForm(),
         help: TestStepTranslations.atf_help_assert_error,
         id: AssertErrorStep.id,
-        keys: const {
+        keys: {
           'caseSensitive',
           'equals',
           'error',
           'timeout',
           'testableId',
         },
-        quickAddValues: const {'equals': 'true'},
+        quickAddValues: {'equals': 'true'},
         title: TestStepTranslations.atf_title_assert_error,
         type: TestableType.error_requestable,
         widgetless: false,
@@ -49,11 +49,11 @@ class TestStepRegistry {
       testRunnerStepBuilder: AssertErrorStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: AssertSemanticsForm(),
         help: TestStepTranslations.atf_help_assert_semantics,
         id: AssertSemanticsStep.id,
-        keys: const {
+        keys: {
           'field',
           'timeout',
           'testableId',
@@ -66,18 +66,18 @@ class TestStepRegistry {
       testRunnerStepBuilder: AssertSemanticsStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: AssertValueForm(),
         help: TestStepTranslations.atf_help_assert_value,
         id: AssertValueStep.id,
-        keys: const {
+        keys: {
           'caseSensitive',
           'equals',
           'timeout',
           'testableId',
           'value',
         },
-        quickAddValues: const {'equals': 'true'},
+        quickAddValues: {'equals': 'true'},
         title: TestStepTranslations.atf_title_assert_value,
         type: TestableType.value_requestable,
         widgetless: false,
@@ -85,11 +85,11 @@ class TestStepRegistry {
       testRunnerStepBuilder: AssertValueStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: CommentForm(),
         help: TestStepTranslations.atf_help_comment,
         id: CommentStep.id,
-        keys: const {
+        keys: {
           'comment',
         },
         quickAddValues: null,
@@ -99,35 +99,35 @@ class TestStepRegistry {
       testRunnerStepBuilder: CommentStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: DoubleTapForm(),
         help: TestStepTranslations.atf_help_double_tap,
         id: DoubleTapStep.id,
-        keys: const {'testableId', 'timeout'},
-        quickAddValues: const {},
+        keys: {'testableId', 'timeout'},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_double_tap,
         widgetless: false,
       ),
       testRunnerStepBuilder: DoubleTapStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: DismissKeyboardForm(),
         help: TestStepTranslations.atf_help_dismiss_keyboard,
         id: DismissKeyboardStep.id,
-        keys: const {'timeout'},
-        quickAddValues: const {},
+        keys: {'timeout'},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_dismiss_keyboard,
         widgetless: true,
       ),
       testRunnerStepBuilder: DismissKeyboardStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: DragForm(),
         help: TestStepTranslations.atf_help_drag,
         id: DragStep.id,
-        keys: const {'dx', 'dy', 'testableId', 'timeout'},
+        keys: {'dx', 'dy', 'testableId', 'timeout'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_drag,
         widgetless: false,
@@ -135,47 +135,47 @@ class TestStepRegistry {
       testRunnerStepBuilder: DragStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: EnsureExistsForm(),
         help: TestStepTranslations.atf_help_ensure_exists,
         id: EnsureExistsStep.id,
-        keys: const {'testableId'},
-        quickAddValues: const {},
+        keys: {'testableId'},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_ensure_exists,
         widgetless: false,
       ),
       testRunnerStepBuilder: EnsureExistsStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: ExitAppForm(),
         help: TestStepTranslations.atf_help_exit_app,
         id: ExitAppStep.id,
-        keys: const {},
-        quickAddValues: const {},
+        keys: {},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_exit_app,
         widgetless: true,
       ),
       testRunnerStepBuilder: ExitAppStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: GoBackForm(),
         help: TestStepTranslations.atf_help_go_back,
         id: GoBackStep.id,
-        quickAddValues: const {},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_go_back,
         widgetless: true,
       ),
       testRunnerStepBuilder: GoBackStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: LongPressForm(),
         help: TestStepTranslations.atf_help_long_press,
         id: LongPressStep.id,
-        keys: const {'testableId', 'timeout'},
-        quickAddValues: const {},
+        keys: {'testableId', 'timeout'},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_long_press,
         type: TestableType.tappable,
         widgetless: false,
@@ -184,23 +184,23 @@ class TestStepRegistry {
     ),
     TestStepBuilder(
       availableTestStep: AvailableTestStep(
-        form: ScreenshotForm(),
+        form: const ScreenshotForm(),
         help: TestStepTranslations.atf_help_screenshot,
         id: ScreenshotStep.id,
         keys: const {'goldenCompatible', 'imageId'},
-        quickAddValues: {'goldenCompatible': true, 'id': Uuid().v4()},
+        quickAddValues: {'goldenCompatible': true, 'id': const Uuid().v4()},
         title: TestStepTranslations.atf_title_screenshot,
         widgetless: true,
       ),
       testRunnerStepBuilder: ScreenshotStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: ScrollUntilVisibleForm(),
         help: TestStepTranslations.atf_help_scroll_until_visible,
         id: ScrollUntilVisibleStep.id,
-        keys: const {'increment', 'scrollableId', 'testableId', 'timeout'},
-        quickAddValues: const {'increment': '200'},
+        keys: {'increment', 'scrollableId', 'testableId', 'timeout'},
+        quickAddValues: {'increment': '200'},
         title: TestStepTranslations.atf_title_scroll_until_visible,
         type: TestableType.scrolled,
         widgetless: false,
@@ -208,11 +208,11 @@ class TestStepRegistry {
       testRunnerStepBuilder: ScrollUntilVisibleStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: RemoveGlobalVariableForm(),
         help: TestStepTranslations.atf_help_remove_global_variable,
         id: RemoveGlobalVariableStep.id,
-        keys: const {'variableName'},
+        keys: {'variableName'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_remove_global_variable,
         type: null,
@@ -221,11 +221,11 @@ class TestStepRegistry {
       testRunnerStepBuilder: RemoveGlobalVariableStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: RemoveVariableForm(),
         help: TestStepTranslations.atf_help_remove_variable,
         id: RemoveVariableStep.id,
-        keys: const {'variableName'},
+        keys: {'variableName'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_remove_variable,
         type: null,
@@ -234,11 +234,11 @@ class TestStepRegistry {
       testRunnerStepBuilder: RemoveVariableStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: SetGlobalVariableForm(),
         help: TestStepTranslations.atf_help_set_global_variable,
         id: SetGlobalVariableStep.id,
-        keys: const {'type', 'value', 'variableName'},
+        keys: {'type', 'value', 'variableName'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_set_global_variable,
         type: null,
@@ -247,12 +247,12 @@ class TestStepRegistry {
       testRunnerStepBuilder: SetGlobalVariableStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: SetValueForm(),
         help: TestStepTranslations.atf_help_set_value,
         id: SetValueStep.id,
-        keys: const {'testableId', 'timeout', 'type', 'value'},
-        quickAddValues: const {'type': 'String'},
+        keys: {'testableId', 'timeout', 'type', 'value'},
+        quickAddValues: {'type': 'String'},
         title: TestStepTranslations.atf_title_set_value,
         type: TestableType.value_settable,
         widgetless: false,
@@ -260,11 +260,11 @@ class TestStepRegistry {
       testRunnerStepBuilder: SetValueStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: SetVariableForm(),
         help: TestStepTranslations.atf_help_set_variable,
         id: SetVariableStep.id,
-        keys: const {'type', 'value', 'variableName'},
+        keys: {'type', 'value', 'variableName'},
         quickAddValues: null,
         title: TestStepTranslations.atf_title_set_variable,
         type: null,
@@ -273,24 +273,24 @@ class TestStepRegistry {
       testRunnerStepBuilder: SetVariableStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: SleepForm(),
         help: TestStepTranslations.atf_help_sleep,
         id: SleepStep.id,
-        keys: const {'timeout'},
-        quickAddValues: const {'timeout': '5'},
+        keys: {'timeout'},
+        quickAddValues: {'timeout': '5'},
         title: TestStepTranslations.atf_title_sleep,
         widgetless: true,
       ),
       testRunnerStepBuilder: SleepStep.fromDynamic,
     ),
     TestStepBuilder(
-      availableTestStep: AvailableTestStep(
+      availableTestStep: const AvailableTestStep(
         form: TapForm(),
         help: TestStepTranslations.atf_help_tap,
         id: TapStep.id,
-        keys: const {'testableId', 'timeout'},
-        quickAddValues: const {},
+        keys: {'testableId', 'timeout'},
+        quickAddValues: {},
         title: TestStepTranslations.atf_title_tap,
         type: TestableType.tappable,
         widgetless: false,
@@ -309,12 +309,12 @@ class TestStepRegistry {
   /// list of built in steps, then overlay on the custom steps assigned by the
   /// application.
   List<AvailableTestStep> get availableSteps {
-    var steps = <String, TestStepBuilder>{};
+    final steps = <String, TestStepBuilder>{};
 
     steps.addAll(_builtInSteps);
     steps.addAll(_customSteps);
 
-    var result = <AvailableTestStep>[];
+    final result = <AvailableTestStep>[];
     steps.forEach((_, value) => result.add(value.availableTestStep));
 
     // This will attempt to sort them alphabetically.  However, in fairness,
@@ -371,7 +371,7 @@ class TestStepRegistry {
     required dynamic values,
   }) {
     TestRunnerStep? result;
-    var builder = getBuilder(id);
+    final builder = getBuilder(id);
 
     if (builder != null) {
       result = builder.testRunnerStepBuilder(values ?? {});

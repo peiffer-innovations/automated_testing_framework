@@ -18,10 +18,10 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 8.0,
         horizontal: 16.0,
       ),
@@ -33,7 +33,7 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
               ? () => setState(() => _expanded = !_expanded)
               : null,
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -42,15 +42,15 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                 Row(
                   children: [
                     widget.result.success == true
-                        ? Icon(
+                        ? const Icon(
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
+                        : const Icon(
                             Icons.clear,
                             color: Colors.red,
                           ),
-                    SizedBox(width: 16.0),
+                    const SizedBox(width: 16.0),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,13 +74,13 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 16.0),
+                    const SizedBox(width: 16.0),
                     RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
                             text: '+${widget.result.numStepsPassed}',
-                            style: TextStyle(color: Colors.green),
+                            style: const TextStyle(color: Colors.green),
                           ),
                           TextSpan(
                             text: ' | ',
@@ -93,7 +93,7 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                             text: (widget.result.numStepsPassed -
                                     widget.result.numStepsTotal)
                                 .toString(),
-                            style: TextStyle(color: Colors.red),
+                            style: const TextStyle(color: Colors.red),
                           ),
                         ],
                       ),
@@ -102,7 +102,7 @@ class _TestSuiteResultWidgetState extends State<TestSuiteResultWidget> {
                 ),
                 if (_expanded == true) ...[
                   for (var step in widget.result.steps) ...[
-                    Divider(),
+                    const Divider(),
                     TestReportStepWidget(
                       step: step,
                     ),

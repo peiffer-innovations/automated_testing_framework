@@ -35,8 +35,8 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var translator = Translator.of(context);
+    final theme = Theme.of(context);
+    final translator = Translator.of(context);
 
     return AlertDialog(
       actions: [
@@ -50,7 +50,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
         ),
         TextButton(
           onPressed: () {
-            var valid = _formKey.currentState!.validate();
+            final valid = _formKey.currentState!.validate();
             if (valid == true) {
               Navigator.of(context).pop(_values);
             } else {
@@ -77,9 +77,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
                           color: theme.textTheme.bodyMedium!.color,
                           size: 54,
                         ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
+                        const SizedBox(height: 16.0),
                         Text(
                           translator.translate(
                             TestTranslations.atf_correct_errors,
@@ -106,7 +104,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
             width: double.maxFinite,
             child: SingleChildScrollView(
               child: Container(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxWidth: 600.0,
                 ),
                 child: widget.form.buildForm(
@@ -119,7 +117,7 @@ class _TestableFormDialogState extends State<TestableFormDialog> {
           ),
         ),
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: 16.0),
+      contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
       title: Text(translator.translate(widget.form.title)),
     );
   }

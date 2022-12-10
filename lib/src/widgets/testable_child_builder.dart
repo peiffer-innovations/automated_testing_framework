@@ -11,7 +11,7 @@ Widget testableChildBuilder(BuildContext context, Widget child) {
   String? id;
 
   if (child.key != null && child.key is ValueKey) {
-    var childKey = child.key as ValueKey<dynamic>;
+    final childKey = child.key as ValueKey<dynamic>;
 
     if (childKey.value is String) {
       id = 'value_key_${childKey.value}';

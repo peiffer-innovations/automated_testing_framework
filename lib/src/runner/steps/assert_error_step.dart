@@ -87,16 +87,16 @@ class AssertErrorStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    String? error = tester.resolveVariable(this.error);
-    String? testableId = tester.resolveVariable(this.testableId);
+    final error = tester.resolveVariable(this.error);
+    final testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "$id('$testableId', '$error', '$equals', '$caseSensitive')";
+    final name = "$id('$testableId', '$error', '$equals', '$caseSensitive')";
     log(
       name,
       tester: tester,
     );
-    var finder = await waitFor(
+    final finder = await waitFor(
       testableId,
       cancelToken: cancelToken,
       tester: tester,
@@ -112,15 +112,15 @@ class AssertErrorStep extends TestRunnerStep {
     if (cancelToken.cancelled == true) {
       throw Exception('[CANCELLED]: step was cancelled by the test');
     }
-    var widgetFinder = finder.evaluate();
+    final widgetFinder = finder.evaluate();
     var match = false;
     if (widgetFinder.isNotEmpty == true) {
-      var element = widgetFinder.first as StatefulElement;
+      final element = widgetFinder.first as StatefulElement;
 
-      var state = element.state;
+      final state = element.state;
       if (state is TestableState) {
         try {
-          var actual = state.onRequestError!();
+          final actual = state.onRequestError!();
 
           if (equals ==
               (caseSensitive == true

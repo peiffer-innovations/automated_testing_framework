@@ -19,7 +19,7 @@ class TestReportStepWidget extends StatelessWidget {
   }) {
     Widget? result;
 
-    var values = JsonClass.removeNull(step.step);
+    final values = JsonClass.removeNull(step.step);
     if (values is Map && values.isNotEmpty == true) {
       result = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,25 +52,25 @@ class TestReportStepWidget extends StatelessWidget {
       );
     }
 
-    return result ?? SizedBox();
+    return result ?? const SizedBox();
   }
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Row(
       children: [
         step.error?.isNotEmpty == true
-            ? Icon(
+            ? const Icon(
                 Icons.clear,
                 color: Colors.red,
               )
-            : Icon(
+            : const Icon(
                 Icons.check_circle,
                 color: Colors.green,
               ),
-        SizedBox(width: 16.0),
+        const SizedBox(width: 16.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class TestReportStepWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Text(
                     NumberFormat('#,##0ms').format(
                       step.endTime!.millisecondsSinceEpoch -

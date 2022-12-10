@@ -43,10 +43,10 @@ class IoTestStore {
 
       for (var image in report.images) {
         if (image.goldenCompatible) {
-          var file = File('${path}${image.id}.png');
+          final file = File('${path}${image.id}.png');
           file.createSync(recursive: true);
 
-          var data = image.image!;
+          final data = image.image!;
           file.writeAsBytesSync(data);
 
           final testImageCodec = await instantiateImageCodec(data);
@@ -102,7 +102,7 @@ class IoTestStore {
     BuildContext? context, {
     String? suiteName,
   }) async {
-    var pendingTests = <PendingTest>[];
+    final pendingTests = <PendingTest>[];
 
     if (kIsWeb) {
       _logger.warning(
@@ -115,14 +115,14 @@ class IoTestStore {
         path = '$path/$suiteName';
       }
 
-      var files = Directory(path).listSync(recursive: true);
+      final files = Directory(path).listSync(recursive: true);
 
       for (var file in files) {
         try {
           if (file is File && file.path.endsWith('.json')) {
-            var data = json.decode(file.readAsStringSync());
+            final data = json.decode(file.readAsStringSync());
 
-            var test = Test.fromDynamic(data);
+            final test = Test.fromDynamic(data);
             pendingTests.add(PendingTest.memory(test));
           }
         } catch (e) {
@@ -151,8 +151,8 @@ class IoTestStore {
 
       path = '$path/${report.name}.json';
 
-      var encoder = JsonEncoder.withIndent('  ');
-      var file = File(path);
+      final encoder = const JsonEncoder.withIndent('  ');
+      final file = File(path);
 
       file.createSync(recursive: true);
       file.writeAsStringSync(encoder.convert(report.toJson()));
@@ -168,7 +168,7 @@ class IoTestStore {
     BuildContext context,
     Test test,
   ) async {
-    var result = false;
+    final result = false;
     if (kIsWeb) {
       _logger.warning(
         '[IoTestStore] -- testReader not supported on web',
@@ -184,12 +184,12 @@ class IoTestStore {
 
       path = '$path${test.name}.json';
 
-      var encoder = JsonEncoder.withIndent('  ');
-      var file = File(path);
+      final encoder = const JsonEncoder.withIndent('  ');
+      final file = File(path);
 
       file.createSync(recursive: true);
 
-      var testData = test
+      final testData = test
           .copyWith(
             steps: test.steps
                 .map((e) => e.copyWith(image: Uint8List.fromList([])))

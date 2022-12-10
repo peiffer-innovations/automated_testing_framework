@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('all variables', () {
     final navigatorKey = GlobalKey<NavigatorState>();
-    var controller = TestController(
+    final controller = TestController(
       navigatorKey: navigatorKey,
       onReset: () async {},
     );
@@ -28,7 +28,7 @@ void main() {
 
   test('global variables', () {
     final navigatorKey = GlobalKey<NavigatorState>();
-    var controller = TestController(
+    final controller = TestController(
       navigatorKey: navigatorKey,
       onReset: () async {},
     );
@@ -54,7 +54,7 @@ void main() {
 
   test('test variables', () {
     final navigatorKey = GlobalKey<NavigatorState>();
-    var controller = TestController(
+    final controller = TestController(
       navigatorKey: navigatorKey,
       onReset: () async {},
     );

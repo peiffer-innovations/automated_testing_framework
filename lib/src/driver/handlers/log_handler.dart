@@ -41,9 +41,9 @@ class LogHandler {
           cancel();
         } else {
           if (record.level.value <= command.level.value) {
-            var jrecord = JsonLogRecord.fromLogRecord(record);
-            var response = LogResponse(record: jrecord);
-            var ack = CommandAck(
+            final jrecord = JsonLogRecord.fromLogRecord(record);
+            final response = LogResponse(record: jrecord);
+            final ack = CommandAck(
               commandId: command.id,
               response: response,
             );

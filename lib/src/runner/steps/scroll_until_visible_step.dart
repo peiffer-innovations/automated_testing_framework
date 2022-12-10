@@ -102,14 +102,14 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var increment =
+    final increment =
         JsonClass.parseDouble(tester.resolveVariable(this.increment)) ?? 200.0;
-    String? scrollableId = tester.resolveVariable(this.scrollableId);
-    String? testableId = tester.resolveVariable(this.testableId);
+    final scrollableId = tester.resolveVariable(this.scrollableId);
+    final testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "$id('$testableId', '$scrollableId', '$increment')";
-    var timeout = this.timeout ?? tester.delays.defaultTimeout;
+    final name = "$id('$testableId', '$scrollableId', '$increment')";
+    final timeout = this.timeout ?? tester.delays.defaultTimeout;
     log(
       name,
       tester: tester,
@@ -124,7 +124,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         // no-op, will be handled later
       }
     } else {
-      var scroller = await waitFor(
+      final scroller = await waitFor(
         scrollableId,
         cancelToken: cancelToken,
         tester: tester,
@@ -179,14 +179,14 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         break;
     }
 
-    var scroller = (int count) async {
+    final scroller = (int count) async {
       await driver.drag(finder, offset);
     };
 
-    var start = DateTime.now().millisecondsSinceEpoch;
-    var end = start + timeout.inMilliseconds;
+    final start = DateTime.now().millisecondsSinceEpoch;
+    final end = start + timeout.inMilliseconds;
 
-    var widgetFinder = find.byKey(ValueKey<String?>(testableId!));
+    final widgetFinder = find.byKey(ValueKey<String?>(testableId!));
     var count = 0;
     var found = widgetFinder.evaluate().isNotEmpty == true;
     while (found != true && DateTime.now().millisecondsSinceEpoch < end) {
@@ -216,7 +216,7 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
         throw Exception('[CANCELLED]: step was cancelled by the test');
       }
 
-      var widgetFinder = find.byKey(ValueKey<String?>(testableId)).evaluate();
+      final widgetFinder = find.byKey(ValueKey<String?>(testableId)).evaluate();
 
       count++;
       found = widgetFinder.isNotEmpty == true;
@@ -231,20 +231,20 @@ class ScrollUntilVisibleStep extends TestRunnerStep {
     tester.sleep = null;
 
     if (found == true) {
-      var testableFinder = await waitFor(
+      final testableFinder = await waitFor(
         testableId,
         cancelToken: cancelToken,
         tester: tester,
       );
 
-      var widgetFinder = find
+      final widgetFinder = find
           .descendant(
             of: testableFinder,
             matching: find.byType(Stack),
           )
           .evaluate();
 
-      var globalKey =
+      final globalKey =
           widgetFinder.first.widget.key as GlobalKey<State<StatefulWidget>>;
       if (cancelToken.cancelled == true) {
         throw Exception('[CANCELLED]: step was cancelled by the test');

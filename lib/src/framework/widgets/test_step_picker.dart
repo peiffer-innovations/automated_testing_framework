@@ -35,7 +35,7 @@ class _TestStepPickerState extends State<TestStepPicker> {
     required BuildContext context,
     ThemeData? theme,
   }) async {
-    var values = await Navigator.of(context).push(
+    final values = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) => Theme(
           data: theme!,
@@ -61,10 +61,11 @@ class _TestStepPickerState extends State<TestStepPicker> {
   }
 
   Future<void> _showAvailableSteps(BuildContext context) async {
-    var theme = _testRunner?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var steps = (_testRunner?.controller?.registry ?? TestStepRegistry.instance)
-        .availableSteps;
+    final theme = _testRunner?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final steps =
+        (_testRunner?.controller?.registry ?? TestStepRegistry.instance)
+            .availableSteps;
 
     await showDialog(
       context: context,
@@ -123,8 +124,8 @@ class _TestStepPickerState extends State<TestStepPicker> {
 
   @override
   Widget build(BuildContext context) {
-    var translator = Translator.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

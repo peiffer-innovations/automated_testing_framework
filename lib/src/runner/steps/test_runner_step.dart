@@ -36,7 +36,7 @@ abstract class TestRunnerStep extends JsonClass {
   /// Returns the default timeout for the step.  Steps that should respond
   /// quickly should use a relatively low value and steps that may take a long
   /// time should return an appropriately longer time.
-  Duration get defaultStepTimeout => Duration(minutes: 1);
+  Duration get defaultStepTimeout => const Duration(minutes: 1);
 
   /// Returns the test driver that can be used to interact with widgets.
   OverrideWidgetTester get driver => _driver;
@@ -103,17 +103,17 @@ abstract class TestRunnerStep extends JsonClass {
   }) async {
     if (duration.inMilliseconds > 0) {
       // Let's reduce the number of log entries to 1 per 100ms or 10 per second.
-      var calcSteps = duration.inMilliseconds / 100;
+      final calcSteps = duration.inMilliseconds / 100;
 
       // However, let's put sanity limits.  At lest 10 events and no more than
       // 50.
-      var steps = max(5, min(50, calcSteps)).toInt();
+      final steps = max(5, min(50, calcSteps)).toInt();
 
       tester.sleep = ProgressValue(max: steps, value: 0);
-      var sleepMillis = duration.inMilliseconds ~/ steps;
+      final sleepMillis = duration.inMilliseconds ~/ steps;
       var canceled = false;
 
-      var cancelListener = cancelStream?.listen((_) {
+      final cancelListener = cancelStream?.listen((_) {
         canceled = true;
       });
       try {
@@ -159,7 +159,7 @@ abstract class TestRunnerStep extends JsonClass {
           max: steps,
           value: steps,
         );
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
         tester.sleep = null;
         await cancelListener?.cancel();
       }
@@ -176,11 +176,11 @@ abstract class TestRunnerStep extends JsonClass {
   }) async {
     timeout ??= tester.delays.defaultTimeout;
 
-    var controller = StreamController<void>.broadcast();
-    var name = "waitFor('$testableId')";
+    final controller = StreamController<void>.broadcast();
+    final name = "waitFor('$testableId')";
     try {
-      var waiter = () async {
-        var end =
+      final waiter = () async {
+        final end =
             DateTime.now().millisecondsSinceEpoch + timeout!.inMilliseconds;
         test.Finder? finder;
         var found = false;
@@ -188,8 +188,8 @@ abstract class TestRunnerStep extends JsonClass {
           try {
             finder = test.find.byKey(_TestableKey(testableId));
 
-            var items = finder.evaluate();
-            var item = items.first;
+            final items = finder.evaluate();
+            final item = items.first;
             if (item.widget is! Testable) {
               finder = test.find.descendant(
                 of: finder,
@@ -203,7 +203,7 @@ abstract class TestRunnerStep extends JsonClass {
               throw Exception('[CANCELLED]: step was cancelled by the test');
             }
 
-            await Future.delayed(Duration(milliseconds: 100));
+            await Future.delayed(const Duration(milliseconds: 100));
           }
         }
 
@@ -213,7 +213,7 @@ abstract class TestRunnerStep extends JsonClass {
         return finder!;
       };
 
-      var sleeper = sleep(
+      final sleeper = sleep(
         timeout,
         cancelStream: controller.stream,
         error: true,
@@ -221,7 +221,7 @@ abstract class TestRunnerStep extends JsonClass {
         tester: tester,
       );
 
-      var result = await waiter();
+      final result = await waiter();
       if (cancelToken.cancelled == true) {
         throw Exception('[CANCELLED]: step was cancelled by the test');
       }
@@ -233,10 +233,10 @@ abstract class TestRunnerStep extends JsonClass {
       }
 
       try {
-        var finder = result.evaluate().first;
+        final finder = result.evaluate().first;
         if (finder.widget is Testable) {
-          var element = finder as StatefulElement;
-          var state = element.state;
+          final element = finder as StatefulElement;
+          final state = element.state;
           if (state is TestableState) {
             _console('flash: [$testableId]', Level.FINEST);
             await state.flash();

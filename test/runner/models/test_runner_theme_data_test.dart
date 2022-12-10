@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('TestRunnerThemeData', () {
-    var data = TestRunnerThemeData(
+    final data = const TestRunnerThemeData(
       runnerOverlayColor: Color(0xff111111),
       showRunnerStatus: true,
       showStepText: true,
@@ -17,8 +17,8 @@ void main() {
       statusTextColor: Color(0xff666666),
     );
 
-    var encoded = data.toJson();
-    var decoded = TestRunnerThemeData.fromDynamic(encoded);
+    final encoded = data.toJson();
+    final decoded = TestRunnerThemeData.fromDynamic(encoded);
 
     expect(encoded, {
       'runnerOverlayColor': '#ff111111',

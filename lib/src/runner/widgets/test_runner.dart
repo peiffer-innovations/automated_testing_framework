@@ -99,7 +99,7 @@ class TestRunnerState extends State<TestRunner> {
     if (widget.enabled == true) {
       _subscriptions
           .add(controller!.screencapStream.listen((captureContext) async {
-        var captured = await capture();
+        final captured = await capture();
         if (captured?.isNotEmpty == true) {
           captureContext.image.addAll(captured!);
         }
@@ -115,18 +115,18 @@ class TestRunnerState extends State<TestRunner> {
   }
 
   Future<Uint8List?> capture() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     Uint8List? image;
 
     if (!foundation.kIsWeb) {
-      var boundary = _globalKey.currentContext!.findRenderObject()
+      final boundary = _globalKey.currentContext!.findRenderObject()
           as RenderRepaintBoundary?;
       if (!foundation.kDebugMode || boundary?.debugNeedsPaint != true) {
-        var img = await boundary!.toImage(
+        final img = await boundary!.toImage(
           pixelRatio: _mediaQuery?.devicePixelRatio ?? 1.0,
         );
-        var byteData = await img.toByteData(
+        final byteData = await img.toByteData(
           format: ui.ImageByteFormat.png,
         );
         image = byteData?.buffer.asUint8List();

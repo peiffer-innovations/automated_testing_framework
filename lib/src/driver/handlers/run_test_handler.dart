@@ -22,7 +22,7 @@ class RunTestHandler {
       success: true,
     );
     if (command is AbortTestCommand) {
-      var controller = _driver.testController;
+      final controller = _driver.testController;
       await controller!.cancelRunningTests();
 
       result = CommandAck(
@@ -44,29 +44,29 @@ class RunTestHandler {
       message: '[${command.type}]: unknown command type',
       success: true,
     );
-    var controller = _driver.testController;
+    final controller = _driver.testController;
 
     var running = controller!.runningTest;
     if (running == true) {
-      _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
         running = controller.runningTest;
       });
     }
 
     while (running == true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
     }
 
     if (command is RunTestCommand) {
       if (command.test.steps.isNotEmpty == true) {
-        var report = TestReport(
+        final report = TestReport(
           name: command.test.name,
           suiteName: command.test.suiteName,
           version: command.test.version,
         );
 
         var status = '';
-        var logSub = report.logStream!.listen((data) {
+        final logSub = report.logStream!.listen((data) {
           _driver.communicator!.sendCommand(
             CommandAck(
               commandId: command.id,
@@ -81,7 +81,7 @@ class RunTestHandler {
           );
         });
 
-        var stepSub = report.stepStream!.listen((step) {
+        final stepSub = report.stepStream!.listen((step) {
           status = step.id;
           _driver.communicator!.sendCommand(
             CommandAck(
@@ -108,7 +108,7 @@ class RunTestHandler {
         }
 
         try {
-          var deviceInfo = await TestDeviceInfoHelper.initialize(null);
+          final deviceInfo = await TestDeviceInfoHelper.initialize(null);
           result = CommandAck(
             commandId: command.id,
             message: json.encode(deviceInfo),

@@ -48,7 +48,7 @@ class AssetTestStore {
 
     if (testAssetIndex?.isNotEmpty == true) {
       try {
-        var indexData = await rootBundle.loadString(testAssetIndex!);
+        final indexData = await rootBundle.loadString(testAssetIndex!);
         files = List<String>.from(json.decode(indexData));
       } catch (e, stack) {
         _logger.severe('Error in AssetTestStore.testReader', e, stack);
@@ -57,14 +57,14 @@ class AssetTestStore {
       files = testAssets;
     }
 
-    var tests = <PendingTest>[];
+    final tests = <PendingTest>[];
 
     if (files?.isNotEmpty == true) {
       for (var asset in files!) {
         try {
-          var text = await rootBundle.loadString(asset);
+          final text = await rootBundle.loadString(asset);
           if (text.isNotEmpty == true) {
-            var parsed = json.decode(text);
+            final parsed = json.decode(text);
 
             tests.addAll(TestStore.createMemoryTests(parsed));
           }
