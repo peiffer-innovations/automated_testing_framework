@@ -32,9 +32,9 @@ const RESOURCES = {
 "assets/packages/automated_testing_framework_example/assets/tests/buttons.json": "0980eeed758c9091b9fe476bbe3aae34",
 "assets/FontManifest.json": "3a1c01ebd9adb7aecf384a895a3cbb43",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
-"assets/NOTICES": "c3c726db202f26a59a1e74dbcf45518e",
-"index.html": "80d1407d77b35e4f8b46b66b8c761798",
-"/": "80d1407d77b35e4f8b46b66b8c761798",
+"assets/NOTICES": "de2faf4cabaa590f9cbc4d36125c90cc",
+"index.html": "fcb9cd961301df72c9e6212f4be3af95",
+"/": "fcb9cd961301df72c9e6212f4be3af95",
 "favicon.png": "7d2009652f165b0bc9d9e23452621c35",
 "version.json": "7fd137b2a5c2fdd6cc43cc0d7ee0cd4d"
 };
