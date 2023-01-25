@@ -36,7 +36,7 @@ class _TestDriverStatusState extends State<TestDriverStatus> {
       }
 
       _timer?.cancel();
-      _timer = Timer(Duration(seconds: 5), () {
+      _timer = Timer(const Duration(seconds: 5), () {
         _statusShowing = false;
         if (mounted == true) {
           setState(() {});
@@ -69,9 +69,9 @@ class _TestDriverStatusState extends State<TestDriverStatus> {
                     child: IgnorePointer(
                       child: AnimatedOpacity(
                         opacity: _statusShowing == true ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         child: Container(
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             maxWidth: 400.0,
                           ),
                           height: 120.0,
@@ -80,20 +80,20 @@ class _TestDriverStatusState extends State<TestDriverStatus> {
                             color: Colors.black87,
                             elevation: 4.0,
                             child: Padding(
-                              padding: EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.bug_report,
                                     color: Colors.white,
                                     size: 40.0,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 16.0,
                                   ),
                                   Text(
                                     _status,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                     ),
                                   ),

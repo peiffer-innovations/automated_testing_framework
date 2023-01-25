@@ -33,13 +33,13 @@ class ScreenshotForm extends TestStepForm {
           [
             buildEditText(
               context: context,
-              defaultValue: Uuid().v4(),
+              defaultValue: const Uuid().v4(),
               id: 'imageId',
               label: TestStepTranslations.atf_form_image_id,
               validators: [RequiredValidator()],
               values: values!,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             buildDropdown(
               context: context,
               defaultValue: 'true',

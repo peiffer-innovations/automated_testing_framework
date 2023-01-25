@@ -61,16 +61,16 @@ class LongPressStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    String? testableId = tester.resolveVariable(this.testableId);
+    final testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "$id('$testableId')";
+    final name = "$id('$testableId')";
     log(
       name,
       tester: tester,
     );
 
-    var finder = await waitFor(
+    final finder = await waitFor(
       testableId,
       cancelToken: cancelToken,
       tester: tester,
@@ -83,7 +83,7 @@ class LongPressStep extends TestRunnerStep {
       tester: tester,
     );
 
-    var evaluated = finder.evaluate();
+    final evaluated = finder.evaluate();
     if (evaluated.length > 1) {
       var error =
           '[ERROR]: found (${evaluated.length}) widgets; expected only one.';

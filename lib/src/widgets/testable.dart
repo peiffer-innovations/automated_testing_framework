@@ -193,7 +193,7 @@ class TestableState extends State<Testable>
         }
 
         if (_testController != null) {
-          var nn = _testController!;
+          final nn = _testController!;
 
           _subscriptions.add(nn.state.runningSuiteStream.listen(
             (_) => _updateRunningState(),
@@ -223,9 +223,13 @@ class TestableState extends State<Testable>
           var canBeScrolled = false;
           if (_scrollableId?.isNotEmpty != true) {
             try {
-              var scrollable = Scrollable.of(context);
-              canBeScrolled = scrollable != null;
-              _scrollableId = scrollable?.widget.key?.toString();
+              try {
+                final scrollable = Scrollable.of(context);
+                canBeScrolled = true;
+                _scrollableId = scrollable.widget.key?.toString();
+              } catch (_) {
+                canBeScrolled = false;
+              }
             } catch (e, stack) {
               _logger.severe(e, stack);
             }
@@ -306,13 +310,13 @@ class TestableState extends State<Testable>
           setState(() {});
         }
 
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
         boundary = _renderKey!.currentContext!.findRenderObject()
             as RenderRepaintBoundary?;
-        var img = await boundary!.toImage(
+        final img = await boundary!.toImage(
           pixelRatio: MediaQuery.of(context).devicePixelRatio,
         );
-        var byteData = await img.toByteData(
+        final byteData = await img.toByteData(
           format: ui.ImageByteFormat.png,
         );
         image = byteData?.buffer.asUint8List();
@@ -332,7 +336,7 @@ class TestableState extends State<Testable>
   /// framework is interactging with the widget.
   Future<void> flash() async {
     // Sometimes the
-    var timeout = Future.delayed(Duration(seconds: 10));
+    final timeout = Future.delayed(const Duration(seconds: 10));
 
     if (_renderController.testWidgetsEnabled == true) {
       try {
@@ -364,7 +368,7 @@ class TestableState extends State<Testable>
     _obscureColor = color ?? Colors.transparent;
     if (mounted == true) {
       setState(() {});
-      await Future.delayed(Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 300));
     }
   }
 
@@ -374,7 +378,7 @@ class TestableState extends State<Testable>
     _opacity = opacity ?? 0;
     if (mounted == true) {
       setState(() {});
-      await Future.delayed(Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 300));
     }
   }
 
@@ -428,17 +432,17 @@ class TestableState extends State<Testable>
   }
 
   Future<void> _openTestActions({required bool page}) async {
-    var overlayShowing = _showTestableOverlay;
+    final overlayShowing = _showTestableOverlay;
     _showTestableOverlay = false;
     if (mounted == true) {
       setState(() {});
     }
     try {
       if (overlayShowing == true) {
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
       }
 
-      var image = await captureImage();
+      final image = await captureImage();
 
       if (mounted == true) {
         setState(() {});
@@ -459,7 +463,7 @@ class TestableState extends State<Testable>
         );
       } else if (_isDialogOpen == false) {
         _isDialogOpen = true;
-        var result = await showDialog<String>(
+        final result = await showDialog<String>(
           context: context,
           useRootNavigator: false,
           builder: (BuildContext context) => TestableStepsDialog(
@@ -474,11 +478,11 @@ class TestableState extends State<Testable>
         _isDialogOpen = false;
 
         if (result?.isNotEmpty == true) {
-          var translator = Translator.of(context);
+          final translator = Translator.of(context);
           try {
-            var snackBar = SnackBar(
+            final snackBar = SnackBar(
               content: Text(result!),
-              duration: Duration(seconds: 4),
+              duration: const Duration(seconds: 4),
               action: SnackBarAction(
                 label: translator
                     .translate(TestTranslations.atf_button_view_steps),
@@ -523,9 +527,9 @@ class TestableState extends State<Testable>
 
     if (depth < _testController!.maxCommonSearchDepth) {
       if (widget is FormField) {
-        var key = widget.key;
+        final key = widget.key;
         if (key is GlobalKey) {
-          var state = key.currentState;
+          final state = key.currentState;
           if (state is FormFieldState) {
             result = () => state.errorText;
           }
@@ -556,7 +560,7 @@ class TestableState extends State<Testable>
       } else if ((widget is TextField ||
           widget is TextFormField ||
           widget is CupertinoTextField)) {
-        dynamic text = widget;
+        final text = widget;
         if (text?.controller != null) {
           result = () => text.controller.text;
         }
@@ -571,9 +575,9 @@ class TestableState extends State<Testable>
       } else if (widget is Switch) {
         result = () => widget.value;
       } else if (widget is FormField) {
-        var key = widget.key;
+        final key = widget.key;
         if (key is GlobalKey) {
-          var state = key.currentState;
+          final state = key.currentState;
           if (state is FormFieldState) {
             result = () => state.value;
           }
@@ -602,14 +606,14 @@ class TestableState extends State<Testable>
       if ((widget is TextField ||
           widget is TextFormField ||
           widget is CupertinoTextField)) {
-        dynamic text = widget;
+        final text = widget;
         if (text?.controller != null) {
           result = (dynamic value) => text.controller.text = value?.toString();
         }
       } else if (widget is FormField) {
-        var key = widget.key;
+        final key = widget.key;
         if (key is GlobalKey) {
-          var state = key.currentState;
+          final state = key.currentState;
           if (state is FormFieldState) {
             result = (value) => state.didChange(value);
           }
@@ -628,8 +632,8 @@ class TestableState extends State<Testable>
   }
 
   void _updateRunningState() {
-    var state = _testController?.state;
-    var running = state?.runningSuite == true || state?.runningTest == true;
+    final state = _testController?.state;
+    final running = state?.runningSuite == true || state?.runningTest == true;
 
     if (running != _runningTest) {
       _runningTest = running;
@@ -643,7 +647,7 @@ class TestableState extends State<Testable>
   Widget _buildActualTestWidget(BuildContext context) => RepaintBoundary(
         key: _renderKey,
         child: AnimatedOpacity(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           opacity: _opacity,
           child: Stack(
             children: <Widget>[
@@ -662,7 +666,7 @@ class TestableState extends State<Testable>
                 child: ExcludeSemantics(
                   child: IgnorePointer(
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       color: _obscureColor,
                     ),
                   ),
@@ -680,7 +684,7 @@ class TestableState extends State<Testable>
     if (widget.id?.isNotEmpty == true &&
         _testRunner?.enabled == true &&
         _renderController.testWidgetsEnabled == true) {
-      var gestures =
+      final gestures =
           widget.gestures ?? TestableRenderController.of(context).gestures;
 
       Widget overlay = _renderController.widgetOverlayBuilder(
@@ -692,11 +696,11 @@ class TestableState extends State<Testable>
         child: IgnorePointer(
           ignoring: _showTestableOverlay != true,
           child: AnimatedOpacity(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             opacity: _showTestableOverlay == true ? 1.0 : 0.0,
             child: Material(
               color: _renderController.overlayColor ??
-                  Theme.of(context).errorColor,
+                  Theme.of(context).colorScheme.error,
               child: InkWell(
                 onDoubleTap: _getGestureAction(
                   overlay: gestures.overlayDoubleTap,
@@ -782,7 +786,7 @@ class TestableState extends State<Testable>
           Positioned.fill(
             child: IgnorePointer(
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 color: _obscureColor,
               ),
             ),

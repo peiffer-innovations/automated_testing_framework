@@ -77,11 +77,11 @@ class TestDriver {
 
   Future<void> _onCommandReceived(DeviceCommand command) async {
     if (state.active == true) {
-      var handler = _handlers[command.type] ?? _builtInHandlers[command.type];
+      final handler = _handlers[command.type] ?? _builtInHandlers[command.type];
 
       if (handler != null) {
         _logger.info('[COMMAND]: handling command: [${command.type}]');
-        var ack = await handler(command);
+        final ack = await handler(command);
         await communicator!.sendCommand(ack);
       }
     }

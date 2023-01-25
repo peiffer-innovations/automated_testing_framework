@@ -87,16 +87,16 @@ class AssertValueStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    String? testableId = tester.resolveVariable(this.testableId);
-    var value = tester.resolveVariable(this.value)?.toString();
+    final testableId = tester.resolveVariable(this.testableId);
+    final value = tester.resolveVariable(this.value)?.toString();
     assert(testableId?.isNotEmpty == true);
 
-    var name = "$id('$testableId', '$value', '$equals', '$caseSensitive')";
+    final name = "$id('$testableId', '$value', '$equals', '$caseSensitive')";
     log(
       name,
       tester: tester,
     );
-    var finder = await waitFor(
+    final finder = await waitFor(
       testableId,
       cancelToken: cancelToken,
       tester: tester,
@@ -112,13 +112,13 @@ class AssertValueStep extends TestRunnerStep {
     if (cancelToken.cancelled == true) {
       throw Exception('[CANCELLED]: step was cancelled by the test');
     }
-    var widgetFinder = finder.evaluate();
+    final widgetFinder = finder.evaluate();
     var match = false;
     dynamic actual;
     if (widgetFinder.isNotEmpty == true) {
-      var element = widgetFinder.first as StatefulElement;
+      final element = widgetFinder.first as StatefulElement;
 
-      var state = element.state;
+      final state = element.state;
       if (state is TestableState) {
         try {
           actual = state.onRequestValue!();

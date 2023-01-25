@@ -19,7 +19,7 @@ class TestReportStepWidget extends StatelessWidget {
   }) {
     Widget? result;
 
-    var values = JsonClass.removeNull(step.step);
+    final values = JsonClass.removeNull(step.step);
     if (values is Map && values.isNotEmpty == true) {
       result = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,15 +32,15 @@ class TestReportStepWidget extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: entry.key,
-                    style: theme.textTheme.bodyText2,
+                    style: theme.textTheme.bodyMedium,
                   ),
                   TextSpan(
                     text: ': ',
-                    style: theme.textTheme.bodyText2,
+                    style: theme.textTheme.bodyMedium,
                   ),
                   TextSpan(
                     text: entry.value?.toString() ?? '<null>',
-                    style: theme.textTheme.subtitle2!.copyWith(
+                    style: theme.textTheme.titleSmall!.copyWith(
                       fontFamily: 'Courier New',
                       fontFamilyFallback: ['monospace', 'Courier'],
                     ),
@@ -52,25 +52,25 @@ class TestReportStepWidget extends StatelessWidget {
       );
     }
 
-    return result ?? SizedBox();
+    return result ?? const SizedBox();
   }
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Row(
       children: [
         step.error?.isNotEmpty == true
-            ? Icon(
+            ? const Icon(
                 Icons.clear,
                 color: Colors.red,
               )
-            : Icon(
+            : const Icon(
                 Icons.check_circle,
                 color: Colors.green,
               ),
-        SizedBox(width: 16.0),
+        const SizedBox(width: 16.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,12 +82,12 @@ class TestReportStepWidget extends StatelessWidget {
                   Expanded(
                     child: Text(
                       step.id,
-                      style: theme.textTheme.bodyText2!.copyWith(
+                      style: theme.textTheme.bodyMedium!.copyWith(
                         fontSize: 18.0,
                       ),
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Text(
                     NumberFormat('#,##0ms').format(
                       step.endTime!.millisecondsSinceEpoch -

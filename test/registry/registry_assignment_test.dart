@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('assert_error', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'assert_error',
     )!;
 
@@ -16,7 +16,7 @@ void main() {
   });
 
   test('assert_semantics', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'assert_semantics',
     )!;
 
@@ -29,7 +29,7 @@ void main() {
   });
 
   test('assert_value', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'assert_value',
     )!;
 
@@ -42,7 +42,7 @@ void main() {
   });
 
   test('comment', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'comment',
     )!;
 
@@ -55,7 +55,7 @@ void main() {
   });
 
   test('dismiss_keyboard', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'dismiss_keyboard',
     )!;
 
@@ -68,7 +68,7 @@ void main() {
   });
 
   test('double_tap', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'double_tap',
     )!;
 
@@ -81,7 +81,7 @@ void main() {
   });
 
   test('drag', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'drag',
     )!;
 
@@ -94,7 +94,7 @@ void main() {
   });
 
   test('ensure_exists', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'ensure_exists',
     )!;
 
@@ -107,7 +107,7 @@ void main() {
   });
 
   test('exit_app', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'exit_app',
     )!;
 
@@ -120,7 +120,7 @@ void main() {
   });
 
   test('go_back', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'go_back',
     )!;
 
@@ -133,7 +133,7 @@ void main() {
   });
 
   test('long_press', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'long_press',
     )!;
 
@@ -146,7 +146,7 @@ void main() {
   });
 
   test('remove_global_variable', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'remove_global_variable',
     )!;
 
@@ -161,7 +161,7 @@ void main() {
   });
 
   test('remove_variable', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'remove_variable',
     )!;
 
@@ -174,7 +174,7 @@ void main() {
   });
 
   test('screenshot', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'screenshot',
     )!;
 
@@ -187,7 +187,7 @@ void main() {
   });
 
   test('scroll_until_visible', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'scroll_until_visible',
     )!;
 
@@ -203,7 +203,7 @@ void main() {
   });
 
   test('set_value', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'set_value',
     )!;
 
@@ -216,7 +216,7 @@ void main() {
   });
 
   test('set_global_variable', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'set_global_variable',
     )!;
 
@@ -229,7 +229,7 @@ void main() {
   });
 
   test('set_variable', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'set_variable',
     )!;
 
@@ -242,7 +242,7 @@ void main() {
   });
 
   test('sleep', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'sleep',
     )!;
 
@@ -255,7 +255,7 @@ void main() {
   });
 
   test('tap', () {
-    var availStep = TestStepRegistry.instance.getAvailableTestStep(
+    final availStep = TestStepRegistry.instance.getAvailableTestStep(
       'tap',
     )!;
 

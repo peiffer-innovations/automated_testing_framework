@@ -32,7 +32,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
   void _onDeleteStep({
     required TestStep step,
   }) {
-    var steps = List<TestStep>.from(
+    final steps = List<TestStep>.from(
       _testController.currentTest.steps,
     );
 
@@ -50,18 +50,18 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
     required ThemeData theme,
     required Translator translator,
   }) async {
-    var steps = List<TestStep>.from(
+    final steps = List<TestStep>.from(
       _testController.currentTest.steps,
     );
 
-    var values = step.values ?? <String, dynamic>{};
-    var idx = steps.indexOf(step);
-    var availableStep = TestStepRegistry.of(context).getAvailableTestStep(
+    final values = step.values ?? <String, dynamic>{};
+    final idx = steps.indexOf(step);
+    final availableStep = TestStepRegistry.of(context).getAvailableTestStep(
       step.id,
     );
 
     if (availableStep != null) {
-      var newValues = await Navigator.of(context).push(
+      final newValues = await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext context) => TestableFormPage(
             form: availableStep.form,
@@ -105,7 +105,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                 onPressed: () => Navigator.of(context).pop(true),
                 style: ButtonStyle(
                   textStyle: MaterialStateProperty.all(
-                    TextStyle(color: theme.errorColor),
+                    TextStyle(color: theme.colorScheme.error),
                   ),
                 ),
                 child: Text(
@@ -120,10 +120,10 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
               children: <Widget>[
                 Icon(
                   Icons.warning,
-                  color: theme.textTheme.bodyText2!.color,
+                  color: theme.textTheme.bodyMedium!.color,
                   size: 54.0,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16.0,
                 ),
                 Text(
@@ -167,11 +167,11 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
     required int index,
     required TestStep step,
   }) {
-    var mq = MediaQuery.of(context);
-    var narrow = mq.size.width - mq.padding.horizontal < 500.0;
-    var tester = TestController.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
+    final mq = MediaQuery.of(context);
+    final narrow = mq.size.width - mq.padding.horizontal < 500.0;
+    final tester = TestController.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
 
     return ListTile(
       key: ValueKey(step.key),
@@ -193,7 +193,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                             message: translator.translate(
                               TestTranslations.atf_step_currently_pinned,
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.label,
                               color: Colors.green,
                             ),
@@ -210,10 +210,10 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                           tooltip: translator.translate(
                             TestTranslations.atf_pin_step,
                           ),
-                          icon: Icon(Icons.label_outline),
+                          icon: const Icon(Icons.label_outline),
                         ),
                 ),
-                SizedBox(width: 16.0),
+                const SizedBox(width: 16.0),
                 Text('${index + 1}'),
               ],
             ),
@@ -228,21 +228,21 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                   step.id,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Courier New',
                     fontFamilyFallback: ['monospace', 'Courier'],
                   ),
                 ),
                 if ((step.values ?? {})['testableId']?.isNotEmpty == true)
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       top: 4.0,
                     ),
                     child: Text(
                       step.values!['testableId'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.caption,
+                      style: theme.textTheme.bodySmall,
                     ),
                   ),
               ],
@@ -266,12 +266,12 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                 child: IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: theme.errorColor,
+                    color: theme.colorScheme.error,
                   ),
                   onPressed: () => _onDeleteStep(step: step),
                 ),
               ),
-              SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
               Tooltip(
                 message: translator.translate(TestTranslations.atf_button_edit),
                 child: IconButton(
@@ -286,20 +286,20 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                   ),
                 ),
               ),
-              SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
               Tooltip(
                 message: translator.translate(
                   TestTranslations.atf_button_run,
                 ),
                 child: IconButton(
                   color: theme.iconTheme.color,
-                  icon: Icon(Icons.play_arrow),
+                  icon: const Icon(Icons.play_arrow),
                   onPressed: () => _run(step: step, tester: tester),
                 ),
               ),
             ],
             if (narrow) ...[
-              SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
               PopupMenuButton(
                 itemBuilder: (context) => <PopupMenuItem<VoidCallback>>[
                   PopupMenuItem(
@@ -322,7 +322,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                     value: () => _onDeleteStep(step: step),
                     child: Text(
                       translator.translate(TestTranslations.atf_button_delete),
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
                 ],
@@ -331,7 +331,7 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
                     value();
                   }
                 },
-                child: Icon(Icons.more_horiz),
+                child: const Icon(Icons.more_horiz),
               ),
             ]
           ],
@@ -345,10 +345,10 @@ class _TestStepListMinifiedTabState extends State<TestStepListMinifiedTab> {
     return ReorderableListView(
       buildDefaultDragHandles: true,
       onReorder: (int oldIndex, int newIndex) {
-        var steps = List<TestStep>.from(
+        final steps = List<TestStep>.from(
           _testController.currentTest.steps,
         );
-        var step = steps[oldIndex];
+        final step = steps[oldIndex];
 
         steps.removeAt(oldIndex);
         if (oldIndex > newIndex) {

@@ -31,7 +31,7 @@ class ScreenshotHandler {
         success: false,
       );
     } else {
-      var screenshot =
+      final screenshot =
           await (_driver.testController!.screencap() as FutureOr<Uint8List>);
       result = CommandAck(
         commandId: command.id,
@@ -84,7 +84,7 @@ class ScreenshotHandler {
   Future<void> _sendScreenshot(
     StartScreenshotStreamCommand command,
   ) async {
-    var screenshot = await _driver.testController!.screencap();
+    final screenshot = await _driver.testController!.screencap();
     if (screenshot != null) {
       var differ =
           _screenshot == null || _screenshot!.length != screenshot.length;

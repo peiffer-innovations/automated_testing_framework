@@ -23,7 +23,7 @@ class _TestReportPageState extends State<TestReportPage>
     required TestReport report,
     required TestController tester,
   }) async {
-    var translator = Translator.of(context);
+    final translator = Translator.of(context);
 
     _saving = true;
     if (mounted == true) {
@@ -39,14 +39,14 @@ class _TestReportPageState extends State<TestReportPage>
     }
 
     if (success == true) {
-      var snackBar = SnackBar(
+      final snackBar = SnackBar(
         content: Text(
           translator.translate(TestTranslations.atf_export_successful),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
-      var snackBar = SnackBar(
+      final snackBar = SnackBar(
         content: Text(
           translator.translate(TestTranslations.atf_error_has_occurred),
         ),
@@ -62,11 +62,11 @@ class _TestReportPageState extends State<TestReportPage>
 
   @override
   Widget build(BuildContext context) {
-    var report = ModalRoute.of(context)!.settings.arguments as TestReport?;
-    var tester = TestController.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var unknown = translator.translate(TestTranslations.atf_unnamed_test);
+    final report = ModalRoute.of(context)!.settings.arguments as TestReport?;
+    final tester = TestController.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final unknown = translator.translate(TestTranslations.atf_unnamed_test);
     return Theme(
       data: theme,
       child: Builder(
@@ -75,7 +75,7 @@ class _TestReportPageState extends State<TestReportPage>
             actions: [
               if (tester!.currentTest.steps.isNotEmpty == true)
                 IconButton(
-                  icon: Icon(Icons.refresh),
+                  icon: const Icon(Icons.refresh),
                   onPressed: () async {
                     await tester.execute(
                       name: tester.currentTest.name,
@@ -108,7 +108,7 @@ class _TestReportPageState extends State<TestReportPage>
                             if (index == 0) {
                               if (report.runtimeException?.isNotEmpty == true) {
                                 result = Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
@@ -117,30 +117,30 @@ class _TestReportPageState extends State<TestReportPage>
                                         size: 64.0,
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyText2!
+                                            .bodyMedium!
                                             .color,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 8.0,
                                       ),
                                       Text(
                                         report.runtimeException!,
                                         maxLines: 5,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 16.0,
                                       ),
-                                      Divider(),
+                                      const Divider(),
                                     ],
                                   ),
                                 );
                               } else {
                                 result = Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      SizedBox(height: 16.0),
+                                      const SizedBox(height: 16.0),
                                       Stack(
                                         alignment: Alignment.center,
                                         children: <Widget>[
@@ -152,7 +152,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                       .toDouble() /
                                                   report.steps.length,
                                               valueColor:
-                                                  AlwaysStoppedAnimation(
+                                                  const AlwaysStoppedAnimation(
                                                       Colors.green),
                                             ),
                                           ),
@@ -161,7 +161,7 @@ class _TestReportPageState extends State<TestReportPage>
                                             height: 160.0,
                                             width: 160.0,
                                             child: report.success == true
-                                                ? Icon(
+                                                ? const Icon(
                                                     Icons.check,
                                                     color: Colors.green,
                                                     size: 120.0,
@@ -172,7 +172,8 @@ class _TestReportPageState extends State<TestReportPage>
                                                         TextSpan(
                                                           text:
                                                               '${report.passedSteps}',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             color: Colors.red,
                                                             fontSize: 32.0,
                                                           ),
@@ -185,7 +186,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                             color: Theme.of(
                                                                     context)
                                                                 .textTheme
-                                                                .bodyText2!
+                                                                .bodyMedium!
                                                                 .color,
                                                           ),
                                                         ),
@@ -195,13 +196,13 @@ class _TestReportPageState extends State<TestReportPage>
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 16.0),
+                                      const SizedBox(height: 16.0),
                                       Material(
                                         borderRadius:
                                             BorderRadius.circular(16.0),
                                         elevation: 2.0,
                                         child: Padding(
-                                          padding: EdgeInsets.all(16.0),
+                                          padding: const EdgeInsets.all(16.0),
                                           child: Column(
                                             children: [
                                               Row(
@@ -214,7 +215,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 16.0,
                                                   ),
                                                   Flexible(
@@ -222,7 +223,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                       report.name ?? unknown,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         fontFamily:
                                                             'Courier New',
                                                         fontFamilyFallback: [
@@ -237,7 +238,7 @@ class _TestReportPageState extends State<TestReportPage>
                                               if (report
                                                       .suiteName?.isNotEmpty ==
                                                   true) ...[
-                                                Divider(),
+                                                const Divider(),
                                                 Row(
                                                   children: <Widget>[
                                                     Expanded(
@@ -248,7 +249,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       width: 16.0,
                                                     ),
                                                     Flexible(
@@ -256,7 +257,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                         report.suiteName!,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                           fontFamily:
                                                               'Courier New',
                                                           fontFamilyFallback: [
@@ -269,7 +270,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                   ],
                                                 ),
                                               ],
-                                              Divider(),
+                                              const Divider(),
                                               Row(
                                                 children: <Widget>[
                                                   Expanded(
@@ -280,7 +281,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 16.0,
                                                   ),
                                                   Flexible(
@@ -288,7 +289,7 @@ class _TestReportPageState extends State<TestReportPage>
                                                       '${report.version}',
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         fontFamily:
                                                             'Courier New',
                                                         fontFamilyFallback: [
@@ -311,7 +312,7 @@ class _TestReportPageState extends State<TestReportPage>
                             } else if (index - 1 < report.steps.length) {
                               index--;
                               result = Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   vertical: 8.0,
                                   horizontal: 16.0,
                                 ),
@@ -319,7 +320,7 @@ class _TestReportPageState extends State<TestReportPage>
                                   borderRadius: BorderRadius.circular(16.0),
                                   elevation: 2.0,
                                   child: Padding(
-                                    padding: EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     child: TestReportStepWidget(
                                       step: report.steps[index],
                                     ),
@@ -330,7 +331,7 @@ class _TestReportPageState extends State<TestReportPage>
                               index -= 1 + report.steps.length;
 
                               result = Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   vertical: 8.0,
                                   horizontal: 16.0,
                                 ),
@@ -388,7 +389,7 @@ class _TestReportPageState extends State<TestReportPage>
                       color: Colors.black26,
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     bottom: 0.0,
                     left: 0.0,
                     right: 0.0,

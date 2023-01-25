@@ -40,7 +40,7 @@ class SetGlobalVariableForm extends TestStepForm {
               ],
               values: values!,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             buildEditText(
               context: context,
               id: 'value',
@@ -48,7 +48,7 @@ class SetGlobalVariableForm extends TestStepForm {
               validators: [RequiredValidator()],
               values: values,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             buildDropdown(
               context: context,
               defaultValue: 'String',

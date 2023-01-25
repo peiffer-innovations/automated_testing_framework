@@ -1,5 +1,4 @@
 import 'package:automated_testing_framework/automated_testing_framework.dart';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:static_translations/static_translations.dart';
@@ -21,10 +20,11 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
     with ResetNavigationStateMixin {
   @override
   Widget build(BuildContext context) {
-    var report = ModalRoute.of(context)!.settings.arguments as TestSuiteReport?;
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var title = translator.translate(TestTranslations.atf_test_suite_results);
+    final report =
+        ModalRoute.of(context)!.settings.arguments as TestSuiteReport?;
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final title = translator.translate(TestTranslations.atf_test_suite_results);
     return Theme(
       data: theme,
       child: Builder(
@@ -38,11 +38,11 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                 Widget result;
                 if (index == 0) {
                   result = Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         Stack(
                           alignment: Alignment.center,
                           children: <Widget>[
@@ -53,7 +53,7 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                                 value: report.numTestsPassed.toDouble() /
                                     report.results.length,
                                 valueColor:
-                                    AlwaysStoppedAnimation(Colors.green),
+                                    const AlwaysStoppedAnimation(Colors.green),
                               ),
                             ),
                             Container(
@@ -61,7 +61,7 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                               height: 160.0,
                               width: 160.0,
                               child: report.success == true
-                                  ? Icon(
+                                  ? const Icon(
                                       Icons.check,
                                       color: Colors.green,
                                       size: 120.0,
@@ -71,7 +71,7 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                                         children: [
                                           TextSpan(
                                             text: '${report.numTestsPassed}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.red,
                                               fontSize: 32.0,
                                             ),
@@ -82,7 +82,7 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                                               fontSize: 20,
                                               color: Theme.of(context)
                                                   .textTheme
-                                                  .bodyText2!
+                                                  .bodyMedium!
                                                   .color,
                                             ),
                                           ),
@@ -92,12 +92,12 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                             ),
                           ],
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         Material(
                           borderRadius: BorderRadius.circular(16.0),
                           elevation: 2.0,
                           child: Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: Text(
                               DateFormat("M/d '@' h:mmaa").format(
                                 widget.timestamp,
@@ -105,7 +105,7 @@ class _TestSuiteReportPageState extends State<TestSuiteReportPage>
                             ),
                           ),
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                       ],
                     ),
                   );

@@ -34,10 +34,10 @@ class ClipboardTestStore {
     var tests = <PendingTest>[];
 
     try {
-      var data = await Clipboard.getData('text/plain');
-      var text = data?.text;
+      final data = await Clipboard.getData('text/plain');
+      final text = data?.text;
       if (text?.isNotEmpty == true) {
-        var parsed = json.decode(text!);
+        final parsed = json.decode(text!);
         tests = TestStore.createMemoryTests(parsed);
       }
 
@@ -56,14 +56,14 @@ class ClipboardTestStore {
     BuildContext context,
     Test test,
   ) async {
-    var encoder = JsonEncoder.withIndent('  ');
-    var encoded = encoder.convert(test.toJson());
+    final encoder = const JsonEncoder.withIndent('  ');
+    final encoded = encoder.convert(test.toJson());
 
-    var translator = Translator.of(context);
+    final translator = Translator.of(context);
 
     await Clipboard.setData(ClipboardData(text: encoded));
 
-    var snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Text(
         translator.translate(
           TestTranslations.atf_copied_to_clipboard,
@@ -72,7 +72,7 @@ class ClipboardTestStore {
     );
 
     try {
-      var controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
       await controller.closed;
     } catch (e) {
       // no-op

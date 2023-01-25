@@ -42,7 +42,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
   bool _isActive(PendingTest test) => _active[test.id] ?? false;
 
   Future<void> _loadTest(PendingTest pendingTest) async {
-    var test = await pendingTest.loader.load();
+    final test = await pendingTest.loader.load();
     _testController!.currentTest = test;
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
@@ -58,7 +58,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
         [];
     _active.clear();
 
-    var suites = <String?>{};
+    final suites = <String?>{};
     _tests?.forEach((test) {
       _active[test.id] = test.active;
       if (test.suiteName != null) {
@@ -95,13 +95,13 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
   }
 
   Future<void> _runTests() async {
-    var tests = <Test>[];
+    final tests = <Test>[];
 
     for (var test in _tests!) {
       if (_isActive(test) &&
           test.numSteps > 0 &&
           (_suiteName == null || _suiteName == test.suiteName)) {
-        var t = await test.loader.load(ignoreImages: true);
+        final t = await test.loader.load(ignoreImages: true);
 
         tests.add(t);
       }
@@ -111,7 +111,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
   }
 
   void _setActive(PendingTest test) {
-    var active = _isActive(test);
+    final active = _isActive(test);
 
     _active[test.id] = active != true;
 
@@ -148,7 +148,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
           ),
           style: (TestRunner.of(context)?.theme ?? Theme.of(context))
               .textTheme
-              .subtitle2,
+              .titleSmall,
         ),
         title: Text(test.name),
         trailing: IgnorePointer(
@@ -161,9 +161,9 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
 
   @override
   Widget build(BuildContext context) {
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var suiteTests = _tests
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final suiteTests = _tests
         ?.where((test) => _suiteName == null || _suiteName == test.suiteName)
         .toList();
 
@@ -174,12 +174,12 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.filter_list),
+                icon: const Icon(Icons.filter_list),
                 onPressed: () async {
                   await showDialog(
                     context: context,
                     builder: (BuildContext context) => SimpleDialog(
-                      contentPadding: EdgeInsets.only(top: 16.0),
+                      contentPadding: const EdgeInsets.only(top: 16.0),
                       title: Text(
                         translator.translate(
                           TestTranslations.atf_select_test_suite,
@@ -199,7 +199,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
                           trailing: _suiteName == null
                               ? Icon(
                                   Icons.check_circle,
-                                  color: theme.textTheme.bodyText2!.color,
+                                  color: theme.textTheme.bodyMedium!.color,
                                 )
                               : null,
                         ),
@@ -214,7 +214,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
                               trailing: _suiteName == suite
                                   ? Icon(
                                       Icons.check_circle,
-                                      color: theme.textTheme.bodyText2!.color,
+                                      color: theme.textTheme.bodyMedium!.color,
                                     )
                                   : null,
                             ),
@@ -225,7 +225,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
                 },
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.play_circle_filled,
                 ),
                 onPressed:
@@ -239,7 +239,7 @@ class _AvailableTestsPageState extends State<AvailableTestsPage>
           body: suiteTests == null || suiteTests.isEmpty == true
               ? Center(
                   child: _tests == null
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : Text(
                           _translator.translate(
                             TestTranslations.atf_no_tests_found,

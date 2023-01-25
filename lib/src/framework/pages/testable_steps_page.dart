@@ -39,8 +39,8 @@ class _TestableStepsPageState extends State<TestableStepsPage>
   void initState() {
     super.initState();
 
-    var registry = TestStepRegistry.of(context);
-    var availSteps = registry.availableSteps;
+    final registry = TestStepRegistry.of(context);
+    final availSteps = registry.availableSteps;
 
     availSteps
         .where((step) => step.widgetless == true)
@@ -64,13 +64,13 @@ class _TestableStepsPageState extends State<TestableStepsPage>
     BuildContext context,
     AvailableTestStep step,
   ) {
-    var testController = TestController.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
+    final testController = TestController.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
 
     return ListTile(
       onTap: () async {
-        var values = await Navigator.of(context).push(
+        final values = await Navigator.of(context).push(
           MaterialPageRoute<Map<String, dynamic>>(
             builder: (BuildContext context) => TestableFormPage(
               form: step.form,
@@ -101,14 +101,14 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                   .translate(TestTranslations.atf_tooltip_add_and_run),
               child: IconButton(
                 color: theme.iconTheme.color,
-                icon: Icon(
+                icon: const Icon(
                   Icons.play_circle_filled,
                 ),
                 onPressed: () async {
-                  var values = <String, dynamic>{}
+                  final values = <String, dynamic>{}
                     ..addAll(_createValues(step))
                     ..addAll(step.quickAddValues!);
-                  var testStep = TestStep(
+                  final testStep = TestStep(
                     id: step.id,
                     image: step.widgetless == true ? null : widget.image,
                     values: step.minify(values),
@@ -118,7 +118,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                   if (mounted == true) {
                     Navigator.of(context).pop();
                     // Wait for the back to complete before kicking off the step
-                    await Future.delayed(Duration(milliseconds: 300));
+                    await Future.delayed(const Duration(milliseconds: 300));
                     await testController.execute(
                       reset: false,
                       steps: [testStep],
@@ -134,11 +134,11 @@ class _TestableStepsPageState extends State<TestableStepsPage>
               message: translator.translate(TestTranslations.atf_quick_add),
               child: IconButton(
                 color: theme.iconTheme.color,
-                icon: Icon(
+                icon: const Icon(
                   Icons.add_circle,
                 ),
                 onPressed: () {
-                  var values = <String, dynamic>{}
+                  final values = <String, dynamic>{}
                     ..addAll(_createValues(step))
                     ..addAll(step.quickAddValues!);
                   testController!.currentTest.addTestStep(TestStep(
@@ -147,7 +147,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                     values: step.minify(values),
                   ));
 
-                  var snackBar = SnackBar(
+                  final snackBar = SnackBar(
                     content: Text(
                       translator.translate(
                         TestTranslations.atf_added_step_action,
@@ -156,7 +156,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                         },
                       ),
                     ),
-                    duration: Duration(seconds: 1),
+                    duration: const Duration(seconds: 1),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   if (mounted == true) {
@@ -167,7 +167,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
             ),
           IconButton(
             color: theme.iconTheme.color,
-            icon: Icon(
+            icon: const Icon(
               Icons.help,
             ),
             onPressed: () {
@@ -199,12 +199,12 @@ class _TestableStepsPageState extends State<TestableStepsPage>
 
   @override
   Widget build(BuildContext context) {
-    var mq = MediaQuery.of(context);
-    var testController = TestController.of(context);
-    var testableRenderController = TestableRenderController.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
-    var translator = Translator.of(context);
-    var wide = mq.size.width >= 600.0;
+    final mq = MediaQuery.of(context);
+    final testController = TestController.of(context);
+    final testableRenderController = TestableRenderController.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final translator = Translator.of(context);
+    final wide = mq.size.width >= 600.0;
 
     return Theme(
       data: theme,
@@ -213,7 +213,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 onPressed: () async {
                   await showDialog(
                     context: context,
@@ -254,7 +254,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                             ),
                           ],
                         ),
-                        contentPadding: EdgeInsets.all(16.0),
+                        contentPadding: const EdgeInsets.all(16.0),
                         title: Text(
                           translator.translate(
                             TestTranslations.atf_test_options,
@@ -266,7 +266,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                 },
               ),
               IconButton(
-                icon: Icon(Icons.bug_report),
+                icon: const Icon(Icons.bug_report),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) => AvailableTestsPage(),
@@ -296,17 +296,18 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                         children: <Widget>[
                           if (widget.testableId?.isNotEmpty == true) ...[
                             Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                              padding: const EdgeInsets.fromLTRB(
+                                  16.0, 16.0, 16.0, 0.0),
                               child: Text(
                                 translator
                                     .translate(TestTranslations.atf_widget),
-                                style: theme.textTheme.headline6,
+                                style: theme.textTheme.titleLarge,
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -315,13 +316,13 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                     child: Text(
                                       widget.testableId!,
                                       maxLines: 1,
-                                      style: theme.textTheme.subtitle2,
+                                      style: theme.textTheme.titleSmall,
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   IconButton(
-                                      icon: Icon(Icons.content_copy),
+                                      icon: const Icon(Icons.content_copy),
                                       onPressed: () {
                                         Clipboard.setData(
                                           ClipboardData(
@@ -329,14 +330,14 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                           ),
                                         );
 
-                                        var snackBar = SnackBar(
+                                        final snackBar = SnackBar(
                                           content: Text(
                                             translator.translate(
                                               TestTranslations
                                                   .atf_copied_to_clipboard,
                                             ),
                                           ),
-                                          duration: Duration(seconds: 1),
+                                          duration: const Duration(seconds: 1),
                                         );
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
@@ -346,7 +347,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                             ),
                           ],
                           if (widget.image != null) ...[
-                            Divider(),
+                            const Divider(),
                             Container(
                               alignment: Alignment.center,
                               color: theme.brightness == Brightness.dark
@@ -363,16 +364,17 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                 scale: MediaQuery.of(context).devicePixelRatio,
                               ),
                             ),
-                            Divider(),
+                            const Divider(),
                           ],
                           if (widget.testableId?.isNotEmpty == true) ...[
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
                                 translator.translate(
                                   TestTranslations.atf_selected_widget_steps,
                                 ),
-                                style: theme.textTheme.headline5,
+                                style: theme.textTheme.headlineSmall,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -381,15 +383,16 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                 context,
                                 step,
                               ),
-                            Divider(),
+                            const Divider(),
                           ],
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             child: Text(
                               translator.translate(
                                 TestTranslations.atf_widgetless_steps,
                               ),
-                              style: theme.textTheme.headline5,
+                              style: theme.textTheme.headlineSmall,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -400,14 +403,15 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                             ),
                           if (testController!.customRoutes.isNotEmpty ==
                               true) ...[
-                            Divider(),
+                            const Divider(),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
                                 translator.translate(
                                   TestTranslations.atf_custom_pages,
                                 ),
-                                style: theme.textTheme.headline5,
+                                style: theme.textTheme.headlineSmall,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -419,7 +423,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                   await Navigator.of(context).push(entry.value);
                                 },
                                 title: Text(entry.key),
-                                trailing: Icon(Icons.chevron_right),
+                                trailing: const Icon(Icons.chevron_right),
                               ),
                           ]
                         ],

@@ -630,10 +630,10 @@ class _KeyFinder extends MatchFinder {
   bool matches(Element candidate) {
     var match = false;
 
-    var vk1 = candidate.widget.key is ValueKey
+    final vk1 = candidate.widget.key is ValueKey
         ? candidate.widget.key as ValueKey
         : null;
-    var vk2 = key is ValueKey ? key as ValueKey : null;
+    final vk2 = key is ValueKey ? key as ValueKey : null;
     if (vk1 != null && vk2 != null) {
       match = vk1.value == vk2.value;
     }

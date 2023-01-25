@@ -92,26 +92,26 @@ class DragStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var dx = JsonClass.parseDouble(tester.resolveVariable(this.dx)) ?? 0.0;
-    var dy = JsonClass.parseDouble(tester.resolveVariable(this.dy)) ?? 0.0;
-    String? testableId = tester.resolveVariable(this.testableId);
+    final dx = JsonClass.parseDouble(tester.resolveVariable(this.dx)) ?? 0.0;
+    final dy = JsonClass.parseDouble(tester.resolveVariable(this.dy)) ?? 0.0;
+    final testableId = tester.resolveVariable(this.testableId);
     assert(testableId?.isNotEmpty == true);
 
-    var name = "$id('$testableId', '$dx', '$dy')";
-    var timeout = this.timeout ?? tester.delays.defaultTimeout;
+    final name = "$id('$testableId', '$dx', '$dy')";
+    final timeout = this.timeout ?? tester.delays.defaultTimeout;
     log(
       name,
       tester: tester,
     );
 
-    var finder = await waitFor(
+    final finder = await waitFor(
       testableId,
       cancelToken: cancelToken,
       tester: tester,
       timeout: timeout,
     );
 
-    var evaluated = finder.evaluate();
+    final evaluated = finder.evaluate();
     if (evaluated.length > 1) {
       var error =
           '[ERROR]: found (${evaluated.length}) widgets; expected only one.';
@@ -129,8 +129,8 @@ class DragStep extends TestRunnerStep {
   String getBehaviorDrivenDescription(TestController tester) {
     String result;
 
-    var setDx = dx != null && JsonClass.parseDouble(dx) != 0.0;
-    var setDy = dy != null && JsonClass.parseDouble(dy) != 0.0;
+    final setDx = dx != null && JsonClass.parseDouble(dx) != 0.0;
+    final setDy = dy != null && JsonClass.parseDouble(dy) != 0.0;
 
     if (timeout == null) {
       if (setDx && setDy) {

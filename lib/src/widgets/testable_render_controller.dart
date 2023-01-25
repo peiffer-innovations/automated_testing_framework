@@ -105,7 +105,7 @@ class TestableRenderController {
     TestableRenderController? result;
 
     try {
-      var runner = TestRunner.of(context)!;
+      final runner = TestRunner.of(context)!;
       result = runner.testableRenderController;
     } catch (e, stack) {
       _logger.severe('Error getting the controller from the context', e, stack);
@@ -129,7 +129,7 @@ class TestableRenderController {
                   border: Border.all(
                     color: TestableRenderController.of(context).overlayColor ??
                         color ??
-                        Theme.of(context).errorColor,
+                        Theme.of(context).colorScheme.error,
                   ),
                 ),
               ),
@@ -149,7 +149,7 @@ class TestableRenderController {
                 child: Container(
                   color: TestableRenderController.of(context).overlayColor ??
                       color ??
-                      Theme.of(context).errorColor,
+                      Theme.of(context).colorScheme.error,
                 ),
               ),
             ),
@@ -174,11 +174,11 @@ class TestableRenderController {
                 color: TinyColor(
                   TestableRenderController.of(context).overlayColor ??
                       color ??
-                      Theme.of(context).errorColor,
+                      Theme.of(context).colorScheme.error,
                 ).darken(20).color,
               ),
             ),
-            padding: EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(4.0),
             child: ClipRect(
               child: Icon(
                 icon ?? Icons.settings_applications,
@@ -201,14 +201,14 @@ class TestableRenderController {
       }) =>
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(4.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
               border: Border.all(
                 color: TinyColor(
                   TestableRenderController.of(context).overlayColor ??
                       color ??
-                      Theme.of(context).errorColor,
+                      Theme.of(context).colorScheme.error,
                 ).darken(20).color,
               ),
             ),

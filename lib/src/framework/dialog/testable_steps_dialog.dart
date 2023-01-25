@@ -37,8 +37,8 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
   void initState() {
     super.initState();
 
-    var registry = TestStepRegistry.of(context);
-    var availSteps = registry.availableSteps;
+    final registry = TestStepRegistry.of(context);
+    final availSteps = registry.availableSteps;
 
     _testRenderController = TestableRenderController.of(context);
 
@@ -65,8 +65,8 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
     bool executeImmediate = false,
   }) async {
     var added = false;
-    var testController = TestController.of(context);
-    var values = await showDialog(
+    final testController = TestController.of(context);
+    final values = await showDialog(
       context: context,
       useRootNavigator: false,
       builder: (BuildContext context) => TestableFormDialog(
@@ -105,12 +105,12 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
     required AvailableTestStep step,
     bool executeImmediate = false,
   }) async {
-    var testController = TestController.of(context)!;
-    var values = <String, dynamic>{}
+    final testController = TestController.of(context)!;
+    final values = <String, dynamic>{}
       ..addAll(_createValues(step))
       ..addAll(step.quickAddValues!);
 
-    var testStep = TestStep(
+    final testStep = TestStep(
       id: step.id,
       image: step.widgetless == true ? null : widget.image,
       values: step.minify(values),
@@ -133,7 +133,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
     BuildContext context,
     AvailableTestStep step,
   ) {
-    var translator = Translator.of(context);
+    final translator = Translator.of(context);
 
     return ListTile(
       onLongPress: () async {
@@ -145,7 +145,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
           await _fireQuickAdd(context: context, step: step);
         }
         if (added == true) {
-          var message = translator.translate(
+          final message = translator.translate(
             TestTranslations.atf_added_step_action,
             {
               'step': translator.translate(step.title),
@@ -164,7 +164,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
         }
 
         if (added == true) {
-          var message = translator.translate(
+          final message = translator.translate(
             TestTranslations.atf_added_step_action,
             {
               'step': translator.translate(step.title),
@@ -175,7 +175,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
       },
       title: Text(translator.translate(step.title)),
       trailing: IconButton(
-        icon: Icon(Icons.play_circle_filled),
+        icon: const Icon(Icons.play_circle_filled),
         onPressed: () async {
           if (step.quickAddValues == null) {
             await _fireForm(
@@ -198,9 +198,9 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var translator = Translator.of(context);
-    var testController = TestController.of(context)!;
-    var numSteps = testController.currentTest.steps.length;
+    final translator = Translator.of(context);
+    final testController = TestController.of(context)!;
+    final numSteps = testController.currentTest.steps.length;
 
     return AlertDialog(
       actions: [
@@ -247,7 +247,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
                       context,
                       step,
                     ),
-                  Divider(),
+                  const Divider(),
                 ],
                 ...[
                   for (var step in _widgetlessSteps)
@@ -256,7 +256,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
                       step,
                     ),
                 ],
-                Divider(),
+                const Divider(),
                 SwitchListTile.adaptive(
                   onChanged: (value) {
                     _testRenderController.showGlobalOverlay = value;
@@ -285,7 +285,7 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
                       TestTranslations.atf_open_tests_page,
                     ),
                   ),
-                  trailing: Icon(Icons.chevron_right),
+                  trailing: const Icon(Icons.chevron_right),
                 ),
                 for (var entry in testController.customRoutes.entries)
                   ListTile(
@@ -294,14 +294,14 @@ class _TestableStepsDialogState extends State<TestableStepsDialog> {
                       await Navigator.of(context).push(entry.value);
                     },
                     title: Text(entry.key),
-                    trailing: Icon(Icons.chevron_right),
+                    trailing: const Icon(Icons.chevron_right),
                   ),
               ],
             ),
           ),
         ),
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: 16.0),
+      contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
       title: Text(
         translator.translate(TestTranslations.atf_test_steps),
       ),

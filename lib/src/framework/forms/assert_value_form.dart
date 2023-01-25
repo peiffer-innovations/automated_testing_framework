@@ -39,14 +39,14 @@ class AssertValueForm extends TestStepForm {
               ],
               values: values!,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             buildEditText(
               context: context,
               id: 'value',
               label: TestStepTranslations.atf_form_value,
               values: values,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             buildDropdown(
               context: context,
               defaultValue: 'true',
@@ -58,7 +58,7 @@ class AssertValueForm extends TestStepForm {
               label: TestStepTranslations.atf_form_equals,
               values: values,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             buildDropdown(
               context: context,
               defaultValue: 'true',
@@ -71,7 +71,7 @@ class AssertValueForm extends TestStepForm {
               values: values,
             ),
             if (minify != true) ...[
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               buildTimeoutSection(
                 context: context,
                 values: values,

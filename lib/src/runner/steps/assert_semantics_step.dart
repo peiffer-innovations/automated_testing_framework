@@ -80,20 +80,20 @@ class AssertSemanticsStep extends TestRunnerStep {
       throw Exception('$id does not support running in Release Mode.');
     }
 
-    var semanticsHandle =
+    final semanticsHandle =
         WidgetsBinding.instance.pipelineOwner.ensureSemantics();
 
     try {
-      String? testableId = tester.resolveVariable(this.testableId);
-      var value = tester.resolveVariable(this.value)?.toString();
+      final testableId = tester.resolveVariable(this.testableId);
+      final value = tester.resolveVariable(this.value)?.toString();
       assert(testableId?.isNotEmpty == true);
 
-      var name = "$id('$field', '$testableId', '$value')";
+      final name = "$id('$field', '$testableId', '$value')";
       log(
         name,
         tester: tester,
       );
-      var finder = await waitFor(
+      final finder = await waitFor(
         testableId,
         cancelToken: cancelToken,
         tester: tester,
@@ -116,12 +116,12 @@ class AssertSemanticsStep extends TestRunnerStep {
       if (widgetFinder.isNotEmpty == true) {
         widgetFinder = finder.evaluate();
 
-        var element = widgetFinder.first;
-        var renderObject = element.renderObject!;
+        final element = widgetFinder.first;
+        final renderObject = element.renderObject!;
 
-        var node = _getSemantics(renderObject);
-        var data = node.getSemanticsData();
-        var flags = data.flags;
+        final node = _getSemantics(renderObject);
+        final data = node.getSemanticsData();
+        final flags = data.flags;
 
         switch (field) {
           case 'currentValueLength':
@@ -280,13 +280,13 @@ class AssertSemanticsStep extends TestRunnerStep {
       };
 
   SemanticsNode _getSemantics(RenderObject child) {
-    var result = SemanticsNode();
+    final result = SemanticsNode();
 
-    var children = <SemanticsNode>[];
+    final children = <SemanticsNode>[];
 
     _popupateSemanticsFromChildren(child, children);
 
-    var reversed = children.reversed.toList();
+    final reversed = children.reversed.toList();
 
     result.updateWith(config: null, childrenInInversePaintOrder: reversed);
 
@@ -302,7 +302,7 @@ class AssertSemanticsStep extends TestRunnerStep {
 
   void _popupateSemanticsFromChildren(
       RenderObject child, List<SemanticsNode> children) {
-    var node = child.debugSemantics;
+    final node = child.debugSemantics;
 
     if (node != null) {
       children.add(node);

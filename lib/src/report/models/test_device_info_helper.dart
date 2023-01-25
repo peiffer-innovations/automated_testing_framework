@@ -32,7 +32,7 @@ class TestDeviceInfoHelper {
       late String device;
       double? devicePixelRatio;
       BaseSize? dips;
-      var id = Uuid().v4();
+      final id = const Uuid().v4();
       late String manufacturer;
       late String model;
       late String os;
@@ -41,9 +41,9 @@ class TestDeviceInfoHelper {
       BaseSize? pixels;
       late String systemVersion;
 
-      var plugin = DeviceInfoPlugin();
+      final plugin = DeviceInfoPlugin();
       if (kIsWeb) {
-        var info = await plugin.webBrowserInfo;
+        final info = await plugin.webBrowserInfo;
         brand = info.browserName.name;
         device = info.appName ?? '<unknown>';
         manufacturer = info.vendor ?? '<unknown>';
@@ -53,7 +53,7 @@ class TestDeviceInfoHelper {
         systemVersion = info.platform ?? '<unknown>';
       } else {
         try {
-          var pInfo = await PackageInfo.fromPlatform();
+          final pInfo = await PackageInfo.fromPlatform();
           appIdentifier = pInfo.appName;
           buildNumber = pInfo.buildNumber;
         } catch (e) {
@@ -63,7 +63,7 @@ class TestDeviceInfoHelper {
           os = 'android';
 
           try {
-            var info = await plugin.androidInfo;
+            final info = await plugin.androidInfo;
 
             brand = info.brand;
             device = info.device;
@@ -80,7 +80,7 @@ class TestDeviceInfoHelper {
           os = 'ios';
 
           try {
-            var info = await plugin.iosInfo;
+            final info = await plugin.iosInfo;
 
             device = info.name ?? 'unknown';
             model = info.model ?? 'unknown';
@@ -98,7 +98,7 @@ class TestDeviceInfoHelper {
           os = 'fuchsia';
           systemVersion = '<unknown>';
         } else if (Platform.isLinux) {
-          var info = await plugin.linuxInfo;
+          final info = await plugin.linuxInfo;
 
           brand = info.id;
           device = info.name;
@@ -108,7 +108,7 @@ class TestDeviceInfoHelper {
           os = 'linux';
           systemVersion = info.versionId ?? '<unknown>';
         } else if (Platform.isMacOS) {
-          var info = await plugin.macOsInfo;
+          final info = await plugin.macOsInfo;
 
           brand = 'apple';
           device = info.arch;
@@ -132,7 +132,7 @@ class TestDeviceInfoHelper {
 
       if (context != null) {
         try {
-          var mq = MediaQuery.of(context);
+          final mq = MediaQuery.of(context);
 
           dips = BaseSize(
             mq.size.width,

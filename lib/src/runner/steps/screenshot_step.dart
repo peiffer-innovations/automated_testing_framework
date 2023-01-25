@@ -62,20 +62,20 @@ class ScreenshotStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var enabled = JsonClass.parseBool(
+    final enabled = JsonClass.parseBool(
           tester.getVariable(ScreenshotStep.kDisableScreenshotVariable),
         ) !=
         true;
 
     if (enabled == true) {
-      var imageId = tester.resolveVariable(this.imageId) ??
+      final imageId = tester.resolveVariable(this.imageId) ??
           '${id}_${report.images.length}';
-      var name = "$id('$imageId', '$goldenCompatible')";
+      final name = "$id('$imageId', '$goldenCompatible')";
       log(
         name,
         tester: tester,
       );
-      var image = await tester.screencap();
+      final image = await tester.screencap();
 
       if (image != null) {
         report.attachScreenshot(

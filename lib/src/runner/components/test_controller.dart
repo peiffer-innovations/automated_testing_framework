@@ -219,7 +219,7 @@ class TestController {
     TestController? result;
 
     try {
-      var runner = TestRunner.of(context);
+      final runner = TestRunner.of(context);
       result = runner?.controller;
     } catch (e) {
       // no-op
@@ -238,9 +238,9 @@ class TestController {
   ]) async {
     _cancelController.add(null);
 
-    var startTime = DateTime.now();
+    final startTime = DateTime.now();
     while (_testControllerState.runningTest == true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       if (DateTime.now().millisecondsSinceEpoch -
               startTime.millisecondsSinceEpoch >=
           timeout.inMilliseconds) {
@@ -304,13 +304,13 @@ class TestController {
       await cancelRunningTests();
     }
 
-    var settings = TestAppSettings.settings;
+    final settings = TestAppSettings.settings;
 
     stepTimeout ??= settings.stepTimeout;
     testTimeout ??= settings.testTimeout;
 
-    var cancelToken = CancelToken(timeout: testTimeout);
-    var cancelSubscription = _cancelController.stream.listen(
+    final cancelToken = CancelToken(timeout: testTimeout);
+    final cancelSubscription = _cancelController.stream.listen(
       (_) => cancelToken.cancel(),
     );
     _testControllerState.currentTest = name;
@@ -326,14 +326,14 @@ class TestController {
       }
 
       status = '<set up>';
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
 
       report ??= TestReport(
         name: name,
         suiteName: suiteName,
         version: version,
       );
-      var logSubscription = Logger.root.onRecord.listen((record) {
+      final logSubscription = Logger.root.onRecord.listen((record) {
         if (_testReportLogLevel <= record.level) {
           report!.appendLog(
             '${record.level.name}: ${record.time}: ${record.message}',
@@ -376,7 +376,7 @@ class TestController {
           }
 
           idx++;
-          var progress = ProgressValue(max: steps.length, value: idx);
+          final progress = ProgressValue(max: steps.length, value: idx);
           this.step = progress;
           _testControllerState.progress = progress.progress;
 
@@ -399,7 +399,7 @@ class TestController {
             (reset == true || submitReport == true)) {
           _testControllerState.runningTest = false;
           testSuiteReport?.addTestReport(report);
-          var futures = <Future>[];
+          final futures = <Future>[];
           futures.add(
             _navigatorKey?.currentState?.push(
                   MaterialPageRoute(
@@ -443,7 +443,7 @@ class TestController {
     bool subStep = true,
   }) async {
     var passed = true;
-    var runnerStep = _registry.getRunnerStep(
+    final runnerStep = _registry.getRunnerStep(
       id: step.id,
       values: step.values,
     )!;
@@ -477,7 +477,7 @@ class TestController {
       }
       if (screenshotOnFail == true) {
         try {
-          var imageNum = report.images.length + 1;
+          final imageNum = report.images.length + 1;
           await ScreenshotStep(
             goldenCompatible: false,
             imageId: 'failure_${step.id}_${imageNum}',
@@ -547,9 +547,9 @@ class TestController {
   }) async {
     var save = true;
     var exported = false;
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
     if (currentTest.name?.isNotEmpty != true) {
-      var translator = Translator.of(context);
+      final translator = Translator.of(context);
 
       String? name = '';
       var suiteName = currentTest.suiteName ?? '';
@@ -595,7 +595,7 @@ class TestController {
                     value: value,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16.0,
                 ),
                 TextFormField(
@@ -743,7 +743,7 @@ class TestController {
     // This covers the minimum animation time for Material animations to
     // complete.  This may or may not be enough time, which is why apps can add
     // to the time using the [testSetUp] value.
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     status = '<set up>';
     await _sleep(delays.testSetUp);
@@ -757,17 +757,17 @@ class TestController {
   dynamic resolveVariable(dynamic input) {
     dynamic result = input;
     if (input is String && input.contains('{{') && input.contains('}}')) {
-      var regex = RegExp(r'\{\{[^(})]*}}]*');
+      final regex = RegExp(r'\{\{[^(})]*}}]*');
 
       var matches = regex.allMatches(input);
       if (matches.isNotEmpty == true) {
         if (matches.length == 1 &&
             input.startsWith('{{') &&
             input.endsWith('}}')) {
-          var match = matches.first;
-          var variableName =
+          final match = matches.first;
+          final variableName =
               result.substring(match.start + 2, match.end - 2).trim();
-          var value = getVariable(variableName);
+          final value = getVariable(variableName);
           if (value != null ||
               _testVariables.containsKey(variableName) == true ||
               _globalVariables.containsKey(variableName) == true) {
@@ -777,10 +777,10 @@ class TestController {
           matches = matches.toList().reversed;
 
           for (var match in matches) {
-            var variableName =
+            final variableName =
                 result.substring(match.start + 2, match.end - 2).trim();
 
-            var value = getVariable(variableName);
+            final value = getVariable(variableName);
             if (value != null ||
                 _testVariables.containsKey(variableName) == true ||
                 _globalVariables.containsKey(variableName) == true) {
@@ -803,7 +803,7 @@ class TestController {
     List<PendingTest> tests, [
     Duration waitTimeout = _kSuiteStartTimeout,
   ]) async {
-    var startTime = DateTime.now();
+    final startTime = DateTime.now();
     while (_testControllerState.runningSuite == true) {
       if (DateTime.now().millisecondsSinceEpoch -
               startTime.millisecondsSinceEpoch >=
@@ -812,17 +812,17 @@ class TestController {
           '[TIMEOUT]: Could not start tests, suite is still running.',
         );
       }
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
     }
 
-    var testSuiteReport = TestSuiteReport();
+    final testSuiteReport = TestSuiteReport();
     _testControllerState.runningSuite = true;
     if (tests.isNotEmpty == true) {
       try {
         for (var pendingTest in tests) {
           if (pendingTest.active == true) {
             try {
-              var test = await pendingTest.loader.load(ignoreImages: true);
+              final test = await pendingTest.loader.load(ignoreImages: true);
               await reset();
 
               await execute(
@@ -864,7 +864,7 @@ class TestController {
     Duration? stepTimeout,
     Duration waitTimeout = _kSuiteStartTimeout,
   }) async {
-    var startTime = DateTime.now();
+    final startTime = DateTime.now();
     while (_testControllerState.runningSuite == true) {
       if (DateTime.now().millisecondsSinceEpoch -
               startTime.millisecondsSinceEpoch >=
@@ -873,10 +873,10 @@ class TestController {
           '[TIMEOUT]: Could not start tests, suite is still running.',
         );
       }
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
     }
 
-    var testSuiteReport = TestSuiteReport();
+    final testSuiteReport = TestSuiteReport();
     _testControllerState.runningSuite = true;
     if (tests.isNotEmpty == true) {
       try {
@@ -926,18 +926,18 @@ class TestController {
     Uint8List? image;
 
     if (!kIsWeb) {
-      var captureContext = CaptureContext(
+      final captureContext = CaptureContext(
         image: [],
       );
       status = '<screenshot>';
       try {
         _screencapController.add(captureContext);
 
-        var now = DateTime.now().millisecondsSinceEpoch;
+        final now = DateTime.now().millisecondsSinceEpoch;
         while (captureContext.image.isNotEmpty != true &&
             now + delays.screenshot.inMilliseconds >
                 DateTime.now().millisecondsSinceEpoch) {
-          await Future.delayed(Duration(milliseconds: 100));
+          await Future.delayed(const Duration(milliseconds: 100));
         }
       } catch (e, stack) {
         _logger.severe(e, stack);
@@ -982,7 +982,7 @@ class TestController {
 
     var first = true;
     for (var step in test.steps) {
-      var runnerStep = _registry.getRunnerStep(
+      final runnerStep = _registry.getRunnerStep(
         id: step.id,
         values: step.values,
       )!;

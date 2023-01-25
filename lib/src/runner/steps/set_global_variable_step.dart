@@ -66,16 +66,16 @@ class SetGlobalVariableStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    String type = tester.resolveVariable(this.type);
-    String? value = tester.resolveVariable(this.value);
-    String variableName = tester.resolveVariable(this.variableName);
+    final type = tester.resolveVariable(this.type);
+    final value = tester.resolveVariable(this.value);
+    final variableName = tester.resolveVariable(this.variableName);
 
     assert(type == 'bool' ||
         type == 'double' ||
         type == 'int' ||
         type == 'String');
     assert(variableName.isNotEmpty == true);
-    var name = "$id('$variableName', '$type', '$value')";
+    final name = "$id('$variableName', '$type', '$value')";
 
     log(
       name,

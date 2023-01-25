@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('variables', () {
-    var regex = RegExp(r'\{\{[^(})]*}}]*');
+    final regex = RegExp(r'\{\{[^(})]*}}]*');
 
     var matches = regex.allMatches('foo');
     expect(matches.isEmpty, true);

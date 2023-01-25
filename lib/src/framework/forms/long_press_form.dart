@@ -40,7 +40,7 @@ class LongPressForm extends TestStepForm {
               values: values!,
             ),
             if (minify != true) ...[
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               buildTimeoutSection(
                 context: context,
                 values: values,

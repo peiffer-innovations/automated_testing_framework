@@ -30,18 +30,18 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
     required ThemeData theme,
     required Translator translator,
   }) async {
-    var steps = List<TestStep>.from(
+    final steps = List<TestStep>.from(
       _testController.currentTest.steps,
     );
 
-    var values = step.values ?? <String, dynamic>{};
-    var idx = steps.indexOf(step);
-    var availableStep = TestStepRegistry.of(context).getAvailableTestStep(
+    final values = step.values ?? <String, dynamic>{};
+    final idx = steps.indexOf(step);
+    final availableStep = TestStepRegistry.of(context).getAvailableTestStep(
       step.id,
     );
 
     if (availableStep != null) {
-      var newValues = await Navigator.of(context).push(
+      final newValues = await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext context) => TestableFormPage(
             form: availableStep.form,
@@ -85,7 +85,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                 onPressed: () => Navigator.of(context).pop(true),
                 style: ButtonStyle(
                   textStyle: MaterialStateProperty.all(
-                    TextStyle(color: theme.errorColor),
+                    TextStyle(color: theme.colorScheme.error),
                   ),
                 ),
                 child: Text(
@@ -100,10 +100,10 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
               children: <Widget>[
                 Icon(
                   Icons.warning,
-                  color: theme.textTheme.bodyText2!.color,
+                  color: theme.textTheme.bodyMedium!.color,
                   size: 54.0,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16.0,
                 ),
                 Text(
@@ -124,17 +124,17 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
     required int index,
     required TestStep step,
   }) {
-    var tester = TestController.of(context);
-    var translator = Translator.of(context);
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final tester = TestController.of(context);
+    final translator = Translator.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     return Padding(
       key: ValueKey(step.key),
-      padding: EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Material(
         borderRadius: BorderRadius.circular(16.0),
         elevation: 2.0,
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -145,13 +145,13 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                   alignment: Alignment.center,
                   color: Colors.black12,
                   height: 200.0,
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Image.memory(
                     step.image!,
                     fit: BoxFit.scaleDown,
                   ),
                 ),
-                Divider(),
+                const Divider(),
               ],
               Container(
                 width: double.infinity,
@@ -167,7 +167,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                                 message: translator.translate(
                                   TestTranslations.atf_step_currently_pinned,
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.label,
                                   color: Colors.green,
                                 ),
@@ -184,14 +184,14 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                               tooltip: translator.translate(
                                 TestTranslations.atf_pin_step,
                               ),
-                              icon: Icon(Icons.label_outline),
+                              icon: const Icon(Icons.label_outline),
                             ),
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
                         '${index + 1}) ${step.id}',
-                        style: theme.textTheme.headline6,
+                        style: theme.textTheme.titleLarge,
                       ),
                     ),
                   ],
@@ -199,7 +199,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
               ),
               for (var entry in (step.values ?? {}).entries)
                 _buildValueEntry(context, entry),
-              Divider(),
+              const Divider(),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -211,11 +211,11 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                     ),
                     child: IconButton(
                       color: theme.iconTheme.color,
-                      icon: Icon(Icons.arrow_upward),
+                      icon: const Icon(Icons.arrow_upward),
                       onPressed: index == 0
                           ? null
                           : () {
-                              var steps = List<TestStep>.from(
+                              final steps = List<TestStep>.from(
                                 _testController.currentTest.steps,
                               );
 
@@ -231,19 +231,19 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                             },
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_tooltip_move_down,
                     ),
                     child: IconButton(
                       color: theme.iconTheme.color,
-                      icon: Icon(Icons.arrow_downward),
+                      icon: const Icon(Icons.arrow_downward),
                       onPressed:
                           index == _testController.currentTest.steps.length - 1
                               ? null
                               : () {
-                                  var steps = List<TestStep>.from(
+                                  final steps = List<TestStep>.from(
                                     _testController.currentTest.steps,
                                   );
 
@@ -260,16 +260,16 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                                 },
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_button_delete,
                     ),
                     child: IconButton(
-                      color: theme.errorColor,
-                      icon: Icon(Icons.delete),
+                      color: theme.colorScheme.error,
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
-                        var steps = List<TestStep>.from(
+                        final steps = List<TestStep>.from(
                           _testController.currentTest.steps,
                         );
 
@@ -284,14 +284,14 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                       },
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_button_edit,
                     ),
                     child: IconButton(
                       color: theme.iconTheme.color,
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () => _onEditStep(
                         step: step,
                         theme: theme,
@@ -299,14 +299,14 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Tooltip(
                     message: translator.translate(
                       TestTranslations.atf_button_run,
                     ),
                     child: IconButton(
                       color: theme.iconTheme.color,
-                      icon: Icon(Icons.play_arrow),
+                      icon: const Icon(Icons.play_arrow),
                       onPressed: () async {
                         if (widget.doublePop == true) {
                           Navigator.of(context).pop();
@@ -340,20 +340,20 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
     BuildContext context,
     MapEntry<String, dynamic> entry,
   ) {
-    var theme = TestRunner.of(context)?.theme ?? Theme.of(context);
+    final theme = TestRunner.of(context)?.theme ?? Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Divider(),
+        const Divider(),
         Text(
           entry.key,
-          style: theme.textTheme.bodyText1,
+          style: theme.textTheme.bodyLarge,
         ),
         Text(
           entry.value?.toString() ?? '',
-          style: theme.textTheme.subtitle1,
+          style: theme.textTheme.titleMedium,
         ),
       ],
     );
@@ -362,7 +362,7 @@ class _TestStepListFullTabState extends State<TestStepListFullTab> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       children: <Widget>[
         for (var i = 0; i < _testController.currentTest.steps.length; i++)
           _buildFullStep(

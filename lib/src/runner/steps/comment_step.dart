@@ -52,8 +52,8 @@ class CommentStep extends TestRunnerStep {
     required TestReport report,
     required TestController tester,
   }) async {
-    var comment = tester.resolveVariable(this.comment)?.toString() ?? '';
-    var name = "$id('$comment')";
+    final comment = tester.resolveVariable(this.comment)?.toString() ?? '';
+    final name = "$id('$comment')";
 
     log(
       name,
