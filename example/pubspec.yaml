@@ -4,40 +4,35 @@ publish_to: 'none'
 version: '1.0.0+12'
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=2.19.0 <4.0.0'
 
-dependencies: 
+dependencies:
   automated_testing_framework_example: '^2.3.1'
-  flutter: 
+  flutter:
     sdk: 'flutter'
 
-dev_dependencies: 
-  flutter_test: 
+dev_dependencies:
+  flutter_test:
     sdk: 'flutter'
 
-
-flutter_icons: 
+flutter_icons:
   android: true
   ios: true
   image_path: 'assets-src/icon.png'
 
-flutter_native_splash: 
+flutter_native_splash:
   image: 'assets-src/splash.png'
   color: '212121'
   android_disable_fullscreen: true
 
-flutter: 
+flutter:
   uses-material-design: true
-  fonts: 
-    - 
-      family: 'MaterialIcons'
-      fonts: 
-        - 
-          asset: 'assets-src/MaterialIcons-Regular.ttf'
+  fonts:
+    - family: 'MaterialIcons'
+      fonts:
+        - asset: 'assets-src/MaterialIcons-Regular.ttf'
 
-
-
-ignore_updates: 
+ignore_updates:
   - 'archive'
   - 'async'
   - 'boolean_selector'
