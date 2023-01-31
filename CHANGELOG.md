@@ -1,3 +1,8 @@
+## [5.0.0+1] - January 31, 2023
+
+* Automated dependency updates
+
+
 ## [5.0.0] - January 24th, 2023
 
 * Flutter 3.7 breaking changes
@@ -710,6 +715,7 @@
 ## [0.1.0] - August 21st, 2020
 
 * First public release; not for production use.
+
 
 
 
