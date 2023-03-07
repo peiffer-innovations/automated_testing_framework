@@ -31,9 +31,9 @@ const RESOURCES = {
 "assets/assets-src/MaterialIcons-Regular.ttf": "a37b0c01c0baf1888ca812cc0508f6e2",
 "assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080",
 "assets/AssetManifest.json": "b26fbd081daa3f91864767849afe2ac4",
-"index.html": "cfe1f4d63d2525da0cc84c057e581490",
-"/": "cfe1f4d63d2525da0cc84c057e581490",
-"main.dart.js": "3db5afc8d82c5d7bb07bff22c1c2c785",
+"index.html": "4b88d8e321e80cfa132c22778bb8a225",
+"/": "4b88d8e321e80cfa132c22778bb8a225",
+"main.dart.js": "6d5a0b2f640fc65c56c7966146c2444e",
 "icons/Icon-512.png": "f0de392acd8910e2196e38a327bbb747",
 "icons/Icon-192.png": "079d22db7d65e763c68d7199c2bd6b08"
 };
