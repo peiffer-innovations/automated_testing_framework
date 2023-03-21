@@ -1,6 +1,6 @@
 name: 'automated_testing_framework'
 description: 'A testing framework that allows in app tests to be built and executed in an automated way.'
-version: '5.0.0+7'
+version: '5.0.0+8'
 homepage: 'https://github.com/peiffer-innovations/automated_testing_framework'
 
 environment: 
@@ -18,8 +18,8 @@ dependencies:
     sdk: 'flutter'
   form_validation: '^2.2.0+6'
   intl: '^0.18.0'
-  json_class: '^2.1.6+1'
-  json_theme: '^5.0.0+5'
+  json_class: '^2.2.0'
+  json_theme: '^5.0.1+1'
   logging: '^1.1.1'
   meta: '^1.8.0'
   package_info_plus: '^3.0.3'
