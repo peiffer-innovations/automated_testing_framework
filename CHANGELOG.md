@@ -1,3 +1,8 @@
+## [5.0.1] - May 3rd, 2023
+
+* Flutter 3.10 fix
+
+
 ## [5.0.0+14] - May 2, 2023
 
 * Automated dependency updates

@@ -88,8 +88,7 @@ abstract class WidgetController {
   /// immediately, but rather a chunk at a time as the iteration progresses
   /// using [Iterator.moveNext].
   Iterable<Element> get allElements {
-    return collectAllElementsFrom(binding.renderViewElement!,
-        skipOffstage: false);
+    return collectAllElementsFrom(binding.rootElement!, skipOffstage: false);
   }
 
   /// The matching element in the widget tree.

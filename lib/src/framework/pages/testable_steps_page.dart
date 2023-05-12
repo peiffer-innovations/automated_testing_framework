@@ -326,7 +326,7 @@ class _TestableStepsPageState extends State<TestableStepsPage>
                                       onPressed: () {
                                         Clipboard.setData(
                                           ClipboardData(
-                                            text: widget.testableId,
+                                            text: widget.testableId ?? '',
                                           ),
                                         );
 
